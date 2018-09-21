@@ -14,11 +14,11 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(90, 90, 90);</string>
+   <string notr="true">background-color: #464646</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -36,7 +36,9 @@
              <string>Search a signal name.</string>
             </property>
             <property name="styleSheet">
-             <string notr="true">color: rgb(255, 255, 255);</string>
+             <string notr="true">color: rgb(255, 255, 255);
+border: 1px solid gray;
+border-radius: 5px;</string>
             </property>
            </widget>
           </item>
@@ -82,21 +84,66 @@
            </sizepolicy>
           </property>
           <property name="styleSheet">
-           <string notr="true">color: rgb(255, 255, 255);</string>
+           <string notr="true">color: rgb(255, 255, 255);
+border: 1px solid gray;
+border-radius: 15px;</string>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QTabWidget" name="tabWidget">
+      <widget class="QTabWidget" name="main_tab">
        <property name="enabled">
         <bool>true</bool>
        </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(255, 255, 255);</string>
+        <string notr="true">QTabWidget::pane { /* The tab widget frame */
+    border-left: 1px solid gray;
+}
+
+
+QTabWidget::tab-bar {
+    left: 30px; /* move to the right by 5px */
+}
+
+
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #7a7a7a, stop: 1.0 #7a7a7a);
+    /*background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);*/
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    min-width: 16ex;
+    padding: 2px;
+    color: #FFFFFF
+}
+
+QTabBar::tab:selected {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #999999, stop: 1.0 #999999);
+  /*  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);*/
+    color: #1d5eff
+}
+
+
+QTabBar::tab:!selected {
+    margin-top: 3px; /* make non-selected tabs look smaller */
+}</string>
+       </property>
+       <property name="tabPosition">
+        <enum>QTabWidget::North</enum>
        </property>
        <property name="tabShape">
-        <enum>QTabWidget::Triangular</enum>
+        <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
         <number>0</number>
