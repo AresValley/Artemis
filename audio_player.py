@@ -1,68 +1,88 @@
 import os
 import sys
-                             
-from PyQt5.QtCore import QUrl, QFileInfo
-from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer
+from pygame import mixer
+from PyQt5.QtCore import QTimer
 
 
 class AudioPlayer(object):
+    """
+    This is the audio player widget. The only public methods are the __init__
+    method and set_audio_player, which loads the current file. Everything else
+    is managed internally.
+    """
+    __time_step = 1000
     def __init__(self, play, pause, stop, volume, audio_progress):
-        self.play = play
-        self.pause = pause
-        self.stop = stop
-        self.volume = volume
-        self.audio_progress = audio_progress
-        self.audio_file = None
-        self.player = QMediaPlayer()
-        self.player.setVolume(51)
-        self.player.durationChanged.connect(self.set_max_progress_bar)
-        self.player.positionChanged.connect(self.set_progress_bar)
-        self.play.clicked.connect(self.audio)
-        self.pause.clicked.connect(self.pause_audio)
-        self.stop.clicked.connect(self.stop_audio)
-        self.player.stateChanged.connect(self.reset_audio_widget)
-        self.volume.valueChanged.connect(self.set_volume)
+        mixer.init()
+        self.__paused = False
+        self.__play = play
+        self.__pause = pause
+        self.__stop = stop
+        self.__volume = volume
+        self.__audio_progress = audio_progress
+        self.__audio_file = None
+        self.__timer = QTimer()
+        self.__timer.timeout.connect(self.__update_bar)
+        self.__play.clicked.connect(self.__play_audio)
+        self.__pause.clicked.connect(self.__pause_audio)
+        self.__stop.clicked.connect(self.__stop_audio)
+        self.__volume.valueChanged.connect(self.__set_volume)
 
-    def set_volume(self):
-        self.player.setVolume(self.volume.value())
+    def __set_volume(self):
+        mixer.music.set_volume(self.__volume.value() / self.__volume.maximum())
 
-    def reset_audio_widget(self):
-        if self.player.state() == QMediaPlayer.StoppedState:
-            self.audio_progress.setValue(0)
-            self.volume.setValue(51)
-            self.pause.setEnabled(False)
-            self.stop.setEnabled(False)
+    def __reset_audio_widget(self):
+        self.__audio_progress.reset()
+        self.__volume.setValue(50)
+        self.__enable_buttons(False, False, False)
+        self.__paused = False
+        if mixer.music.get_busy():
+            mixer.music.stop()
+            self.__timer.stop()
 
-    def set_max_progress_bar(self):
-        print(self.player.duration())
-        self.audio_progress.setMaximum(self.player.duration())
+    def __update_bar(self):
+        pos = mixer.music.get_pos()
+        if pos == -1:
+            self.__timer.stop()
+            self.__audio_progress.reset()
+        else:
+            self.__audio_progress.setValue(pos)
 
-    def set_progress_bar(self):
-        print(self.player.position())
-        self.audio_progress.setValue(self.player.position())
-
-    def set_media_player(self):
-        self.player.setMedia(QMediaContent(self.audio_file))
+    def __set_max_progress_bar(self):
+        self.__audio_progress.setMaximum(
+            mixer.Sound(self.__audio_file).get_length() * 1000
+        )
 
     def set_audio_player(self, fname):
-        self.reset_audio_widget()
-        self.play.setEnabled(False)
-        full_name = os.path.join('Data', 'Audio', fname + '.mp3')
-        if QFileInfo(full_name).exists():
-            print('exists')
-            self.play.setEnabled(True)
-            self.audio_file = QUrl.fromLocalFile(full_name)
-            self.set_media_player()
+        self.__reset_audio_widget()
+        full_name = os.path.join('Data', 'Audio', fname + '.ogg')
+        if os.path.exists(full_name):
+            self.__play.setEnabled(True)
+            self.__audio_file = full_name
+            self.__set_max_progress_bar()
+            mixer.music.load(full_name)
+            mixer.music.set_volume(self.__volume.value())
+
+    def __play_audio(self):
+        if not self.__paused:
+            mixer.music.play()
         else:
-            print('not exists')
+            mixer.music.unpause()
+            self.__paused = False
+        self.__timer.start(self.__time_step)
+        self.__enable_buttons(False, True, True)
 
-    def audio(self):
-        self.player.play()
-        self.stop.setEnabled(True)
-        self.pause.setEnabled(True)
+    def __stop_audio(self):
+        mixer.music.stop()
+        self.__timer.stop()
+        self.__enable_buttons(True, False, False)
 
-    def stop_audio(self):
-        self.player.stop()
+    def __pause_audio(self):
+        mixer.music.pause()
+        self.__timer.stop()
+        self.__paused = True
+        self.__enable_buttons(True, False, False)
 
-    def pause_audio(self):
-        self.player.pause()
+    def __enable_buttons(self, play_en, pause_en, stop_en):
+        self.__play.setEnabled(play_en)
+        self.__pause.setEnabled(pause_en)
+        self.__stop.setEnabled(stop_en)
