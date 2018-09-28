@@ -39,12 +39,12 @@ QProgressBar::chunk {
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d5eff, stop:0.5 #4177ff, stop:1 #1d5eff);
 	border-radius: 3px;
 }
-
+/*
 QAbstractScrollArea::corner {
     background: none;
     border: none;
 }
-
+*/
 QScrollBar:vertical, QScrollBar:horizontal{
 	background-color:#343434;
 	border-radius: 5px;

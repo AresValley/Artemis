@@ -2,7 +2,7 @@ import os
 import sys
 from pydub import AudioSegment
 from pygame import mixer
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QTimer
 
 
 class AudioPlayer(object):
@@ -11,11 +11,11 @@ class AudioPlayer(object):
     method and set_audio_player, which loads the current file. Everything else
     is managed internally.
     """
+    
     __time_step = 1000 # Milliseconds.
-    # __sample_rate = 8000 # Sample frequency of all audio files.
+    __delay_load_audio = 250 # Milliseconds
 
     def __init__(self, play, pause, stop, volume, audio_progress):
-        # mixer.init(frequency = self.__sample_rate)
         self.__paused = False
         self.__play = play
         self.__pause = pause
@@ -25,6 +25,8 @@ class AudioPlayer(object):
         self.__audio_file = None
         self.__timer = QTimer()
         self.__timer.timeout.connect(self.__update_bar)
+        self.__load_timer = QTimer()
+        self.__load_timer.timeout.connect(self.__set_audio_player)
         self.__play.clicked.connect(self.__play_audio)
         self.__pause.clicked.connect(self.__pause_audio)
         self.__stop.clicked.connect(self.__stop_audio)
@@ -59,8 +61,15 @@ class AudioPlayer(object):
         )
 
     def set_audio_player(self, fname):
+        if self.__load_timer.isActive():
+            self.__load_timer.stop()
+        self.fname = fname
+        self.__load_timer.start(self.__delay_load_audio)
+
+    def __set_audio_player(self):
+        self.__load_timer.stop()
         self.__reset_audio_widget()
-        full_name = os.path.join('Data', 'Audio_wav', fname + '.wav')
+        full_name = os.path.join('Data', 'Audio_wav', self.fname + '.wav')
         if os.path.exists(full_name):
             mixer.init(frequency = AudioSegment.from_ogg(full_name).frame_rate)
             self.__play.setEnabled(True)
