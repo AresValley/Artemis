@@ -11,8 +11,8 @@ class AudioPlayer(object):
     method and set_audio_player, which loads the current file. Everything else
     is managed internally.
     """
-    
-    __time_step = 1000 # Milliseconds.
+
+    __time_step = 500 # Milliseconds.
     __delay_load_audio = 250 # Milliseconds
 
     def __init__(self, play, pause, stop, volume, audio_progress):
@@ -34,7 +34,8 @@ class AudioPlayer(object):
 
 
     def __set_volume(self):
-        mixer.music.set_volume(self.__volume.value() / self.__volume.maximum())
+        if mixer.get_init():
+            mixer.music.set_volume(self.__volume.value() / self.__volume.maximum())
 
     def __reset_audio_widget(self):
         if mixer.get_init():
@@ -60,7 +61,7 @@ class AudioPlayer(object):
             mixer.Sound(self.__audio_file).get_length() * 1000
         )
 
-    def set_audio_player(self, fname):
+    def set_audio_player(self, fname = ""):
         if self.__load_timer.isActive():
             self.__load_timer.stop()
         self.fname = fname
@@ -71,7 +72,7 @@ class AudioPlayer(object):
         self.__reset_audio_widget()
         full_name = os.path.join('Data', 'Audio_wav', self.fname + '.wav')
         if os.path.exists(full_name):
-            mixer.init(frequency = AudioSegment.from_ogg(full_name).frame_rate)
+            mixer.init(frequency = AudioSegment.from_wav(full_name).frame_rate)
             self.__play.setEnabled(True)
             self.__audio_file = full_name
             self.__set_max_progress_bar()
