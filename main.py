@@ -3,7 +3,8 @@ import os
 from pandas import read_csv
 from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
-                             QMessageBox,)
+                             QMessageBox,
+                             qApp,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import QFileInfo, QSize
@@ -20,22 +21,24 @@ class MyApp(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.show()
+        self.actionExit.triggered.connect(qApp.quit)
         self.db_version = None
         self.load_db()
         self.display_signals()
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.itemSelectionChanged.connect(self.display_specs)
+        self.result_list.currentItemChanged.connect(self.display_specs)
         self.play.setIcon(qta.icon('fa5.play-circle',
-            color = "#999999",
-            color_disabled = '#000000'))
+                                   color = "#4facf1",
+                                   color_disabled = '#7a7a7a'))
         self.play.setIconSize(self.play.size())
         self.pause.setIcon(qta.icon('fa5.pause-circle',
-            color = "#999999",
-            color_disabled = '#000000'))
+                                    color = "#4facf1",
+                                    color_disabled = '#7a7a7a'))
         self.pause.setIconSize(self.pause.size())
         self.stop.setIcon(qta.icon('fa5.stop-circle',
-            color = "#999999",
-            color_disabled = '#000000'))
+                                   color = "#4facf1",
+                                   color_disabled = '#7a7a7a'))
         self.stop.setIconSize(self.stop.size())
         self.audio_widget = AudioPlayer(self.play, 
                                         self.pause, 
@@ -89,13 +92,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def display_specs(self):
         self.display_spectrogram()
-        self.audio_widget.set_audio_player(self.result_list.currentItem().text())
+        item = self.result_list.currentItem()
+        if item:
+            self.audio_widget.set_audio_player(item.text())
+        else:
+            self.audio_widget.set_audio_player()
 
     def display_spectrogram(self):
-        spectrogram_name = self.result_list.currentItem().text()
-        path_spectr = os.path.join("Data", "Spectra", spectrogram_name + ".jpg")
-        if not QFileInfo(path_spectr).exists():
-            path_spectr = os.path.join("icons_imgs", "image_not_found.png")
+        default_pic = os.path.join("icons_imgs", "image_not_found.png")
+        item = self.result_list.currentItem()
+        if item:
+            spectrogram_name = item.text()
+            path_spectr = os.path.join("Data", "Spectra", spectrogram_name + ".jpg")
+            if not QFileInfo(path_spectr).exists():
+                path_spectr = default_pic
+        else:
+            path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
 

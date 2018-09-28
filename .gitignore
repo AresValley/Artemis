@@ -3,3 +3,4 @@ Data
 .ipynb_checkpoints
 *.ipynb
 wav_converter.py
+*.txt
