@@ -1,5 +1,6 @@
 import os
 import sys
+from pydub import AudioSegment
 from pygame import mixer
 from PyQt5.QtCore import QTimer
 
@@ -10,9 +11,11 @@ class AudioPlayer(object):
     method and set_audio_player, which loads the current file. Everything else
     is managed internally.
     """
-    __time_step = 1000
+    __time_step = 1000 # Milliseconds.
+    # __sample_rate = 8000 # Sample frequency of all audio files.
+
     def __init__(self, play, pause, stop, volume, audio_progress):
-        mixer.init()
+        # mixer.init(frequency = self.__sample_rate)
         self.__paused = False
         self.__play = play
         self.__pause = pause
@@ -27,23 +30,26 @@ class AudioPlayer(object):
         self.__stop.clicked.connect(self.__stop_audio)
         self.__volume.valueChanged.connect(self.__set_volume)
 
+
     def __set_volume(self):
         mixer.music.set_volume(self.__volume.value() / self.__volume.maximum())
 
     def __reset_audio_widget(self):
+        if mixer.get_init():
+            if mixer.music.get_busy():
+                mixer.music.stop()
+                self.__timer.stop()
+            mixer.quit()
         self.__audio_progress.reset()
-        self.__volume.setValue(50)
         self.__enable_buttons(False, False, False)
         self.__paused = False
-        if mixer.music.get_busy():
-            mixer.music.stop()
-            self.__timer.stop()
 
     def __update_bar(self):
         pos = mixer.music.get_pos()
         if pos == -1:
             self.__timer.stop()
             self.__audio_progress.reset()
+            self.__enable_buttons(True, False, False)
         else:
             self.__audio_progress.setValue(pos)
 
@@ -54,13 +60,14 @@ class AudioPlayer(object):
 
     def set_audio_player(self, fname):
         self.__reset_audio_widget()
-        full_name = os.path.join('Data', 'Audio', fname + '.ogg')
+        full_name = os.path.join('Data', 'Audio_wav', fname + '.wav')
         if os.path.exists(full_name):
+            mixer.init(frequency = AudioSegment.from_ogg(full_name).frame_rate)
             self.__play.setEnabled(True)
             self.__audio_file = full_name
             self.__set_max_progress_bar()
             mixer.music.load(full_name)
-            mixer.music.set_volume(self.__volume.value())
+            self.__volume.setValue(50)
 
     def __play_audio(self):
         if not self.__paused:
@@ -73,6 +80,7 @@ class AudioPlayer(object):
 
     def __stop_audio(self):
         mixer.music.stop()
+        self.__audio_progress.reset()
         self.__timer.stop()
         self.__enable_buttons(True, False, False)
 

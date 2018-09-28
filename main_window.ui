@@ -38,6 +38,76 @@ QProgressBar::chunk {
     /*background-color: #1d5eff;*/
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d5eff, stop:0.5 #4177ff, stop:1 #1d5eff);
 	border-radius: 3px;
+}
+
+QAbstractScrollArea::corner {
+    background: none;
+    border: none;
+}
+
+QScrollBar:vertical, QScrollBar:horizontal{
+	background-color:#343434;
+	border-radius: 5px;
+	/*background: none;*/
+}
+
+QScrollBar:vertical {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	/*width: 10px;*/
+}
+QScrollBar:horizontal{
+	margin-left: 0px;
+	margin-right: 0px;
+	/*height: 10px;*/
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal{
+	border-radius: 5px;
+	border-color: none;
+	border-width: 1px; 
+ 	background-color: #959595; 
+}
+
+QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal{
+	width: 0px; 
+	height: 0px;
+}
+
+QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal{
+	width: 0px; 
+	height: 0px;
+}
+
+QScrollBar::add-page:vertical{
+	border-left: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*
+	border: 1px#343434;
+	background-color: #343434;*/
+}
+QScrollBar::add-page:horizontal{
+	border-top: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*
+	border: 1px#343434;
+	background-color: #343434;*/
+}
+QScrollBar::sub-page:vertical{
+	border-left: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*	border: 1px #343434;
+	background-color: #343434;*/
+}
+QScrollBar::sub-page:horizontal{
+	border-top: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*	border: 1px #343434;
+	background-color: #343434;*/
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -94,10 +164,11 @@ QProgressBar::chunk {
            <string/>
           </property>
           <property name="statusTip">
-           <string>Search a signal name.</string>
+           <string/>
           </property>
           <property name="styleSheet">
-           <string notr="true">color: rgb(255, 255, 255);
+           <string notr="true">background-color: #343434;
+color: rgb(255, 255, 255);
 border: 1px solid gray;
 border-radius: 5px;</string>
           </property>
@@ -147,9 +218,10 @@ border-radius: 5px;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">QListWidget {
+	background-color:rgb(52,52,52);
 	color: rgb(255, 255, 255);
 	border: 1px solid gray;
-	border-radius: 10px;
+	border-radius: 8px;
 }
 </string>
           </property>
@@ -158,6 +230,12 @@ border-radius: 5px;</string>
           </property>
           <property name="horizontalScrollBarPolicy">
            <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="autoScrollMargin">
+           <number>16</number>
+          </property>
+          <property name="showDropIndicator" stdset="0">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -420,6 +498,9 @@ QSlider::handle:horizontal {
                  </property>
                  <property name="maximum">
                   <number>100</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>10</number>
                  </property>
                  <property name="value">
                   <number>50</number>

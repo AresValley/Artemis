@@ -20,27 +20,28 @@ class MyApp(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.show()
+        self.db_version = None
         self.load_db()
         self.display_signals()
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.itemSelectionChanged.connect(self.display_specs)
         self.play.setIcon(qta.icon('fa5.play-circle',
-            color = "#7a7a7a",
-            color_active = '#1d5eff'))
+            color = "#999999",
+            color_disabled = '#000000'))
         self.play.setIconSize(self.play.size())
         self.pause.setIcon(qta.icon('fa5.pause-circle',
-            color = "#7a7a7a",
-            color_active = '#1d5eff'))
+            color = "#999999",
+            color_disabled = '#000000'))
         self.pause.setIconSize(self.pause.size())
         self.stop.setIcon(qta.icon('fa5.stop-circle',
-            color = "#7a7a7a",
-            color_active = '#1d5eff'))
+            color = "#999999",
+            color_disabled = '#000000'))
         self.stop.setIconSize(self.stop.size())
         self.audio_widget = AudioPlayer(self.play, 
-                                         self.pause, 
-                                         self.stop, 
-                                         self.volume, 
-                                         self.audio_progress)
+                                        self.pause, 
+                                        self.stop, 
+                                        self.volume, 
+                                        self.audio_progress)
 
     def load_db(self):
         try:
@@ -61,6 +62,24 @@ class MyApp(QMainWindow, Ui_MainWindow):
             box.show()
         else:
             self.signal_names = db['signal_0']
+        
+        try:
+            with open(os.path.join('Data', 'verdb.ini'), 'r') as dbver:
+                self.db_version = int(dbver.read())
+        except (FileNotFoundError, ValueError):
+            box = QMessageBox(self)
+            box.setStyleSheet("""
+                color:#FFFFFF;
+            """)
+            box.setWindowTitle("No database version")
+            box.setText("Unable to detect database version.\n"
+                "Possible data curruption.\n"
+                "Go to Updates->Force Download.")
+            box.show()
+            self.setStatusTip(f"Database version: undefined.")
+        else:
+            self.setStatusTip(f"Database version: {self.db_version}.")
+
 
     def display_signals(self):
         self.result_list.clear()

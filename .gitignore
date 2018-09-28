@@ -1,3 +1,5 @@
 __pycache__
 Data
+.ipynb_checkpoints
+*.ipynb
 wav_converter.py
