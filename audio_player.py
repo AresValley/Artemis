@@ -73,24 +73,10 @@ class AudioPlayer(object):
         )
 
     def set_audio_player(self, fname = ""):
-<<<<<<< HEAD
-        if self.__load_timer.isActive():
-            self.__load_timer.stop()
-        self.fname = fname
-        self.__load_timer.start(self.__delay_load_audio)
-
-    def __set_audio_player(self):
-        self.__load_timer.stop()
-=======
         self.__first_call = True
->>>>>>> load_sound_on_request
         self.__reset_audio_widget()
         full_name = os.path.join('Data', 'Audio_wav', fname + '.wav')
         if os.path.exists(full_name):
-<<<<<<< HEAD
-            mixer.init(frequency = AudioSegment.from_wav(full_name).frame_rate)
-=======
->>>>>>> load_sound_on_request
             self.__play.setEnabled(True)
             self.__audio_file = full_name
 
