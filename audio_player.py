@@ -17,6 +17,7 @@ class AudioPlayer(object):
 
     def __init__(self, play, pause, stop, volume, audio_progress):
         self.__paused = False
+        self.__first_call = True
         self.__play = play
         self.__pause = pause
         self.__stop = stop
@@ -25,8 +26,6 @@ class AudioPlayer(object):
         self.__audio_file = None
         self.__timer = QTimer()
         self.__timer.timeout.connect(self.__update_bar)
-        self.__load_timer = QTimer()
-        self.__load_timer.timeout.connect(self.__set_audio_player)
         self.__play.clicked.connect(self.__play_audio)
         self.__pause.clicked.connect(self.__pause_audio)
         self.__stop.clicked.connect(self.__stop_audio)
@@ -62,25 +61,21 @@ class AudioPlayer(object):
         )
 
     def set_audio_player(self, fname = ""):
-        if self.__load_timer.isActive():
-            self.__load_timer.stop()
-        self.fname = fname
-        self.__load_timer.start(self.__delay_load_audio)
-
-    def __set_audio_player(self):
-        self.__load_timer.stop()
+        self.__first_call = True
         self.__reset_audio_widget()
-        full_name = os.path.join('Data', 'Audio_wav', self.fname + '.wav')
+        full_name = os.path.join('Data', 'Audio_wav', fname + '.wav')
         if os.path.exists(full_name):
-            mixer.init(frequency = AudioSegment.from_ogg(full_name).frame_rate)
             self.__play.setEnabled(True)
             self.__audio_file = full_name
             self.__set_max_progress_bar()
-            mixer.music.load(full_name)
-            self.__volume.setValue(50)
 
     def __play_audio(self):
         if not self.__paused:
+            if self.__first_call:
+                self.__first_call = False
+                mixer.init(frequency = AudioSegment.from_wav(self.__audio_file).frame_rate)
+                mixer.music.load(full_name)
+                self.__set_volume()
             mixer.music.play()
         else:
             mixer.music.unpause()
