@@ -3,6 +3,7 @@ import sys
 from pydub import AudioSegment
 from pygame import mixer
 from PyQt5.QtCore import QTimer, QTimer
+import qtawesome as qta
 
 
 class AudioPlayer(object):
@@ -17,6 +18,7 @@ class AudioPlayer(object):
 
     def __init__(self, play, pause, stop, volume, audio_progress):
         self.__paused = False
+        self.__first_call = True
         self.__play = play
         self.__pause = pause
         self.__stop = stop
@@ -25,13 +27,22 @@ class AudioPlayer(object):
         self.__audio_file = None
         self.__timer = QTimer()
         self.__timer.timeout.connect(self.__update_bar)
-        self.__load_timer = QTimer()
-        self.__load_timer.timeout.connect(self.__set_audio_player)
         self.__play.clicked.connect(self.__play_audio)
         self.__pause.clicked.connect(self.__pause_audio)
         self.__stop.clicked.connect(self.__stop_audio)
         self.__volume.valueChanged.connect(self.__set_volume)
-
+        self.__play.setIcon(qta.icon('fa5.play-circle',
+                                   color = "#4facf1",
+                                   color_disabled = '#7a7a7a'))
+        self.__play.setIconSize(self.__play.size())
+        self.__pause.setIcon(qta.icon('fa5.pause-circle',
+                                    color = "#4facf1",
+                                    color_disabled = '#7a7a7a'))
+        self.__pause.setIconSize(self.__pause.size())
+        self.__stop.setIcon(qta.icon('fa5.stop-circle',
+                                   color = "#4facf1",
+                                   color_disabled = '#7a7a7a'))
+        self.__stop.setIconSize(self.__stop.size())
 
     def __set_volume(self):
         if mixer.get_init():
@@ -62,6 +73,7 @@ class AudioPlayer(object):
         )
 
     def set_audio_player(self, fname = ""):
+<<<<<<< HEAD
         if self.__load_timer.isActive():
             self.__load_timer.stop()
         self.fname = fname
@@ -69,18 +81,28 @@ class AudioPlayer(object):
 
     def __set_audio_player(self):
         self.__load_timer.stop()
+=======
+        self.__first_call = True
+>>>>>>> load_sound_on_request
         self.__reset_audio_widget()
-        full_name = os.path.join('Data', 'Audio_wav', self.fname + '.wav')
+        full_name = os.path.join('Data', 'Audio_wav', fname + '.wav')
         if os.path.exists(full_name):
+<<<<<<< HEAD
             mixer.init(frequency = AudioSegment.from_wav(full_name).frame_rate)
+=======
+>>>>>>> load_sound_on_request
             self.__play.setEnabled(True)
             self.__audio_file = full_name
-            self.__set_max_progress_bar()
-            mixer.music.load(full_name)
-            self.__volume.setValue(50)
 
     def __play_audio(self):
         if not self.__paused:
+            if self.__first_call:
+                self.__first_call = False
+                mixer.init(frequency = AudioSegment.from_wav(self.__audio_file).frame_rate,
+                           buffer = 2048)
+                mixer.music.load(self.__audio_file)
+                self.__set_volume()
+                self.__set_max_progress_bar()
             mixer.music.play()
         else:
             mixer.music.unpause()

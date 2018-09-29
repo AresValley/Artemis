@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import (QMainWindow,
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import QFileInfo, QSize
-import qtawesome as qta
 
 from audio_player import AudioPlayer
 
@@ -28,6 +27,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.itemSelectionChanged.connect(self.display_specs)
         self.result_list.currentItemChanged.connect(self.display_specs)
+<<<<<<< HEAD
         self.play.setIcon(qta.icon('fa5.play-circle',
                                    color = "#4facf1",
                                    color_disabled = '#7a7a7a'))
@@ -40,6 +40,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                    color = "#4facf1",
                                    color_disabled = '#7a7a7a'))
         self.stop.setIconSize(self.stop.size())
+=======
+>>>>>>> load_sound_on_request
         self.audio_widget = AudioPlayer(self.play, 
                                         self.pause, 
                                         self.stop, 
