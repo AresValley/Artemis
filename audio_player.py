@@ -3,6 +3,7 @@ import sys
 from pydub import AudioSegment
 from pygame import mixer
 from PyQt5.QtCore import QTimer, QTimer
+import qtawesome as qta
 
 
 class AudioPlayer(object):
@@ -30,7 +31,18 @@ class AudioPlayer(object):
         self.__pause.clicked.connect(self.__pause_audio)
         self.__stop.clicked.connect(self.__stop_audio)
         self.__volume.valueChanged.connect(self.__set_volume)
-
+        self.__play.setIcon(qta.icon('fa5.play-circle',
+                                   color = "#4facf1",
+                                   color_disabled = '#7a7a7a'))
+        self.__play.setIconSize(self.__play.size())
+        self.__pause.setIcon(qta.icon('fa5.pause-circle',
+                                    color = "#4facf1",
+                                    color_disabled = '#7a7a7a'))
+        self.__pause.setIconSize(self.__pause.size())
+        self.__stop.setIcon(qta.icon('fa5.stop-circle',
+                                   color = "#4facf1",
+                                   color_disabled = '#7a7a7a'))
+        self.__stop.setIconSize(self.__stop.size())
 
     def __set_volume(self):
         if mixer.get_init():
@@ -67,15 +79,16 @@ class AudioPlayer(object):
         if os.path.exists(full_name):
             self.__play.setEnabled(True)
             self.__audio_file = full_name
-            self.__set_max_progress_bar()
 
     def __play_audio(self):
         if not self.__paused:
             if self.__first_call:
                 self.__first_call = False
-                mixer.init(frequency = AudioSegment.from_wav(self.__audio_file).frame_rate)
-                mixer.music.load(full_name)
+                mixer.init(frequency = AudioSegment.from_wav(self.__audio_file).frame_rate,
+                           buffer = 2048)
+                mixer.music.load(self.__audio_file)
                 self.__set_volume()
+                self.__set_max_progress_bar()
             mixer.music.play()
         else:
             mixer.music.unpause()
