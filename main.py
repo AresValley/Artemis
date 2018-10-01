@@ -128,7 +128,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.url_button.setEnabled(True)
             self.url_button.setStyleSheet("color: #4c75ff;")
             self.current_signal_name = item.text()
-            self.name_lab.setText(self.current_signal_name)
+            words = self.current_signal_name.split(' ')
+            if len(words) > 3:
+                words_per_row = len(words) // 2
+                words = ' '.join(words[:words_per_row]) \
+                    + "\n" + ' '.join(words[words_per_row:])
+            else:
+                words = self.current_signal_name
+            self.name_lab.setText(words)
             current_signal = self.db.loc[self.current_signal_name]
             category_code = current_signal.loc["category_code"]
             self.freq_lab.setText(self.format_numbers(
@@ -175,11 +182,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @staticmethod
     def change_unit(num):
-        if len(num) < 4:
+        digits = len(num)
+        if digits < 4:
             return 1
-        elif len(num) < 7:
+        elif digits < 7:
             return 1000
-        elif len(num) < 10:
+        elif digits < 10:
             return 10**6
         else:
             return 10**9
