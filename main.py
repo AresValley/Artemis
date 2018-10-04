@@ -1,5 +1,8 @@
 import sys
 import os
+import webbrowser
+from collections import namedtuple
+
 from pandas import read_csv
 from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
@@ -8,7 +11,6 @@ from PyQt5.QtWidgets import (QMainWindow,
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import QFileInfo, QSize
-import webbrowser
 
 from audio_player import AudioPlayer
 
@@ -17,6 +19,20 @@ qt_creator_file = "main_window.ui"
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 class MyApp(QMainWindow, Ui_MainWindow):
+    Band = namedtuple("Band", ["lower", "upper"])
+    ELF =  Band(3, 30)
+    SLF = Band(30, 300)
+    ULF = Band(300, 3000)
+    VLF = Band(3000, 30000)
+    LF  = Band(30 * 10**3, 300 * 10**3)
+    MF  = Band(300 * 10 ** 3, 3000 * 10**3)
+    HF  = Band(3 * 10**6, 30 * 10**6)
+    VHF = Band(30 * 10**6, 300 * 10**6)
+    UHF = Band(300 * 10**6, 3000 * 10**6)
+    SHF = Band(3 * 10**9, 30 * 10**9)
+    EHF = Band(30 * 10**9, 300 * 10**9)
+    bands = ELF, SLF, ULF, VLF, LF, MF, HF, VHF, UHF, SHF, EHF
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -63,6 +79,20 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         self.stop, 
                                         self.volume, 
                                         self.audio_progress)
+
+        self.band_labels = [
+            [self.elf, self.elf_s1, self.elf_s2],
+            [self.slf, self.slf_s1, self.slf_s2],
+            [self.ulf, self.ulf_s1, self.ulf_s2],
+            [self.vlf, self.vlf_s1, self.vlf_s2],
+            [self.lf , self.lf_s1 , self.lf_s2],
+            [self.mf , self.mf_s1 , self.mf_s2],
+            [self.hf , self.hf_s1 , self.hf_s2],
+            [self.vhf, self.vhf_s1, self.vhf_s2],
+            [self.uhf, self.uhf_s1, self.uhf_s2],
+            [self.shf, self.shf_s1, self.shf_s2],
+            [self.ehf, None,        None],
+        ]
 
     def load_db(self):
         try:
@@ -137,6 +167,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 words = self.current_signal_name
             self.name_lab.setText(words)
             current_signal = self.db.loc[self.current_signal_name]
+            print(current_signal.loc["inf_band"], current_signal.loc["sup_band"])
             category_code = current_signal.loc["category_code"]
             self.freq_lab.setText(self.format_numbers(
                                     current_signal.loc["inf_freq"],
@@ -156,6 +187,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     cat_lab.setStyleSheet("color: #9f9f9f;")
                 elif cat == '1':
                     cat_lab.setStyleSheet("color: #39eaff;")
+            self.set_band_range(current_signal)
             self.audio_widget.set_audio_player(self.current_signal_name)
         else:
             self.url_button.setEnabled(False)
@@ -165,6 +197,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 lab.setText("N/A")
             for lab in self.category_labels:
                 lab.setStyleSheet("""color: #9f9f9f;""")
+            self.set_band_range()
             self.audio_widget.set_audio_player()
 
     @classmethod
@@ -203,6 +236,30 @@ class MyApp(QMainWindow, Ui_MainWindow):
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
+
+    def set_band_range(self, current_signal = None):
+        # How to deal with one-frequency signals?
+        if current_signal is not None:
+            inf_band = int(current_signal.loc["inf_freq"])
+            sup_band = int(current_signal.loc["sup_freq"])
+            for band, band_label in zip(self.bands, self.band_labels):
+                delta = (band.upper - band.lower) // 2 + band.lower
+                if inf_band <= band.lower and sup_band > band.lower:
+                    band_label[0].setStyleSheet("color: #39eaff;")
+                else:
+                    band_label[0].setStyleSheet("color: #9f9f9f;")
+                if band_label[1]:
+                    if inf_band <= delta and sup_band >= delta:
+                        band_label[1].setStyleSheet("color: #39eaff;")
+                    else:
+                        band_label[1].setStyleSheet("color: #9f9f9f;")
+                if band_label[2]:                
+                    if inf_band <= band.upper and sup_band > band.upper:
+                        band_label[2].setStyleSheet("color: #39eaff;")
+                    else:
+                        band_label[2].setStyleSheet("color: #9f9f9f;")
+        else:
+            [label.setStyleSheet("color: #9f9f9f;") for labels in self.band_labels for label in labels if label]
 
     def go_to_web_page_signal(self):
         if self.current_signal_name:
