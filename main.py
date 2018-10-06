@@ -32,7 +32,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
     SHF = Band(3 * 10**9, 30 * 10**9)
     EHF = Band(30 * 10**9, 300 * 10**9)
     bands = ELF, SLF, ULF, VLF, LF, MF, HF, VHF, UHF, SHF, EHF
-
+    active_color = "#39eaff"
+    inactive_color = "#9f9f9f"
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -45,7 +46,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.undefined_band = False
         self.signal_names = []
         UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
-        self.url_button.colors = UrlColors("#898989", "#4c75ff", "#942ccc")
+        self.url_button.colors = UrlColors("#9f9f9f", "#4c75ff", "#942ccc")
         self.category_labels = [self.cat_mil,
                                 self.cat_rad,
                                 self.cat_active,
@@ -199,19 +200,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.description_text.setText(current_signal.at["description"])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
-                    cat_lab.setStyleSheet("color: #9f9f9f;")
+                    cat_lab.setStyleSheet(f"color: {self.inactive_color};")
                 elif cat == '1':
-                    cat_lab.setStyleSheet("color: #39eaff;")
+                    cat_lab.setStyleSheet(f"color: {self.active_color};")
             self.set_band_range(current_signal)
             self.audio_widget.set_audio_player(self.current_signal_name)
         else:
             self.url_button.setEnabled(False)
-            self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked};")
+            self.url_button.setStyleSheet(f"color: {self.url_button.colors.inactive};")
             self.current_signal_name = ''
             for lab in self.property_labels:
                 lab.setText("N/A")
             for lab in self.category_labels:
-                lab.setStyleSheet("""color: #9f9f9f;""")
+                lab.setStyleSheet(f"color: {self.inactive_color};")
             self.set_band_range()
             self.audio_widget.set_audio_player()
 
@@ -267,22 +268,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
-    @staticmethod
-    def activate_band_category(band_label, activate = True):
-        color = "#39eaff;" if activate else "#9f9f9f"
+    @classmethod
+    def activate_band_category(cls, band_label, activate = True):
+        color = cls.active_color if activate else cls.inactive_color
         for label in band_label:
-            label.setStyleSheet(f"color: {color}")
+            label.setStyleSheet(f"color: {color};")
 
     def set_band_range(self, current_signal = None):
         if current_signal is not None and not self.undefined_freq:
             lower_freq = int(current_signal.at["inf_freq"])
             upper_freq = int(current_signal.at["sup_freq"])
-            zipped = zip(self.bands, self.band_labels)
+            zipped = list(zip(self.bands, self.band_labels))
             for i, w in enumerate(zipped):
                 band, band_label = w
                 if lower_freq >= band.lower and lower_freq < band.upper:
                     self.activate_band_category(band_label)
-                    for uband, uband_label in list(zipped)[i + 1:]:
+                    for uband, uband_label in zipped[i + 1:]:
                         if upper_freq > uband.lower:
                             self.activate_band_category(uband_label)
                         else:
@@ -296,7 +297,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def go_to_web_page_signal(self):
         if self.current_signal_name:
-            self.url_button.setStyleSheet("color: #942ccc;")
+            self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked}")
             webbrowser.open(self.db.at[self.current_signal_name, "url"])
             self.db.at[self.current_signal_name, "url_clicked"] = True
 
