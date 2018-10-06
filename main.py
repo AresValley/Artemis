@@ -170,28 +170,28 @@ class MyApp(QMainWindow, Ui_MainWindow):
             current_signal = self.db.loc[self.current_signal_name]
             self.url_button.setEnabled(True)
             self.url_button.setStyleSheet("color: #4c75ff;")
-            category_code = current_signal.loc["category_code"]
+            category_code = current_signal.at["category_code"]
             self.find_if_undefined(current_signal)
             if not self.undefined_freq:
                 self.freq_lab.setText(self.format_numbers(
-                                          current_signal.loc["inf_freq"],
-                                          current_signal.loc["sup_freq"])
+                                          current_signal.at["inf_freq"],
+                                          current_signal.at["sup_freq"])
                                      )
             else:
                 self.freq_lab.setText("Undefined")
             if not self.undefined_band:
                 self.band_lab.setText(self.format_numbers(
-                                        current_signal.loc["inf_band"],
-                                        current_signal.loc["sup_band"])
+                                        current_signal.at["inf_band"],
+                                        current_signal.at["sup_band"])
                                      )
             else:
                 self.band_lab.setText("Undefined")
 
-            self.mode_lab.setText(current_signal.loc["mode"])
-            self.modul_lab.setText(current_signal.loc["modulation"])
-            self.loc_lab.setText(current_signal.loc["location"])
-            self.acf_lab.setText(current_signal.loc["acf"])
-            self.description_text.setText(current_signal.loc["description"])
+            self.mode_lab.setText(current_signal.at["mode"])
+            self.modul_lab.setText(current_signal.at["modulation"])
+            self.loc_lab.setText(current_signal.at["location"])
+            self.acf_lab.setText(current_signal.at["acf"])
+            self.description_text.setText(current_signal.at["description"])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
                     cat_lab.setStyleSheet("color: #9f9f9f;")
@@ -211,10 +211,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.audio_widget.set_audio_player()
 
     def find_if_undefined(self, current_signal):
-        lower_freq = current_signal.loc["inf_freq"]
-        lower_band = current_signal.loc["inf_band"]
-        upper_freq = current_signal.loc["sup_freq"]
-        upper_band = current_signal.loc["sup_band"]
+        lower_freq = current_signal.at["inf_freq"]
+        lower_band = current_signal.at["inf_band"]
+        upper_freq = current_signal.at["sup_freq"]
+        upper_band = current_signal.at["sup_band"]
         if lower_freq == '0' and upper_freq == "100000000000":
             self.undefined_freq = True
         else:
@@ -270,8 +270,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def set_band_range(self, current_signal = None):
         if current_signal is not None and not self.undefined_freq:
-            lower_freq = int(current_signal.loc["inf_freq"])
-            upper_freq = int(current_signal.loc["sup_freq"])
+            lower_freq = int(current_signal.at["inf_freq"])
+            upper_freq = int(current_signal.at["sup_freq"])
             zipped = zip(self.bands, self.band_labels)
             for i, w in enumerate(zipped):
                 band, band_label = w
@@ -292,8 +292,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def go_to_web_page_signal(self):
         if self.current_signal_name:
             self.url_button.setStyleSheet("color: #942ccc;")
-            webbrowser.open(self.db.loc[self.current_signal_name].loc["url"])
-            # self.db.loc[self.current_signal_name].loc["url_clicked"] = True
+            webbrowser.open(self.db.at[self.current_signal_name, "url"])
+            self.db.at[self.current_signal_name, "url_clicked"] = True
 
 
 
