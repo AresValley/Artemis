@@ -44,6 +44,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.undefined_freq = False
         self.undefined_band = False
         self.signal_names = []
+        UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
+        self.url_button.colors = UrlColors("#898989", "#4c75ff", "#942ccc")
         self.category_labels = [self.cat_mil,
                                 self.cat_rad,
                                 self.cat_active,
@@ -169,7 +171,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.name_lab.setText(words)
             current_signal = self.db.loc[self.current_signal_name]
             self.url_button.setEnabled(True)
-            self.url_button.setStyleSheet("color: #4c75ff;")
+            if not current_signal.at["url_clicked"]:
+                self.url_button.setStyleSheet(f"color: {self.url_button.colors.active};")
+            else:
+                self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked};")
             category_code = current_signal.at["category_code"]
             self.find_if_undefined(current_signal)
             if not self.undefined_freq:
@@ -201,7 +206,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.audio_widget.set_audio_player(self.current_signal_name)
         else:
             self.url_button.setEnabled(False)
-            self.url_button.setStyleSheet("color: #898989;")
+            self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked};")
             self.current_signal_name = ''
             for lab in self.property_labels:
                 lab.setText("N/A")
