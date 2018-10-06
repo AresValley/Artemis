@@ -41,6 +41,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.db_version = None
         self.db = None
         self.current_signal_name = ''
+        self.undefined_freq = False
+        self.undefined_band = False
         self.signal_names = []
         self.category_labels = [self.cat_mil,
                                 self.cat_rad,
@@ -80,21 +82,34 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         self.volume, 
                                         self.audio_progress)
 
+        BandLabel = namedtuple("BandLabel", ["left", "center", "right"])
         self.band_labels = [
-            [self.elf, self.elf_s1, self.elf_s2],
-            [self.slf, self.slf_s1, self.slf_s2],
-            [self.ulf, self.ulf_s1, self.ulf_s2],
-            [self.vlf, self.vlf_s1, self.vlf_s2],
-            [self.lf , self.lf_s1 , self.lf_s2],
-            [self.mf , self.mf_s1 , self.mf_s2],
-            [self.hf , self.hf_s1 , self.hf_s2],
-            [self.vhf, self.vhf_s1, self.vhf_s2],
-            [self.uhf, self.uhf_s1, self.uhf_s2],
-            [self.shf, self.shf_s1, self.shf_s2],
-            [self.ehf, None,        None],
+            BandLabel(self.elf_left, self.elf, self.elf_right),
+            BandLabel(self.slf_left, self.slf, self.slf_right),
+            BandLabel(self.ulf_left, self.ulf, self.ulf_right),
+            BandLabel(self.vlf_left, self.vlf, self.vlf_right),
+            BandLabel(self.lf_left,  self.lf,  self.lf_right),
+            BandLabel(self.mf_left,  self.mf,  self.mf_right),
+            BandLabel(self.hf_left,  self.hf,  self.hf_right),
+            BandLabel(self.vhf_left, self.vhf, self.vhf_right),
+            BandLabel(self.uhf_left, self.uhf, self.uhf_right),
+            BandLabel(self.shf_left, self.shf, self.shf_right),
+            BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
 
     def load_db(self):
+        names = ["name",
+                 "inf_freq",
+                 "sup_freq",
+                 "mode",
+                 "inf_band",
+                 "sup_band",
+                 "location",
+                 "url",
+                 "description",
+                 "modulation",
+                 "category_code",
+                 "acf",]
         try:
             self.db = read_csv(os.path.join('Data', 'db.csv'), 
                                sep = '*',
@@ -106,20 +121,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         'inf_band': str,
                                         'sup_band': str,
                                         'category_code': str,},
-                               names = ["name",
-                                        "inf_freq",
-                                        "sup_freq",
-                                        "mode",
-                                        "inf_band",
-                                        "sup_band",
-                                        "location",
-                                        "url",
-                                        "description",
-                                        "modulation",
-                                        "category_code",
-                                        "acf",],
+                               names = names,
                                )
-            self.db.fillna("N/A", inplace = True)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
             box = QMessageBox(self)
@@ -129,7 +132,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             box.show()
         else:
             self.signal_names = self.db.index
-        
+            self.db.fillna("N/A", inplace = True)
+            self.db["url_clicked"] = False
         try:
             with open(os.path.join('Data', 'verdb.ini'), 'r') as dbver:
                 self.db_version = int(dbver.read())
@@ -144,7 +148,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         else:
             self.setStatusTip(f"Database version: {self.db_version}")
 
-
     def display_signals(self):
         self.result_list.clear()
         for signal in self.signal_names:
@@ -155,8 +158,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.display_spectrogram()
         item = self.result_list.currentItem()
         if item:
-            self.url_button.setEnabled(True)
-            self.url_button.setStyleSheet("color: #4c75ff;")
             self.current_signal_name = item.text()
             words = self.current_signal_name.split(' ')
             if len(words) > 3:
@@ -167,16 +168,25 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 words = self.current_signal_name
             self.name_lab.setText(words)
             current_signal = self.db.loc[self.current_signal_name]
-            print(current_signal.loc["inf_band"], current_signal.loc["sup_band"])
+            self.url_button.setEnabled(True)
+            self.url_button.setStyleSheet("color: #4c75ff;")
             category_code = current_signal.loc["category_code"]
-            self.freq_lab.setText(self.format_numbers(
-                                    current_signal.loc["inf_freq"],
-                                    current_signal.loc["sup_freq"])
-                                 )
-            self.band_lab.setText(self.format_numbers(
-                                    current_signal.loc["inf_band"],
-                                    current_signal.loc["sup_band"])
-                                 )
+            self.find_if_undefined(current_signal)
+            if not self.undefined_freq:
+                self.freq_lab.setText(self.format_numbers(
+                                          current_signal.loc["inf_freq"],
+                                          current_signal.loc["sup_freq"])
+                                     )
+            else:
+                self.freq_lab.setText("Undefined")
+            if not self.undefined_band:
+                self.band_lab.setText(self.format_numbers(
+                                        current_signal.loc["inf_band"],
+                                        current_signal.loc["sup_band"])
+                                     )
+            else:
+                self.band_lab.setText("Undefined")
+
             self.mode_lab.setText(current_signal.loc["mode"])
             self.modul_lab.setText(current_signal.loc["modulation"])
             self.loc_lab.setText(current_signal.loc["location"])
@@ -200,18 +210,33 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.set_band_range()
             self.audio_widget.set_audio_player()
 
+    def find_if_undefined(self, current_signal):
+        lower_freq = current_signal.loc["inf_freq"]
+        lower_band = current_signal.loc["inf_band"]
+        upper_freq = current_signal.loc["sup_freq"]
+        upper_band = current_signal.loc["sup_band"]
+        if lower_freq == '0' and upper_freq == "100000000000":
+            self.undefined_freq = True
+        else:
+            self.undefined_freq = False
+        if lower_band == '0' and upper_band == '100000000':
+            self.undefined_band = True
+        else:
+            self.undefined_band = False
+
     @classmethod
     def format_numbers(cls, lower, upper):
         units = {1: 'Hz', 1000: 'kHz', 10**6: 'MHz', 10**9: 'GHz'}
         lower_factor = cls.change_unit(lower)
         upper_factor = cls.change_unit(upper)
-        if lower != upper:
-            lower = int(lower) / lower_factor
-            upper = int(upper) / upper_factor
-            return f"{lower} {units[lower_factor]} - {upper} {units[upper_factor]}"
+        pre_lower = lower
+        pre_upper = upper
+        lower = int(lower) / lower_factor
+        upper = int(upper) / upper_factor
+        if pre_lower != pre_upper:    
+            return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
         else:
-            lower = int(lower) / lower_factor
-            return f"{lower} {units[lower_factor]}"
+            return f"{lower:,} {units[lower_factor]}"
 
     @staticmethod
     def change_unit(num):
@@ -237,33 +262,38 @@ class MyApp(QMainWindow, Ui_MainWindow):
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
+    @staticmethod
+    def activate_band_category(band_label, activate = True):
+        color = "#39eaff;" if activate else "#9f9f9f"
+        for label in band_label:
+            label.setStyleSheet(f"color: {color}")
+
     def set_band_range(self, current_signal = None):
-        # How to deal with one-frequency signals?
-        if current_signal is not None:
-            inf_band = int(current_signal.loc["inf_freq"])
-            sup_band = int(current_signal.loc["sup_freq"])
-            for band, band_label in zip(self.bands, self.band_labels):
-                delta = (band.upper - band.lower) // 2 + band.lower
-                if inf_band <= band.lower and sup_band > band.lower:
-                    band_label[0].setStyleSheet("color: #39eaff;")
+        if current_signal is not None and not self.undefined_freq:
+            lower_freq = int(current_signal.loc["inf_freq"])
+            upper_freq = int(current_signal.loc["sup_freq"])
+            zipped = zip(self.bands, self.band_labels)
+            for i, w in enumerate(zipped):
+                band, band_label = w
+                if lower_freq >= band.lower and lower_freq < band.upper:
+                    self.activate_band_category(band_label)
+                    for uband, uband_label in list(zipped)[i + 1:]:
+                        if upper_freq > uband.lower:
+                            self.activate_band_category(uband_label)
+                        else:
+                            self.activate_band_category(uband_label, False)
+                    break
                 else:
-                    band_label[0].setStyleSheet("color: #9f9f9f;")
-                if band_label[1]:
-                    if inf_band <= delta and sup_band >= delta:
-                        band_label[1].setStyleSheet("color: #39eaff;")
-                    else:
-                        band_label[1].setStyleSheet("color: #9f9f9f;")
-                if band_label[2]:                
-                    if inf_band <= band.upper and sup_band > band.upper:
-                        band_label[2].setStyleSheet("color: #39eaff;")
-                    else:
-                        band_label[2].setStyleSheet("color: #9f9f9f;")
+                    self.activate_band_category(band_label, False)
         else:
-            [label.setStyleSheet("color: #9f9f9f;") for labels in self.band_labels for label in labels if label]
+            for band_label in self.band_labels:
+                self.activate_band_category(band_label, False)
 
     def go_to_web_page_signal(self):
         if self.current_signal_name:
+            self.url_button.setStyleSheet("color: #942ccc;")
             webbrowser.open(self.db.loc[self.current_signal_name].loc["url"])
+            # self.db.loc[self.current_signal_name].loc["url_clicked"] = True
 
 
 
