@@ -137,19 +137,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.signal_names = self.db.index
             self.db.fillna("N/A", inplace = True)
             self.db["url_clicked"] = False
-        try:
-            with open(os.path.join('Data', 'verdb.ini'), 'r') as dbver:
-                self.db_version = int(dbver.read())
-        except (FileNotFoundError, ValueError):
-            box = QMessageBox(self)
-            box.setWindowTitle("No database version")
-            box.setText("Unable to detect database version.\n"
-                "Possible data curruption.\n"
-                "Go to Updates->Force Download.")
-            box.show()
-            self.setStatusTip("Database version: undefined.")
-        else:
-            self.setStatusTip(f"Database version: {self.db_version}")
+            try:
+                with open(os.path.join('Data', 'verdb.ini'), 'r') as dbver:
+                    self.db_version = int(dbver.read())
+            except (FileNotFoundError, ValueError):
+                box = QMessageBox(self)
+                box.setWindowTitle("No database version")
+                box.setText("Unable to detect database version.\n"
+                    "Possible data curruption.\n"
+                    "Go to Updates->Force Download.")
+                box.show()
+                self.setStatusTip("Database version: undefined.")
+            else:
+                self.setStatusTip(f"Database version: {self.db_version}")
 
     def display_signals(self):
         self.result_list.clear()

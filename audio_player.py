@@ -75,7 +75,7 @@ class AudioPlayer(object):
     def set_audio_player(self, fname = ""):
         self.__first_call = True
         self.__reset_audio_widget()
-        full_name = os.path.join('Data', 'Audio_wav', fname + '.wav')
+        full_name = os.path.join('Data', 'Audio', fname + '.wav')
         if os.path.exists(full_name):
             self.__play.setEnabled(True)
             self.__audio_file = full_name

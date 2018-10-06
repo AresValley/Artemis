@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1169</width>
-    <height>626</height>
+    <width>1337</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -260,6 +260,12 @@ border-radius: 5px;</string>
          <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>400</height>
+        </size>
        </property>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
@@ -1920,7 +1926,7 @@ QTabBar::tab:!selected {
       </property>
       <property name="minimumSize">
        <size>
-        <width>170</width>
+        <width>300</width>
         <height>0</height>
        </size>
       </property>
@@ -1955,7 +1961,7 @@ QLabel, QPushButton, QSlider {
        <item>
         <widget class="QWidget" name="audio_widget" native="true">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -2020,8 +2026,8 @@ QPushButton:disabled {
             </property>
             <property name="minimumSize">
              <size>
-              <width>41</width>
-              <height>41</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
@@ -2045,8 +2051,8 @@ QPushButton:disabled {
             </property>
             <property name="minimumSize">
              <size>
-              <width>41</width>
-              <height>41</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
@@ -2070,8 +2076,8 @@ QPushButton:disabled {
             </property>
             <property name="minimumSize">
              <size>
-              <width>41</width>
-              <height>41</height>
+              <width>60</width>
+              <height>60</height>
              </size>
             </property>
             <property name="text">
@@ -2151,15 +2157,15 @@ QSlider::handle:horizontal {
        <item>
         <widget class="QLabel" name="spectrogram">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
          <property name="minimumSize">
           <size>
-           <width>153</width>
-           <height>350</height>
+           <width>250</width>
+           <height>400</height>
           </size>
          </property>
          <property name="toolTip">
@@ -2189,7 +2195,7 @@ QSlider::handle:horizontal {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1169</width>
+     <width>1337</width>
      <height>21</height>
     </rect>
    </property>
