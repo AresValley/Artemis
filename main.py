@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              qApp,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
-from PyQt5.QtCore import QFileInfo, QSize
+from PyQt5.QtCore import QFileInfo, QSize, Qt
 
 from audio_player import AudioPlayer
 
@@ -169,7 +169,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     + "\n" + ' '.join(words[words_per_row:])
             else:
                 words = self.current_signal_name
-            self.name_lab.setText(words)
+            self.name_lab.setText(self.current_signal_name)
+            self.name_lab.setAlignment(Qt.AlignHCenter)
             current_signal = self.db.loc[self.current_signal_name]
             self.url_button.setEnabled(True)
             if not current_signal.at["url_clicked"]:

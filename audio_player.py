@@ -75,7 +75,7 @@ class AudioPlayer(object):
     def set_audio_player(self, fname = ""):
         self.__first_call = True
         self.__reset_audio_widget()
-        full_name = os.path.join('Data', 'Audio', fname + '.wav')
+        full_name = os.path.join('Data', 'Audio_ogg', fname + '.ogg')
         if os.path.exists(full_name):
             self.__play.setEnabled(True)
             self.__audio_file = full_name
@@ -84,7 +84,7 @@ class AudioPlayer(object):
         if not self.__paused:
             if self.__first_call:
                 self.__first_call = False
-                mixer.init(frequency = AudioSegment.from_wav(self.__audio_file).frame_rate,
+                mixer.init(frequency = AudioSegment.from_ogg(self.__audio_file).frame_rate,
                            buffer = 2048)
                 mixer.music.load(self.__audio_file)
                 self.__set_volume()
