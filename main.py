@@ -258,13 +258,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
             return 10**9
         
     def display_spectrogram(self):
-        default_pic = os.path.join("icons_imgs", "image_not_found.png")
+        default_pic = os.path.join("icons_imgs", "nosignalselected.png")
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
             path_spectr = os.path.join("Data", "Spectra", spectrogram_name + ".jpg")
             if not QFileInfo(path_spectr).exists():
-                path_spectr = default_pic
+                path_spectr = os.path.join("icons_imgs", "spectrumnotavailable.png")
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))

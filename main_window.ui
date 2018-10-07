@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>ARTEMIS2</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
@@ -1920,7 +1920,7 @@ p, li { white-space: pre-wrap; }
       </property>
       <property name="minimumSize">
        <size>
-        <width>310</width>
+        <width>270</width>
         <height>0</height>
        </size>
       </property>
@@ -2159,7 +2159,7 @@ QSlider::handle:horizontal {
          <property name="minimumSize">
           <size>
            <width>250</width>
-           <height>400</height>
+           <height>417</height>
           </size>
          </property>
          <property name="toolTip">
@@ -2172,7 +2172,7 @@ QSlider::handle:horizontal {
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>icons_imgs/image_not_found.png</pixmap>
+          <pixmap>icons_imgs/nosignalselected.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
