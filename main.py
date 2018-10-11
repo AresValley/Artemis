@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
                              QMessageBox,
                              qApp,
-                             QDesktopWidget)
+                             QDesktopWidget,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import QFileInfo, QSize, Qt
@@ -38,6 +38,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+
+
+
         self.set_initial_size()
         self.show()
         self.actionExit.triggered.connect(qApp.quit)
