@@ -7,7 +7,8 @@ from pandas import read_csv
 from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
                              QMessageBox,
-                             qApp,)
+                             qApp,
+                             QDesktopWidget)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import QFileInfo, QSize, Qt
@@ -20,7 +21,7 @@ Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 class MyApp(QMainWindow, Ui_MainWindow):
     Band = namedtuple("Band", ["lower", "upper"])
-    ELF =  Band(3, 30)
+    ELF = Band(3, 30)
     SLF = Band(30, 300)
     ULF = Band(300, 3000)
     VLF = Band(3000, 30000)
@@ -37,6 +38,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.set_initial_size()
         self.show()
         self.actionExit.triggered.connect(qApp.quit)
         self.db_version = None
@@ -98,6 +100,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.shf_left, self.shf, self.shf_right),
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
+
+    def set_initial_size(self):
+        d = QDesktopWidget().availableGeometry()
+        w = d.width()
+        h = d.height()
+        self.setGeometry(50, 50, (3  * w) // 4, (3 * h) // 4)
 
     def load_db(self):
         names = ["name",
