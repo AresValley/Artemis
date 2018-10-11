@@ -65,8 +65,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                 self.cat_num_stat,
                                 self.cat_time_sig,]
 
-        self.property_labels = [self.name_lab,
-                                self.freq_lab,
+        self.property_labels = [self.freq_lab,
                                 self.band_lab,
                                 self.mode_lab,
                                 self.modul_lab,
@@ -210,6 +209,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.url_button.setEnabled(False)
             self.url_button.setStyleSheet(f"color: {self.url_button.colors.inactive};")
             self.current_signal_name = ''
+            self.name_lab.setText("No signal")
+            self.name_lab.setAlignment(Qt.AlignHCenter)
             for lab in self.property_labels:
                 lab.setText("N/A")
             for lab in self.category_labels:
