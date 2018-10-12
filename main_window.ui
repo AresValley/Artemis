@@ -1983,6 +1983,9 @@ QPushButton {
                   <property name="text">
                    <string>LF</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item row="2" column="2">
@@ -1996,6 +1999,9 @@ QPushButton {
                   </property>
                   <property name="text">
                    <string>VLF</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2011,6 +2017,12 @@ QPushButton {
                   <property name="text">
                    <string>EHF</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
+                  </property>
                  </widget>
                 </item>
                 <item row="3" column="2">
@@ -2024,6 +2036,9 @@ QPushButton {
                   </property>
                   <property name="text">
                    <string>SHF</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2039,6 +2054,9 @@ QPushButton {
                   <property name="text">
                    <string>VHF</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item row="2" column="1">
@@ -2052,6 +2070,9 @@ QPushButton {
                   </property>
                   <property name="text">
                    <string>SLF</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2067,6 +2088,9 @@ QPushButton {
                   <property name="text">
                    <string>UHF</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item row="0" column="1">
@@ -2080,6 +2104,9 @@ QPushButton {
                   </property>
                   <property name="text">
                    <string>ULF</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2101,6 +2128,9 @@ QPushButton {
                   <property name="text">
                    <string>ELF</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="0">
@@ -2120,6 +2150,9 @@ QPushButton {
                   </property>
                   <property name="text">
                    <string>HF</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
@@ -2141,6 +2174,9 @@ QPushButton {
                   <property name="text">
                    <string>EHF</string>
                   </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
                 <item row="3" column="0">
@@ -2160,6 +2196,9 @@ QPushButton {
                   </property>
                   <property name="text">
                    <string>MF</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
                   </property>
                  </widget>
                 </item>
