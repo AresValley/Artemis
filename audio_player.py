@@ -14,7 +14,6 @@ class AudioPlayer(object):
     """
 
     __time_step = 500 # Milliseconds.
-    __delay_load_audio = 250 # Milliseconds
 
     def __init__(self, play, pause, stop, volume, audio_progress):
         self.__paused = False
