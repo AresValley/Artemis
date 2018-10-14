@@ -23,7 +23,7 @@ Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 class MyApp(QMainWindow, Ui_MainWindow):
     Band = namedtuple("Band", ["lower", "upper"])
-    ELF = Band(3, 30)
+    ELF = Band(0, 30) # Formally it is (3, 30) Hz.
     SLF = Band(30, 300)
     ULF = Band(300, 3000)
     VLF = Band(3000, 30000)
@@ -47,8 +47,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.db_version = None
         self.db = None
         self.current_signal_name = ''
-        self.undefined_freq = False
-        self.undefined_band = False
         self.signal_names = []
         self.frequency_filters_btns = (
             self.elf_filter_btn,
@@ -261,10 +259,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         for btn, band_limits in zip(self.frequency_filters_btns, self.bands):
             if btn.isChecked():
                 any_checked = True
-                if (signal_freqs[0] >= band_limits.lower \
+                if (signal_freqs[0] >= band_limits.lower     \
                     and signal_freqs[0] < band_limits.upper) \
-                    or (signal_freqs[1] >= band_limits.lower \
-                    and signal_freqs[1] < band_limits.upper):
+                    or                                       \
+                    (signal_freqs[1] >= band_limits.lower    \
+                    and signal_freqs[1] < band_limits.upper) \
+                    or                                       \
+                    (signal_freqs[0] < band_limits.lower     \
+                    and signal_freqs[1] >= band_limits.upper):
                     band_filter_ok = True
         lower_freq_filter = self.lower_freq_spinbox.value()
         upper_freq_filter = self.upper_freq_spinbox.value()
@@ -412,7 +414,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             label.setStyleSheet(f"color: {color};")
 
     def set_band_range(self, current_signal = None):
-        if current_signal is not None and not self.undefined_freq:
+        if current_signal is not None and not self.find_if_undefined(current_signal)[0]:
             lower_freq = int(current_signal.at["inf_freq"])
             upper_freq = int(current_signal.at["sup_freq"])
             zipped = list(zip(self.bands, self.band_labels))
