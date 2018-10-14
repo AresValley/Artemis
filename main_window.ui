@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>ARTEMIS2</string>
+   <string>ARTEMIS3</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
@@ -2330,6 +2330,14 @@ QPushButton:checked {
                        <bold>true</bold>
                       </font>
                      </property>
+                     <property name="currentText">
+                      <string>MHz</string>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>MHz</string>
+                      </property>
+                     </item>
                      <item>
                       <property name="text">
                        <string>Hz</string>
@@ -2338,11 +2346,6 @@ QPushButton:checked {
                      <item>
                       <property name="text">
                        <string>kHz</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>MHz</string>
                       </property>
                      </item>
                      <item>
@@ -2586,6 +2589,9 @@ QPushButton:checked {
                        <bold>true</bold>
                       </font>
                      </property>
+                     <property name="currentText">
+                      <string>MHz</string>
+                     </property>
                      <property name="maxCount">
                       <number>4</number>
                      </property>
@@ -2597,17 +2603,17 @@ QPushButton:checked {
                      </property>
                      <item>
                       <property name="text">
+                       <string>MHz</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
                        <string>Hz</string>
                       </property>
                      </item>
                      <item>
                       <property name="text">
                        <string>kHz</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>MHz</string>
                       </property>
                      </item>
                      <item>
@@ -2636,10 +2642,24 @@ QPushButton:checked {
                 </font>
                </property>
                <property name="text">
-                <string>Applay frequency filters</string>
+                <string>Applay</string>
                </property>
                <property name="checkable">
                 <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="reset_frequency_filters_btn">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Reset</string>
                </property>
               </widget>
              </item>
@@ -2695,7 +2715,7 @@ border: 1px solid gray;
 border-radius: 5px;</string>
            </property>
            <property name="text">
-            <string>Remove all filters</string>
+            <string>Reset all filters</string>
            </property>
           </widget>
          </item>

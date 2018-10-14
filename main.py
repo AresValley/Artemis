@@ -37,6 +37,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     bands = ELF, SLF, ULF, VLF, LF, MF, HF, VHF, UHF, SHF, EHF
     active_color = "#39eaff"
     inactive_color = "#9f9f9f"
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -49,7 +50,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.undefined_freq = False
         self.undefined_band = False
         self.signal_names = []
-        self.frequency_filters = (
+        self.frequency_filters_btns = (
             self.elf_filter_btn,
             self.slf_filter_btn,
             self.ulf_filter_btn,
@@ -67,10 +68,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
                         self.lower_freq_confidence.value()
                     )
         )
-        self.apply_reset_freq_filter_btn.set_texts("Apply frequency filters",
-                                                   "Remove frequency filters")
+        self.apply_reset_freq_filter_btn.set_texts("Apply", "Remove")
         self.apply_reset_freq_filter_btn.set_slave_filters(
-            *self.frequency_filters, 
+            *self.frequency_filters_btns, 
             self.lower_freq_spinbox, 
             self.upper_freq_spinbox,
             self.lower_freq_filter_unit, 
@@ -79,6 +79,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.upper_freq_confidence,
         )
         self.apply_reset_freq_filter_btn.clicked.connect(self.display_signals)
+        self.reset_frequency_filters_btn.clicked.connect(self.reset_frequency_filters)
         UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
         self.url_button.colors = UrlColors("#9f9f9f", "#4c75ff", "#942ccc")
         self.category_labels = [self.cat_mil,
@@ -132,6 +133,20 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.shf_left, self.shf, self.shf_right),
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
+
+    def reset_frequency_filters(self):
+        if self.apply_reset_freq_filter_btn.isChecked():
+            self.apply_reset_freq_filter_btn.setChecked(False)
+            self.apply_reset_freq_filter_btn.clicked.emit()
+        for f in self.frequency_filters_btns:
+            if f.isChecked():
+                f.setChecked(False)
+        self.lower_freq_spinbox.setValue(0)
+        self.upper_freq_spinbox.setValue(0)
+        self.lower_freq_filter_unit.setCurrentText("MHz")
+        self.upper_freq_filter_unit.setCurrentText("MHz")
+        self.lower_freq_confidence.setValue(5)
+        self.upper_freq_confidence.setValue(5)
 
     def set_initial_size(self):
         """
@@ -243,13 +258,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         band_filter_ok = False
         any_checked = False
-        for btn, band_limits in zip(self.frequency_filters, self.bands):
+        for btn, band_limits in zip(self.frequency_filters_btns, self.bands):
             if btn.isChecked():
                 any_checked = True
-                if signal_freqs[0] >= band_limits.lower \
-                    and signal_freqs[0] < band_limits.upper \
-                    or signal_freqs[1] >= band_limits.lower \
-                    and signal_freqs[1] < band_limits.upper:
+                if (signal_freqs[0] >= band_limits.lower \
+                    and signal_freqs[0] < band_limits.upper) \
+                    or (signal_freqs[1] >= band_limits.lower \
+                    and signal_freqs[1] < band_limits.upper):
                     band_filter_ok = True
         lower_freq_filter = self.lower_freq_spinbox.value()
         upper_freq_filter = self.upper_freq_spinbox.value()
