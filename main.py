@@ -180,9 +180,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 QSlider::handle:horizontal {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 gray, stop:0.5 white, stop:1.0 gray);
                     border: 1px solid #5c5c5c;
-                    width: 25px;
-                    margin: -10px -10px;
-                    border-radius: 12px;
+                    width: 28px;
+                    margin: -8px -8px;
+                    border-radius: 14px;
                 }
             """)
 
