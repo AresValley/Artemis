@@ -49,8 +49,36 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.undefined_freq = False
         self.undefined_band = False
         self.signal_names = []
+        self.frequency_filters = (
+            self.elf_filter_btn,
+            self.slf_filter_btn,
+            self.ulf_filter_btn,
+            self.vlf_filter_btn,
+            self.lf_filter_btn,
+            self.mf_filter_btn,
+            self.hf_filter_btn,
+            self.vhf_filter_btn,
+            self.uhf_filter_btn,
+            self.shf_filter_btn,
+            self.ehf_filter_btn,
+        )
+        self.lower_freq_confidence.valueChanged.connect(
+            lambda: self.upper_freq_confidence.setValue(
+                        self.lower_freq_confidence.value()
+                    )
+        )
         self.apply_reset_freq_filter_btn.set_texts("Apply frequency filters",
                                                    "Remove frequency filters")
+        self.apply_reset_freq_filter_btn.set_slave_filters(
+            *self.frequency_filters, 
+            self.lower_freq_spinbox, 
+            self.upper_freq_spinbox,
+            self.lower_freq_filter_unit, 
+            self.upper_freq_filter_unit,
+            self.lower_freq_confidence, 
+            self.upper_freq_confidence,
+        )
+        self.apply_reset_freq_filter_btn.clicked.connect(self.display_signals)
         UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
         self.url_button.colors = UrlColors("#9f9f9f", "#4c75ff", "#942ccc")
         self.category_labels = [self.cat_mil,
@@ -83,7 +111,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.load_db()
         self.display_signals()
         self.search_bar.textChanged.connect(self.display_signals)
-        self.apply_reset_freq_filter_btn.clicked.connect(self.display_signals)
         self.result_list.currentItemChanged.connect(self.display_specs)
         self.audio_widget = AudioPlayer(self.play, 
                                         self.pause, 
@@ -106,20 +133,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
 
-        self.frequency_filters = (
-            self.elf_filter_btn,
-            self.slf_filter_btn,
-            self.ulf_filter_btn,
-            self.vlf_filter_btn,
-            self.lf_filter_btn,
-            self.mf_filter_btn,
-            self.hf_filter_btn,
-            self.vhf_filter_btn,
-            self.uhf_filter_btn,
-            self.shf_filter_btn,
-            self.ehf_filter_btn,
-        )
-
     def set_initial_size(self):
         """
         Function to handle high resolution screens. The function sets bigger sizes
@@ -131,6 +144,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.setGeometry(50, 50, (3  * w) // 4, (3 * h) // 4)
         if w > 3000 or h > 2000:
             self.fixed_audio_and_image.setFixedSize(540, 1150)
+            self.fixed_audio_and_image.setMaximumSize(540, 1150)
             self.play.setFixedSize(140, 140)
             self.pause.setFixedSize(140, 140)
             self.stop.setFixedSize(140, 140)
@@ -216,48 +230,49 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 self.result_list.addItem(signal)
 
     def frequency_filters_ok(self, signal_name):
-        if self.apply_reset_freq_filter_btn.isChecked():
-            undef_freq, _ = self.find_if_undefined(self.db.loc[signal_name])
-            if not undef_freq:
-                conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000,
-                                      "GHz":1000000000}
+        if not self.apply_reset_freq_filter_btn.isChecked():
+            return True
+        undef_freq, _ = self.find_if_undefined(self.db.loc[signal_name])
+        if undef_freq:
+            return False
+        conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000,
+                              "GHz":1000000000}
 
-                signal_freqs = (int(self.db.at[signal_name, "inf_freq"]), 
-                                int(self.db.at[signal_name, "sup_freq"]))
+        signal_freqs = (int(self.db.at[signal_name, "inf_freq"]), 
+                        int(self.db.at[signal_name, "sup_freq"]))
 
-                band_filter_ok = False
-                any_checked = False
-                for btn, band_limits in zip(self.frequency_filters, self.bands):
-                    if btn.isChecked():
-                        any_checked = True
-                        if signal_freqs[0] >= band_limits.lower and signal_freqs[1] < band_limits.upper:
-                            band_filter_ok = True
-                lower_freq_filter = self.lower_freq_spinbox.value()
-                upper_freq_filter = self.upper_freq_spinbox.value()
-                if lower_freq_filter > 0 and upper_freq_filter > 0:
-                    lower_tol = self.lower_freq_confidence.value()
-                    upper_tol = self.upper_freq_confidence.value()
-                    lower_limit = lower_freq_filter - lower_tol / 100 * lower_freq_filter
-                    upper_limit = upper_freq_filter + lower_tol / 100 * lower_freq_filter
-                    lower_units = self.lower_freq_filter_unit.currentText()
-                    upper_units = self.upper_freq_filter_unit.currentText()
-                    lower_limit *= conversion_factors[lower_units]
-                    upper_limit *= conversion_factors[upper_units]
-                    if signal_freqs[0] >= lower_limit and signal_freqs[1] <= upper_limit:
-                        if any_checked:
-                            return band_filter_ok
-                        else:
-                            return True
-                    else:
-                        return False
-                else:
-                    if any_checked:
-                        return band_filter_ok
-                    else:
-                        return False
-            else:
-                return False
-        return True
+        band_filter_ok = False
+        any_checked = False
+        for btn, band_limits in zip(self.frequency_filters, self.bands):
+            if btn.isChecked():
+                any_checked = True
+                if signal_freqs[0] >= band_limits.lower \
+                    and signal_freqs[0] < band_limits.upper \
+                    or signal_freqs[1] >= band_limits.lower \
+                    and signal_freqs[1] < band_limits.upper:
+                    band_filter_ok = True
+        lower_freq_filter = self.lower_freq_spinbox.value()
+        upper_freq_filter = self.upper_freq_spinbox.value()
+        lower_limit_ok = True
+        upper_limit_ok = True
+        if  lower_freq_filter > 0:
+            lower_tol = self.lower_freq_confidence.value()
+            lower_limit = lower_freq_filter - lower_tol / 100 * lower_freq_filter
+            lower_units = self.lower_freq_filter_unit.currentText()
+            lower_limit *= conversion_factors[lower_units]
+            if not signal_freqs[0] >= lower_limit:
+                lower_limit_ok = False
+        if  upper_freq_filter > 0:
+            upper_tol = self.upper_freq_confidence.value()
+            upper_limit = upper_freq_filter + lower_tol / 100 * lower_freq_filter
+            upper_units = self.upper_freq_filter_unit.currentText()
+            upper_limit *= conversion_factors[upper_units]
+            if not signal_freqs[1] <= upper_limit:
+                upper_limit_ok = False
+        if any_checked:
+            return band_filter_ok and lower_limit_ok and upper_limit_ok
+        else:
+            return lower_limit_ok and upper_limit_ok
 
     def display_specs(self):
         self.display_spectrogram()
@@ -321,7 +336,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.set_band_range()
             self.audio_widget.set_audio_player()
 
-    def find_if_undefined(self, current_signal):
+    @staticmethod
+    def find_if_undefined(current_signal):
         lower_freq = current_signal.at["inf_freq"]
         lower_band = current_signal.at["inf_band"]
         upper_freq = current_signal.at["sup_freq"]

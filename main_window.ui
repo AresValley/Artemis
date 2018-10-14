@@ -2720,8 +2720,8 @@ border-radius: 5px;</string>
       </property>
       <property name="maximumSize">
        <size>
-        <width>153</width>
-        <height>16777215</height>
+        <width>270</width>
+        <height>575</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -2945,7 +2945,7 @@ QSlider::handle:horizontal {
        <item>
         <widget class="QLabel" name="spectrogram">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
