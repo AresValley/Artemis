@@ -1979,7 +1979,24 @@ QPushButton:checked {
                 <string notr="true"/>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
-                <item row="0" column="0">
+                <item row="0" column="0" colspan="3">
+                 <widget class="QPushButton" name="include_undef_freqs">
+                  <property name="font">
+                   <font>
+                    <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Include undefined frequencies</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
                  <widget class="QPushButton" name="elf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2005,7 +2022,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
+                <item row="1" column="1">
                  <widget class="QPushButton" name="slf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2025,7 +2042,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2">
+                <item row="1" column="2">
                  <widget class="QPushButton" name="ulf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2045,7 +2062,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
+                <item row="2" column="0">
                  <widget class="QPushButton" name="vlf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2065,7 +2082,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
+                <item row="2" column="1">
                  <widget class="QPushButton" name="lf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2085,7 +2102,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
+                <item row="2" column="2">
                  <widget class="QPushButton" name="mf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2111,7 +2128,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
+                <item row="3" column="0">
                  <widget class="QPushButton" name="hf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2137,7 +2154,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1">
+                <item row="3" column="1">
                  <widget class="QPushButton" name="vhf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2157,7 +2174,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="2">
+                <item row="3" column="2">
                  <widget class="QPushButton" name="uhf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2177,7 +2194,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
+                <item row="4" column="0">
                  <widget class="QPushButton" name="shf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2197,7 +2214,7 @@ QPushButton:checked {
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="2">
+                <item row="4" column="2">
                  <widget class="QPushButton" name="ehf_filter_btn">
                   <property name="enabled">
                    <bool>true</bool>
@@ -2241,7 +2258,30 @@ QPushButton:checked {
                    </sizepolicy>
                   </property>
                   <layout class="QGridLayout" name="gridLayout_6">
-                   <item row="0" column="1">
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="label_10">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Upper frequency</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
                     <widget class="QSpinBox" name="lower_freq_spinbox">
                      <property name="enabled">
                       <bool>true</bool>
@@ -2277,30 +2317,7 @@ QPushButton:checked {
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_10">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Upper frequency</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
+                   <item row="2" column="2">
                     <widget class="QComboBox" name="upper_freq_filter_unit">
                      <property name="enabled">
                       <bool>true</bool>
@@ -2355,55 +2372,7 @@ QPushButton:checked {
                      </item>
                     </widget>
                    </item>
-                   <item row="0" column="4">
-                    <widget class="QSpinBox" name="lower_freq_confidence">
-                     <property name="enabled">
-                      <bool>true</bool>
-                     </property>
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="minimumSize">
-                      <size>
-                       <width>60</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>50</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                      </font>
-                     </property>
-                     <property name="frame">
-                      <bool>false</bool>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignCenter</set>
-                     </property>
-                     <property name="buttonSymbols">
-                      <enum>QAbstractSpinBox::UpDownArrows</enum>
-                     </property>
-                     <property name="specialValueText">
-                      <string/>
-                     </property>
-                     <property name="maximum">
-                      <number>100</number>
-                     </property>
-                     <property name="value">
-                      <number>5</number>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="4">
+                   <item row="2" column="4">
                     <widget class="QSpinBox" name="upper_freq_confidence">
                      <property name="enabled">
                       <bool>true</bool>
@@ -2451,7 +2420,7 @@ QPushButton:checked {
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="0">
+                   <item row="1" column="0">
                     <widget class="QLabel" name="label_2">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -2475,29 +2444,6 @@ QPushButton:checked {
                     </widget>
                    </item>
                    <item row="1" column="3">
-                    <widget class="QLabel" name="label_13">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>   Confidence %</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="3">
                     <widget class="QLabel" name="label_12">
                      <property name="sizePolicy">
                       <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -2520,7 +2466,7 @@ QPushButton:checked {
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="1">
+                   <item row="2" column="1">
                     <widget class="QSpinBox" name="upper_freq_spinbox">
                      <property name="enabled">
                       <bool>true</bool>
@@ -2559,7 +2505,7 @@ QPushButton:checked {
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="2">
+                   <item row="1" column="2">
                     <widget class="QComboBox" name="lower_freq_filter_unit">
                      <property name="enabled">
                       <bool>true</bool>
@@ -2623,6 +2569,77 @@ QPushButton:checked {
                      </item>
                     </widget>
                    </item>
+                   <item row="2" column="3">
+                    <widget class="QLabel" name="label_13">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>   Confidence %</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="4">
+                    <widget class="QSpinBox" name="lower_freq_confidence">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>60</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>50</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="frame">
+                      <bool>false</bool>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="buttonSymbols">
+                      <enum>QAbstractSpinBox::UpDownArrows</enum>
+                     </property>
+                     <property name="specialValueText">
+                      <string/>
+                     </property>
+                     <property name="maximum">
+                      <number>100</number>
+                     </property>
+                     <property name="value">
+                      <number>5</number>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </widget>
                 </item>
@@ -2630,7 +2647,7 @@ QPushButton:checked {
               </widget>
              </item>
              <item>
-              <widget class="DoubleTextButton" name="apply_reset_freq_filter_btn">
+              <widget class="DoubleTextButton" name="apply_remove_freq_filter_btn">
                <property name="enabled">
                 <bool>true</bool>
                </property>
