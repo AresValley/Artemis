@@ -2,11 +2,11 @@ import os
 import sys
 from pydub import AudioSegment
 from pygame import mixer
-from PyQt5.QtCore import QTimer, QTimer
+from PyQt5.QtCore import QTimer, QTimer, pyqtSlot, QObject
 import qtawesome as qta
 
 
-class AudioPlayer(object):
+class AudioPlayer(QObject):
     """
     This is the audio player widget. The only public methods are the __init__
     method and set_audio_player, which loads the current file. Everything else
@@ -16,6 +16,7 @@ class AudioPlayer(object):
     __time_step = 500 # Milliseconds.
 
     def __init__(self, play, pause, stop, volume, audio_progress):
+        super().__init__()
         self.__paused = False
         self.__first_call = True
         self.__play = play
@@ -43,6 +44,7 @@ class AudioPlayer(object):
                                    color_disabled = '#7a7a7a'))
         self.__stop.setIconSize(self.__stop.size())
 
+    @pyqtSlot()
     def __set_volume(self):
         if mixer.get_init():
             mixer.music.set_volume(self.__volume.value() / self.__volume.maximum())
@@ -57,6 +59,7 @@ class AudioPlayer(object):
         self.__enable_buttons(False, False, False)
         self.__paused = False
 
+    @pyqtSlot()
     def __update_bar(self):
         pos = mixer.music.get_pos()
         if pos == -1:
@@ -79,6 +82,7 @@ class AudioPlayer(object):
             self.__play.setEnabled(True)
             self.__audio_file = full_name
 
+    @pyqtSlot()
     def __play_audio(self):
         if not self.__paused:
             if self.__first_call:
@@ -95,12 +99,14 @@ class AudioPlayer(object):
         self.__timer.start(self.__time_step)
         self.__enable_buttons(False, True, True)
 
+    @pyqtSlot()
     def __stop_audio(self):
         mixer.music.stop()
         self.__audio_progress.reset()
         self.__timer.stop()
         self.__enable_buttons(True, False, False)
 
+    @pyqtSlot()
     def __pause_audio(self):
         mixer.music.pause()
         self.__timer.stop()

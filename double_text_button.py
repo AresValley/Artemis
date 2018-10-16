@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtCore import pyqtSlot
 
 class DoubleTextButton(QPushButton):
     def __init__(self, parent = None):
@@ -12,6 +13,7 @@ class DoubleTextButton(QPushButton):
     def set_slave_filters(self, *filters):
         self.filters = filters
 
+    @pyqtSlot()
     def manage_click(self):
         if self.isChecked():
             self.setText(self.text_b)

@@ -8,10 +8,11 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
                              QMessageBox,
                              qApp,
-                             QDesktopWidget,)
+                             QDesktopWidget,
+                             QListWidgetItem,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
-from PyQt5.QtCore import QFileInfo, QSize, Qt
+from PyQt5.QtCore import QFileInfo, QSize, Qt, pyqtSlot
 
 from audio_player import AudioPlayer
 
@@ -37,6 +38,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
     bands = ELF, SLF, ULF, VLF, LF, MF, HF, VHF, UHF, SHF, EHF
     active_color = "#39eaff"
     inactive_color = "#9f9f9f"
+    conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000,
+                          "GHz":1000000000}
 
     def __init__(self):
         super().__init__()
@@ -62,10 +65,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.ehf_filter_btn,
         )
         self.lower_freq_confidence.valueChanged.connect(
-            lambda: self.upper_freq_confidence.setValue(
-                        self.lower_freq_confidence.value()
-                    )
+            lambda value: self.upper_freq_confidence.setValue(value)
         )
+        # self.lower_freq_spinbox.valueChanged.connect(self.set_min_value_upper_limit)
         self.apply_remove_freq_filter_btn.set_texts("Apply", "Remove")
         self.apply_remove_freq_filter_btn.set_slave_filters(
             *self.frequency_filters_btns, 
@@ -79,6 +81,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
         self.apply_remove_freq_filter_btn.clicked.connect(self.display_signals)
         self.reset_frequency_filters_btn.clicked.connect(self.reset_frequency_filters)
+
         UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
         self.url_button.colors = UrlColors("#9f9f9f", "#4c75ff", "#942ccc")
         self.category_labels = [self.cat_mil,
@@ -222,13 +225,24 @@ class MyApp(QMainWindow, Ui_MainWindow):
             else:
                 self.setStatusTip(f"Database version: {self.db_version}")
 
+    # @pyqtSlot(int) # Da sistemare.
+    # def set_min_value_upper_limit(self, lower_spinbox_value):
+    #     conversion_factor = self.conversion_factors[self.lower_freq_filter_unit.currentText()]
+    #     print("enter")
+    #     if self.upper_freq_spinbox.value() * self.conversion_factors[self.upper_freq_filter_unit.currentText()] < lower_spinbox_value * conversion_factor:
+    #         print('IF')
+    #         self.upper_freq_spinbox.setValue(lower_spinbox_value * conversion_factor // self.conversion_factors[self.upper_freq_filter_unit.currentText()])
+
+    @pyqtSlot()
     def display_signals(self):
         self.result_list.clear()
+        text = self.search_bar.text()
         for signal in self.signal_names:
-            if self.search_bar.text().lower() in signal.lower() and \
+            if text.lower() in signal.lower() and \
                 self.frequency_filters_ok(signal):
                 self.result_list.addItem(signal)
 
+    @pyqtSlot()
     def reset_frequency_filters(self):
         if self.apply_remove_freq_filter_btn.isChecked():
             self.apply_remove_freq_filter_btn.setChecked(False)
@@ -254,8 +268,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 return True
             else:
                 return False
-        conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000,
-                              "GHz":1000000000}
 
         signal_freqs = (int(self.db.at[signal_name, "inf_freq"]), 
                         int(self.db.at[signal_name, "sup_freq"]))
@@ -275,14 +287,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
             lower_tol = self.lower_freq_confidence.value()
             lower_limit = lower_freq_filter - lower_tol / 100 * lower_freq_filter
             lower_units = self.lower_freq_filter_unit.currentText()
-            lower_limit *= conversion_factors[lower_units]
+            lower_limit *= self.conversion_factors[lower_units]
             if not signal_freqs[1] >= lower_limit:
                 lower_limit_ok = False
         if  upper_freq_filter > 0:
             upper_tol = self.upper_freq_confidence.value()
             upper_limit = upper_freq_filter + lower_tol / 100 * lower_freq_filter
             upper_units = self.upper_freq_filter_unit.currentText()
-            upper_limit *= conversion_factors[upper_units]
+            upper_limit *= self.conversion_factors[upper_units]
             if not signal_freqs[0] < upper_limit:
                 upper_limit_ok = False
         if any_checked:
@@ -290,9 +302,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
         else:
             return lower_limit_ok and upper_limit_ok
 
-    def display_specs(self):
+    @pyqtSlot(QListWidgetItem, QListWidgetItem)
+    def display_specs(self, item, previous_item):
         self.display_spectrogram()
-        item = self.result_list.currentItem()
         if item:
             self.current_signal_name = item.text()
             words = self.current_signal_name.split(' ')
@@ -433,6 +445,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             for band_label in self.band_labels:
                 self.activate_band_category(band_label, False)
 
+    @pyqtSlot()
     def go_to_web_page_signal(self):
         if self.current_signal_name:
             self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked}")
