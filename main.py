@@ -247,7 +247,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             return True
         undef_freq, _ = self.find_if_undefined(self.db.loc[signal_name])
         if undef_freq:
-            return False
+            return True
         conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000,
                               "GHz":1000000000}
 
@@ -259,14 +259,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         for btn, band_limits in zip(self.frequency_filters_btns, self.bands):
             if btn.isChecked():
                 any_checked = True
-                if (signal_freqs[0] >= band_limits.lower     \
-                    and signal_freqs[0] < band_limits.upper) \
-                    or                                       \
-                    (signal_freqs[1] >= band_limits.lower    \
-                    and signal_freqs[1] < band_limits.upper) \
-                    or                                       \
-                    (signal_freqs[0] < band_limits.lower     \
-                    and signal_freqs[1] >= band_limits.upper):
+                if signal_freqs[0] < band_limits.upper and signal_freqs[1] >= band_limits.lower:
                     band_filter_ok = True
         lower_freq_filter = self.lower_freq_spinbox.value()
         upper_freq_filter = self.upper_freq_spinbox.value()
@@ -277,14 +270,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
             lower_limit = lower_freq_filter - lower_tol / 100 * lower_freq_filter
             lower_units = self.lower_freq_filter_unit.currentText()
             lower_limit *= conversion_factors[lower_units]
-            if not signal_freqs[0] >= lower_limit:
+            if not signal_freqs[1] >= lower_limit:
                 lower_limit_ok = False
         if  upper_freq_filter > 0:
             upper_tol = self.upper_freq_confidence.value()
             upper_limit = upper_freq_filter + lower_tol / 100 * lower_freq_filter
             upper_units = self.upper_freq_filter_unit.currentText()
             upper_limit *= conversion_factors[upper_units]
-            if not signal_freqs[1] <= upper_limit:
+            if not signal_freqs[0] < upper_limit:
                 upper_limit_ok = False
         if any_checked:
             return band_filter_ok and lower_limit_ok and upper_limit_ok
