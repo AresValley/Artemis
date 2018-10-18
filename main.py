@@ -1,7 +1,8 @@
-import sys
-import os
-import webbrowser
 from collections import namedtuple
+from functools import partial
+import webbrowser
+import os
+import sys
 
 from pandas import read_csv
 from PyQt5.QtWidgets import (QMainWindow,
@@ -38,8 +39,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     bands = ELF, SLF, ULF, VLF, LF, MF, HF, VHF, UHF, SHF, EHF
     active_color = "#39eaff"
     inactive_color = "#9f9f9f"
-    conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000,
-                          "GHz":1000000000}
+    conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000, "GHz":1000000000}
 
     def __init__(self):
         super().__init__()
@@ -67,7 +67,29 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.lower_freq_confidence.valueChanged.connect(
             lambda value: self.upper_freq_confidence.setValue(value)
         )
-        # self.lower_freq_spinbox.valueChanged.connect(self.set_min_value_upper_limit)
+
+        self.lower_freq_spinbox.valueChanged.connect(
+            partial(self.set_min_value_upper_limit, 
+                    self.lower_freq_filter_unit, 
+                    self.lower_freq_spinbox, 
+                    self.upper_freq_filter_unit, 
+                    self.upper_freq_spinbox)
+                   )
+        self.lower_freq_filter_unit.currentTextChanged.connect(
+            partial(self.set_min_value_upper_limit, 
+                    self.lower_freq_filter_unit, 
+                    self.lower_freq_spinbox, 
+                    self.upper_freq_filter_unit, 
+                    self.upper_freq_spinbox)
+                   )
+        self.upper_freq_filter_unit.currentTextChanged.connect(
+            partial(self.set_min_value_upper_limit, 
+                    self.lower_freq_filter_unit, 
+                    self.lower_freq_spinbox, 
+                    self.upper_freq_filter_unit, 
+                    self.upper_freq_spinbox)
+                   )
+
         self.apply_remove_freq_filter_btn.set_texts("Apply", "Remove")
         self.apply_remove_freq_filter_btn.set_slave_filters(
             *self.frequency_filters_btns, 
@@ -225,21 +247,45 @@ class MyApp(QMainWindow, Ui_MainWindow):
             else:
                 self.setStatusTip(f"Database version: {self.db_version}")
 
-    # @pyqtSlot(int) # Da sistemare.
-    # def set_min_value_upper_limit(self, lower_spinbox_value):
-    #     conversion_factor = self.conversion_factors[self.lower_freq_filter_unit.currentText()]
-    #     print("enter")
-    #     if self.upper_freq_spinbox.value() * self.conversion_factors[self.upper_freq_filter_unit.currentText()] < lower_spinbox_value * conversion_factor:
-    #         print('IF')
-    #         self.upper_freq_spinbox.setValue(lower_spinbox_value * conversion_factor // self.conversion_factors[self.upper_freq_filter_unit.currentText()])
+    @pyqtSlot()
+    def set_min_value_upper_limit(self, lower_combo_box, 
+                                  lower_spin_box, 
+                                  upper_combo_box, 
+                                  upper_spin_box):
+        lower_units = lower_combo_box.currentText()
+        upper_units = upper_combo_box.currentText()
+        lower_value = lower_spin_box.value()
+        inf_limit = (lower_value * self.conversion_factors[lower_units]) \
+            // self.conversion_factors[upper_units]
+        counter = 0
+        while inf_limit > upper_spin_box.maximum():
+            counter += 1
+            inf_limit //= 1000
+        if counter > 0:
+            if counter == 1 and upper_units == 'kHz':
+                new_unit = 'MHz'
+            else:
+                new_unit = 'GHz'
+            upper_combo_box.disconnect()
+            upper_combo_box.setCurrentText(new_unit)
+            upper_combo_box.currentTextChanged.connect(
+                partial(self.set_min_value_upper_limit, 
+                        self.lower_combo_box, 
+                        self.lower_spin_box, 
+                        self.upper_combo_box, 
+                        self.upper_spin_box
+                       )
+            )
+            upper_spin_box.setValue(upper_spin_box.value() // (1000**counter))
+        if upper_spin_box.minimum() != inf_limit:
+            upper_spin_box.setMinimum(inf_limit)
 
     @pyqtSlot()
     def display_signals(self):
         self.result_list.clear()
         text = self.search_bar.text()
         for signal in self.signal_names:
-            if text.lower() in signal.lower() and \
-                self.frequency_filters_ok(signal):
+            if text.lower() in signal.lower() and self.frequency_filters_ok(signal):
                 self.result_list.addItem(signal)
 
     @pyqtSlot()
