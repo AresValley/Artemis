@@ -65,9 +65,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.shf_filter_btn,
             self.ehf_filter_btn,
         )
-        self.lower_freq_confidence.valueChanged.connect(
-            lambda value: self.upper_freq_confidence.setValue(value)
-        )
 
         self.lower_freq_spinbox.valueChanged.connect(
             partial(self.set_min_value_upper_limit, 
@@ -76,6 +73,17 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_freq_filter_unit, 
                     self.upper_freq_spinbox)
             )
+        self.lower_freq_spinbox.valueChanged.connect(self.set_band_filter_label)
+
+        self.upper_freq_spinbox.valueChanged.connect(
+            partial(self.set_min_value_upper_limit,
+                    self.lower_freq_filter_unit,
+                    self.lower_freq_spinbox,
+                    self.upper_freq_filter_unit,
+                    self.upper_freq_spinbox)
+        )
+        self.upper_freq_spinbox.valueChanged.connect(self.set_band_filter_label)
+
         self.lower_freq_filter_unit.currentTextChanged.connect(
             partial(self.set_min_value_upper_limit, 
                     self.lower_freq_filter_unit, 
@@ -83,6 +91,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_freq_filter_unit, 
                     self.upper_freq_spinbox)
             )
+        self.lower_freq_filter_unit.currentTextChanged.connect(self.set_band_filter_label)
+
         self.upper_freq_filter_unit.currentTextChanged.connect(
             partial(self.set_min_value_upper_limit, 
                     self.lower_freq_filter_unit, 
@@ -90,6 +100,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_freq_filter_unit, 
                     self.upper_freq_spinbox)
             )
+        self.upper_freq_filter_unit.currentTextChanged.connect(self.set_band_filter_label)
 
         self.activate_low_freq_filter_btn.toggled.connect(
             partial(self.activate_if_toggled,
@@ -98,6 +109,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.lower_freq_filter_unit,
                     self.lower_freq_confidence)
             )
+        self.activate_low_freq_filter_btn.clicked.connect(self.set_band_filter_label)
 
         self.activate_up_freq_filter_btn.toggled.connect(
             partial(self.activate_if_toggled,
@@ -106,12 +118,18 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_freq_filter_unit,
                     self.upper_freq_confidence)
             )
+        self.activate_up_freq_filter_btn.clicked.connect(self.set_band_filter_label)
+
+        self.lower_freq_confidence.valueChanged.connect(self.set_band_filter_label)
+        self.upper_freq_confidence.valueChanged.connect(self.set_band_filter_label)
 
         self.apply_remove_freq_filter_btn.set_texts("Apply", "Remove")
         self.apply_remove_freq_filter_btn.set_slave_filters(
             [
                 *self.frequency_filters_btns,
                 self.include_undef_freqs,
+                self.activate_low_freq_filter_btn,
+                self.activate_up_freq_filter_btn,
             ],
             self.activate_low_freq_filter_btn,
             [
@@ -128,6 +146,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
         self.apply_remove_freq_filter_btn.clicked.connect(self.display_signals)
         self.reset_frequency_filters_btn.clicked.connect(self.reset_frequency_filters)
+
+        self.reset_filters_btn.clicked.connect(self.reset_all_filters)
 
         UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
         self.url_button.colors = UrlColors("#9f9f9f", "#4c75ff", "#942ccc")
@@ -245,8 +265,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         'inf_band': str,
                                         'sup_band': str,
                                         'category_code': str,},
-                               names = names,
-                               )
+                               names = names,)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
             box = QMessageBox(self)
@@ -271,40 +290,77 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 box.show()
                 self.statusbar.showMessage("Database version: undefined.")
             else:
-                self.statusbar.showMessage(f"Database version: {self.db_version}")
+                self.update_status_tip(self.total_signals)
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box, 
                                   lower_spin_box, 
                                   upper_combo_box, 
                                   upper_spin_box):
+        unit_conversion = {'Hz' : ['kHz', 'MHz', 'GHz'],
+                           'kHz': ['MHz', 'GHz'],
+                           'MHz': ['GHz']
+                          }
         lower_units = lower_combo_box.currentText()
         upper_units = upper_combo_box.currentText()
         lower_value = lower_spin_box.value()
+        upper_value = upper_spin_box.value()
         inf_limit = (lower_value * self.conversion_factors[lower_units]) \
             // self.conversion_factors[upper_units]
         counter = 0
         while inf_limit > upper_spin_box.maximum():
             counter += 1
             inf_limit //= 1000
+        if upper_spin_box.minimum() != inf_limit:
+            upper_spin_box.setMinimum(inf_limit)
         if counter > 0:
-            if counter == 1 and upper_units == 'kHz':
-                new_unit = 'MHz'
-            else:
-                new_unit = 'GHz'
+            new_unit = unit_conversion[upper_units][counter - 1]
             upper_combo_box.disconnect()
             upper_combo_box.setCurrentText(new_unit)
             upper_combo_box.currentTextChanged.connect(
                 partial(self.set_min_value_upper_limit, 
-                        self.lower_combo_box, 
-                        self.lower_spin_box, 
-                        self.upper_combo_box, 
-                        self.upper_spin_box
-                )
+                        lower_combo_box, 
+                        lower_spin_box, 
+                        upper_combo_box, 
+                        upper_spin_box)
             )
-            upper_spin_box.setValue(upper_spin_box.value() // (1000**counter))
-        if upper_spin_box.minimum() != inf_limit:
-            upper_spin_box.setMinimum(inf_limit)
+
+    @pyqtSlot()
+    def set_band_filter_label(self):
+        activate_low = False
+        activate_high = False
+        color = self.inactive_color
+        title = ''
+        to_display = ''
+        if self.activate_low_freq_filter_btn.isChecked():
+            to_display += str(self.lower_freq_spinbox.value()) + ' ' + self.lower_freq_filter_unit.currentText()
+            activate_low = True
+            color = self.active_color
+            if self.lower_freq_confidence.value() != 0:
+                to_display += ' - ' + str(self.lower_freq_confidence.value()) + ' %'
+        else:
+            to_display += 'DC'
+        to_display += ' ÷ '
+        if self.activate_up_freq_filter_btn.isChecked():
+            to_display += str(self.upper_freq_spinbox.value()) + ' ' + self.upper_freq_filter_unit.currentText()
+            activate_high = True
+            color = self.active_color
+            if self.upper_freq_confidence.value() != 0:
+                to_display += ' + ' + str(self.upper_freq_confidence.value()) + ' %'
+        else:
+            to_display += 'INF'
+        if activate_low and activate_high:
+            title = 'Band-pass\n\n'
+        elif activate_low and not activate_high:
+            title = 'Low-pass\n\n'
+        elif not activate_low and activate_high:
+            title = 'High-pass\n\n'
+        else:
+            title = "Frequency range:\n\n"
+            to_display = "Inactive"
+        to_display = title + to_display
+        self.freq_range_lbl.setText(to_display)
+        self.freq_range_lbl.setStyleSheet(f'color: {color};')
 
     @pyqtSlot()
     def activate_if_toggled(self, radio_btn, *widgets):
@@ -321,10 +377,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
             if text.lower() in signal.lower() and self.frequency_filters_ok(signal):
                 self.result_list.addItem(signal)
                 available_signals += 1
-        self.upadte_status_tip(available_signals)
+        self.update_status_tip(available_signals)
 
-    def upadte_status_tip(self, available_signals):
-        self.statusbar.showMessage(f"Database version: {self.db_version}. {available_signals} out of {self.total_signals} signals displayed.")
+    def update_status_tip(self, available_signals):
+        self.statusbar.showMessage(f"{available_signals} out of {self.total_signals} signals displayed.")
 
     @pyqtSlot()
     def reset_frequency_filters(self):
@@ -369,22 +425,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 any_checked = True
                 if signal_freqs[0] < band_limits.upper and signal_freqs[1] >= band_limits.lower:
                     band_filter_ok = True
-        lower_freq_filter = self.lower_freq_spinbox.value()
-        upper_freq_filter = self.upper_freq_spinbox.value()
         lower_limit_ok = True
         upper_limit_ok = True
         if self.activate_low_freq_filter_btn.isChecked():
-            lower_tol = self.lower_freq_confidence.value()
-            lower_limit = lower_freq_filter - lower_tol / 100 * lower_freq_filter
+            lower_freq_filter = self.lower_freq_spinbox.value()
             lower_units = self.lower_freq_filter_unit.currentText()
-            lower_limit *= self.conversion_factors[lower_units]
+            lower_freq_filter *= self.conversion_factors[lower_units]
+            lower_tol = self.lower_freq_confidence.value()
+            lower_limit = lower_freq_filter - (lower_tol  * lower_freq_filter) // 100
             if not signal_freqs[1] >= lower_limit:
                 lower_limit_ok = False
         if self.activate_up_freq_filter_btn.isChecked():
-            upper_tol = self.upper_freq_confidence.value()
-            upper_limit = upper_freq_filter + upper_tol / 100 * lower_freq_filter
+            upper_freq_filter = self.upper_freq_spinbox.value()
             upper_units = self.upper_freq_filter_unit.currentText()
-            upper_limit *= self.conversion_factors[upper_units]
+            upper_freq_filter *= self.conversion_factors[upper_units]
+            upper_tol = self.upper_freq_confidence.value()
+            upper_limit = upper_freq_filter + (upper_tol * upper_freq_filter) // 100
             if not signal_freqs[0] < upper_limit:
                 upper_limit_ok = False
         if any_checked:
@@ -397,13 +453,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.display_spectrogram()
         if item:
             self.current_signal_name = item.text()
-            words = self.current_signal_name.split(' ')
-            if len(words) > 3:
-                words_per_row = len(words) // 2
-                words = ' '.join(words[:words_per_row]) \
-                    + "\n" + ' '.join(words[words_per_row:])
-            else:
-                words = self.current_signal_name
             self.name_lab.setText(self.current_signal_name)
             self.name_lab.setAlignment(Qt.AlignHCenter)
             current_signal = self.db.loc[self.current_signal_name]
@@ -479,6 +528,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         pre_upper = upper
         lower = int(lower) / lower_factor
         upper = int(upper) / upper_factor
+        if lower.is_integer():
+            lower = int(lower)
+        if upper.is_integer():
+            upper = int(upper)
         if pre_lower != pre_upper:    
             return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
         else:
@@ -534,6 +587,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         else:
             for band_label in self.band_labels:
                 self.activate_band_category(band_label, False)
+
+    @pyqtSlot()
+    def reset_all_filters(self):
+        self.reset_frequency_filters_btn.clicked.emit()
 
     @pyqtSlot()
     def go_to_web_page_signal(self):

@@ -70,7 +70,7 @@ QScrollBar::handle:vertical, QScrollBar::handle:horizontal{
 	border-radius: 5px;
 	border-color: none;
 	border-width: 1px; 
- 	background-color: #959595; 
+ 	background-color: #999999; 
 }
 
 QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal{
@@ -1958,7 +1958,8 @@ QPushButton:!enabled {
 
 QPushButton:checked {
 	color: #39eaff;
-}</string>
+}
+</string>
            </property>
            <property name="currentIndex">
             <number>0</number>
@@ -2228,7 +2229,7 @@ QPushButton:checked {
                  <widget class="QPushButton" name="include_undef_freqs">
                   <property name="font">
                    <font>
-                    <pointsize>10</pointsize>
+                    <pointsize>12</pointsize>
                     <weight>75</weight>
                     <bold>true</bold>
                    </font>
@@ -2254,15 +2255,85 @@ QPushButton:checked {
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_24">
                 <item>
-                 <widget class="QWidget" name="widget_9" native="true">
+                 <widget class="QWidget" name="freq_filter_container" native="true">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="styleSheet">
+                   <string notr="true">QWidget#freq_filter_container {
+	border: 1px solid gray;
+	background-color: rgb(52,52,52);
+	border-radius: 12px;
+}
+
+QRadioButton, QLabel {
+	background-color: rgb(52,52,52);
+}</string>
+                  </property>
                   <layout class="QGridLayout" name="gridLayout_6">
-                   <item row="1" column="2">
+                   <item row="0" column="0">
+                    <widget class="QRadioButton" name="activate_low_freq_filter_btn">
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Lower frequency</string>
+                     </property>
+                     <property name="autoExclusive">
+                      <bool>false</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QSpinBox" name="lower_freq_spinbox">
+                     <property name="enabled">
+                      <bool>false</bool>
+                     </property>
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: #464646;</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                     <property name="maximum">
+                      <number>100000000</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="2">
                     <widget class="QComboBox" name="lower_freq_filter_unit">
                      <property name="enabled">
                       <bool>false</bool>
@@ -2291,6 +2362,9 @@ QPushButton:checked {
                        <weight>75</weight>
                        <bold>true</bold>
                       </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: #464646;</string>
                      </property>
                      <property name="currentText">
                       <string>MHz</string>
@@ -2326,7 +2400,30 @@ QPushButton:checked {
                      </item>
                     </widget>
                    </item>
-                   <item row="1" column="4">
+                   <item row="0" column="3">
+                    <widget class="QLabel" name="label_12">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>   Confidence %</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="4">
                     <widget class="QSpinBox" name="lower_freq_confidence">
                      <property name="enabled">
                       <bool>false</bool>
@@ -2354,6 +2451,9 @@ QPushButton:checked {
                        <pointsize>12</pointsize>
                       </font>
                      </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: #464646;</string>
+                     </property>
                      <property name="frame">
                       <bool>false</bool>
                      </property>
@@ -2374,43 +2474,24 @@ QPushButton:checked {
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="1">
-                    <widget class="QSpinBox" name="lower_freq_spinbox">
-                     <property name="enabled">
-                      <bool>false</bool>
-                     </property>
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="minimumSize">
-                      <size>
-                       <width>100</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>100</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
+                   <item row="1" column="0">
+                    <widget class="QRadioButton" name="activate_up_freq_filter_btn">
                      <property name="font">
                       <font>
                        <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
                       </font>
                      </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     <property name="text">
+                      <string>Upper frequency</string>
                      </property>
-                     <property name="maximum">
-                      <number>1000000000</number>
+                     <property name="autoExclusive">
+                      <bool>false</bool>
                      </property>
                     </widget>
                    </item>
-                   <item row="2" column="1">
+                   <item row="1" column="1">
                     <widget class="QSpinBox" name="upper_freq_spinbox">
                      <property name="enabled">
                       <bool>false</bool>
@@ -2438,18 +2519,24 @@ QPushButton:checked {
                        <pointsize>12</pointsize>
                       </font>
                      </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: #464646;</string>
+                     </property>
                      <property name="alignment">
                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                      </property>
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
                      <property name="maximum">
-                      <number>1000000000</number>
+                      <number>100000000</number>
                      </property>
                      <property name="value">
-                      <number>0</number>
+                      <number>1</number>
                      </property>
                     </widget>
                    </item>
-                   <item row="2" column="2">
+                   <item row="1" column="2">
                     <widget class="QComboBox" name="upper_freq_filter_unit">
                      <property name="enabled">
                       <bool>false</bool>
@@ -2479,6 +2566,9 @@ QPushButton:checked {
                        <bold>true</bold>
                       </font>
                      </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: #464646;</string>
+                     </property>
                      <property name="currentText">
                       <string>MHz</string>
                      </property>
@@ -2504,7 +2594,30 @@ QPushButton:checked {
                      </item>
                     </widget>
                    </item>
-                   <item row="2" column="4">
+                   <item row="1" column="3">
+                    <widget class="QLabel" name="label_13">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>12</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>   Confidence %</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="4">
                     <widget class="QSpinBox" name="upper_freq_confidence">
                      <property name="enabled">
                       <bool>false</bool>
@@ -2532,6 +2645,9 @@ QPushButton:checked {
                        <pointsize>12</pointsize>
                       </font>
                      </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: #464646;</string>
+                     </property>
                      <property name="frame">
                       <bool>false</bool>
                      </property>
@@ -2552,10 +2668,13 @@ QPushButton:checked {
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="3">
-                    <widget class="QLabel" name="label_12">
+                   <item row="2" column="0" colspan="5">
+                    <widget class="QLabel" name="freq_range_lbl">
+                     <property name="enabled">
+                      <bool>false</bool>
+                     </property>
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -2564,71 +2683,21 @@ QPushButton:checked {
                       <font>
                        <pointsize>12</pointsize>
                        <weight>75</weight>
+                       <italic>false</italic>
                        <bold>true</bold>
+                       <underline>false</underline>
                       </font>
                      </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: #9f9f9f;</string>
+                     </property>
                      <property name="text">
-                      <string>   Confidence %</string>
+                      <string>Frequency range:
+
+Inactive</string>
                      </property>
                      <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="3">
-                    <widget class="QLabel" name="label_13">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>   Confidence %</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QRadioButton" name="activate_low_freq_filter_btn">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Lower frequency</string>
-                     </property>
-                     <property name="autoExclusive">
-                      <bool>false</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QRadioButton" name="activate_up_freq_filter_btn">
-                     <property name="font">
-                      <font>
-                       <pointsize>12</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Upper frequency</string>
-                     </property>
-                     <property name="autoExclusive">
-                      <bool>false</bool>
+                      <set>Qt::AlignCenter</set>
                      </property>
                     </widget>
                    </item>
