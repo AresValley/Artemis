@@ -155,6 +155,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.lower_freq_filter_unit,
                     self.lower_freq_confidence)
             )
+        self.activate_low_freq_filter_btn.toggled.connect(
+            partial(self.set_min_value_upper_limit, 
+                    self.lower_freq_filter_unit, 
+                    self.lower_freq_spinbox, 
+                    self.upper_freq_filter_unit, 
+                    self.upper_freq_spinbox)
+            )
+
         self.activate_low_freq_filter_btn.clicked.connect(
             partial(self.set_band_filter_label,
                     self.activate_low_freq_filter_btn,
@@ -326,6 +334,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.lower_band_filter_unit,
                     self.lower_band_confidence)
             )
+        self.activate_low_band_filter_btn.toggled.connect(
+            partial(self.set_min_value_upper_limit, 
+                    self.lower_band_filter_unit, 
+                    self.lower_band_spinbox, 
+                    self.upper_band_filter_unit, 
+                    self.upper_band_spinbox)
+            )
         self.activate_low_band_filter_btn.clicked.connect(
             partial(self.set_band_filter_label,
                     self.activate_low_band_filter_btn,
@@ -407,7 +422,36 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.apply_remove_band_filter_btn.clicked.connect(self.display_signals)
         self.reset_band_filters_btn.clicked.connect(partial(self.reset_fb_filters, 'band'))
 
+#       Manage category filters
+
+        # Order matters!
+        self.cat_filter_btns = [self.military_btn,
+                                self.radar_btn,
+                                self.active_btn,
+                                self.inactive_btn,
+                                self.ham_btn,
+                                self.commercial_btn,
+                                self.aviation_btn,
+                                self.marine_btn,
+                                self.analogue_btn,
+                                self.digital_btn,
+                                self.trunked_btn,
+                                self.utility_btn,
+                                self.sat_btn,
+                                self.navigation_btn,
+                                self.interfering_btn,
+                                self.number_stations_btn,
+                                self.time_signal_btn,]
+
+        self.apply_remove_cat_filter_btn.set_texts('Apply', 'Remove')   
+        self.apply_remove_cat_filter_btn.set_slave_filters([*self.cat_filter_btns,
+                                                             self.cat_at_least_one,
+                                                             self.cat_all])
+        self.apply_remove_cat_filter_btn.clicked.connect(self.display_signals)
+        self.reset_cat_filters_btn.clicked.connect(self.reset_cat_filters)
+
 # #######################################################################################
+
         self.reset_filters_btn.clicked.connect(self.reset_all_filters)
 
         UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
@@ -559,33 +603,34 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                   lower_spin_box, 
                                   upper_combo_box, 
                                   upper_spin_box):
-        unit_conversion = {'Hz' : ['kHz', 'MHz', 'GHz'],
-                           'kHz': ['MHz', 'GHz'],
-                           'MHz': ['GHz']
-                          }
-        lower_units = lower_combo_box.currentText()
-        upper_units = upper_combo_box.currentText()
-        lower_value = lower_spin_box.value()
-        upper_value = upper_spin_box.value()
-        inf_limit = (lower_value * self.conversion_factors[lower_units]) \
-            // self.conversion_factors[upper_units]
-        counter = 0
-        while inf_limit > upper_spin_box.maximum():
-            counter += 1
-            inf_limit //= 1000
-        if upper_spin_box.minimum() != inf_limit:
-            upper_spin_box.setMinimum(inf_limit)
-        if counter > 0:
-            new_unit = unit_conversion[upper_units][counter - 1]
-            upper_combo_box.disconnect()
-            upper_combo_box.setCurrentText(new_unit)
-            upper_combo_box.currentTextChanged.connect(
-                partial(self.set_min_value_upper_limit, 
-                        lower_combo_box, 
-                        lower_spin_box, 
-                        upper_combo_box, 
-                        upper_spin_box)
-            )
+        if lower_spin_box.isEnabled():
+            unit_conversion = {'Hz' : ['kHz', 'MHz', 'GHz'],
+                               'kHz': ['MHz', 'GHz'],
+                               'MHz': ['GHz']
+                              }
+            lower_units = lower_combo_box.currentText()
+            upper_units = upper_combo_box.currentText()
+            lower_value = lower_spin_box.value()
+            upper_value = upper_spin_box.value()
+            inf_limit = (lower_value * self.conversion_factors[lower_units]) \
+                // self.conversion_factors[upper_units]
+            counter = 0
+            while inf_limit > upper_spin_box.maximum():
+                counter += 1
+                inf_limit //= 1000
+            if upper_spin_box.minimum() != inf_limit:
+                upper_spin_box.setMinimum(inf_limit)
+            if counter > 0:
+                new_unit = unit_conversion[upper_units][counter - 1]
+                upper_combo_box.disconnect()
+                upper_combo_box.setCurrentText(new_unit)
+                upper_combo_box.currentTextChanged.connect(
+                    partial(self.set_min_value_upper_limit, 
+                            lower_combo_box, 
+                            lower_spin_box, 
+                            upper_combo_box, 
+                            upper_spin_box)
+                )
 
     @pyqtSlot()
     def set_band_filter_label(self, 
@@ -627,7 +672,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         elif not activate_low and activate_high:
             title = 'High-pass\n\n'
         else:
-            title = "Frequency range:\n\n"
+            title = "Selected range:\n\n"
             to_display = "Inactive"
         to_display = title + to_display
         range_lbl.setText(to_display)
@@ -645,7 +690,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         text = self.search_bar.text()
         available_signals = 0
         for signal in self.signal_names:
-            if text.lower() in signal.lower() and self.frequency_filters_ok(signal) and self.band_filters_ok(signal):
+            if text.lower() in signal.lower()     and \
+                self.frequency_filters_ok(signal) and \
+                self.band_filters_ok(signal)      and \
+                self.category_filters_ok(signal):
                 self.result_list.addItem(signal)
                 available_signals += 1
         self.update_status_tip(available_signals)
@@ -661,17 +709,21 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def reset_fb_filters(self, ftype):
         if ftype != 'freq' and ftype != 'band':
             raise ValueError("Wrong ftype in function 'reset_fb_filters'")
-        apply_remove_btn  = getattr(self, 'apply_remove_' + ftype + '_filter_btn')
+        apply_remove_btn  = getattr(self, 'apply_remove_'  + ftype + '_filter_btn')
         include_undef_btn = getattr(self, 'include_undef_' + ftype + 's')
-        activate_low      = getattr(self, 'activate_low_' + ftype + '_filter_btn')
-        activate_up       = getattr(self, 'activate_up_' + ftype + '_filter_btn')
-        lower_unit        = getattr(self, 'lower_' + ftype + '_filter_unit')
-        upper_unit        = getattr(self, 'upper_' + ftype + '_filter_unit')
-        lower_spinbox     = getattr(self, 'lower_' + ftype + '_spinbox')
-        upper_spinbox     = getattr(self, 'upper_' + ftype + '_spinbox')
-        lower_confidence  = getattr(self, 'lower_' + ftype + '_confidence')
-        upper_confidence  = getattr(self, 'lower_' + ftype + '_confidence')
+        activate_low      = getattr(self, 'activate_low_'  + ftype + '_filter_btn')
+        activate_up       = getattr(self, 'activate_up_'   + ftype + '_filter_btn')
+        lower_unit        = getattr(self, 'lower_'         + ftype + '_filter_unit')
+        upper_unit        = getattr(self, 'upper_'         + ftype + '_filter_unit')
+        lower_spinbox     = getattr(self, 'lower_'         + ftype + '_spinbox')
+        upper_spinbox     = getattr(self, 'upper_'         + ftype + '_spinbox')
+        lower_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
+        upper_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
         default_val = 1 if ftype == 'freq' else 5000
+        if ftype == 'freq':
+            for f in self.frequency_filters_btns:
+                if f.isChecked():
+                    f.setChecked(False)
         if apply_remove_btn.isChecked():
             apply_remove_btn.setChecked(False)
             apply_remove_btn.clicked.emit()
@@ -685,10 +737,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
             activate_up.clicked.emit()
         lower_unit.setCurrentText("MHz")
         upper_unit.setCurrentText("MHz")
-        upper_spinbox.setValue(default_val)
+        lower_spinbox.setValue(default_val)
+        upper_spinbox.setMinimum(1)
         upper_spinbox.setValue(default_val)
         lower_confidence.setValue(0)
         upper_confidence.setValue(0)
+
+    def reset_cat_filters(self):
+        if self.apply_remove_cat_filter_btn.isChecked():
+            self.apply_remove_cat_filter_btn.setChecked(False)
+            self.apply_remove_cat_filter_btn.clicked.emit()
+        for f in self.cat_filter_btns:
+            f.setChecked(False) if f.isChecked() else None
+        self.cat_at_least_one.setChecked(True)
 
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
@@ -754,6 +815,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 upper_limit_ok = False
         return lower_limit_ok and upper_limit_ok
 
+    def category_filters_ok(self, signal_name):
+        if not self.apply_remove_cat_filter_btn.isChecked():
+            return True
+        cat_code = self.db.at[signal_name, 'category_code']
+        cat_checked = 0
+        positive_cases = 0
+        for index, cat in enumerate(self.cat_filter_btns):
+            if cat.isChecked():
+                cat_checked += 1 
+                if cat_code[index] == '1':
+                    positive_cases += 1
+        if self.cat_at_least_one.isChecked():
+            return positive_cases > 0
+        else:
+            return cat_checked == positive_cases and cat_checked > 0
+
     @classmethod
     def filters_ok(cls, spinbox, filter_unit, confidence, sign = 1):
         band_filter = spinbox.value() * cls.conversion_factors[filter_unit.currentText()]
@@ -776,16 +853,16 @@ class MyApp(QMainWindow, Ui_MainWindow):
             undef_freq, undef_band = self.find_if_undefined(current_signal)
             if not undef_freq:
                 self.freq_lab.setText(self.format_numbers(
-                                          current_signal.at["inf_freq"],
-                                          current_signal.at["sup_freq"])
-                                     )
+                                      current_signal.at["inf_freq"],
+                                      current_signal.at["sup_freq"])
+                )
             else:
                 self.freq_lab.setText("Undefined")
             if not undef_band:
                 self.band_lab.setText(self.format_numbers(
-                                        current_signal.at["inf_band"],
-                                        current_signal.at["sup_band"])
-                                     )
+                                      current_signal.at["inf_band"],
+                                      current_signal.at["sup_band"])
+                )
             else:
                 self.band_lab.setText("Undefined")
 
@@ -903,6 +980,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def reset_all_filters(self):
         self.reset_frequency_filters_btn.clicked.emit()
         self.reset_band_filters_btn.clicked.emit()
+        self.reset_cat_filters_btn.clicked.emit()
 
     @pyqtSlot()
     def go_to_web_page_signal(self):
