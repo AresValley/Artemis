@@ -68,84 +68,38 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.ehf_filter_btn,
         )
 
-        self.lower_freq_spinbox.valueChanged.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_freq_filter_unit, 
-                    self.lower_freq_spinbox, 
-                    self.upper_freq_filter_unit, 
-                    self.upper_freq_spinbox)
-            )
-        self.lower_freq_spinbox.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
+        self.connect_to(
+            objects_to_connect = {self.lower_freq_spinbox: 'valueChanged',
+                                  self.upper_freq_spinbox: 'valueChanged',
+                                  self.lower_freq_filter_unit: 'currentTextChanged',
+                                  self.upper_freq_filter_unit: 'currentTextChanged',
+                                  self.activate_low_freq_filter_btn: 'toggled'},
+            fun_to_connect = self.set_min_value_upper_limit,
+            fun_args = [self.lower_freq_filter_unit, 
+                        self.lower_freq_spinbox, 
+                        self.upper_freq_filter_unit, 
+                        self.upper_freq_spinbox]
         )
 
-        self.upper_freq_spinbox.valueChanged.connect(
-            partial(self.set_min_value_upper_limit,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_spinbox)
-        )
-        self.upper_freq_spinbox.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
-        )
-
-        self.lower_freq_filter_unit.currentTextChanged.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_freq_filter_unit, 
-                    self.lower_freq_spinbox, 
-                    self.upper_freq_filter_unit, 
-                    self.upper_freq_spinbox)
-            )
-        self.lower_freq_filter_unit.currentTextChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
-        )
-
-        self.upper_freq_filter_unit.currentTextChanged.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_freq_filter_unit, 
-                    self.lower_freq_spinbox, 
-                    self.upper_freq_filter_unit, 
-                    self.upper_freq_spinbox)
-            )
-        self.upper_freq_filter_unit.currentTextChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
+        self.connect_to(
+            objects_to_connect = {self.lower_freq_spinbox: 'valueChanged',
+                                  self.upper_freq_spinbox: 'valueChanged',
+                                  self.lower_freq_filter_unit: 'currentTextChanged',
+                                  self.upper_freq_filter_unit: 'currentTextChanged',
+                                  self.activate_low_freq_filter_btn: 'clicked',
+                                  self.activate_up_freq_filter_btn: 'clicked',
+                                  self.lower_freq_confidence: 'valueChanged',
+                                  self.upper_freq_confidence: 'valueChanged'},
+            fun_to_connect = self.set_band_filter_label,
+            fun_args = [self.activate_low_freq_filter_btn,
+                        self.lower_freq_spinbox,
+                        self.lower_freq_filter_unit,
+                        self.lower_freq_confidence,
+                        self.activate_up_freq_filter_btn,
+                        self.upper_freq_spinbox,
+                        self.upper_freq_filter_unit,
+                        self.upper_freq_confidence,
+                        self.freq_range_lbl]
         )
 
         self.activate_low_freq_filter_btn.toggled.connect(
@@ -155,26 +109,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.lower_freq_filter_unit,
                     self.lower_freq_confidence)
             )
-        self.activate_low_freq_filter_btn.toggled.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_freq_filter_unit, 
-                    self.lower_freq_spinbox, 
-                    self.upper_freq_filter_unit, 
-                    self.upper_freq_spinbox)
-            )
-
-        self.activate_low_freq_filter_btn.clicked.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
-        )
 
         self.activate_up_freq_filter_btn.toggled.connect(
             partial(self.activate_if_toggled,
@@ -183,43 +117,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_freq_filter_unit,
                     self.upper_freq_confidence)
             )
-        self.activate_up_freq_filter_btn.clicked.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
-        )
-
-        self.lower_freq_confidence.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
-        )
-        self.upper_freq_confidence.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence,
-                    self.freq_range_lbl)
-        )
 
         self.apply_remove_freq_filter_btn.set_texts("Apply", "Remove")
         self.apply_remove_freq_filter_btn.set_slave_filters(
@@ -247,84 +144,38 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         # Manage bandwidth filters.
 
-        self.lower_band_spinbox.valueChanged.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_band_filter_unit, 
-                    self.lower_band_spinbox, 
-                    self.upper_band_filter_unit, 
-                    self.upper_band_spinbox)
-            )
-        self.lower_band_spinbox.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
+        self.connect_to(
+            objects_to_connect = {self.lower_band_spinbox: 'valueChanged',
+                                  self.upper_band_spinbox: 'valueChanged',
+                                  self.lower_band_filter_unit: 'currentTextChanged',
+                                  self.upper_band_filter_unit: 'currentTextChanged',
+                                  self.activate_low_band_filter_btn: 'toggled'},
+            fun_to_connect = self.set_min_value_upper_limit,
+            fun_args = [self.lower_band_filter_unit, 
+                        self.lower_band_spinbox, 
+                        self.upper_band_filter_unit, 
+                        self.upper_band_spinbox]
         )
 
-        self.upper_band_spinbox.valueChanged.connect(
-            partial(self.set_min_value_upper_limit,
-                    self.lower_band_filter_unit,
-                    self.lower_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_spinbox)
-        )
-        self.upper_band_spinbox.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
-        )
-
-        self.lower_band_filter_unit.currentTextChanged.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_band_filter_unit, 
-                    self.lower_band_spinbox, 
-                    self.upper_band_filter_unit, 
-                    self.upper_band_spinbox)
-            )
-        self.lower_band_filter_unit.currentTextChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
-        )
-
-        self.upper_band_filter_unit.currentTextChanged.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_band_filter_unit, 
-                    self.lower_band_spinbox, 
-                    self.upper_band_filter_unit, 
-                    self.upper_band_spinbox)
-            )
-        self.upper_band_filter_unit.currentTextChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
+        self.connect_to(
+            objects_to_connect = {self.lower_band_spinbox: 'valueChanged',
+                                  self.upper_band_spinbox: 'valueChanged',
+                                  self.lower_band_filter_unit: 'currentTextChanged',
+                                  self.upper_band_filter_unit: 'currentTextChanged',
+                                  self.activate_low_band_filter_btn: 'clicked',
+                                  self.activate_up_band_filter_btn: 'clicked',
+                                  self.lower_band_confidence: 'valueChanged',
+                                  self.upper_band_confidence: 'valueChanged'},
+            fun_to_connect = self.set_band_filter_label,
+            fun_args = [self.activate_low_band_filter_btn,
+                        self.lower_band_spinbox,
+                        self.lower_band_filter_unit,
+                        self.lower_band_confidence,
+                        self.activate_up_band_filter_btn,
+                        self.upper_band_spinbox,
+                        self.upper_band_filter_unit,
+                        self.upper_band_confidence,
+                        self.band_range_lbl]
         )
 
         self.activate_low_band_filter_btn.toggled.connect(
@@ -334,25 +185,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.lower_band_filter_unit,
                     self.lower_band_confidence)
             )
-        self.activate_low_band_filter_btn.toggled.connect(
-            partial(self.set_min_value_upper_limit, 
-                    self.lower_band_filter_unit, 
-                    self.lower_band_spinbox, 
-                    self.upper_band_filter_unit, 
-                    self.upper_band_spinbox)
-            )
-        self.activate_low_band_filter_btn.clicked.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
-        )
 
         self.activate_up_band_filter_btn.toggled.connect(
             partial(self.activate_if_toggled,
@@ -361,43 +193,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_band_filter_unit,
                     self.upper_band_confidence)
             )
-        self.activate_up_band_filter_btn.clicked.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
-        )
-
-        self.lower_band_confidence.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
-        )
-        self.upper_band_confidence.valueChanged.connect(
-            partial(self.set_band_filter_label,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence,
-                    self.band_range_lbl)
-        )
 
         self.apply_remove_band_filter_btn.set_texts("Apply", "Remove")
         self.apply_remove_band_filter_btn.set_slave_filters(
@@ -597,6 +392,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 self.statusbar.showMessage("Database version: undefined.")
             else:
                 self.update_status_tip(self.total_signals)
+
+    @staticmethod
+    def connect_to(objects_to_connect, fun_to_connect, fun_args):
+        for obj, signal in objects_to_connect.items():
+            getattr(obj, signal).connect(
+                partial(fun_to_connect, *fun_args)
+            )
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box, 
