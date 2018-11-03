@@ -18,13 +18,22 @@ class DownloadWindow(QWidget, Ui_Download_window):
         self.everything_ok = True
         self.no_internet_msg = QMessageBox(self)
         self.no_internet_msg.setWindowTitle("No internet connection")
-        self.no_internet_msg.setText("Unable to establish an internet connection")
+        self.no_internet_msg.setText("Unable to establish an internet connection.")
         # self.no_internet_msg.buttonClicked.connect(self.close)
         self.no_internet_msg.finished.connect(self.close)
 
         self.bad_db_download_msg = QMessageBox(self)
         self.bad_db_download_msg.setWindowTitle("Something wrong")
+        self.bad_db_download_msg.setText("""Something went wrong with the downaload.
+        Check your internet connection and try again.""")
         self.bad_db_download_msg.finished.connect(self.close)
+
+        self.bad_file_msg = QMessageBox(self)
+        self.bad_file_msg.setWindowTitle("Bad file detected")
+        self.bad_file_msg.setText("""The downloaded file seems to be corrupted.
+        The old database has not been deleted and
+        the downloaded file has been discarded.""")
+        self.bad_file_msg.finished.connect(self.close)
 
         self.download_thread = DownloadThread(db_location, data_folder)
         self.download_thread.finished.connect(self.wait_close)
