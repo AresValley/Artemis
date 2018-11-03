@@ -13,17 +13,26 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QListWidgetItem,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
-from PyQt5.QtCore import QFileInfo, QSize, Qt, pyqtSlot
+from PyQt5.QtCore import (QFileInfo, 
+                          QSize, 
+                          Qt,
+                          pyqtSlot,)
 
 from audio_player import AudioPlayer
 
 from double_text_button import DoubleTextButton
+from download_window import DownloadWindow
 
 qt_creator_file = "main_window.ui"
-
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 class MyApp(QMainWindow, Ui_MainWindow):
+    db_location = 'https://aresvalley.com/Storage/Artemis/Database/data.zip'
+    data_folder = 'Data'
+    spectra_folder = 'Spectra'
+    audio_folder = 'Audio'
+    icons_folder = 'icons_imgs'
+
     Band = namedtuple("Band", ["lower", "upper"])
     ELF = Band(0, 30) # Formally it is (3, 30) Hz.
     SLF = Band(30, 300)
@@ -45,8 +54,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.set_initial_size()
+        self.download_window = DownloadWindow(self.db_location, self.data_folder)
         self.show()
         self.actionExit.triggered.connect(qApp.quit)
+        self.action_update_database.triggered.connect(self.download_db)
         self.db_version = None
         self.db = None
         self.current_signal_name = ''
@@ -286,7 +297,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         self.pause, 
                                         self.stop, 
                                         self.volume, 
-                                        self.audio_progress)
+                                        self.audio_progress,
+                                        self.data_folder,
+                                        self.audio_folder)
 
         BandLabel = namedtuple("BandLabel", ["left", "center", "right"])
         self.band_labels = [
@@ -324,6 +337,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.upper_freq_filter_unit.setFixedWidth(120)
             self.lower_freq_confidence.setFixedWidth(120)
             self.upper_freq_confidence.setFixedWidth(120)
+
+            self.lower_band_spinbox.setFixedWidth(200)
+            self.upper_band_spinbox.setFixedWidth(200)
+            self.lower_band_filter_unit.setFixedWidth(120)
+            self.upper_band_filter_unit.setFixedWidth(120)
+            self.lower_band_confidence.setFixedWidth(120)
+            self.upper_band_confidence.setFixedWidth(120)
+
             self.audio_progress.setFixedHeight(20)
             self.volume.setStyleSheet("""
                 QSlider::groove:horizontal {
@@ -341,6 +362,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 }
             """)
 
+    @pyqtSlot()
+    def download_db(self):
+        self.download_window.download_thread.finished.connect(self.show_downloaded_signals)
+        self.download_window.download_thread.start()
+        self.download_window.show()
+
+    @pyqtSlot()
+    def show_downloaded_signals(self):
+        if self.download_window.everything_ok:
+            self.search_bar.setEnabled(True)
+            self.load_db()
+            self.display_signals()
+
     def load_db(self):
         names = ["name",
                  "inf_freq",
@@ -355,7 +389,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                  "category_code",
                  "acf",]
         try:
-            self.db = read_csv(os.path.join('Data', 'db.csv'), 
+            self.db = read_csv(os.path.join(self.data_folder, 'db.csv'), 
                                sep = '*',
                                header = None,
                                index_col = 0,
@@ -371,27 +405,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
             box = QMessageBox(self)
             box.setWindowTitle("No database")
             box.setText("No database available.\n"
-                "Go to Updates->Download database.")
+                "Go to Updates->Update database.")
             box.show()
         else:
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
             self.db.fillna("N/A", inplace = True)
             self.db["url_clicked"] = False
-            try:
-                with open(os.path.join('Data', 'verdb.ini'), 'r') as dbver:
-                    self.db_version = int(dbver.read())
-            except (FileNotFoundError, ValueError):
-                box = QMessageBox(self)
-                box.setWindowTitle("No database version")
-                box.setText("Unable to detect database version.\n"
-                    "Possible data curruption.\n"
-                    "Go to Updates->Force Download.")
-                box.show()
-                self.statusbar.setStyleSheet(f'color: {self.active_color}')
-                self.statusbar.showMessage("Database version: undefined.")
-            else:
-                self.update_status_tip(self.total_signals)
+            self.update_status_tip(self.total_signals)
 
     @staticmethod
     def connect_to(objects_to_connect, fun_to_connect, fun_args):
@@ -556,7 +577,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
             return True
-        undef_freq, _ = self.find_if_undefined(self.db.loc[signal_name])
+        undef_freq = self.is_undef_freq(self.db.loc[signal_name])
         if undef_freq:
             if self.include_undef_freqs.isChecked():
                 return True
@@ -593,7 +614,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def band_filters_ok(self, signal_name):
         if not self.apply_remove_band_filter_btn.isChecked():
             return True
-        _, undef_band = self.find_if_undefined(self.db.loc[signal_name])
+        undef_band = self.is_undef_band(self.db.loc[signal_name])
         if undef_band:
             if self.include_undef_bands.isChecked():
                 return True
@@ -652,7 +673,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             else:
                 self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked};")
             category_code = current_signal.at["category_code"]
-            undef_freq, undef_band = self.find_if_undefined(current_signal)
+            undef_freq = self.is_undef_freq(current_signal)
+            undef_band = self.is_undef_band(current_signal)
             if not undef_freq:
                 self.freq_lab.setText(self.format_numbers(
                                       current_signal.at["inf_freq"],
@@ -694,20 +716,16 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.audio_widget.set_audio_player()
 
     @staticmethod
-    def find_if_undefined(current_signal):
+    def is_undef_freq(current_signal):
         lower_freq = current_signal.at["inf_freq"]
-        lower_band = current_signal.at["inf_band"]
         upper_freq = current_signal.at["sup_freq"]
+        return lower_freq == 'N/A' or upper_freq == 'N/A'
+
+    @staticmethod
+    def is_undef_band(current_signal):
+        lower_band = current_signal.at["inf_band"]
         upper_band = current_signal.at["sup_band"]
-        if lower_freq == '0' and upper_freq == "100000000000":
-            undefined_freq = True
-        else:
-            undefined_freq = False
-        if lower_band == '0' and upper_band == '100000000':
-            undefined_band = True
-        else:
-            undefined_band = False
-        return undefined_freq, undefined_band
+        return lower_band == 'N/A' or upper_band == 'N/A'
 
     @classmethod
     def format_numbers(cls, lower, upper):
@@ -740,13 +758,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
             return 10**9
         
     def display_spectrogram(self):
-        default_pic = os.path.join("icons_imgs", "nosignalselected.png")
+        default_pic = os.path.join(self.icons_folder, "nosignalselected.png")
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
-            path_spectr = os.path.join("Data", "Spectra", spectrogram_name + ".jpg")
+            path_spectr = os.path.join(self.data_folder, self.spectra_folder, spectrogram_name + ".png")
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join("icons_imgs", "spectrumnotavailable.png")
+                path_spectr = os.path.join(self.icons_folder, "spectrumnotavailable.png")
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
@@ -758,7 +776,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             label.setStyleSheet(f"color: {color};")
 
     def set_band_range(self, current_signal = None):
-        if current_signal is not None and not self.find_if_undefined(current_signal)[0]:
+        if current_signal is not None and not self.is_undef_freq(current_signal):
             lower_freq = int(current_signal.at["inf_freq"])
             upper_freq = int(current_signal.at["sup_freq"])
             zipped = list(zip(self.bands, self.band_labels))
@@ -790,6 +808,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked}")
             webbrowser.open(self.db.at[self.current_signal_name, "url"])
             self.db.at[self.current_signal_name, "url_clicked"] = True
+
+    def closeEvent(self, event):
+        if self.download_window.isVisible():
+            self.download_window.close()
+        super().closeEvent(event)
 
 
 

@@ -323,7 +323,7 @@ QPushButton:!enabled {
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="movable">
         <bool>true</bool>
@@ -4032,11 +4032,15 @@ QMenuBar::item:selected {
 QMenu::item:selected {
     background-color: #999999;
 	color: #1d5eff
+}
+
+QMenu {
+	color: #ffffff;
 }</string>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="styleSheet">
-     <string notr="true">color: rgb(255, 255, 255);</string>
+     <string notr="true"/>
     </property>
     <property name="title">
      <string>File</string>
@@ -4047,6 +4051,7 @@ QMenu::item:selected {
     <property name="title">
      <string>Updates</string>
     </property>
+    <addaction name="action_update_database"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuUpdates"/>
@@ -4059,6 +4064,11 @@ QMenu::item:selected {
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="action_update_database">
+   <property name="text">
+    <string>Update database</string>
    </property>
   </action>
  </widget>

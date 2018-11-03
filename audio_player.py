@@ -15,8 +15,10 @@ class AudioPlayer(QObject):
 
     __time_step = 500 # Milliseconds.
 
-    def __init__(self, play, pause, stop, volume, audio_progress):
+    def __init__(self, play, pause, stop, volume, audio_progress, data_folder, audio_folder):
         super().__init__()
+        self.__data_folder = data_folder
+        self.__audio_folder = audio_folder
         self.__paused = False
         self.__first_call = True
         self.__play = play
@@ -77,7 +79,7 @@ class AudioPlayer(QObject):
     def set_audio_player(self, fname = ""):
         self.__first_call = True
         self.__reset_audio_widget()
-        full_name = os.path.join('Data', 'Audio_ogg', fname + '.ogg')
+        full_name = os.path.join(self.__data_folder, self.__audio_folder, fname + '.ogg')
         if os.path.exists(full_name):
             self.__play.setEnabled(True)
             self.__audio_file = full_name
