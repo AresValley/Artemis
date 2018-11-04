@@ -1,7 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QMessageBox
-from download_thread import DownloadThread
+from threads import DownloadThread, ThreadStatus
 Ui_Download_window, _ = uic.loadUiType("download_db_window.ui")
 
 class DownloadWindow(QWidget, Ui_Download_window):
@@ -37,18 +37,15 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
         self.download_thread = DownloadThread(db_location, data_folder)
         self.download_thread.finished.connect(self.wait_close)
-        self.download_thread.no_connection_error.connect(self.show_no_connection_warning)
-        self.download_thread.bad_db_download_error.connect(self.show_bad_download_warning)
 
         self.cancel_btn.clicked.connect(self.terminate_process)
 
-    @pyqtSlot()
     def show_no_connection_warning(self):
-        self.bad_db_download_msg.setText(f"Unable to correctly download the database.\nReason: {self.download_thread.reason}")
+        self.bad_db_download_msg.setText(f"""Unable to correctly download the database.
+        Reason: {self.download_thread.reason}""")
         self.no_internet_msg.show()
         self.everything_ok = False
 
-    @pyqtSlot()
     def show_bad_download_warning(self):
         self.bad_db_download_msg.show()
         self.everything_ok = False
@@ -62,8 +59,14 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     @pyqtSlot()
     def wait_close(self):
-        if self.download_thread.regular_execution:
-            self.close() 
+        if self.download_thread.status == ThreadStatus.ok:
+            self.close()
+        elif self.download_thread.status == ThreadStatus.no_connection_err:
+            self.show_no_connection_warning()
+        elif self.download_thread.status == ThreadStatus.bad_download_err:
+            self.show_bad_download_warning
+        else:
+            self.close()
 
     def reject(self):
         if self.download_thread.isRunning():

@@ -1,23 +1,30 @@
+from enum import Enum, auto
 from io import BytesIO
 from os import mkdir
 import os.path
 from shutil import rmtree
 import urllib3
 from zipfile import ZipFile
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread
 import utilities
 
-class DownloadThread(QThread):
-    no_connection_error = pyqtSignal()
-    bad_db_download_error = pyqtSignal()
-    bad_file_error = pyqtSignal()
+class ThreadStatus(Enum):
+    ok = auto()
+    no_connection_err = auto()
+    no_file_err = auto()
+    bad_download_err = auto()
 
+class DownloadThread(QThread):
     def __init__(self, db_location, path):
         super().__init__()
         self.__db_location = db_location
         self.__path = path
-        self.regular_execution = True
+        self.__status = None
         self.reason = 0
+
+    @property
+    def status(self):
+        return self.__status
 
     def __del__(self):
         self.terminate()
@@ -29,26 +36,27 @@ class DownloadThread(QThread):
             # db = urllib.request.urlopen(self.__db_location)
             # raise urllib.error.URLError('Test')
         except urllib3.exceptions.MaxRetryError: # No internet connection.
-            self.regular_execution = False
-            self.no_connection_error.emit()
+            # self.no_connection_error.emit()
+            self.__status = ThreadStatus.no_connection_err
             return
         if db.status != 200:
-            self.regular_execution = False
             self.reason = db.reason
-            self.bad_db_download_error.emit()
+            # self.bad_download_error.emit()
+            self.__status = ThreadStatus.bad_download_err
             return
         if not utilities.checksum_ok(db.data, "folder"):
-            regular_execution = False
-            self.bad_db_download_error.emit()
+            # self.bad_download_error.emit()
+            self.__status = ThreadStatus.bad_download_err
             return
         if os.path.exists(self.__path):
             rmtree(self.__path)
         try:
-        # data_folder = db.read()
-            # data_folder = db.data
+            # data_folder = db.read()
             with ZipFile(BytesIO(db.data)) as zipped:
                 zipped.extractall()
         except:
-            self.regular_execution = False
-            self.bad_file_error.emit()
+            # self.bad_file_error.emit()
+            self.__status = ThreadStatus.bad_file_err
             return
+        else:
+            self.__status = ThreadStatus.ok

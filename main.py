@@ -55,7 +55,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.set_initial_size()
         self.download_window = DownloadWindow(self.db_location, self.data_folder)
-        self.show()
         self.actionExit.triggered.connect(qApp.quit)
         self.action_update_database.triggered.connect(self.download_db)
         self.db_version = None
@@ -289,6 +288,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                 self.description_text,]
 
         self.url_button.clicked.connect(self.go_to_web_page_signal)
+
+        self.show()
+
         self.load_db()
         self.display_signals()
         self.search_bar.textChanged.connect(self.display_signals)
