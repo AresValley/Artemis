@@ -57,11 +57,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
 
         self.connect_to(
-            objects_to_connect = {self.lower_freq_spinbox: 'valueChanged',
-                                  self.upper_freq_spinbox: 'valueChanged',
-                                  self.lower_freq_filter_unit: 'currentTextChanged',
-                                  self.upper_freq_filter_unit: 'currentTextChanged',
-                                  self.activate_low_freq_filter_btn: 'toggled'},
+            objects_to_connect = [self.lower_freq_spinbox.valueChanged,
+                                  self.upper_freq_spinbox.valueChanged,
+                                  self.lower_freq_filter_unit.currentTextChanged,
+                                  self.upper_freq_filter_unit.currentTextChanged,
+                                  self.activate_low_freq_filter_btn.toggled],
             fun_to_connect = self.set_min_value_upper_limit,
             fun_args = [self.lower_freq_filter_unit, 
                         self.lower_freq_spinbox, 
@@ -70,14 +70,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
 
         self.connect_to(
-            objects_to_connect = {self.lower_freq_spinbox: 'valueChanged',
-                                  self.upper_freq_spinbox: 'valueChanged',
-                                  self.lower_freq_filter_unit: 'currentTextChanged',
-                                  self.upper_freq_filter_unit: 'currentTextChanged',
-                                  self.activate_low_freq_filter_btn: 'clicked',
-                                  self.activate_up_freq_filter_btn: 'clicked',
-                                  self.lower_freq_confidence: 'valueChanged',
-                                  self.upper_freq_confidence: 'valueChanged'},
+            objects_to_connect = [self.lower_freq_spinbox.valueChanged,
+                                  self.upper_freq_spinbox.valueChanged,
+                                  self.lower_freq_filter_unit.currentTextChanged,
+                                  self.upper_freq_filter_unit.currentTextChanged,
+                                  self.activate_low_freq_filter_btn.clicked,
+                                  self.activate_up_freq_filter_btn.clicked,
+                                  self.lower_freq_confidence.valueChanged,
+                                  self.upper_freq_confidence.valueChanged],
             fun_to_connect = self.set_band_filter_label,
             fun_args = [self.activate_low_freq_filter_btn,
                         self.lower_freq_spinbox,
@@ -133,11 +133,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
         # Manage bandwidth filters.
 
         self.connect_to(
-            objects_to_connect = {self.lower_band_spinbox: 'valueChanged',
-                                  self.upper_band_spinbox: 'valueChanged',
-                                  self.lower_band_filter_unit: 'currentTextChanged',
-                                  self.upper_band_filter_unit: 'currentTextChanged',
-                                  self.activate_low_band_filter_btn: 'toggled'},
+            objects_to_connect = [self.lower_band_spinbox.valueChanged,
+                                  self.upper_band_spinbox.valueChanged,
+                                  self.lower_band_filter_unit.currentTextChanged,
+                                  self.upper_band_filter_unit.currentTextChanged,
+                                  self.activate_low_band_filter_btn.toggled],
             fun_to_connect = self.set_min_value_upper_limit,
             fun_args = [self.lower_band_filter_unit, 
                         self.lower_band_spinbox, 
@@ -146,14 +146,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
 
         self.connect_to(
-            objects_to_connect = {self.lower_band_spinbox: 'valueChanged',
-                                  self.upper_band_spinbox: 'valueChanged',
-                                  self.lower_band_filter_unit: 'currentTextChanged',
-                                  self.upper_band_filter_unit: 'currentTextChanged',
-                                  self.activate_low_band_filter_btn: 'clicked',
-                                  self.activate_up_band_filter_btn: 'clicked',
-                                  self.lower_band_confidence: 'valueChanged',
-                                  self.upper_band_confidence: 'valueChanged'},
+            objects_to_connect = [self.lower_band_spinbox.valueChanged,
+                                  self.upper_band_spinbox.valueChanged,
+                                  self.lower_band_filter_unit.currentTextChanged,
+                                  self.upper_band_filter_unit.currentTextChanged,
+                                  self.activate_low_band_filter_btn.clicked,
+                                  self.activate_up_band_filter_btn.clicked,
+                                  self.lower_band_confidence.valueChanged,
+                                  self.upper_band_confidence.valueChanged],
             fun_to_connect = self.set_band_filter_label,
             fun_args = [self.activate_low_band_filter_btn,
                         self.lower_band_spinbox,
@@ -396,10 +396,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @staticmethod
     def connect_to(objects_to_connect, fun_to_connect, fun_args):
-        for obj, signal in objects_to_connect.items():
-            getattr(obj, signal).connect(
-                partial(fun_to_connect, *fun_args)
-            )
+        for signal in objects_to_connect:
+            signal.connect(partial(fun_to_connect, *fun_args))
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box, 
