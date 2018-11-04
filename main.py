@@ -22,39 +22,17 @@ from audio_player import AudioPlayer
 
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
+from utilities import Constants
 
 qt_creator_file = "main_window.ui"
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 class MyApp(QMainWindow, Ui_MainWindow):
-    db_location = 'https://aresvalley.com/Storage/Artemis/Database/data.zip'
-    data_folder = 'Data'
-    spectra_folder = 'Spectra'
-    audio_folder = 'Audio'
-    icons_folder = 'icons_imgs'
-
-    Band = namedtuple("Band", ["lower", "upper"])
-    ELF = Band(0, 30) # Formally it is (3, 30) Hz.
-    SLF = Band(30, 300)
-    ULF = Band(300, 3000)
-    VLF = Band(3000, 30000)
-    LF  = Band(30 * 10**3, 300 * 10**3)
-    MF  = Band(300 * 10 ** 3, 3000 * 10**3)
-    HF  = Band(3 * 10**6, 30 * 10**6)
-    VHF = Band(30 * 10**6, 300 * 10**6)
-    UHF = Band(300 * 10**6, 3000 * 10**6)
-    SHF = Band(3 * 10**9, 30 * 10**9)
-    EHF = Band(30 * 10**9, 300 * 10**9)
-    bands = ELF, SLF, ULF, VLF, LF, MF, HF, VHF, UHF, SHF, EHF
-    active_color = "#39eaff"
-    inactive_color = "#9f9f9f"
-    conversion_factors = {"Hz":1, "kHz":1000, "MHz":1000000, "GHz":1000000000}
-
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.set_initial_size()
-        self.download_window = DownloadWindow(self.db_location, self.data_folder)
+        self.download_window = DownloadWindow()
         self.actionExit.triggered.connect(qApp.quit)
         self.action_update_database.triggered.connect(self.download_db)
         self.db_version = None
@@ -300,8 +278,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         self.stop, 
                                         self.volume, 
                                         self.audio_progress,
-                                        self.data_folder,
-                                        self.audio_folder)
+                                        Constants.data_folder,
+                                        Constants.audio_folder)
 
         BandLabel = namedtuple("BandLabel", ["left", "center", "right"])
         self.band_labels = [
@@ -391,7 +369,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                  "category_code",
                  "acf",]
         try:
-            self.db = read_csv(os.path.join(self.data_folder, 'db.csv'), 
+            self.db = read_csv(os.path.join(Constants.data_folder, 'db.csv'), 
                                sep = '*',
                                header = None,
                                index_col = 0,
@@ -437,8 +415,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             upper_units = upper_combo_box.currentText()
             lower_value = lower_spin_box.value()
             upper_value = upper_spin_box.value()
-            inf_limit = (lower_value * self.conversion_factors[lower_units]) \
-                // self.conversion_factors[upper_units]
+            inf_limit = (lower_value * Constants.conversion_factors[lower_units]) \
+                // Constants.conversion_factors[upper_units]
             counter = 0
             while inf_limit > upper_spin_box.maximum():
                 counter += 1
@@ -470,13 +448,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
                               range_lbl):
         activate_low = False
         activate_high = False
-        color = self.inactive_color
+        color = Constants.inactive_color
         title = ''
         to_display = ''
         if activate_low_btn.isChecked():
             to_display += str(lower_spinbox.value()) + ' ' + lower_unit.currentText()
             activate_low = True
-            color = self.active_color
+            color = Constants.active_color
             if lower_confidence.value() != 0:
                 to_display += ' - ' + str(lower_confidence.value()) + ' %'
         else:
@@ -485,7 +463,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if activate_up_btn.isChecked():
             to_display += str(upper_spinbox.value()) + ' ' + upper_unit.currentText()
             activate_high = True
-            color = self.active_color
+            color = Constants.active_color
             if upper_confidence.value() != 0:
                 to_display += ' + ' + str(upper_confidence.value()) + ' %'
         else:
@@ -525,7 +503,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def update_status_tip(self, available_signals):
         if available_signals < self.total_signals:
-            self.statusbar.setStyleSheet(f'color: {self.active_color}')
+            self.statusbar.setStyleSheet(f'color: {Constants.active_color}')
         else:
             self.statusbar.setStyleSheet('color: #ffffff')
         self.statusbar.showMessage(f"{available_signals} out of {self.total_signals} signals displayed.")
@@ -591,7 +569,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         band_filter_ok = False
         any_checked = False
-        for btn, band_limits in zip(self.frequency_filters_btns, self.bands):
+        for btn, band_limits in zip(self.frequency_filters_btns, Constants.bands):
             if btn.isChecked():
                 any_checked = True
                 if signal_freqs[0] < band_limits.upper and signal_freqs[1] >= band_limits.lower:
@@ -656,9 +634,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
         else:
             return cat_checked == positive_cases and cat_checked > 0
 
-    @classmethod
-    def filters_ok(cls, spinbox, filter_unit, confidence, sign = 1):
-        band_filter = spinbox.value() * cls.conversion_factors[filter_unit.currentText()]
+    @staticmethod
+    def filters_ok(spinbox, filter_unit, confidence, sign = 1):
+        band_filter = spinbox.value() * Constants.conversion_factors[filter_unit.currentText()]
         return band_filter + sign * (confidence.value() * band_filter) // 100
 
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
@@ -699,9 +677,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.description_text.setText(current_signal.at["description"])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
-                    cat_lab.setStyleSheet(f"color: {self.inactive_color};")
+                    cat_lab.setStyleSheet(f"color: {Constants.inactive_color};")
                 elif cat == '1':
-                    cat_lab.setStyleSheet(f"color: {self.active_color};")
+                    cat_lab.setStyleSheet(f"color: {Constants.active_color};")
             self.set_band_range(current_signal)
             self.audio_widget.set_audio_player(self.current_signal_name)
         else:
@@ -713,7 +691,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             for lab in self.property_labels:
                 lab.setText("N/A")
             for lab in self.category_labels:
-                lab.setStyleSheet(f"color: {self.inactive_color};")
+                lab.setStyleSheet(f"color: {Constants.inactive_color};")
             self.set_band_range()
             self.audio_widget.set_audio_player()
 
@@ -760,20 +738,20 @@ class MyApp(QMainWindow, Ui_MainWindow):
             return 10**9
         
     def display_spectrogram(self):
-        default_pic = os.path.join(self.icons_folder, "nosignalselected.png")
+        default_pic = os.path.join(Constants.icons_folder, "nosignalselected.png")
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
-            path_spectr = os.path.join(self.data_folder, self.spectra_folder, spectrogram_name + ".png")
+            path_spectr = os.path.join(Constants.data_folder, Constants.spectra_folder, spectrogram_name + ".png")
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join(self.icons_folder, "spectrumnotavailable.png")
+                path_spectr = os.path.join(Constants.icons_folder, "spectrumnotavailable.png")
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
-    @classmethod
-    def activate_band_category(cls, band_label, activate = True):
-        color = cls.active_color if activate else cls.inactive_color
+    @staticmethod
+    def activate_band_category(band_label, activate = True):
+        color = Constants.active_color if activate else Constants.inactive_color
         for label in band_label:
             label.setStyleSheet(f"color: {color};")
 
@@ -781,7 +759,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if current_signal is not None and not self.is_undef_freq(current_signal):
             lower_freq = int(current_signal.at["inf_freq"])
             upper_freq = int(current_signal.at["sup_freq"])
-            zipped = list(zip(self.bands, self.band_labels))
+            zipped = list(zip(Constants.bands, self.band_labels))
             for i, w in enumerate(zipped):
                 band, band_label = w
                 if lower_freq >= band.lower and lower_freq < band.upper:

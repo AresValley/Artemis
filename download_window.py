@@ -5,7 +5,7 @@ from threads import DownloadThread, ThreadStatus
 Ui_Download_window, _ = uic.loadUiType("download_db_window.ui")
 
 class DownloadWindow(QWidget, Ui_Download_window):
-    def __init__(self, db_location, data_folder):
+    def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowFlags(
@@ -35,7 +35,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
         the downloaded file has been discarded.""")
         self.bad_file_msg.finished.connect(self.close)
 
-        self.download_thread = DownloadThread(db_location, data_folder)
+        self.download_thread = DownloadThread()
         self.download_thread.finished.connect(self.wait_close)
 
         self.cancel_btn.clicked.connect(self.terminate_process)
