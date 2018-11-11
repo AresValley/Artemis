@@ -9,15 +9,15 @@ from PyQt5.QtCore import QThread
 from utilities import checksum_ok, Constants
 
 class ThreadStatus(Enum):
-    ok = auto()
-    no_connection_err = auto()
-    no_file_err = auto()
-    bad_download_err = auto()
+    OK = auto()
+    NO_CONNECTION_ERR = auto()
+    UNKNOWN_ERR = auto()
+    BAD_DOWNLOAD_ERR = auto()
 
 class DownloadThread(QThread):
     def __init__(self):
         super().__init__()
-        self.__status = ThreadStatus.ok
+        self.__status = ThreadStatus.OK
         self.reason = 0
 
     @property
@@ -34,14 +34,14 @@ class DownloadThread(QThread):
             # db = urllib.request.urlopen(Constants.db_location)
             # raise urllib.error.URLError('Test')
         except urllib3.exceptions.MaxRetryError: # No internet connection.
-            self.__status = ThreadStatus.no_connection_err
+            self.__status = ThreadStatus.NO_CONNECTION_ERR
             return
         if db.status != 200:
             self.reason = db.reason
-            self.__status = ThreadStatus.bad_download_err
+            self.__status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
         if not checksum_ok(db.data, "folder"):
-            self.__status = ThreadStatus.bad_download_err
+            self.__status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
         if os.path.exists(Constants.data_folder):
             rmtree(Constants.data_folder)
@@ -50,4 +50,4 @@ class DownloadThread(QThread):
             with ZipFile(BytesIO(db.data)) as zipped:
                 zipped.extractall()
         except:
-            self.__status = ThreadStatus.bad_file_err
+            self.__status = ThreadStatus.UNKNOWN_ERR

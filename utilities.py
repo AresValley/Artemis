@@ -36,6 +36,16 @@ class Constants(object):
     active_color = _ReadOnlyProperty("#39eaff")
     inactive_color = _ReadOnlyProperty("#9f9f9f")
     conversion_factors = _ReadOnlyProperty({"Hz":1, "kHz":1000, "MHz":1000000, "GHz":1000000000})
+    modes = _ReadOnlyProperty({"FM": ["NFM", "WFM"],
+                               "AM": [],
+                               "CW": [],
+                               "SK": ["FSK", "PSK", "MSK"],
+                               "SB": ["LSB", "USB", "DSB"],
+                               "Chirp Spread Spectrum": [],
+                               "FHSS-TDM": [],
+                               "RAW": [],
+                               "SC-FDMA": [],}
+                             )
 
 
 def checksum_ok(data, what):

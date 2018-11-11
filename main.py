@@ -10,8 +10,10 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QMessageBox,
                              qApp,
                              QDesktopWidget,
-                             QListWidgetItem,)
-from PyQt5.QtGui import QPixmap
+                             QListWidgetItem,
+                             QTreeView,
+                             QTreeWidgetItem)
+from PyQt5.QtGui import QPixmap, QStandardItemModel, QStandardItem
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo, 
                           QSize, 
@@ -35,7 +37,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.download_window = DownloadWindow()
         self.actionExit.triggered.connect(qApp.quit)
         self.action_update_database.triggered.connect(self.download_db)
-        self.db_version = None
         self.db = None
         self.current_signal_name = ''
         self.signal_names = []
@@ -267,6 +268,17 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         self.url_button.clicked.connect(self.go_to_web_page_signal)
 
+        # Set modulation TreeView
+
+        self.set_mode_tree_widget()
+        self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
+        self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
+        self.apply_remove_mode_filter_btn.set_texts("Apply", "Remove")
+        self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget])
+        self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
+        self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
+
+# ##########################################################################################
         self.show()
 
         self.load_db()
@@ -279,7 +291,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         self.volume, 
                                         self.audio_progress,
                                         Constants.data_folder,
-                                        Constants.audio_folder)
+                                        Constants.audio_folder) # Da togliere/////////////////
 
         BandLabel = namedtuple("BandLabel", ["left", "center", "right"])
         self.band_labels = [
@@ -295,6 +307,24 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.shf_left, self.shf, self.shf_right),
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
+
+    def set_mode_tree_widget(self):
+        for parent, children in Constants.modes.items():
+            iparent = QTreeWidgetItem([parent])
+            self.mode_tree_widget.addTopLevelItem(iparent)
+            for child in children:
+                ichild = QTreeWidgetItem([child])
+                iparent.addChild(ichild)
+        self.mode_tree_widget.expandAll()
+
+    def manage_mode_selections(self):
+        selected_items = self.mode_tree_widget.selectedItems()
+        parents = Constants.modes.keys()
+        for parent in parents:
+            for item in selected_items:
+                if parent == item.text(0):
+                    for i in range(len(Constants.modes[parent])):
+                        item.child(i).setSelected(True)
 
     def set_initial_size(self):
         """
@@ -494,7 +524,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             if text.lower() in signal.lower()     and \
                 self.frequency_filters_ok(signal) and \
                 self.band_filters_ok(signal)      and \
-                self.category_filters_ok(signal):
+                self.category_filters_ok(signal)  and \
+                self.mode_filters_ok(signal):
                 self.result_list.addItem(signal)
                 available_signals += 1
         self.update_status_tip(available_signals)
@@ -551,6 +582,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
         for f in self.cat_filter_btns:
             f.setChecked(False) if f.isChecked() else None
         self.cat_at_least_one.setChecked(True)
+
+    def reset_mode_filters(self):
+        if self.apply_remove_mode_filter_btn.isChecked():
+            self.apply_remove_mode_filter_btn.setChecked(False)
+            self.apply_remove_mode_filter_btn.clicked.emit()
+        for item in self.mode_tree_widget.selectedItems():
+            item.setSelected(False)
 
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
@@ -631,6 +669,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
             return positive_cases > 0
         else:
             return cat_checked == positive_cases and cat_checked > 0
+
+    def mode_filters_ok(self, signal_name):
+        if not self.apply_remove_mode_filter_btn.isChecked():
+            return True
+        selected_items = [item for item in self.mode_tree_widget.selectedItems()]
+        selected_items_text = [i.text(0) for i in selected_items]
+        parents = [item for item in selected_items_text if item in Constants.modes.keys()]
+        children = [item for item in selected_items_text if item not in parents]
+        signal_mode = self.db.at[signal_name, "mode"]
+        ok = []
+        for item in selected_items:
+            if item.text(0) in parents:
+                ok.append(item.text(0) in signal_mode)
+            elif not item.parent().isSelected():
+                ok.append(item.text(0) == signal_mode)
+        return any(ok)
 
     @staticmethod
     def filters_ok(spinbox, filter_unit, confidence, sign = 1):
@@ -779,6 +833,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.reset_frequency_filters_btn.clicked.emit()
         self.reset_band_filters_btn.clicked.emit()
         self.reset_cat_filters_btn.clicked.emit()
+        self.reset_mode_filters_btn.clicked.emit()
 
     @pyqtSlot()
     def go_to_web_page_signal(self):

@@ -59,11 +59,11 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     @pyqtSlot()
     def wait_close(self):
-        if self.download_thread.status == ThreadStatus.ok:
+        if self.download_thread.status == ThreadStatus.OK:
             self.close()
-        elif self.download_thread.status == ThreadStatus.no_connection_err:
+        elif self.download_thread.status == ThreadStatus.NO_CONNECTION_ERR:
             self.show_no_connection_warning()
-        elif self.download_thread.status == ThreadStatus.bad_download_err:
+        elif self.download_thread.status == ThreadStatus.BAD_DOWNLOAD_ERR:
             self.show_bad_download_warning
         else:
             self.close()
