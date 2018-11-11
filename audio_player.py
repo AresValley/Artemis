@@ -5,6 +5,8 @@ from pygame import mixer
 from PyQt5.QtCore import QTimer, QTimer, pyqtSlot, QObject
 import qtawesome as qta
 
+from utilities import Constants
+
 
 class AudioPlayer(QObject):
     """
@@ -15,10 +17,8 @@ class AudioPlayer(QObject):
 
     __time_step = 500 # Milliseconds.
 
-    def __init__(self, play, pause, stop, volume, audio_progress, data_folder, audio_folder):
+    def __init__(self, play, pause, stop, volume, audio_progress):
         super().__init__()
-        self.__data_folder = data_folder
-        self.__audio_folder = audio_folder
         self.__paused = False
         self.__first_call = True
         self.__play = play
@@ -79,7 +79,7 @@ class AudioPlayer(QObject):
     def set_audio_player(self, fname = ""):
         self.__first_call = True
         self.__reset_audio_widget()
-        full_name = os.path.join(self.__data_folder, self.__audio_folder, fname + '.ogg')
+        full_name = os.path.join(Constants.data_folder, Constants.audio_folder, fname + '.ogg')
         if os.path.exists(full_name):
             self.__play.setEnabled(True)
             self.__audio_file = full_name

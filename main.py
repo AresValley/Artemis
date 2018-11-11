@@ -290,9 +290,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                         self.pause, 
                                         self.stop, 
                                         self.volume, 
-                                        self.audio_progress,
-                                        Constants.data_folder,
-                                        Constants.audio_folder) # Da togliere/////////////////
+                                        self.audio_progress)
 
         BandLabel = namedtuple("BandLabel", ["left", "center", "right"])
         self.band_labels = [
