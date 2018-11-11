@@ -46,39 +46,40 @@ class Constants(object):
                                "RAW": [],
                                "SC-FDMA": [],}
                              )
-    UNKNOWN = "Unknown"
-    MODULATIONS = ["8VSB",
-                   "AFSK",
-                   "AM",
-                   "BFSK",
-                   "C4FM",
-                   "CDMA",
-                   "COFDM",
-                   "CW",
-                   "FFSK",
-                   "FM",
-                   "FMCW",
-                   "FMOP",
-                   "FSK",
-                   "GFSK",
-                   "GMSK",
-                   "IFK",
-                   "MFSK",
-                   "MSK",
-                   "OFDM",
-                   "OOK",
-                   "PAM",
-                   "PPM",
-                   "PSK",
-                   "QAM",
-                   "TDMA",]
+    APPLY = _ReadOnlyProperty("Apply")
+    REMOVE = _ReadOnlyProperty("Remove")
+    UNKNOWN = _ReadOnlyProperty("N/A")
+    MODULATIONS = _ReadOnlyProperty(["8VSB",
+                                     "AFSK",
+                                     "AM",
+                                     "BFSK",
+                                     "C4FM",
+                                     "CDMA",
+                                     "COFDM",
+                                     "CW",
+                                     "FFSK",
+                                     "FM",
+                                     "FMCW",
+                                     "FMOP",
+                                     "FSK",
+                                     "GFSK",
+                                     "GMSK",
+                                     "IFK",
+                                     "MFSK",
+                                     "MSK",
+                                     "OFDM",
+                                     "OOK",
+                                     "PAM",
+                                     "PPM",
+                                     "PSK",
+                                     "QAM",
+                                     "TDMA",])
 
 
 def reset_apply_remove_btn(button):
     if button.isChecked():
         button.setChecked(False)
         button.clicked.emit()
-
 
 def checksum_ok(data, what):
     code = hashlib.sha256()

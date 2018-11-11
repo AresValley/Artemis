@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1206</width>
-    <height>638</height>
+    <height>634</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -3938,7 +3938,10 @@ QWidget#xFM_container,  QWidget#xSK_container, QWidget#xSB_container{
               </layout>
              </item>
              <item>
-              <widget class="QPushButton" name="apply_remove_modulation_filter_btn">
+              <widget class="DoubleTextButton" name="apply_remove_modulation_filter_btn">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
                <property name="font">
                 <font>
                  <pointsize>12</pointsize>
@@ -3948,6 +3951,9 @@ QWidget#xFM_container,  QWidget#xSK_container, QWidget#xSB_container{
                </property>
                <property name="text">
                 <string>Apply</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
                </property>
               </widget>
              </item>

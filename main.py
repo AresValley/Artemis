@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QListWidgetItem,
                              QTreeView,
                              QTreeWidgetItem)
-from PyQt5.QtGui import QPixmap, QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo, 
                           QSize, 
@@ -108,7 +108,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_freq_confidence)
             )
 
-        self.apply_remove_freq_filter_btn.set_texts("Apply", "Remove")
+        self.apply_remove_freq_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_freq_filter_btn.set_slave_filters(
             [
                 *self.frequency_filters_btns,
@@ -184,7 +184,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_band_confidence)
             )
 
-        self.apply_remove_band_filter_btn.set_texts("Apply", "Remove")
+        self.apply_remove_band_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_band_filter_btn.set_slave_filters(
             [
                 self.include_undef_bands,
@@ -228,7 +228,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                 self.number_stations_btn,
                                 self.time_signal_btn,]
 
-        self.apply_remove_cat_filter_btn.set_texts('Apply', 'Remove')   
+        self.apply_remove_cat_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)   
         self.apply_remove_cat_filter_btn.set_slave_filters([*self.cat_filter_btns,
                                                              self.cat_at_least_one,
                                                              self.cat_all])
@@ -274,7 +274,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.set_mode_tree_widget()
         self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
         self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
-        self.apply_remove_mode_filter_btn.set_texts("Apply", "Remove")
+        self.apply_remove_mode_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget, 
                                                              self.include_unknown_modes_btn])
         self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
@@ -283,10 +283,17 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         self.modulation_list.addItems(Constants.MODULATIONS)
         self.search_bar_modulation.textEdited.connect(self.show_matching_modulations)
+        self.apply_remove_modulation_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
+        self.apply_remove_modulation_filter_btn.set_slave_filters([self.search_bar_modulation,
+                                                                   self.modulation_list])
+        self.apply_remove_modulation_filter_btn.clicked.connect(self.display_signals)
+        self.reset_modulation_filters_btn.clicked.connect(self.reset_modulation_filters)
 
 # ##########################################################################################
 
         self.load_db()
+
+        # Left list widget and search bar.
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.addItems(self.signal_names)
         self.result_list.currentItemChanged.connect(self.display_specs)
@@ -319,8 +326,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot(str)
     def show_matching_modulations(self, text):
-        pass
-        # for modulation in 
+        for index in range(self.modulation_list.count()):
+            item = self.modulation_list.item(index)
+            if self.search_bar_modulation.text().upper() in item.text() or item.isSelected():
+                item.setHidden(False)
+            else:
+                item.setHidden(True)
 
     def set_mode_tree_widget(self):
         for parent, children in Constants.MODES.items():
@@ -434,7 +445,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         else:
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
-            self.db.fillna("N/A", inplace = True)
+            self.db.fillna(Constants.UNKNOWN, inplace = True)
             self.db["url_clicked"] = False
             self.update_status_tip(self.total_signals)
 
@@ -536,11 +547,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
         text = self.search_bar.text()
         available_signals = 0
         for index, signal in enumerate(self.signal_names):
-            if text.lower() in signal.lower()     and \
-                self.frequency_filters_ok(signal) and \
-                self.band_filters_ok(signal)      and \
-                self.category_filters_ok(signal)  and \
-                self.mode_filters_ok(signal):
+            if all([text.lower() in signal.lower()     ,
+                    self.frequency_filters_ok(signal)  ,
+                    self.band_filters_ok(signal)       ,
+                    self.category_filters_ok(signal)   ,
+                    self.mode_filters_ok(signal)       ,
+                    self.modulation_filters_ok(signal)]):
                 self.result_list.item(index).setHidden(False)
                 available_signals += 1
         self.update_status_tip(available_signals)
@@ -598,6 +610,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
             item.setSelected(False)
         if self.include_unknown_modes_btn.isChecked():
             self.include_unknown_modes_btn.setChecked(False)
+
+    @pyqtSlot()
+    def reset_modulation_filters(self):
+        reset_apply_remove_btn(self.apply_remove_modulation_filter_btn)
+        self.search_bar_modulation.setText('')
+        for i in range(self.modulation_list.count()):
+            if self.modulation_list.item(i).isSelected():
+                self.modulation_list.item(i).setSelected(False)
 
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
@@ -700,6 +720,15 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 ok.append(item.text(0) == signal_mode)
         return any(ok)
 
+    def modulation_filters_ok(self, signal_name):
+        if not self.apply_remove_modulation_filter_btn.isChecked():
+            return True
+        signal_modulation = self.db.at[signal_name, "modulation"]
+        for item in self.modulation_list.selectedItems():
+            if item.text() == signal_modulation:
+                return True
+        return False
+
     @staticmethod
     def filters_ok(spinbox, filter_unit, confidence, sign = 1):
         band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
@@ -755,7 +784,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.name_lab.setText("No signal")
             self.name_lab.setAlignment(Qt.AlignHCenter)
             for lab in self.property_labels:
-                lab.setText("N/A")
+                lab.setText(Constants.UNKNOWN)
             for lab in self.category_labels:
                 lab.setStyleSheet(f"color: {Constants.INACTIVE_COLOR};")
             self.set_band_range()
@@ -765,13 +794,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def is_undef_freq(current_signal):
         lower_freq = current_signal.at["inf_freq"]
         upper_freq = current_signal.at["sup_freq"]
-        return lower_freq == 'N/A' or upper_freq == 'N/A'
+        return lower_freq == Constants.UNKNOWN or upper_freq == Constants.UNKNOWN
 
     @staticmethod
     def is_undef_band(current_signal):
         lower_band = current_signal.at["inf_band"]
         upper_band = current_signal.at["sup_band"]
-        return lower_band == 'N/A' or upper_band == 'N/A'
+        return lower_band == Constants.UNKNOWN or upper_band == Constants.UNKNOWN
 
     @classmethod
     def format_numbers(cls, lower, upper):
@@ -848,6 +877,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.reset_band_filters_btn.clicked.emit()
         self.reset_cat_filters_btn.clicked.emit()
         self.reset_mode_filters_btn.clicked.emit()
+        self.reset_modulation_filters_btn.clicked.emit()
 
     @pyqtSlot()
     def go_to_web_page_signal(self):

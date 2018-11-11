@@ -10,7 +10,7 @@ class DoubleTextButton(QPushButton):
         self.__text_a = text_a
         self.__text_b = text_b
 
-    def set_slave_filters(self, simple_ones, 
+    def set_slave_filters(self, simple_ones = None, 
                           radio_1 = None,
                           ruled_by_radio_1 = None, 
                           radio_2 = None,
