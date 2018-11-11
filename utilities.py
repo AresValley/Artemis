@@ -14,12 +14,12 @@ class _ReadOnlyProperty(object):
 
 
 class Constants(object):
-    db_location = _ReadOnlyProperty('https://aresvalley.com/Storage/Artemis/Database/data.zip')
-    ref_loc = _ReadOnlyProperty('https://aresvalley.com/Storage/Artemis/Database/data.zip.log')
-    data_folder = _ReadOnlyProperty('Data')
-    spectra_folder = _ReadOnlyProperty('Spectra')
-    audio_folder = _ReadOnlyProperty('Audio')
-    icons_folder = _ReadOnlyProperty('icons_imgs')
+    DB_LOCATION = _ReadOnlyProperty('https://aresvalley.com/Storage/Artemis/Database/data.zip')
+    REF_LOC = _ReadOnlyProperty('https://aresvalley.com/Storage/Artemis/Database/data.zip.log')
+    DATA_FOLDER = _ReadOnlyProperty('Data')
+    SPECTRA_FOLDER = _ReadOnlyProperty('Spectra')
+    AUDIO_FOLDER = _ReadOnlyProperty('Audio')
+    ICONS_FOLDER = _ReadOnlyProperty('icons_imgs')
     __Band = namedtuple("Band", ["lower", "upper"])
     __ELF = __Band(0, 30) # Formally it is (3, 30) Hz.
     __SLF = __Band(30, 300)
@@ -32,11 +32,11 @@ class Constants(object):
     __UHF = __Band(300 * 10**6, 3000 * 10**6)
     __SHF = __Band(3 * 10**9, 30 * 10**9)
     __EHF = __Band(30 * 10**9, 300 * 10**9)
-    bands = _ReadOnlyProperty((__ELF, __SLF, __ULF, __VLF, __LF, __MF, __HF, __VHF, __UHF, __SHF, __EHF))
-    active_color = _ReadOnlyProperty("#39eaff")
-    inactive_color = _ReadOnlyProperty("#9f9f9f")
-    conversion_factors = _ReadOnlyProperty({"Hz":1, "kHz":1000, "MHz":1000000, "GHz":1000000000})
-    modes = _ReadOnlyProperty({"FM": ["NFM", "WFM"],
+    BANDS = _ReadOnlyProperty((__ELF, __SLF, __ULF, __VLF, __LF, __MF, __HF, __VHF, __UHF, __SHF, __EHF))
+    ACTIVE_COLOR = _ReadOnlyProperty("#39eaff")
+    INACTIVE_COLOR = _ReadOnlyProperty("#9f9f9f")
+    CONVERSION_FACTORS = _ReadOnlyProperty({"Hz":1, "kHz":1000, "MHz":1000000, "GHz":1000000000})
+    MODES = _ReadOnlyProperty({"FM": ["NFM", "WFM"],
                                "AM": [],
                                "CW": [],
                                "SK": ["FSK", "PSK", "MSK"],
@@ -46,7 +46,7 @@ class Constants(object):
                                "RAW": [],
                                "SC-FDMA": [],}
                              )
-    unknown = "Unknown"
+    UNKNOWN = "Unknown"
 
 
 def reset_apply_remove_btn(button):
@@ -65,7 +65,7 @@ def checksum_ok(data, what):
     else:
         raise ValueError("Wrong entry name.")
     try:
-        reference = read_csv(Constants.ref_loc, delimiter = '*').iat[-1, n]
+        reference = read_csv(Constants.REF_LOC, delimiter = '*').iat[-1, n]
     except HTTPError:
         return False
     return code.hexdigest() == reference

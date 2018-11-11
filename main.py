@@ -308,7 +308,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         ]
 
     def set_mode_tree_widget(self):
-        for parent, children in Constants.modes.items():
+        for parent, children in Constants.MODES.items():
             iparent = QTreeWidgetItem([parent])
             self.mode_tree_widget.addTopLevelItem(iparent)
             for child in children:
@@ -318,11 +318,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def manage_mode_selections(self):
         selected_items = self.mode_tree_widget.selectedItems()
-        parents = Constants.modes.keys()
+        parents = Constants.MODES.keys()
         for parent in parents:
             for item in selected_items:
                 if parent == item.text(0):
-                    for i in range(len(Constants.modes[parent])):
+                    for i in range(len(Constants.MODES[parent])):
                         item.child(i).setSelected(True)
 
     def set_initial_size(self):
@@ -398,7 +398,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                  "category_code",
                  "acf",]
         try:
-            self.db = read_csv(os.path.join(Constants.data_folder, 'db.csv'), 
+            self.db = read_csv(os.path.join(Constants.DATA_FOLDER, 'db.csv'), 
                                sep = '*',
                                header = None,
                                index_col = 0,
@@ -442,8 +442,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             upper_units = upper_combo_box.currentText()
             lower_value = lower_spin_box.value()
             upper_value = upper_spin_box.value()
-            inf_limit = (lower_value * Constants.conversion_factors[lower_units]) \
-                // Constants.conversion_factors[upper_units]
+            inf_limit = (lower_value * Constants.CONVERSION_FACTORS[lower_units]) \
+                // Constants.CONVERSION_FACTORS[upper_units]
             counter = 0
             while inf_limit > upper_spin_box.maximum():
                 counter += 1
@@ -475,13 +475,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
                               range_lbl):
         activate_low = False
         activate_high = False
-        color = Constants.inactive_color
+        color = Constants.INACTIVE_COLOR
         title = ''
         to_display = ''
         if activate_low_btn.isChecked():
             to_display += str(lower_spinbox.value()) + ' ' + lower_unit.currentText()
             activate_low = True
-            color = Constants.active_color
+            color = Constants.ACTIVE_COLOR
             if lower_confidence.value() != 0:
                 to_display += ' - ' + str(lower_confidence.value()) + ' %'
         else:
@@ -490,7 +490,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if activate_up_btn.isChecked():
             to_display += str(upper_spinbox.value()) + ' ' + upper_unit.currentText()
             activate_high = True
-            color = Constants.active_color
+            color = Constants.ACTIVE_COLOR
             if upper_confidence.value() != 0:
                 to_display += ' + ' + str(upper_confidence.value()) + ' %'
         else:
@@ -531,7 +531,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def update_status_tip(self, available_signals):
         if available_signals < self.total_signals:
-            self.statusbar.setStyleSheet(f'color: {Constants.active_color}')
+            self.statusbar.setStyleSheet(f'color: {Constants.ACTIVE_COLOR}')
         else:
             self.statusbar.setStyleSheet('color: #ffffff')
         self.statusbar.showMessage(f"{available_signals} out of {self.total_signals} signals displayed.")
@@ -598,7 +598,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         band_filter_ok = False
         any_checked = False
-        for btn, band_limits in zip(self.frequency_filters_btns, Constants.bands):
+        for btn, band_limits in zip(self.frequency_filters_btns, Constants.BANDS):
             if btn.isChecked():
                 any_checked = True
                 if signal_freqs[0] < band_limits.upper and signal_freqs[1] >= band_limits.lower:
@@ -667,14 +667,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if not self.apply_remove_mode_filter_btn.isChecked():
             return True
         signal_mode = self.db.at[signal_name, "mode"]
-        if signal_mode == Constants.unknown:
+        if signal_mode == Constants.UNKNOWN:
             if self.include_unknown_modes_btn.isChecked():
                 return True
             else:
                 return False
         selected_items = [item for item in self.mode_tree_widget.selectedItems()]
         selected_items_text = [i.text(0) for i in selected_items]
-        parents = [item for item in selected_items_text if item in Constants.modes.keys()]
+        parents = [item for item in selected_items_text if item in Constants.MODES.keys()]
         children = [item for item in selected_items_text if item not in parents]
         ok = []
         for item in selected_items:
@@ -686,7 +686,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @staticmethod
     def filters_ok(spinbox, filter_unit, confidence, sign = 1):
-        band_filter = spinbox.value() * Constants.conversion_factors[filter_unit.currentText()]
+        band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
         return band_filter + sign * (confidence.value() * band_filter) // 100
 
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
@@ -727,9 +727,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.description_text.setText(current_signal.at["description"])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
-                    cat_lab.setStyleSheet(f"color: {Constants.inactive_color};")
+                    cat_lab.setStyleSheet(f"color: {Constants.INACTIVE_COLOR};")
                 elif cat == '1':
-                    cat_lab.setStyleSheet(f"color: {Constants.active_color};")
+                    cat_lab.setStyleSheet(f"color: {Constants.ACTIVE_COLOR};")
             self.set_band_range(current_signal)
             self.audio_widget.set_audio_player(self.current_signal_name)
         else:
@@ -741,7 +741,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             for lab in self.property_labels:
                 lab.setText("N/A")
             for lab in self.category_labels:
-                lab.setStyleSheet(f"color: {Constants.inactive_color};")
+                lab.setStyleSheet(f"color: {Constants.INACTIVE_COLOR};")
             self.set_band_range()
             self.audio_widget.set_audio_player()
 
@@ -788,20 +788,20 @@ class MyApp(QMainWindow, Ui_MainWindow):
             return 10**9
         
     def display_spectrogram(self):
-        default_pic = os.path.join(Constants.icons_folder, "nosignalselected.png")
+        default_pic = os.path.join(Constants.ICONS_FOLDER, "nosignalselected.png")
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
-            path_spectr = os.path.join(Constants.data_folder, Constants.spectra_folder, spectrogram_name + ".png")
+            path_spectr = os.path.join(Constants.DATA_FOLDER, Constants.SPECTRA_FOLDER, spectrogram_name + ".png")
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join(Constants.icons_folder, "spectrumnotavailable.png")
+                path_spectr = os.path.join(Constants.ICONS_FOLDER, "spectrumnotavailable.png")
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
     @staticmethod
     def activate_band_category(band_label, activate = True):
-        color = Constants.active_color if activate else Constants.inactive_color
+        color = Constants.ACTIVE_COLOR if activate else Constants.INACTIVE_COLOR
         for label in band_label:
             label.setStyleSheet(f"color: {color};")
 
@@ -809,7 +809,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if current_signal is not None and not self.is_undef_freq(current_signal):
             lower_freq = int(current_signal.at["inf_freq"])
             upper_freq = int(current_signal.at["sup_freq"])
-            zipped = list(zip(Constants.bands, self.band_labels))
+            zipped = list(zip(Constants.BANDS, self.band_labels))
             for i, w in enumerate(zipped):
                 band, band_label = w
                 if lower_freq >= band.lower and lower_freq < band.upper:
