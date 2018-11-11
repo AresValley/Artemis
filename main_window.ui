@@ -328,7 +328,7 @@ QPushButton:!enabled {
        <property name="movable">
         <bool>true</bool>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="signal_properties_tab">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -1909,13 +1909,13 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="filter_tab">
         <attribute name="title">
          <string>Filters</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QTabWidget" name="tabWidget">
+          <widget class="QTabWidget" name="all_filter_tabs">
            <property name="styleSheet">
             <string notr="true">QComboBox {
 	background-color: rgb(52,52,52);
@@ -1962,7 +1962,7 @@ QPushButton:checked {
 </string>
            </property>
            <property name="currentIndex">
-            <number>3</number>
+            <number>4</number>
            </property>
            <property name="movable">
             <bool>true</bool>

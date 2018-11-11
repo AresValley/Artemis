@@ -286,6 +286,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.display_signals()
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.currentItemChanged.connect(self.display_specs)
+        self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(
+                                                               self.signal_properties_tab
+                                                           )
+                                                  )
         self.audio_widget = AudioPlayer(self.play, 
                                         self.pause, 
                                         self.stop, 
