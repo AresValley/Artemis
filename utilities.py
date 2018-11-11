@@ -49,6 +49,12 @@ class Constants(object):
     unknown = "Unknown"
 
 
+def reset_apply_remove_btn(button):
+    if button.isChecked():
+        button.setChecked(False)
+        button.clicked.emit()
+
+
 def checksum_ok(data, what):
     code = hashlib.sha256()
     code.update(data)

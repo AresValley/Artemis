@@ -24,12 +24,13 @@ from audio_player import AudioPlayer
 
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
-from utilities import Constants
+from utilities import Constants, reset_apply_remove_btn
 
 qt_creator_file = "main_window.ui"
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 class MyApp(QMainWindow, Ui_MainWindow):
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -277,7 +278,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget, 
                                                              self.include_unknown_modes_btn])
         self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
-        self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
 
 # ##########################################################################################
         self.show()
@@ -557,17 +557,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
             for f in self.frequency_filters_btns:
                 if f.isChecked():
                     f.setChecked(False)
-        if apply_remove_btn.isChecked():
-            apply_remove_btn.setChecked(False)
-            apply_remove_btn.clicked.emit()
+        reset_apply_remove_btn(apply_remove_btn)
         if include_undef_btn.isChecked():
             include_undef_btn.setChecked(False)
-        if activate_low.isChecked():
-            activate_low.setChecked(False)
-            activate_low.clicked.emit()
-        if activate_up.isChecked():
-            activate_up.setChecked(False)
-            activate_up.clicked.emit()
+        reset_apply_remove_btn(activate_low)
+        reset_apply_remove_btn(activate_up)
         lower_unit.setCurrentText("MHz")
         upper_unit.setCurrentText("MHz")
         lower_spinbox.setValue(default_val)
@@ -576,18 +570,16 @@ class MyApp(QMainWindow, Ui_MainWindow):
         lower_confidence.setValue(0)
         upper_confidence.setValue(0)
 
+    @pyqtSlot()
     def reset_cat_filters(self):
-        if self.apply_remove_cat_filter_btn.isChecked():
-            self.apply_remove_cat_filter_btn.setChecked(False)
-            self.apply_remove_cat_filter_btn.clicked.emit()
+        reset_apply_remove_btn(self.apply_remove_cat_filter_btn)
         for f in self.cat_filter_btns:
             f.setChecked(False) if f.isChecked() else None
         self.cat_at_least_one.setChecked(True)
 
+    @pyqtSlot()
     def reset_mode_filters(self):
-        if self.apply_remove_mode_filter_btn.isChecked():
-            self.apply_remove_mode_filter_btn.setChecked(False)
-            self.apply_remove_mode_filter_btn.clicked.emit()
+        reset_apply_remove_btn(self.apply_remove_mode_filter_btn)
         for item in self.mode_tree_widget.selectedItems():
             item.setSelected(False)
         if self.include_unknown_modes_btn.isChecked():
