@@ -269,7 +269,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         self.url_button.clicked.connect(self.go_to_web_page_signal)
 
-        # Set modulation TreeView
+        # Set mode TreeView
 
         self.set_mode_tree_widget()
         self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
@@ -278,6 +278,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget, 
                                                              self.include_unknown_modes_btn])
         self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
+
+        # Set modulation filter screen.
+
+        self.modulation_list.addItems(Constants.MODULATIONS)
 
 # ##########################################################################################
         self.show()

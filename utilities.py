@@ -47,6 +47,31 @@ class Constants(object):
                                "SC-FDMA": [],}
                              )
     UNKNOWN = "Unknown"
+    MODULATIONS = ["8VSB",
+                   "AFSK",
+                   "AM",
+                   "BFSK",
+                   "C4FM",
+                   "CDMA",
+                   "COFDM",
+                   "CW",
+                   "FFSK",
+                   "FM",
+                   "FMCW",
+                   "FMOP",
+                   "FSK",
+                   "GFSK",
+                   "GMSK",
+                   "IFK",
+                   "MFSK",
+                   "MSK",
+                   "OFDM",
+                   "OOK",
+                   "PAM",
+                   "PPM",
+                   "PSK",
+                   "QAM",
+                   "TDMA",]
 
 
 def reset_apply_remove_btn(button):
