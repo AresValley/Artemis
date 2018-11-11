@@ -282,18 +282,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
         # Set modulation filter screen.
 
         self.modulation_list.addItems(Constants.MODULATIONS)
+        self.search_bar_modulation.textEdited.connect(self.show_matching_modulations)
 
 # ##########################################################################################
-        self.show()
 
         self.load_db()
-        self.display_signals()
         self.search_bar.textChanged.connect(self.display_signals)
+        self.result_list.addItems(self.signal_names)
         self.result_list.currentItemChanged.connect(self.display_specs)
         self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(
                                                                self.signal_properties_tab
                                                            )
-                                                  )
+                                                  )                    
+        self.display_signals()
         self.audio_widget = AudioPlayer(self.play, 
                                         self.pause, 
                                         self.stop, 
@@ -314,6 +315,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.shf_left, self.shf, self.shf_right),
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
+        self.show()
+
+    @pyqtSlot(str)
+    def show_matching_modulations(self, text):
+        pass
+        # for modulation in 
 
     def set_mode_tree_widget(self):
         for parent, children in Constants.MODES.items():
@@ -524,16 +531,17 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def display_signals(self):
-        self.result_list.clear()
+        for i in range(self.result_list.count()):
+            self.result_list.item(i).setHidden(True)
         text = self.search_bar.text()
         available_signals = 0
-        for signal in self.signal_names:
+        for index, signal in enumerate(self.signal_names):
             if text.lower() in signal.lower()     and \
                 self.frequency_filters_ok(signal) and \
                 self.band_filters_ok(signal)      and \
                 self.category_filters_ok(signal)  and \
                 self.mode_filters_ok(signal):
-                self.result_list.addItem(signal)
+                self.result_list.item(index).setHidden(False)
                 available_signals += 1
         self.update_status_tip(available_signals)
 
