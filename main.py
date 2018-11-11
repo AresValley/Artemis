@@ -274,7 +274,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
         self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
         self.apply_remove_mode_filter_btn.set_texts("Apply", "Remove")
-        self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget])
+        self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget, 
+                                                             self.include_unknown_modes_btn])
         self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
         self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
 
@@ -589,6 +590,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.apply_remove_mode_filter_btn.clicked.emit()
         for item in self.mode_tree_widget.selectedItems():
             item.setSelected(False)
+        if self.include_unknown_modes_btn.isChecked():
+            self.include_unknown_modes_btn.setChecked(False)
 
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
@@ -673,11 +676,16 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def mode_filters_ok(self, signal_name):
         if not self.apply_remove_mode_filter_btn.isChecked():
             return True
+        signal_mode = self.db.at[signal_name, "mode"]
+        if signal_mode == Constants.unknown:
+            if self.include_unknown_modes_btn.isChecked():
+                return True
+            else:
+                return False
         selected_items = [item for item in self.mode_tree_widget.selectedItems()]
         selected_items_text = [i.text(0) for i in selected_items]
         parents = [item for item in selected_items_text if item in Constants.modes.keys()]
         children = [item for item in selected_items_text if item not in parents]
-        signal_mode = self.db.at[signal_name, "mode"]
         ok = []
         for item in selected_items:
             if item.text(0) in parents:

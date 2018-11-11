@@ -46,6 +46,7 @@ class Constants(object):
                                "RAW": [],
                                "SC-FDMA": [],}
                              )
+    unknown = "Unknown"
 
 
 def checksum_ok(data, what):

@@ -3712,7 +3712,7 @@ QWidget#xFM_container,  QWidget#xSK_container, QWidget#xSB_container{
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_11">
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="include_unknown_modes_btn">
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
