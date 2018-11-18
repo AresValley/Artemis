@@ -12,6 +12,9 @@ class _ReadOnlyProperty(object):
     def __set__(self, obj, value):
         return NotImplementedError("Cannot change a constant.")
 
+    # def change_hardcoded_value(self, value):
+    #     self.__value = value
+
 def __make_read_only(cls):
     for k, v in cls.__dict__.items():
         if not callable(getattr(cls, k)) and '__' not in k:
@@ -23,12 +26,12 @@ def __make_read_only(cls):
 
 @__make_read_only
 class __Constants(object):
-    DB_LOCATION        = 'https://aresvalley.com/Storage/Artemis/Database/data.zip'
-    REF_LOC            = 'https://aresvalley.com/Storage/Artemis/Database/data.zip.log'
-    DATA_FOLDER        = 'Data'
-    SPECTRA_FOLDER     = 'Spectra'
-    AUDIO_FOLDER       = 'Audio'
-    ICONS_FOLDER       = 'icons_imgs'
+    DB_LOCATION        = "https://aresvalley.com/Storage/Artemis/Database/data.zip"
+    REF_LOC            = "https://aresvalley.com/Storage/Artemis/Database/data.zip.log"
+    DATA_FOLDER        = "Data"
+    SPECTRA_FOLDER     = "Spectra"
+    AUDIO_FOLDER       = "Audio"
+    ICONS_FOLDER       = "icons_imgs"
     __Band             = namedtuple("Band", ["lower", "upper"])
     __ELF              = __Band(0, 30) # Formally it is (3, 30) Hz.
     __SLF              = __Band(30, 300)
@@ -44,16 +47,19 @@ class __Constants(object):
     BANDS              = (__ELF, __SLF, __ULF, __VLF, __LF, __MF, __HF, __VHF, __UHF, __SHF, __EHF)
     ACTIVE_COLOR       = "#39eaff"
     INACTIVE_COLOR     = "#9f9f9f"
-    CONVERSION_FACTORS = {"Hz": 1, "kHz": 1000, "MHz": 1000000, "GHz": 1000000000}
-    MODES              = {"FM": ["NFM", "WFM"],
-                          "AM": [],
-                          "CW": [],
-                          "SK": ["FSK", "PSK", "MSK"],
-                          "SB": ["LSB", "USB", "DSB"],
-                          "Chirp Spread Spectrum": [],
-                          "FHSS-TDM": [],
-                          "RAW": [],
-                          "SC-FDMA": [],}
+    CONVERSION_FACTORS = {"Hz" : 1, 
+                          "kHz": 1000, 
+                          "MHz": 1000000, 
+                          "GHz": 1000000000}
+    MODES              = {"FM": ("NFM", "WFM"),
+                          "AM": (),
+                          "CW": (),
+                          "SK": ("FSK", "PSK", "MSK"),
+                          "SB": ("LSB", "USB", "DSB"),
+                          "Chirp Spread Spectrum": (),
+                          "FHSS-TDM": (),
+                          "RAW": (),
+                          "SC-FDMA": (),}
     APPLY              = "Apply"
     REMOVE             = "Remove"
     UNKNOWN            = "N/A"
