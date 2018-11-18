@@ -2716,7 +2716,24 @@ Inactive</string>
                </property>
               </spacer>
              </item>
-             <item row="3" column="0" colspan="2">
+             <item row="0" column="0" colspan="3">
+              <widget class="QPushButton" name="include_undef_freqs">
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Include undefined frequencies</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="3">
               <widget class="DoubleTextButton" name="apply_remove_freq_filter_btn">
                <property name="enabled">
                 <bool>true</bool>
@@ -2736,7 +2753,7 @@ Inactive</string>
                </property>
               </widget>
              </item>
-             <item row="4" column="0" colspan="2">
+             <item row="4" column="0" colspan="3">
               <widget class="QPushButton" name="reset_frequency_filters_btn">
                <property name="font">
                 <font>
@@ -2747,23 +2764,6 @@ Inactive</string>
                </property>
                <property name="text">
                 <string>Reset</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0" colspan="3">
-              <widget class="QPushButton" name="include_undef_freqs">
-               <property name="font">
-                <font>
-                 <pointsize>12</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="text">
-                <string>Include undefined frequencies</string>
-               </property>
-               <property name="checkable">
-                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -3876,8 +3876,8 @@ Inactive</string>
                   <property name="font">
                    <font>
                     <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
+                    <weight>50</weight>
+                    <bold>false</bold>
                    </font>
                   </property>
                   <property name="editTriggers">
@@ -3962,7 +3962,7 @@ Inactive</string>
               <widget class="QWidget" name="widget_10" native="true">
                <layout class="QGridLayout" name="gridLayout_10">
                 <item row="0" column="0">
-                 <widget class="QLineEdit" name="lineEdit"/>
+                 <widget class="QLineEdit" name="search_bar_location"/>
                 </item>
                 <item row="0" column="1">
                  <widget class="QLabel" name="label_10">
@@ -3990,7 +3990,16 @@ Inactive</string>
                  </widget>
                 </item>
                 <item row="1" column="0" colspan="2">
-                 <widget class="QListWidget" name="listWidget"/>
+                 <widget class="QListWidget" name="locations_list">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                   </font>
+                  </property>
+                  <property name="selectionMode">
+                   <enum>QAbstractItemView::MultiSelection</enum>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>
@@ -4009,7 +4018,7 @@ Inactive</string>
               </spacer>
              </item>
              <item row="1" column="0" colspan="3">
-              <widget class="QPushButton" name="pushButton">
+              <widget class="DoubleTextButton" name="apply_remove_location_filter_btn">
                <property name="font">
                 <font>
                  <pointsize>12</pointsize>
@@ -4026,7 +4035,7 @@ Inactive</string>
               </widget>
              </item>
              <item row="2" column="0" colspan="3">
-              <widget class="QPushButton" name="pushButton_2">
+              <widget class="QPushButton" name="reset_location_filters_btn">
                <property name="font">
                 <font>
                  <pointsize>12</pointsize>
@@ -4038,7 +4047,7 @@ Inactive</string>
                 <string>Reset</string>
                </property>
                <property name="checkable">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
               </widget>
              </item>

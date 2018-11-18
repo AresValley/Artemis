@@ -288,7 +288,18 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                                                    self.modulation_list])
         self.apply_remove_modulation_filter_btn.clicked.connect(self.display_signals)
         self.reset_modulation_filters_btn.clicked.connect(self.reset_modulation_filters)
-        self.modulation_list.itemClicked.connect(self.remove_if_unselected)
+        self.modulation_list.itemClicked.connect(self.remove_if_unselected_modulation)
+
+        # Set location filter screen.
+
+        self.locations_list.addItems(Constants.LOCATIONS)
+        self.search_bar_location.textEdited.connect(self.show_matching_locations)
+        self.apply_remove_location_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
+        self.apply_remove_location_filter_btn.set_slave_filters([self.search_bar_location,
+                                                                 self.locations_list])
+        self.apply_remove_location_filter_btn.clicked.connect(self.display_signals)
+        self.reset_location_filters_btn.clicked.connect(self.reset_location_filters)
+        self.locations_list.itemClicked.connect(self.remove_if_unselected_location)
 
 # ##########################################################################################
 
@@ -326,15 +337,27 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.show()
 
     @pyqtSlot(QListWidgetItem)
-    def remove_if_unselected(self, item):
+    def remove_if_unselected_modulation(self, item):
         if not item.isSelected():
             self.show_matching_modulations(self.search_bar_modulation.text())
 
+    @pyqtSlot(QListWidgetItem)
+    def remove_if_unselected_location(self, item):
+        if not item.isSelected():
+            self.show_matching_locations(self.search_bar_location.text())
+
     @pyqtSlot(str)
     def show_matching_modulations(self, text):
-        for index in range(self.modulation_list.count()):
-            item = self.modulation_list.item(index)
-            if self.search_bar_modulation.text().upper() in item.text() or item.isSelected():
+        self.show_matching_strings(self.modulation_list, text)
+
+    @pyqtSlot(str)
+    def show_matching_locations(self, text):
+        self.show_matching_strings(self.locations_list, text)
+
+    def show_matching_strings(self, list_elements, text):
+        for index in range(list_elements.count()):
+            item = list_elements.item(index)
+            if text.upper() in item.text() or item.isSelected():
                 item.setHidden(False)
             else:
                 item.setHidden(True)
@@ -558,7 +581,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.band_filters_ok(signal)       ,
                     self.category_filters_ok(signal)   ,
                     self.mode_filters_ok(signal)       ,
-                    self.modulation_filters_ok(signal)]):
+                    self.modulation_filters_ok(signal) ,
+                    self.location_filters_ok(signal)]) :
                 self.result_list.item(index).setHidden(False)
                 available_signals += 1
             else:
@@ -626,6 +650,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         for i in range(self.modulation_list.count()):
             if self.modulation_list.item(i).isSelected():
                 self.modulation_list.item(i).setSelected(False)
+
+    @pyqtSlot()
+    def reset_location_filters(self):
+        reset_apply_remove_btn(self.apply_remove_location_filter_btn)
+        self.search_bar_location.setText('')
+        for i in range(self.locations_list.count()):
+            if self.locations_list.item(i).isSelected():
+                self.locations_list.item(i).setSelected(False)
 
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
@@ -737,6 +769,15 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 return True
         return False
 
+    def location_filters_ok(self, signal_name):
+        if not self.apply_remove_location_filter_btn.isChecked():
+            return True
+        signal_location = self.db.at[signal_name, "location"]
+        for item in self.locations_list.selectedItems():
+            if item.text() == signal_location:
+                return True
+        return False
+
     @staticmethod
     def filters_ok(spinbox, filter_unit, confidence, sign = 1):
         band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
@@ -845,9 +886,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
-            path_spectr = os.path.join(Constants.DATA_FOLDER, Constants.SPECTRA_FOLDER, spectrogram_name + ".png")
+            path_spectr = os.path.join(Constants.DATA_FOLDER, 
+                                       Constants.SPECTRA_FOLDER, 
+                                       spectrogram_name + ".png")
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join(Constants.ICONS_FOLDER, "spectrumnotavailable.png")
+                path_spectr = os.path.join(Constants.ICONS_FOLDER, 
+                                           "spectrumnotavailable.png")
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
@@ -886,6 +930,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.reset_cat_filters_btn.clicked.emit()
         self.reset_mode_filters_btn.clicked.emit()
         self.reset_modulation_filters_btn.clicked.emit()
+        self.reset_location_filters_btn.clicked.emit()
 
     @pyqtSlot()
     def go_to_web_page_signal(self):

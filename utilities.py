@@ -44,7 +44,7 @@ class __Constants(object):
     BANDS              = (__ELF, __SLF, __ULF, __VLF, __LF, __MF, __HF, __VHF, __UHF, __SHF, __EHF)
     ACTIVE_COLOR       = "#39eaff"
     INACTIVE_COLOR     = "#9f9f9f"
-    CONVERSION_FACTORS = {"Hz":1, "kHz":1000, "MHz":1000000, "GHz":1000000000}
+    CONVERSION_FACTORS = {"Hz": 1, "kHz": 1000, "MHz": 1000000, "GHz": 1000000000}
     MODES              = {"FM": ["NFM", "WFM"],
                           "AM": [],
                           "CW": [],
@@ -57,7 +57,7 @@ class __Constants(object):
     APPLY              = "Apply"
     REMOVE             = "Remove"
     UNKNOWN            = "N/A"
-    MODULATIONS        = ["8VSB",
+    MODULATIONS        = ("8VSB",
                           "AFSK",
                           "AM",
                           "BFSK",
@@ -81,7 +81,39 @@ class __Constants(object):
                           "PPM",
                           "PSK",
                           "QAM",
-                          "TDMA",]
+                          "TDMA",)
+
+    LOCATIONS          = (UNKNOWN,
+                          "Australia",
+                          "Canada",
+                          "Central Europe",
+                          "China",
+                          "Cyprus",
+                          "Eastern Europe",
+                          "Europe",
+                          "Europe, japan and Asia",
+                          "Exmouth, Australia",
+                          "Finland",
+                          "France",
+                          "Germany",
+                          "Home Base Mobile , AL",
+                          "Hungary",
+                          "Iran",
+                          "Israel",
+                          "Japan",
+                          "LaMour, North Dakota",
+                          "Lualualei, Hawaii",
+                          "North America",
+                          "North Korea",
+                          "Poland",
+                          "Romania",
+                          "Ruda, Sweden",
+                          "UK",
+                          "United Kingdom",
+                          "United States",
+                          "Varberg, Sweden",
+                          "World Wide",
+                          "Worldwide",)
 
 Constants = __Constants()
 
