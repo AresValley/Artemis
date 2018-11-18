@@ -288,6 +288,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                                                    self.modulation_list])
         self.apply_remove_modulation_filter_btn.clicked.connect(self.display_signals)
         self.reset_modulation_filters_btn.clicked.connect(self.reset_modulation_filters)
+        self.modulation_list.itemClicked.connect(self.remove_if_unselected)
 
 # ##########################################################################################
 
@@ -323,6 +324,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
         self.show()
+
+    @pyqtSlot(QListWidgetItem)
+    def remove_if_unselected(self, item):
+        if not item.isSelected():
+            self.show_matching_modulations(self.search_bar_modulation.text())
 
     @pyqtSlot(str)
     def show_matching_modulations(self, text):
