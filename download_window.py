@@ -2,6 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QMessageBox
 from threads import DownloadThread, ThreadStatus
+
 Ui_Download_window, _ = uic.loadUiType("download_db_window.ui")
 
 class DownloadWindow(QWidget, Ui_Download_window):

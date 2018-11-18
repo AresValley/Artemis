@@ -542,8 +542,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def display_signals(self):
-        for i in range(self.result_list.count()):
-            self.result_list.item(i).setHidden(True)
+        # for i in range(self.result_list.count()):
+        #     self.result_list.item(i).setHidden(True)
         text = self.search_bar.text()
         available_signals = 0
         for index, signal in enumerate(self.signal_names):
@@ -555,6 +555,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.modulation_filters_ok(signal)]):
                 self.result_list.item(index).setHidden(False)
                 available_signals += 1
+            else:
+                self.result_list.item(index).setHidden(True)
         self.update_status_tip(available_signals)
 
     def update_status_tip(self, available_signals):

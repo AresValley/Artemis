@@ -134,6 +134,20 @@ QTextBrowser {
 
 QRadioButton {
 	color: #ffffff;
+}
+
+QListWidget {
+	background-color:rgb(52,52,52);
+	color: rgb(255, 255, 255);
+	border: 1px solid gray;
+	border-radius: 8px;
+}
+
+QLineEdit {
+	background-color: #343434;
+	color: rgb(255, 255, 255);
+	border: 1px solid gray;
+	border-radius: 5px;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -187,10 +201,7 @@ QRadioButton {
            <string/>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #343434;
-color: rgb(255, 255, 255);
-border: 1px solid gray;
-border-radius: 5px;</string>
+           <string notr="true"/>
           </property>
          </widget>
         </item>
@@ -244,13 +255,7 @@ border-radius: 5px;</string>
            <string/>
           </property>
           <property name="styleSheet">
-           <string notr="true">QListWidget {
-	background-color:rgb(52,52,52);
-	color: rgb(255, 255, 255);
-	border: 1px solid gray;
-	border-radius: 8px;
-}
-</string>
+           <string notr="true"/>
           </property>
           <property name="verticalScrollBarPolicy">
            <enum>Qt::ScrollBarAsNeeded</enum>
@@ -330,7 +335,7 @@ QPushButton:!enabled {
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="movable">
         <bool>true</bool>
@@ -1969,7 +1974,7 @@ QPushButton:checked {
 </string>
            </property>
            <property name="currentIndex">
-            <number>4</number>
+            <number>0</number>
            </property>
            <property name="movable">
             <bool>true</bool>
