@@ -1,5 +1,6 @@
 from collections import namedtuple
 from functools import partial
+from glob import glob
 import webbrowser
 import os
 import sys
@@ -7,12 +8,13 @@ import sys
 from pandas import read_csv
 from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
+                             QAction,
                              QMessageBox,
                              qApp,
                              QDesktopWidget,
                              QListWidgetItem,
                              QTreeView,
-                             QTreeWidgetItem)
+                             QTreeWidgetItem,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo, 
@@ -24,7 +26,12 @@ from audio_player import AudioPlayer
 
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
-from utilities import Constants, reset_apply_remove_btn
+
+
+from utilities import (Constants, 
+                       reset_apply_remove_btn, 
+                       throwable_message,
+                       is_valid_html_color,)
 
 qt_creator_file = "main_window.ui"
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
@@ -42,6 +49,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.current_signal_name = ''
         self.signal_names = []
         self.total_signals = 0
+        self.active_color = Constants.ACTIVE_COLOR
+        self.inactive_color = Constants.INACTIVE_COLOR
 
         # Manage frequency filters.
         self.frequency_filters_btns = (
@@ -301,6 +310,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.reset_location_filters_btn.clicked.connect(self.reset_location_filters)
         self.locations_list.itemClicked.connect(self.remove_if_unselected_location)
 
+        # Find available themes.
+        self.default_images_folder = os.path.join(Constants.THEMES_FOLDER,
+                                         Constants.DEFAULT_THEME,
+                                         Constants.ICONS_FOLDER)
+        # self.find_themes()
+        # self.set_theme()
+
 # ##########################################################################################
 
         self.load_db()
@@ -309,16 +325,15 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.addItems(self.signal_names)
         self.result_list.currentItemChanged.connect(self.display_specs)
-        self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(
-                                                               self.signal_properties_tab
-                                                           )
-                                                  )                    
+        self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab))                    
         self.display_signals()
         self.audio_widget = AudioPlayer(self.play, 
                                         self.pause, 
                                         self.stop, 
                                         self.volume, 
-                                        self.audio_progress)
+                                        self.audio_progress,
+                                        self.active_color,
+                                        self.inactive_color)
 
         BandLabel = namedtuple("BandLabel", ["left", "center", "right"])
         self.band_labels = [
@@ -334,7 +349,123 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.shf_left, self.shf, self.shf_right),
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
+
+        self.find_themes()
+        self.set_theme()
+
         self.show()
+
+    def find_themes(self):
+        themes = []
+        for theme_folder in os.listdir(Constants.THEMES_FOLDER):
+            relative_folder = os.path.join(Constants.THEMES_FOLDER, theme_folder)
+            if os.path.isdir(os.path.abspath(relative_folder)):
+                relative_folder = os.path.join(Constants.THEMES_FOLDER, theme_folder)
+                themes.append(relative_folder)
+        for theme in themes:
+            theme_name = '&' + ' '.join(
+                map(lambda s: s.capitalize(), 
+                    os.path.basename(theme).split('-')[1].split('_')
+                )
+            )
+            new_theme = QAction(theme_name, self)
+            self.menu_themes.addAction(new_theme)
+
+            @pyqtSlot()
+            def show_new_theme(theme):
+                self.change_theme(theme)
+                self.display_specs(self.result_list.currentItem(), None)
+            new_theme.triggered.connect(partial(show_new_theme, theme))
+
+    @pyqtSlot()
+    def change_theme(self, theme_path):
+        try:
+            with open(os.path.join(
+                          theme_path, 
+                          os.path.basename(theme_path).split('-')[1] + Constants.THEME_EXTENSION)
+                     ) as stylesheet:
+                style = stylesheet.read()
+                self.setStyleSheet(style)
+                self.download_window.setStyleSheet(style)
+        except FileNotFoundError:
+            throwable_message(self, title = "Theme not found",
+                              text = f"Missing theme in {Constants.THEMES_FOLDER} folder.").show()
+        else:
+            icons_path = os.path.join(theme_path, Constants.ICONS_FOLDER)
+            default_icons_path = os.path.join(Constants.THEMES_FOLDER, Constants.DEFAULT_THEME, Constants.ICONS_FOLDER)
+
+            if os.path.exists(os.path.join(icons_path, Constants.NOT_SELECTED)) and \
+               os.path.exists(os.path.join(icons_path, Constants.NOT_AVAILABLE)):
+                self.default_images_folder = icons_path
+            else:
+                self.default_images_folder = default_icons_path
+
+            path_to_search_label = os.path.join(icons_path, Constants.SEARCH_LABEL_IMG)
+            default_search_label = os.path.join(default_icons_path, Constants.SEARCH_LABEL_IMG)
+
+            if os.path.exists(path_to_search_label):
+                self.search_label.setPixmap(QPixmap(path_to_search_label))
+                self.modulation_search_label.setPixmap(QPixmap(path_to_search_label))
+                self.location_search_label.setPixmap(QPixmap(path_to_search_label))
+            else:
+                self.search_label.setPixmap(QPixmap(default_search_label))
+                self.modulation_search_label.setPixmap(QPixmap(default_search_label))
+                self.location_search_label.setPixmap(QPixmap(default_search_label))
+            
+            self.search_label.setScaledContents(True)
+            self.modulation_search_label.setScaledContents(True)
+            self.location_search_label.setScaledContents(True)
+
+            path_to_volume_label = os.path.join(icons_path, Constants.VOLUME_LABEL_IMG)
+            default_volume_label = os.path.join(default_icons_path, Constants.VOLUME_LABEL_IMG)
+
+            if os.path.exists(path_to_volume_label):
+                self.volume_label.setPixmap(QPixmap(path_to_volume_label))
+            else:
+                self.volume_label.setPixmap(QPixmap(default_volume_label))
+
+            self.volume_label.setScaledContents(True)
+
+            path_to_colors = os.path.join(theme_path, Constants.THEME_COLORS)
+            active_color_ok = False
+            inactive_color_ok = False
+            valid_format = False
+            valid_file = False
+            if os.path.exists(path_to_colors):
+                valid_file = True
+                with open(path_to_colors, "r") as colors_file:
+                    for line in colors_file:
+                        if '=' in line:
+                            valid_format = True
+                            quality, color = line.split("=")
+                            color = color.rstrip()
+                            if quality == "active" and is_valid_html_color(color):
+                                self.active_color = color
+                                active_color_ok = True
+                            if quality == "inactive" and is_valid_html_color(color):
+                                self.inactive_color = color
+                                inactive_color_ok = True
+            
+            if not all([valid_file, valid_format, active_color_ok, inactive_color_ok]):
+                self.active_color = Constants.ACTIVE_COLOR
+                self.inactive_color = Constants.INACTIVE_COLOR
+
+            self.audio_widget.refresh_btns_colors(self.active_color, self.inactive_color)
+
+            try:
+                with open(os.path.join(Constants.THEMES_FOLDER, 
+                          Constants.CURRENT_THEME), "w") as current_theme:
+                    current_theme.write(theme_path)
+            except:
+                pass
+
+    def set_theme(self):
+        current_theme_file = os.path.join(Constants.THEMES_FOLDER, Constants.CURRENT_THEME)
+        if os.path.exists(current_theme_file):
+            with open(current_theme_file) as current_theme:
+                theme = current_theme.read()
+                if theme != Constants.DEFAULT_THEME:
+                    self.change_theme(theme)
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):
@@ -440,42 +571,25 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.display_signals()
 
     def load_db(self):
-        names = ["name",
-                 "inf_freq",
-                 "sup_freq",
-                 "mode",
-                 "inf_band",
-                 "sup_band",
-                 "location",
-                 "url",
-                 "description",
-                 "modulation",
-                 "category_code",
-                 "acf",]
+        names = Constants.DB_NAMES
         try:
-            self.db = read_csv(os.path.join(Constants.DATA_FOLDER, 'db.csv'), 
+            self.db = read_csv(os.path.join(Constants.DATA_FOLDER, Constants.DB_NAME), 
                                sep = '*',
                                header = None,
                                index_col = 0,
-                               dtype = {'inf_freq': str,
-                                        'sup_freq': str,
-                                        'mode': str,
-                                        'inf_band': str,
-                                        'sup_band': str,
-                                        'category_code': str,},
+                               dtype = {name : str for name in Constants.DB_STRINGS},
                                names = names,)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
             box = QMessageBox(self)
-            box.setWindowTitle("No database")
-            box.setText("No database available.\n"
-                "Go to Updates->Update database.")
+            box.setWindowTitle(Constants.Messages.NO_DB)
+            box.setText(Constants.Messages.NO_DB_AVAIL)
             box.show()
         else:
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
             self.db.fillna(Constants.UNKNOWN, inplace = True)
-            self.db["url_clicked"] = False
+            self.db[Constants.DB_WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
 
     @staticmethod
@@ -530,13 +644,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
                               range_lbl):
         activate_low = False
         activate_high = False
-        color = Constants.INACTIVE_COLOR
+        color = self.inactive_color
         title = ''
         to_display = ''
         if activate_low_btn.isChecked():
             to_display += str(lower_spinbox.value()) + ' ' + lower_unit.currentText()
             activate_low = True
-            color = Constants.ACTIVE_COLOR
+            color = self.active_color
             if lower_confidence.value() != 0:
                 to_display += ' - ' + str(lower_confidence.value()) + ' %'
         else:
@@ -545,7 +659,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if activate_up_btn.isChecked():
             to_display += str(upper_spinbox.value()) + ' ' + upper_unit.currentText()
             activate_high = True
-            color = Constants.ACTIVE_COLOR
+            color = self.active_color
             if upper_confidence.value() != 0:
                 to_display += ' + ' + str(upper_confidence.value()) + ' %'
         else:
@@ -591,7 +705,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def update_status_tip(self, available_signals):
         if available_signals < self.total_signals:
-            self.statusbar.setStyleSheet(f'color: {Constants.ACTIVE_COLOR}')
+            self.statusbar.setStyleSheet(f'color: {self.active_color}')
         else:
             self.statusbar.setStyleSheet('color: #ffffff')
         self.statusbar.showMessage(f"{available_signals} out of {self.total_signals} signals displayed.")
@@ -821,21 +935,21 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.description_text.setText(current_signal.at["description"])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
-                    cat_lab.setStyleSheet(f"color: {Constants.INACTIVE_COLOR};")
+                    cat_lab.setStyleSheet(f"color: {self.inactive_color};")
                 elif cat == '1':
-                    cat_lab.setStyleSheet(f"color: {Constants.ACTIVE_COLOR};")
+                    cat_lab.setStyleSheet(f"color: {self.active_color};")
             self.set_band_range(current_signal)
             self.audio_widget.set_audio_player(self.current_signal_name)
         else:
             self.url_button.setEnabled(False)
             self.url_button.setStyleSheet(f"color: {self.url_button.colors.inactive};")
             self.current_signal_name = ''
-            self.name_lab.setText("No signal")
+            self.name_lab.setText("No Signal")
             self.name_lab.setAlignment(Qt.AlignHCenter)
             for lab in self.property_labels:
                 lab.setText(Constants.UNKNOWN)
             for lab in self.category_labels:
-                lab.setStyleSheet(f"color: {Constants.INACTIVE_COLOR};")
+                lab.setStyleSheet(f"color: {self.inactive_color};")
             self.set_band_range()
             self.audio_widget.set_audio_player()
 
@@ -882,23 +996,21 @@ class MyApp(QMainWindow, Ui_MainWindow):
             return 10**9
         
     def display_spectrogram(self):
-        default_pic = os.path.join(Constants.ICONS_FOLDER, "nosignalselected.png")
+        default_pic = os.path.join(self.default_images_folder, Constants.NOT_SELECTED)
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
             path_spectr = os.path.join(Constants.DATA_FOLDER, 
                                        Constants.SPECTRA_FOLDER, 
-                                       spectrogram_name + ".png")
+                                       spectrogram_name + Constants.SPECTRA_EXT)
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join(Constants.ICONS_FOLDER, 
-                                           "spectrumnotavailable.png")
+                path_spectr = os.path.join(self.default_images_folder, Constants.NOT_AVAILABLE)
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
-    @staticmethod
-    def activate_band_category(band_label, activate = True):
-        color = Constants.ACTIVE_COLOR if activate else Constants.INACTIVE_COLOR
+    def activate_band_category(self, band_label, activate = True):
+        color = self.active_color if activate else self.inactive_color
         for label in band_label:
             label.setStyleSheet(f"color: {color};")
 

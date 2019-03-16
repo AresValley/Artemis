@@ -14,33 +14,7 @@
    <string>Download database</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	background-color: #464646
-}
-
-QLabel {
-	color: #ffffff;
-}
-
-QProgressBar {
-    border: 2px #7a7a7a;
-	border-radius: 5px;
-	background-color:  #7a7a7a;
-}
-
-QProgressBar::chunk {
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d5eff, stop:0.5 #4177ff, stop:1 #1d5eff);
-	border-radius: 5px;
-}
-
-
-QMessageBox {
-	color: #ffffff;
-}
-
-QPushButton {
-	color: #ffffff;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="sizeConstraint">
@@ -73,6 +47,9 @@ Please wait</string>
      <property name="value">
       <number>-1</number>
      </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    <item>
@@ -83,13 +60,7 @@ Please wait</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton {
-	background-color: rgb(52,52,52);
-	color: #FFFFFF;
-	border: 1px solid gray;
-	border-radius: 8px;
-}
-</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Cancel</string>

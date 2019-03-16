@@ -1,37 +1,70 @@
 from collections import namedtuple
 import hashlib
+import re
 from pandas import read_csv
 
-class _ReadOnlyProperty(object):
-    def __init__(self, value):
-        self.__value = value
+from PyQt5.QtWidgets import QMessageBox
+
+# class _ReadOnlyProperty(object):
+#     def __init__(self, value):
+#         self.__value = value
     
-    def __get__(self, obj, objtype):
-        return self.__value
+#     def __get__(self, obj, objtype):
+#         return self.__value
 
-    def __set__(self, obj, value):
-        return NotImplementedError("Cannot change a constant.")
+#     def __set__(self, obj, value):
+#         return NotImplementedError("Cannot change a constant.")
 
-    # def change_hardcoded_value(self, value):
-    #     self.__value = value
+# def __make_read_only(cls):
+#     for k, v in cls.__dict__.items():
+#         if not callable(getattr(cls, k)) and '__' not in k:
+#             setattr(cls, k, _ReadOnlyProperty(v))
+#     # def raise_err(self, attr, value):
+#     #     raise NotImplementedError("Cannot add an attribute.")
+#     # setattr(cls, '__setattr__', raise_err)
+#     return cls
 
-def __make_read_only(cls):
-    for k, v in cls.__dict__.items():
-        if not callable(getattr(cls, k)) and '__' not in k:
-            setattr(cls, k, _ReadOnlyProperty(v))
-    # def raise_err(self, attr, value):
-    #     raise NotImplementedError("Cannot add an attribute.")
-    # setattr(cls, '__setattr__', raise_err)
-    return cls
-
-@__make_read_only
-class __Constants(object):
+# @__make_read_only
+class Constants(object):
+    class Messages(object):
+        NO_DB_AVAIL    = "No database available.\nGo to Updates->Update database."
+        NO_DB          = "No database"
     DB_LOCATION        = "https://aresvalley.com/Storage/Artemis/Database/data.zip"
     REF_LOC            = "https://aresvalley.com/Storage/Artemis/Database/data.zip.log"
+    DB_NAME            = "db.csv"
+    DB_NAMES           = ("name",
+                          "inf_freq",
+                          "sup_freq",
+                          "mode",
+                          "inf_band",
+                          "sup_band",
+                          "location",
+                          "url",
+                          "description",
+                          "modulation",
+                          "category_code",
+                          "acf",)
+    DB_WIKI_CLICKED    = "url_clicked"
+    DB_STRINGS         = ('inf_freq',
+                          'sup_freq',
+                          'mode',
+                          'inf_band',
+                          'sup_band',
+                          'category_code',)
     DATA_FOLDER        = "Data"
     SPECTRA_FOLDER     = "Spectra"
+    SPECTRA_EXT        = ".png"
     AUDIO_FOLDER       = "Audio"
-    ICONS_FOLDER       = "icons_imgs"
+    THEMES_FOLDER      = "themes"
+    THEME_EXTENSION    = ".th"
+    ICONS_FOLDER       = "icons"
+    DEFAULT_THEME      = "1-system"
+    CURRENT_THEME      = ".current_theme"
+    THEME_COLORS       = "colors.txt"
+    NOT_AVAILABLE      = "spectrumnotavailable.png"
+    NOT_SELECTED       = "nosignalselected.png"
+    SEARCH_LABEL_IMG   = "search_icon.png"
+    VOLUME_LABEL_IMG   = "volume.png"
     __Band             = namedtuple("Band", ["lower", "upper"])
     __ELF              = __Band(0, 30) # Formally it is (3, 30) Hz.
     __SLF              = __Band(30, 300)
@@ -88,7 +121,6 @@ class __Constants(object):
                           "PSK",
                           "QAM",
                           "TDMA",)
-
     LOCATIONS          = (UNKNOWN,
                           "Australia",
                           "Canada",
@@ -121,12 +153,20 @@ class __Constants(object):
                           "World Wide",
                           "Worldwide",)
 
-Constants = __Constants()
+# Constants = __Constants()
 
 def reset_apply_remove_btn(button):
     if button.isChecked():
         button.setChecked(False)
         button.clicked.emit()
+
+def throwable_message(cls, title, text, connection = None):
+    msg = QMessageBox(cls)
+    msg.setWindowTitle(title)
+    msg.setText(text)
+    if connection:
+        msg.setText(text).finished.connect(connection)
+    return msg
 
 def checksum_ok(data, what):
     code = hashlib.sha256()
@@ -142,3 +182,6 @@ def checksum_ok(data, what):
     except HTTPError:
         return False
     return code.hexdigest() == reference
+
+def is_valid_html_color(color):
+    return bool(re.match("#([a-zA-Z0-9]){6}", color))

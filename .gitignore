@@ -6,3 +6,4 @@ wav_converter.py
 *.txt
 icons_imgs
 TestData
+themes/.current_theme

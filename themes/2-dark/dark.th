@@ -1,0 +1,239 @@
+QMenuBar {
+    color: rgb(255, 255, 255);
+}
+
+QMenuBar::item:selected {
+	background:#999999;
+	color: #1d5eff
+}
+
+QMenu::item:selected {
+    background-color: #999999;
+	color: #1d5eff
+}
+
+QMenu {
+	color: #ffffff;
+}
+
+QWidget {
+	background-color: #464646
+}
+
+QLabel {
+	color: #ffffff;
+}
+
+QPushButton {
+	color: #FFFFFF;
+	background-color: rgb(52,52,52);
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+
+QPushButton:!enabled {
+	color:#9f9f9f;
+}
+
+QPushButton:checked {
+	color: #39eaff;
+}
+
+QTabWidget::pane { /* The tab widget frame */
+   /* border-left: 1px solid gray;*/
+	border: 0px;
+}
+
+
+QTabWidget::tab-bar {
+    left: 30px; /* move to the right by 5px */
+}
+
+
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+	background: #7a7a7a;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    min-width: 16ex;
+    padding: 2px;
+    color: #FFFFFF
+}
+
+QTabBar::tab:selected {
+	background: #999999;
+    color: #1d5eff
+}
+
+
+QTabBar::tab:!selected {
+    margin-top: 3px; /* make non-selected tabs look smaller */
+}
+
+
+
+QProgressBar {
+    border: 2px #7a7a7a;
+	border-radius: 3px;
+	background-color:  #7a7a7a;
+}
+
+QProgressBar::chunk {
+    /*background-color: #1d5eff;*/
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d5eff, stop:0.5 #4177ff, stop:1 #1d5eff);
+	border-radius: 3px;
+}
+
+
+QAbstractScrollArea::corner {
+    background: none;
+    border: none;
+}
+
+QScrollBar:vertical, QScrollBar:horizontal{
+	background-color:#343434;
+	border-radius: 5px;
+	/*background: none;*/
+}
+
+QScrollBar:vertical {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	/*width: 10px;*/
+}
+QScrollBar:horizontal{
+	margin-left: 0px;
+	margin-right: 0px;
+	/*height: 10px;*/
+}
+
+QScrollBar::handle:vertical, QScrollBar::handle:horizontal{
+	border-radius: 5px;
+	border-color: none;
+	border-width: 1px; 
+ 	background-color: #999999; 
+}
+
+QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal{
+	width: 0px; 
+	height: 0px;
+}
+
+QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal{
+	width: 0px; 
+	height: 0px;
+}
+
+QScrollBar::add-page:vertical{
+	border-left: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*
+	border: 1px#343434;
+	background-color: #343434;*/
+}
+QScrollBar::add-page:horizontal{
+	border-top: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*
+	border: 1px#343434;
+	background-color: #343434;*/
+}
+QScrollBar::sub-page:vertical{
+	border-left: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*	border: 1px #343434;
+	background-color: #343434;*/
+}
+QScrollBar::sub-page:horizontal{
+	border-top: 1px solid gray;
+	background: transparent;
+	border-radius: 5px;
+/*	border: 1px #343434;
+	background-color: #343434;*/
+}
+
+QTextEdit{
+	color: #ffffff;
+}
+
+QMessageBox {
+	color: #ffffff;
+}
+
+QToolTip {
+	color: #000000;
+}
+
+QTextBrowser {
+	background-color: #464646;
+	color: #ffffff;
+	border: 0px;
+}
+
+QRadioButton {
+	color: #ffffff;
+}
+
+QListWidget {
+	background-color:rgb(52,52,52);
+	color: rgb(255, 255, 255);
+	border: 1px solid gray;
+	border-radius: 8px;
+}
+
+QLineEdit {
+	background-color: #343434;
+	color: rgb(255, 255, 255);
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+
+QComboBox {
+	background-color: rgb(52,52,52);
+	color: #ffffff;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+QComboBox:!enabled {
+	color: #9f9f9f;
+}
+
+QComboBox QAbstractItemView {
+    border: 1px solid gray;
+    selection-background-color: #999999;
+	selection-color: #1d5eff;
+	color: #ffffff;
+}
+
+QSpinBox {
+	background-color: rgb(52,52,52);
+	color: #ffffff;
+	border: 1px solid gray;
+	border-radius: 5px;
+}
+
+QSpinBox:!enabled {
+	color:#9f9f9f;
+}
+
+/* SPECIAL WIDGETS */
+QPushButton#url_button {
+	color: #9f9f9f;
+	border: 0px;
+	background-color: #464646;
+}
+
+QPushButton#play, QPushButton#pause, QPushButton#stop {
+	color: #464646;
+	border: 0px;
+	background-color: #464646;
+}
+
+QLabel#band_range_lbl {
+	color: #9f9f9f;
+}

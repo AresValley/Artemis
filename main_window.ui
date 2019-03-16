@@ -20,135 +20,7 @@
    <string>ARTEMIS3</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	background-color: #464646
-}
-
-QLabel {
-	color: #ffffff;
-}
-
-QPushButton {
-	color: #FFFFFF
-}
-
-QProgressBar {
-    border: 2px #7a7a7a;
-	border-radius: 3px;
-	background-color:  #7a7a7a;
-}
-
-QProgressBar::chunk {
-    /*background-color: #1d5eff;*/
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d5eff, stop:0.5 #4177ff, stop:1 #1d5eff);
-	border-radius: 3px;
-}
-
-QAbstractScrollArea::corner {
-    background: none;
-    border: none;
-}
-
-QScrollBar:vertical, QScrollBar:horizontal{
-	background-color:#343434;
-	border-radius: 5px;
-	/*background: none;*/
-}
-
-QScrollBar:vertical {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	/*width: 10px;*/
-}
-QScrollBar:horizontal{
-	margin-left: 0px;
-	margin-right: 0px;
-	/*height: 10px;*/
-}
-
-QScrollBar::handle:vertical, QScrollBar::handle:horizontal{
-	border-radius: 5px;
-	border-color: none;
-	border-width: 1px; 
- 	background-color: #999999; 
-}
-
-QScrollBar::add-line:vertical, QScrollBar::add-line:horizontal{
-	width: 0px; 
-	height: 0px;
-}
-
-QScrollBar::sub-line:vertical, QScrollBar::sub-line:horizontal{
-	width: 0px; 
-	height: 0px;
-}
-
-QScrollBar::add-page:vertical{
-	border-left: 1px solid gray;
-	background: transparent;
-	border-radius: 5px;
-/*
-	border: 1px#343434;
-	background-color: #343434;*/
-}
-QScrollBar::add-page:horizontal{
-	border-top: 1px solid gray;
-	background: transparent;
-	border-radius: 5px;
-/*
-	border: 1px#343434;
-	background-color: #343434;*/
-}
-QScrollBar::sub-page:vertical{
-	border-left: 1px solid gray;
-	background: transparent;
-	border-radius: 5px;
-/*	border: 1px #343434;
-	background-color: #343434;*/
-}
-QScrollBar::sub-page:horizontal{
-	border-top: 1px solid gray;
-	background: transparent;
-	border-radius: 5px;
-/*	border: 1px #343434;
-	background-color: #343434;*/
-}
-
-QTextEdit{
-	color: #ffffff;
-}
-
-QMessageBox {
-	color: #ffffff;
-}
-
-QToolTip {
-	color: #000000;
-}
-
-QTextBrowser {
-	background-color: #464646;
-	color: #ffffff;
-	border: 0px;
-}
-
-QRadioButton {
-	color: #ffffff;
-}
-
-QListWidget {
-	background-color:rgb(52,52,52);
-	color: rgb(255, 255, 255);
-	border: 1px solid gray;
-	border-radius: 8px;
-}
-
-QLineEdit {
-	background-color: #343434;
-	color: rgb(255, 255, 255);
-	border: 1px solid gray;
-	border-radius: 5px;
-}</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -229,7 +101,7 @@ QLineEdit {
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>icons_imgs/search_icon.png</pixmap>
+           <pixmap>themes/1-default/icons/search_icon.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
@@ -293,40 +165,7 @@ QLineEdit {
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="styleSheet">
-        <string notr="true">QTabWidget::pane { /* The tab widget frame */
-   /* border-left: 1px solid gray;*/
-}
-
-
-QTabWidget::tab-bar {
-    left: 30px; /* move to the right by 5px */
-}
-
-
-/* Style the tab using the tab sub-control. Note that
-    it reads QTabBar _not_ QTabWidget */
-QTabBar::tab {
-	background: #7a7a7a;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    min-width: 16ex;
-    padding: 2px;
-    color: #FFFFFF
-}
-
-QTabBar::tab:selected {
-	background: #999999;
-    color: #1d5eff
-}
-
-
-QTabBar::tab:!selected {
-    margin-top: 3px; /* make non-selected tabs look smaller */
-}
-
-QPushButton:!enabled {
-	color:#9f9f9f;
-}</string>
+        <string notr="true"/>
        </property>
        <property name="tabPosition">
         <enum>QTabWidget::North</enum>
@@ -335,7 +174,7 @@ QPushButton:!enabled {
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="movable">
         <bool>true</bool>
@@ -1221,7 +1060,7 @@ p, li { white-space: pre-wrap; }
                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#000000;&quot;&gt;Go to the signal's wiki.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">color: #9f9f9f;</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Signal's wiki</string>
@@ -1929,49 +1768,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QTabWidget" name="all_filter_tabs">
            <property name="styleSheet">
-            <string notr="true">QComboBox {
-	background-color: rgb(52,52,52);
-	color: #ffffff;
-    border: 1px solid gray;
-    border-radius: 5px;
-}
-
-QComboBox:!enabled {
-	color: #9f9f9f;
-}
-
-QComboBox QAbstractItemView {
-    border: 1px solid gray;
-    selection-background-color: #999999;
-	selection-color: #1d5eff;
-	color: #ffffff;
-}
-
-QSpinBox {
-	background-color: rgb(52,52,52);
-	color: #ffffff;
-	border: 1px solid gray;
-	border-radius: 5px;
-}
-
-QSpinBox:!enabled {
-	color:#9f9f9f;
-}
-
-QPushButton {	
-	background-color: rgb(52,52,52);
-	border: 1px solid gray;
-	border-radius: 5px;
-}
-
-QPushButton:!enabled {
-	color:#9f9f9f;
-}
-
-QPushButton:checked {
-	color: #39eaff;
-}
-</string>
+            <string notr="true"/>
            </property>
            <property name="currentIndex">
             <number>5</number>
@@ -2262,15 +2059,7 @@ QPushButton:checked {
                 </sizepolicy>
                </property>
                <property name="styleSheet">
-                <string notr="true">QWidget#freq_filter_container {
-	border: 1px solid gray;
-	background-color: rgb(52,52,52);
-	border-radius: 12px;
-}
-
-QRadioButton, QLabel {
-	background-color: rgb(52,52,52);
-}</string>
+                <string notr="true"/>
                </property>
                <layout class="QGridLayout" name="gridLayout_6">
                 <item row="0" column="0">
@@ -2319,7 +2108,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2363,7 +2152,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="currentText">
                    <string>MHz</string>
@@ -2451,7 +2240,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="frame">
                    <bool>false</bool>
@@ -2519,7 +2308,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2566,7 +2355,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="currentText">
                    <string>MHz</string>
@@ -2645,7 +2434,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="frame">
                    <bool>false</bool>
@@ -2796,15 +2585,7 @@ Inactive</string>
                 </sizepolicy>
                </property>
                <property name="styleSheet">
-                <string notr="true">QWidget#band_filter_container {
-	border: 1px solid gray;
-	background-color: rgb(52,52,52);
-	border-radius: 12px;
-}
-
-QRadioButton, QLabel {
-	background-color: rgb(52,52,52);
-}</string>
+                <string notr="true"/>
                </property>
                <layout class="QGridLayout" name="gridLayout_7">
                 <item row="1" column="1">
@@ -2836,7 +2617,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2881,7 +2662,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2943,7 +2724,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="frame">
                    <bool>false</bool>
@@ -3019,7 +2800,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="currentText">
                    <string>MHz</string>
@@ -3084,7 +2865,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="frame">
                    <bool>false</bool>
@@ -3137,7 +2918,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: #464646;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="currentText">
                    <string>MHz</string>
@@ -3225,7 +3006,7 @@ QRadioButton, QLabel {
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">color: #9f9f9f;</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Selected range:
@@ -3311,47 +3092,383 @@ Inactive</string>
              <string>Category</string>
             </attribute>
             <layout class="QGridLayout" name="gridLayout_14">
-             <item row="0" column="0" colspan="2">
-              <widget class="QRadioButton" name="cat_at_least_one">
-               <property name="font">
-                <font>
-                 <pointsize>12</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
+             <item row="0" column="0">
+              <spacer name="horizontalSpacer_11">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Keep all the signals which belong to &lt;span style=&quot; font-style:italic;&quot;&gt;at least&lt;/span&gt; one of the selected categories.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>102</width>
+                 <height>20</height>
+                </size>
                </property>
-               <property name="styleSheet">
-                <string notr="true"/>
-               </property>
-               <property name="text">
-                <string>At least one selected</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
+              </spacer>
+             </item>
+             <item row="0" column="1">
+              <widget class="QWidget" name="widget_8" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_24">
+                <property name="spacing">
+                 <number>50</number>
+                </property>
+                <item>
+                 <widget class="QRadioButton" name="cat_at_least_one">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Keep all the signals which belong to &lt;span style=&quot; font-style:italic;&quot;&gt;at least&lt;/span&gt; one of the selected categories.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="text">
+                   <string>At least one selected</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QRadioButton" name="cat_all">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Keep all the signals which belong to &lt;span style=&quot; font-style:italic;&quot;&gt;all &lt;/span&gt;the selected categories.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>All selected</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
              <item row="0" column="2">
-              <widget class="QRadioButton" name="cat_all">
-               <property name="font">
-                <font>
-                 <pointsize>12</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
+              <spacer name="horizontalSpacer_12">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
-               <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Keep all the signals which belong to &lt;span style=&quot; font-style:italic;&quot;&gt;all &lt;/span&gt;the selected categories.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>102</width>
+                 <height>20</height>
+                </size>
                </property>
-               <property name="text">
-                <string>All selected</string>
+              </spacer>
+             </item>
+             <item row="1" column="0" colspan="3">
+              <widget class="QWidget" name="widget_11" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
-               <property name="checked">
-                <bool>false</bool>
-               </property>
+               <layout class="QGridLayout" name="gridLayout_8">
+                <item row="8" column="1" colspan="2">
+                 <widget class="QPushButton" name="number_stations_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Number Stations</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="2" colspan="2">
+                 <widget class="QPushButton" name="time_signal_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Time Signal</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="7" column="0" colspan="2">
+                 <widget class="QPushButton" name="interfering_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Interfering</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0" colspan="2">
+                 <widget class="QPushButton" name="sat_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Satellite</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="2" colspan="2">
+                 <widget class="QPushButton" name="navigation_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Navigation</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="2" colspan="2">
+                 <widget class="QPushButton" name="utility_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Utility</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="2" colspan="2">
+                 <widget class="QPushButton" name="digital_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Digital</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2" colspan="2">
+                 <widget class="QPushButton" name="marine_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Marine</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2" colspan="2">
+                 <widget class="QPushButton" name="commercial_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Commercial</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2" colspan="2">
+                 <widget class="QPushButton" name="inactive_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Inactive</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2" colspan="2">
+                 <widget class="QPushButton" name="radar_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Radar</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0" colspan="2">
+                 <widget class="QPushButton" name="military_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Military</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" colspan="2">
+                 <widget class="QPushButton" name="active_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Active</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0" colspan="2">
+                 <widget class="QPushButton" name="ham_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>HAM</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0" colspan="2">
+                 <widget class="QPushButton" name="aviation_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Aviation</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0" colspan="2">
+                 <widget class="QPushButton" name="analogue_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Analogue</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0" colspan="2">
+                 <widget class="QPushButton" name="trunked_btn">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Trunked</string>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
              <item row="2" column="0" colspan="3">
@@ -3386,307 +3503,6 @@ Inactive</string>
                <property name="text">
                 <string>Reset</string>
                </property>
-              </widget>
-             </item>
-             <item row="1" column="0" colspan="3">
-              <widget class="QWidget" name="widget_11" native="true">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_8">
-                <item row="0" column="0">
-                 <widget class="QPushButton" name="military_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Military</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QPushButton" name="radar_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Radar</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QPushButton" name="active_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Active</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QPushButton" name="inactive_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Inactive</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QPushButton" name="ham_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>HAM</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QPushButton" name="commercial_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Commercial</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="0">
-                 <widget class="QPushButton" name="aviation_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Aviation</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QPushButton" name="marine_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Marine</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QPushButton" name="analogue_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Analogue</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="1">
-                 <widget class="QPushButton" name="digital_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Digital</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QPushButton" name="trunked_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Trunked</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="1">
-                 <widget class="QPushButton" name="utility_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Utility</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="0">
-                 <widget class="QPushButton" name="sat_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Satellite</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="6" column="1">
-                 <widget class="QPushButton" name="navigation_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Navigation</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="0">
-                 <widget class="QPushButton" name="interfering_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Interfering</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="7" column="1">
-                 <widget class="QPushButton" name="time_signal_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Time Signal</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="8" column="0" colspan="2">
-                 <widget class="QPushButton" name="number_stations_btn">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Number Stations</string>
-                  </property>
-                  <property name="checkable">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
               </widget>
              </item>
             </layout>
@@ -3838,7 +3654,7 @@ Inactive</string>
                  </widget>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QLabel" name="label_2">
+                 <widget class="QLabel" name="modulation_search_label">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -3965,7 +3781,7 @@ Inactive</string>
                  <widget class="QLineEdit" name="search_bar_location"/>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QLabel" name="label_10">
+                 <widget class="QLabel" name="location_search_label">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -4073,9 +3889,7 @@ Inactive</string>
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">background-color: rgb(52,52,52);
-border: 1px solid gray;
-border-radius: 5px;</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>Reset all filters</string>
@@ -4108,25 +3922,7 @@ border-radius: 5px;</string>
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">QWidget {
-background-color:rgb(52,52,52);
-border: 1px solid gray;
-border-radius: 8px;
-}
-QProgressBar {
-    border: 2px #7a7a7a;
-	border-radius: 3px;
-	background-color:  #7a7a7a;
-}
-
-QProgressBar::chunk {
-    /*background-color: #1d5eff;*/
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #1d5eff, stop:0.5 #4177ff, stop:1 #1d5eff);
-	border-radius: 3px;
-}
-QLabel, QPushButton, QSlider {
-	border: 0px;
-}</string>
+       <string notr="true"/>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -4143,17 +3939,10 @@ QWidget {
 	border: 0px;
 }
 QPushButton {
-	/*background-color: #1d5eff;*/
     border: 0px solid gray;
 	border-color: #1d5eff;
     border-radius: 20px;
-}
-
-/*
-QPushButton:disabled {
-	background-color: #7a7a7a;
-}
-*/</string>
+}</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="3" column="0" colspan="3">
@@ -4259,7 +4048,7 @@ QPushButton:disabled {
           <item row="2" column="0" colspan="3">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="volume_label">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -4276,7 +4065,7 @@ QPushButton:disabled {
                <string/>
               </property>
               <property name="pixmap">
-               <pixmap>icons_imgs/volume.png</pixmap>
+               <pixmap>themes/1-default/icons/volume.png</pixmap>
               </property>
               <property name="scaledContents">
                <bool>true</bool>
@@ -4349,7 +4138,7 @@ QSlider::handle:horizontal {
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>icons_imgs/nosignalselected.png</pixmap>
+          <pixmap>themes/1-system/icons/nosignalselected.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -4371,23 +4160,7 @@ QSlider::handle:horizontal {
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QMenuBar {
-    color: rgb(255, 255, 255);
-}
-
-QMenuBar::item:selected {
-	background:#999999;
-	color: #1d5eff
-}
-
-QMenu::item:selected {
-    background-color: #999999;
-	color: #1d5eff
-}
-
-QMenu {
-	color: #ffffff;
-}</string>
+    <string notr="true"/>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="styleSheet">
@@ -4404,8 +4177,14 @@ QMenu {
     </property>
     <addaction name="action_update_database"/>
    </widget>
+   <widget class="QMenu" name="menu_themes">
+    <property name="title">
+     <string>Themes</string>
+    </property>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuUpdates"/>
+   <addaction name="menu_themes"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="styleSheet">

@@ -3,9 +3,9 @@ import sys
 from pydub import AudioSegment
 from pygame import mixer
 from PyQt5.QtCore import QTimer, QTimer, pyqtSlot, QObject
-import qtawesome as qta
 
 from utilities import Constants
+import qtawesome as qta
 
 
 class AudioPlayer(QObject): # Maybe useless inheriting from QObject
@@ -17,7 +17,7 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
 
     __time_step = 500 # Milliseconds.
 
-    def __init__(self, play, pause, stop, volume, audio_progress):
+    def __init__(self, play, pause, stop, volume, audio_progress, active_color, inactive_color):
         super().__init__()
         self.__paused = False
         self.__first_call = True
@@ -33,18 +33,21 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
         self.__pause.clicked.connect(self.__pause_audio)
         self.__stop.clicked.connect(self.__stop_audio)
         self.__volume.valueChanged.connect(self.__set_volume)
-        self.__play.setIcon(qta.icon('fa5.play-circle',
-                                   color = "#4facf1",
-                                   color_disabled = '#7a7a7a'))
         self.__play.setIconSize(self.__play.size())
-        self.__pause.setIcon(qta.icon('fa5.pause-circle',
-                                    color = "#4facf1",
-                                    color_disabled = '#7a7a7a'))
         self.__pause.setIconSize(self.__pause.size())
-        self.__stop.setIcon(qta.icon('fa5.stop-circle',
-                                   color = "#4facf1",
-                                   color_disabled = '#7a7a7a'))
         self.__stop.setIconSize(self.__stop.size())
+        self.refresh_btns_colors(active_color, inactive_color)
+
+    def refresh_btns_colors(self, active_color, inactive_color):
+        self.__play.setIcon(qta.icon('fa5.play-circle',
+                                     color = active_color,
+                                     color_disabled = inactive_color))
+        self.__pause.setIcon(qta.icon('fa5.pause-circle',
+                                      color = active_color,
+                                      color_disabled = inactive_color))
+        self.__stop.setIcon(qta.icon('fa5.stop-circle',
+                                     color = active_color,
+                                     color_disabled = inactive_color))
 
     @pyqtSlot()
     def __set_volume(self):
