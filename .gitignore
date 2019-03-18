@@ -3,7 +3,9 @@ Data
 .ipynb_checkpoints
 *.ipynb
 wav_converter.py
-*.txt
+to_do.txt
+csv_info.txt
+pyinstaller_cmd.txt
 icons_imgs
 TestData
 themes/.current_theme

@@ -1,7 +1,9 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
-from PyQt5.QtWidgets import QWidget, QMessageBox
+from PyQt5.QtWidgets import QWidget
 from threads import DownloadThread, ThreadStatus
+from utilities import throwable_message
+from constants import Messages
 
 Ui_Download_window, _ = uic.loadUiType("download_db_window.ui")
 
@@ -17,24 +19,19 @@ class DownloadWindow(QWidget, Ui_Download_window):
             # Qt.WindowStaysOnTopHint
         )
         self.everything_ok = True
-        self.no_internet_msg = QMessageBox(self)
-        self.no_internet_msg.setWindowTitle("No internet connection")
-        self.no_internet_msg.setText("Unable to establish an internet connection.")
-        # self.no_internet_msg.buttonClicked.connect(self.close)
-        self.no_internet_msg.finished.connect(self.close)
 
-        self.bad_db_download_msg = QMessageBox(self)
-        self.bad_db_download_msg.setWindowTitle("Something wrong")
-        self.bad_db_download_msg.setText("""Something went wrong with the downaload.
-        Check your internet connection and try again.""")
-        self.bad_db_download_msg.finished.connect(self.close)
+        self.no_internet_msg = throwable_message(self, title = Messages.NO_CONNECTION, 
+                                                 text = Messages.NO_CONNECTION_MSG, 
+                                                 connection = self.close)
 
-        self.bad_file_msg = QMessageBox(self)
-        self.bad_file_msg.setWindowTitle("Bad file detected")
-        self.bad_file_msg.setText("""The downloaded file seems to be corrupted.
-        The old database has not been deleted and
-        the downloaded file has been discarded.""")
-        self.bad_file_msg.finished.connect(self.close)
+        self.bad_db_download_msg = throwable_message(self, title = Messages.BAD_DOWNLOAD,
+                                                     text = Messages.BAD_DOWNLOAD_MSG,
+                                                     connection = self.close)
+
+        # Never used (should exploit the checksum check for the single file)
+        self.bad_file_msg = throwable_message(self, title = Messages.BAD_FILE,
+                                              text = Messages.BAD_FILE_MSG,
+                                              connection = self.close)
 
         self.download_thread = DownloadThread()
         self.download_thread.finished.connect(self.wait_close)
@@ -42,13 +39,15 @@ class DownloadWindow(QWidget, Ui_Download_window):
         self.cancel_btn.clicked.connect(self.terminate_process)
 
     def show_no_connection_warning(self):
-        self.bad_db_download_msg.setText(f"""Unable to correctly download the database.
-        Reason: {self.download_thread.reason}""")
         self.no_internet_msg.show()
         self.everything_ok = False
 
     def show_bad_download_warning(self):
         self.bad_db_download_msg.show()
+        self.everything_ok = False
+
+    def show_bad_file_warning(self):
+        self.bad_file_msg.show()
         self.everything_ok = False
 
     @pyqtSlot()
@@ -65,7 +64,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
         elif self.download_thread.status == ThreadStatus.NO_CONNECTION_ERR:
             self.show_no_connection_warning()
         elif self.download_thread.status == ThreadStatus.BAD_DOWNLOAD_ERR:
-            self.show_bad_download_warning
+            self.show_bad_download_warning()
         else:
             self.close()
 

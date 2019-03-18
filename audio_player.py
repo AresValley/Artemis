@@ -4,7 +4,7 @@ from pydub import AudioSegment
 from pygame import mixer
 from PyQt5.QtCore import QTimer, QTimer, pyqtSlot, QObject
 
-from utilities import Constants
+import constants
 import qtawesome as qta
 
 
@@ -82,7 +82,7 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
     def set_audio_player(self, fname = ""):
         self.__first_call = True
         self.__reset_audio_widget()
-        full_name = os.path.join(Constants.DATA_FOLDER, Constants.AUDIO_FOLDER, fname + '.ogg')
+        full_name = os.path.join(constants.DATA_FOLDER, constants.AUDIO_FOLDER, fname + '.ogg')
         if os.path.exists(full_name):
             self.__play.setEnabled(True)
             self.__audio_file = full_name

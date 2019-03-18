@@ -1,0 +1,2 @@
+active=#ddffdf
+inactive=#949494

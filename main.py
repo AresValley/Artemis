@@ -9,7 +9,6 @@ from pandas import read_csv
 from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
                              QAction,
-                             QMessageBox,
                              qApp,
                              QDesktopWidget,
                              QListWidgetItem,
@@ -27,17 +26,23 @@ from audio_player import AudioPlayer
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
 
+import constants
 
-from utilities import (Constants, 
-                       reset_apply_remove_btn, 
+from utilities import (reset_apply_remove_btn, 
                        throwable_message,
-                       is_valid_html_color,)
+                       is_valid_html_color,
+                       connect_to,
+                       filters_ok,
+                       is_undef_freq,
+                       is_undef_band,
+                       change_unit,
+                       format_numbers)
 
 qt_creator_file = "main_window.ui"
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
-class MyApp(QMainWindow, Ui_MainWindow):
 
+class MyApp(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -49,8 +54,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.current_signal_name = ''
         self.signal_names = []
         self.total_signals = 0
-        self.active_color = Constants.ACTIVE_COLOR
-        self.inactive_color = Constants.INACTIVE_COLOR
+        self.active_color = constants.Theme.DEFAULT_ACTIVE_COLOR
+        self.inactive_color = constants.Theme.DEFAULT_INACTIVE_COLOR
 
         # Manage frequency filters.
         self.frequency_filters_btns = (
@@ -67,7 +72,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.ehf_filter_btn,
         )
 
-        self.connect_to(
+        connect_to(
             objects_to_connect = [self.lower_freq_spinbox.valueChanged,
                                   self.upper_freq_spinbox.valueChanged,
                                   self.lower_freq_filter_unit.currentTextChanged,
@@ -80,7 +85,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                         self.upper_freq_spinbox]
         )
 
-        self.connect_to(
+        connect_to(
             objects_to_connect = [self.lower_freq_spinbox.valueChanged,
                                   self.upper_freq_spinbox.valueChanged,
                                   self.lower_freq_filter_unit.currentTextChanged,
@@ -117,7 +122,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_freq_confidence)
             )
 
-        self.apply_remove_freq_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
+        self.apply_remove_freq_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
         self.apply_remove_freq_filter_btn.set_slave_filters(
             [
                 *self.frequency_filters_btns,
@@ -139,11 +144,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
             ],
         )
         self.apply_remove_freq_filter_btn.clicked.connect(self.display_signals)
-        self.reset_frequency_filters_btn.clicked.connect(partial(self.reset_fb_filters, 'freq'))
+        self.reset_frequency_filters_btn.clicked.connect(partial(self.reset_fb_filters, constants.Ftype.FREQ))
 
         # Manage bandwidth filters.
 
-        self.connect_to(
+        connect_to(
             objects_to_connect = [self.lower_band_spinbox.valueChanged,
                                   self.upper_band_spinbox.valueChanged,
                                   self.lower_band_filter_unit.currentTextChanged,
@@ -156,7 +161,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                         self.upper_band_spinbox]
         )
 
-        self.connect_to(
+        connect_to(
             objects_to_connect = [self.lower_band_spinbox.valueChanged,
                                   self.upper_band_spinbox.valueChanged,
                                   self.lower_band_filter_unit.currentTextChanged,
@@ -193,7 +198,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                     self.upper_band_confidence)
             )
 
-        self.apply_remove_band_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
+        self.apply_remove_band_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
         self.apply_remove_band_filter_btn.set_slave_filters(
             [
                 self.include_undef_bands,
@@ -214,7 +219,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             ],
         )
         self.apply_remove_band_filter_btn.clicked.connect(self.display_signals)
-        self.reset_band_filters_btn.clicked.connect(partial(self.reset_fb_filters, 'band'))
+        self.reset_band_filters_btn.clicked.connect(partial(self.reset_fb_filters, constants.Ftype.BAND))
 
 #       Manage category filters
 
@@ -237,7 +242,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                 self.number_stations_btn,
                                 self.time_signal_btn,]
 
-        self.apply_remove_cat_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)   
+        self.apply_remove_cat_filter_btn.set_texts(constants.APPLY, constants.REMOVE)   
         self.apply_remove_cat_filter_btn.set_slave_filters([*self.cat_filter_btns,
                                                              self.cat_at_least_one,
                                                              self.cat_all])
@@ -283,16 +288,16 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.set_mode_tree_widget()
         self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
         self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
-        self.apply_remove_mode_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
+        self.apply_remove_mode_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
         self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget, 
                                                              self.include_unknown_modes_btn])
         self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
 
         # Set modulation filter screen.
 
-        self.modulation_list.addItems(Constants.MODULATIONS)
+        self.modulation_list.addItems(constants.MODULATIONS)
         self.search_bar_modulation.textEdited.connect(self.show_matching_modulations)
-        self.apply_remove_modulation_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
+        self.apply_remove_modulation_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
         self.apply_remove_modulation_filter_btn.set_slave_filters([self.search_bar_modulation,
                                                                    self.modulation_list])
         self.apply_remove_modulation_filter_btn.clicked.connect(self.display_signals)
@@ -301,9 +306,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         # Set location filter screen.
 
-        self.locations_list.addItems(Constants.LOCATIONS)
+        self.locations_list.addItems(constants.LOCATIONS)
         self.search_bar_location.textEdited.connect(self.show_matching_locations)
-        self.apply_remove_location_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
+        self.apply_remove_location_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
         self.apply_remove_location_filter_btn.set_slave_filters([self.search_bar_location,
                                                                  self.locations_list])
         self.apply_remove_location_filter_btn.clicked.connect(self.display_signals)
@@ -311,11 +316,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.locations_list.itemClicked.connect(self.remove_if_unselected_location)
 
         # Find available themes.
-        self.default_images_folder = os.path.join(Constants.THEMES_FOLDER,
-                                         Constants.DEFAULT_THEME,
-                                         Constants.ICONS_FOLDER)
-        # self.find_themes()
-        # self.set_theme()
+        self.default_images_folder = os.path.join(constants.Theme.FOLDER,
+                                         constants.Theme.DEFAULT,
+                                         constants.Theme.ICONS_FOLDER)
 
 # ##########################################################################################
 
@@ -357,10 +360,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def find_themes(self):
         themes = []
-        for theme_folder in os.listdir(Constants.THEMES_FOLDER):
-            relative_folder = os.path.join(Constants.THEMES_FOLDER, theme_folder)
+        for theme_folder in os.listdir(constants.Theme.FOLDER):
+            relative_folder = os.path.join(constants.Theme.FOLDER, theme_folder)
             if os.path.isdir(os.path.abspath(relative_folder)):
-                relative_folder = os.path.join(Constants.THEMES_FOLDER, theme_folder)
+                relative_folder = os.path.join(constants.Theme.FOLDER, theme_folder)
                 themes.append(relative_folder)
         for theme in themes:
             theme_name = '&' + ' '.join(
@@ -382,26 +385,26 @@ class MyApp(QMainWindow, Ui_MainWindow):
         try:
             with open(os.path.join(
                           theme_path, 
-                          os.path.basename(theme_path).split('-')[1] + Constants.THEME_EXTENSION)
+                          os.path.basename(theme_path).split('-')[1] + constants.Theme.EXTENSION)
                      ) as stylesheet:
                 style = stylesheet.read()
                 self.setStyleSheet(style)
                 self.download_window.setStyleSheet(style)
         except FileNotFoundError:
-            throwable_message(self, title = "Theme not found",
-                              text = f"Missing theme in {Constants.THEMES_FOLDER} folder.").show()
+            throwable_message(self, title = constants.Messages.THEME_NOT_FOUND,
+                              text = constants.Messages.MISSING_THEME).show()
         else:
-            icons_path = os.path.join(theme_path, Constants.ICONS_FOLDER)
-            default_icons_path = os.path.join(Constants.THEMES_FOLDER, Constants.DEFAULT_THEME, Constants.ICONS_FOLDER)
+            icons_path = os.path.join(theme_path, constants.Theme.ICONS_FOLDER)
+            default_icons_path = os.path.join(constants.Theme.FOLDER, constants.Theme.DEFAULT, constants.Theme.ICONS_FOLDER)
 
-            if os.path.exists(os.path.join(icons_path, Constants.NOT_SELECTED)) and \
-               os.path.exists(os.path.join(icons_path, Constants.NOT_AVAILABLE)):
+            if os.path.exists(os.path.join(icons_path, constants.NOT_SELECTED)) and \
+               os.path.exists(os.path.join(icons_path, constants.NOT_AVAILABLE)):
                 self.default_images_folder = icons_path
             else:
                 self.default_images_folder = default_icons_path
 
-            path_to_search_label = os.path.join(icons_path, Constants.SEARCH_LABEL_IMG)
-            default_search_label = os.path.join(default_icons_path, Constants.SEARCH_LABEL_IMG)
+            path_to_search_label = os.path.join(icons_path, constants.SEARCH_LABEL_IMG)
+            default_search_label = os.path.join(default_icons_path, constants.SEARCH_LABEL_IMG)
 
             if os.path.exists(path_to_search_label):
                 self.search_label.setPixmap(QPixmap(path_to_search_label))
@@ -416,8 +419,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.modulation_search_label.setScaledContents(True)
             self.location_search_label.setScaledContents(True)
 
-            path_to_volume_label = os.path.join(icons_path, Constants.VOLUME_LABEL_IMG)
-            default_volume_label = os.path.join(default_icons_path, Constants.VOLUME_LABEL_IMG)
+            path_to_volume_label = os.path.join(icons_path, constants.VOLUME_LABEL_IMG)
+            default_volume_label = os.path.join(default_icons_path, constants.VOLUME_LABEL_IMG)
 
             if os.path.exists(path_to_volume_label):
                 self.volume_label.setPixmap(QPixmap(path_to_volume_label))
@@ -426,7 +429,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
             self.volume_label.setScaledContents(True)
 
-            path_to_colors = os.path.join(theme_path, Constants.THEME_COLORS)
+            path_to_colors = os.path.join(theme_path, constants.Theme.COLORS)
             active_color_ok = False
             inactive_color_ok = False
             valid_format = False
@@ -435,36 +438,36 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 valid_file = True
                 with open(path_to_colors, "r") as colors_file:
                     for line in colors_file:
-                        if '=' in line:
+                        if constants.Theme.COLOR_SEPARATOR in line:
                             valid_format = True
-                            quality, color = line.split("=")
+                            quality, color = line.split(constants.Theme.COLOR_SEPARATOR)
                             color = color.rstrip()
-                            if quality == "active" and is_valid_html_color(color):
+                            if quality.lower() == constants.ACTIVE and is_valid_html_color(color):
                                 self.active_color = color
                                 active_color_ok = True
-                            if quality == "inactive" and is_valid_html_color(color):
+                            if quality.lower() == constants.INACTIVE and is_valid_html_color(color):
                                 self.inactive_color = color
                                 inactive_color_ok = True
             
             if not all([valid_file, valid_format, active_color_ok, inactive_color_ok]):
-                self.active_color = Constants.ACTIVE_COLOR
-                self.inactive_color = Constants.INACTIVE_COLOR
+                self.active_color = constants.Theme.DEFAULT_ACTIVE_COLOR
+                self.inactive_color = constants.Theme.DEFAULT_INACTIVE_COLOR
 
             self.audio_widget.refresh_btns_colors(self.active_color, self.inactive_color)
 
             try:
-                with open(os.path.join(Constants.THEMES_FOLDER, 
-                          Constants.CURRENT_THEME), "w") as current_theme:
+                with open(os.path.join(constants.Theme.FOLDER, 
+                          constants.Theme.CURRENT), "w") as current_theme:
                     current_theme.write(theme_path)
             except:
                 pass
 
     def set_theme(self):
-        current_theme_file = os.path.join(Constants.THEMES_FOLDER, Constants.CURRENT_THEME)
+        current_theme_file = os.path.join(constants.Theme.FOLDER, constants.Theme.CURRENT)
         if os.path.exists(current_theme_file):
             with open(current_theme_file) as current_theme:
                 theme = current_theme.read()
-                if theme != Constants.DEFAULT_THEME:
+                if theme != constants.Theme.DEFAULT:
                     self.change_theme(theme)
 
     @pyqtSlot(QListWidgetItem)
@@ -494,7 +497,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 item.setHidden(True)
 
     def set_mode_tree_widget(self):
-        for parent, children in Constants.MODES.items():
+        for parent, children in constants.MODES.items():
             iparent = QTreeWidgetItem([parent])
             self.mode_tree_widget.addTopLevelItem(iparent)
             for child in children:
@@ -504,11 +507,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     def manage_mode_selections(self):
         selected_items = self.mode_tree_widget.selectedItems()
-        parents = Constants.MODES.keys()
+        parents = constants.MODES.keys()
         for parent in parents:
             for item in selected_items:
                 if parent == item.text(0):
-                    for i in range(len(Constants.MODES[parent])):
+                    for i in range(len(constants.MODES[parent])):
                         item.child(i).setSelected(True)
 
     def set_initial_size(self):
@@ -571,31 +574,24 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.display_signals()
 
     def load_db(self):
-        names = Constants.DB_NAMES
+        names = constants.Database.NAMES
         try:
-            self.db = read_csv(os.path.join(Constants.DATA_FOLDER, Constants.DB_NAME), 
-                               sep = '*',
+            self.db = read_csv(os.path.join(constants.DATA_FOLDER, constants.Database.NAME), 
+                               sep = constants.Database.DELIMITER,
                                header = None,
                                index_col = 0,
-                               dtype = {name : str for name in Constants.DB_STRINGS},
+                               dtype = {name : str for name in constants.Database.STRINGS},
                                names = names,)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
-            box = QMessageBox(self)
-            box.setWindowTitle(Constants.Messages.NO_DB)
-            box.setText(Constants.Messages.NO_DB_AVAIL)
-            box.show()
+            throwable_message(self, title = constants.Messages.NO_DB, 
+                              text = constants.Messages.NO_DB_AVAIL).show()
         else:
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
-            self.db.fillna(Constants.UNKNOWN, inplace = True)
-            self.db[Constants.DB_WIKI_CLICKED] = False
+            self.db.fillna(constants.UNKNOWN, inplace = True)
+            self.db[constants.Signal.WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
-
-    @staticmethod
-    def connect_to(objects_to_connect, fun_to_connect, fun_args):
-        for signal in objects_to_connect:
-            signal.connect(partial(fun_to_connect, *fun_args))
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box, 
@@ -605,14 +601,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if lower_spin_box.isEnabled():
             unit_conversion = {'Hz' : ['kHz', 'MHz', 'GHz'],
                                'kHz': ['MHz', 'GHz'],
-                               'MHz': ['GHz']
-                              }
+                               'MHz': ['GHz']}
             lower_units = lower_combo_box.currentText()
             upper_units = upper_combo_box.currentText()
             lower_value = lower_spin_box.value()
             upper_value = upper_spin_box.value()
-            inf_limit = (lower_value * Constants.CONVERSION_FACTORS[lower_units]) \
-                // Constants.CONVERSION_FACTORS[upper_units]
+            inf_limit = (lower_value * constants.CONVERSION_FACTORS[lower_units]) \
+                // constants.CONVERSION_FACTORS[upper_units]
             counter = 0
             while inf_limit > upper_spin_box.maximum():
                 counter += 1
@@ -685,8 +680,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def display_signals(self):
-        # for i in range(self.result_list.count()):
-        #     self.result_list.item(i).setHidden(True)
         text = self.search_bar.text()
         available_signals = 0
         for index, signal in enumerate(self.signal_names):
@@ -712,7 +705,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_fb_filters(self, ftype):
-        if ftype != 'freq' and ftype != 'band':
+        if ftype != constants.Ftype.FREQ and ftype != constants.Ftype.BAND:
             raise ValueError("Wrong ftype in function 'reset_fb_filters'")
         apply_remove_btn  = getattr(self, 'apply_remove_'  + ftype + '_filter_btn')
         include_undef_btn = getattr(self, 'include_undef_' + ftype + 's')
@@ -724,8 +717,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         upper_spinbox     = getattr(self, 'upper_'         + ftype + '_spinbox')
         lower_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
         upper_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
-        default_val = 1 if ftype == 'freq' else 5000
-        if ftype == 'freq':
+        default_val = 1 if ftype == constants.Ftype.FREQ else 5000
+        if ftype == constants.Ftype.FREQ:
             for f in self.frequency_filters_btns:
                 if f.isChecked():
                     f.setChecked(False)
@@ -776,19 +769,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
             return True
-        undef_freq = self.is_undef_freq(self.db.loc[signal_name])
+        undef_freq = is_undef_freq(self.db.loc[signal_name])
         if undef_freq:
             if self.include_undef_freqs.isChecked():
                 return True
             else:
                 return False
 
-        signal_freqs = (int(self.db.at[signal_name, "inf_freq"]), 
-                        int(self.db.at[signal_name, "sup_freq"]))
+        signal_freqs = (int(self.db.at[signal_name, constants.Signal.INF_FREQ]), 
+                        int(self.db.at[signal_name, constants.Signal.SUP_FREQ]))
 
         band_filter_ok = False
         any_checked = False
-        for btn, band_limits in zip(self.frequency_filters_btns, Constants.BANDS):
+        for btn, band_limits in zip(self.frequency_filters_btns, constants.BANDS):
             if btn.isChecked():
                 any_checked = True
                 if signal_freqs[0] < band_limits.upper and signal_freqs[1] >= band_limits.lower:
@@ -796,14 +789,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         lower_limit_ok = True
         upper_limit_ok = True
         if self.activate_low_freq_filter_btn.isChecked():
-            if not signal_freqs[1] >= self.filters_ok(self.lower_freq_spinbox, 
-                                                      self.lower_freq_filter_unit,
-                                                      self.lower_freq_confidence, -1):
+            if not signal_freqs[1] >= filters_ok(self.lower_freq_spinbox, 
+                                                 self.lower_freq_filter_unit,
+                                                 self.lower_freq_confidence, -1):
                 lower_limit_ok = False
         if self.activate_up_freq_filter_btn.isChecked():
-            if not signal_freqs[0] < self.filters_ok(self.upper_freq_spinbox, 
-                                                     self.upper_freq_filter_unit,
-                                                     self.upper_freq_confidence):
+            if not signal_freqs[0] < filters_ok(self.upper_freq_spinbox, 
+                                                self.upper_freq_filter_unit,
+                                                self.upper_freq_confidence):
                 upper_limit_ok = False
         if any_checked:
             return band_filter_ok and lower_limit_ok and upper_limit_ok
@@ -813,34 +806,34 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def band_filters_ok(self, signal_name):
         if not self.apply_remove_band_filter_btn.isChecked():
             return True
-        undef_band = self.is_undef_band(self.db.loc[signal_name])
+        undef_band = is_undef_band(self.db.loc[signal_name])
         if undef_band:
             if self.include_undef_bands.isChecked():
                 return True
             else:
                 return False
 
-        signal_bands = (int(self.db.at[signal_name, "inf_band"]), 
-                        int(self.db.at[signal_name, "sup_band"]))
+        signal_bands = (int(self.db.at[signal_name, constants.Signal.INF_BAND]), 
+                        int(self.db.at[signal_name, constants.Signal.SUP_BAND]))
 
         lower_limit_ok = True
         upper_limit_ok = True
         if self.activate_low_band_filter_btn.isChecked():
-            if not signal_bands[1] >= self.filters_ok(self.lower_band_spinbox, 
-                                                      self.lower_band_filter_unit,
-                                                      self.lower_band_confidence, -1):
+            if not signal_bands[1] >= filters_ok(self.lower_band_spinbox, 
+                                                 self.lower_band_filter_unit,
+                                                 self.lower_band_confidence, -1):
                 lower_limit_ok = False
         if self.activate_up_band_filter_btn.isChecked():
-            if not signal_bands[0] < self.filters_ok(self.upper_band_spinbox, 
-                                                     self.upper_band_filter_unit,
-                                                     self.upper_band_confidence):
+            if not signal_bands[0] < filters_ok(self.upper_band_spinbox, 
+                                                self.upper_band_filter_unit,
+                                                self.upper_band_confidence):
                 upper_limit_ok = False
         return lower_limit_ok and upper_limit_ok
 
     def category_filters_ok(self, signal_name):
         if not self.apply_remove_cat_filter_btn.isChecked():
             return True
-        cat_code = self.db.at[signal_name, 'category_code']
+        cat_code = self.db.at[signal_name, constants.Signal.CATEGORY_CODE]
         cat_checked = 0
         positive_cases = 0
         for index, cat in enumerate(self.cat_filter_btns):
@@ -856,15 +849,15 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def mode_filters_ok(self, signal_name):
         if not self.apply_remove_mode_filter_btn.isChecked():
             return True
-        signal_mode = self.db.at[signal_name, "mode"]
-        if signal_mode == Constants.UNKNOWN:
+        signal_mode = self.db.at[signal_name, constants.Signal.MODE]
+        if signal_mode == constants.UNKNOWN:
             if self.include_unknown_modes_btn.isChecked():
                 return True
             else:
                 return False
         selected_items = [item for item in self.mode_tree_widget.selectedItems()]
         selected_items_text = [i.text(0) for i in selected_items]
-        parents = [item for item in selected_items_text if item in Constants.MODES.keys()]
+        parents = [item for item in selected_items_text if item in constants.MODES.keys()]
         children = [item for item in selected_items_text if item not in parents]
         ok = []
         for item in selected_items:
@@ -877,7 +870,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def modulation_filters_ok(self, signal_name):
         if not self.apply_remove_modulation_filter_btn.isChecked():
             return True
-        signal_modulation = self.db.at[signal_name, "modulation"]
+        signal_modulation = self.db.at[signal_name, constants.Signal.MODULATION]
         for item in self.modulation_list.selectedItems():
             if item.text() == signal_modulation:
                 return True
@@ -886,16 +879,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def location_filters_ok(self, signal_name):
         if not self.apply_remove_location_filter_btn.isChecked():
             return True
-        signal_location = self.db.at[signal_name, "location"]
+        signal_location = self.db.at[signal_name, constants.Signal.LOCATION]
         for item in self.locations_list.selectedItems():
             if item.text() == signal_location:
                 return True
         return False
-
-    @staticmethod
-    def filters_ok(spinbox, filter_unit, confidence, sign = 1):
-        band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
-        return band_filter + sign * (confidence.value() * band_filter) // 100
 
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def display_specs(self, item, previous_item):
@@ -906,33 +894,31 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.name_lab.setAlignment(Qt.AlignHCenter)
             current_signal = self.db.loc[self.current_signal_name]
             self.url_button.setEnabled(True)
-            if not current_signal.at["url_clicked"]:
+            if not current_signal.at[constants.Signal.WIKI_CLICKED]:
                 self.url_button.setStyleSheet(f"color: {self.url_button.colors.active};")
             else:
                 self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked};")
-            category_code = current_signal.at["category_code"]
-            undef_freq = self.is_undef_freq(current_signal)
-            undef_band = self.is_undef_band(current_signal)
+            category_code = current_signal.at[constants.Signal.CATEGORY_CODE]
+            undef_freq = is_undef_freq(current_signal)
+            undef_band = is_undef_band(current_signal)
             if not undef_freq:
-                self.freq_lab.setText(self.format_numbers(
-                                      current_signal.at["inf_freq"],
-                                      current_signal.at["sup_freq"])
+                self.freq_lab.setText(format_numbers(current_signal.at[constants.Signal.INF_FREQ],
+                                                     current_signal.at[constants.Signal.SUP_FREQ])
                 )
             else:
                 self.freq_lab.setText("Undefined")
             if not undef_band:
-                self.band_lab.setText(self.format_numbers(
-                                      current_signal.at["inf_band"],
-                                      current_signal.at["sup_band"])
+                self.band_lab.setText(format_numbers(current_signal.at[constants.Signal.INF_BAND],
+                                                     current_signal.at[constants.Signal.SUP_BAND])
                 )
             else:
                 self.band_lab.setText("Undefined")
 
-            self.mode_lab.setText(current_signal.at["mode"])
-            self.modul_lab.setText(current_signal.at["modulation"])
-            self.loc_lab.setText(current_signal.at["location"])
-            self.acf_lab.setText(current_signal.at["acf"])
-            self.description_text.setText(current_signal.at["description"])
+            self.mode_lab.setText(current_signal.at[constants.Signal.MODE])
+            self.modul_lab.setText(current_signal.at[constants.Signal.MODULATION])
+            self.loc_lab.setText(current_signal.at[constants.Signal.LOCATION])
+            self.acf_lab.setText(current_signal.at[constants.Signal.ACF])
+            self.description_text.setText(current_signal.at[constants.Signal.DESCRIPTION])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
                     cat_lab.setStyleSheet(f"color: {self.inactive_color};")
@@ -947,64 +933,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.name_lab.setText("No Signal")
             self.name_lab.setAlignment(Qt.AlignHCenter)
             for lab in self.property_labels:
-                lab.setText(Constants.UNKNOWN)
+                lab.setText(constants.UNKNOWN)
             for lab in self.category_labels:
                 lab.setStyleSheet(f"color: {self.inactive_color};")
             self.set_band_range()
             self.audio_widget.set_audio_player()
-
-    @staticmethod
-    def is_undef_freq(current_signal):
-        lower_freq = current_signal.at["inf_freq"]
-        upper_freq = current_signal.at["sup_freq"]
-        return lower_freq == Constants.UNKNOWN or upper_freq == Constants.UNKNOWN
-
-    @staticmethod
-    def is_undef_band(current_signal):
-        lower_band = current_signal.at["inf_band"]
-        upper_band = current_signal.at["sup_band"]
-        return lower_band == Constants.UNKNOWN or upper_band == Constants.UNKNOWN
-
-    @classmethod
-    def format_numbers(cls, lower, upper):
-        units = {1: 'Hz', 1000: 'kHz', 10**6: 'MHz', 10**9: 'GHz'}
-        lower_factor = cls.change_unit(lower)
-        upper_factor = cls.change_unit(upper)
-        pre_lower = lower
-        pre_upper = upper
-        lower = int(lower) / lower_factor
-        upper = int(upper) / upper_factor
-        if lower.is_integer():
-            lower = int(lower)
-        if upper.is_integer():
-            upper = int(upper)
-        if pre_lower != pre_upper:    
-            return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
-        else:
-            return f"{lower:,} {units[lower_factor]}"
-
-    @staticmethod
-    def change_unit(num):
-        digits = len(num)
-        if digits < 4:
-            return 1
-        elif digits < 7:
-            return 1000
-        elif digits < 10:
-            return 10**6
-        else:
-            return 10**9
         
     def display_spectrogram(self):
-        default_pic = os.path.join(self.default_images_folder, Constants.NOT_SELECTED)
+        default_pic = os.path.join(self.default_images_folder, constants.NOT_SELECTED)
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
-            path_spectr = os.path.join(Constants.DATA_FOLDER, 
-                                       Constants.SPECTRA_FOLDER, 
-                                       spectrogram_name + Constants.SPECTRA_EXT)
+            path_spectr = os.path.join(constants.DATA_FOLDER, 
+                                       constants.SPECTRA_FOLDER, 
+                                       spectrogram_name + constants.SPECTRA_EXT)
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join(self.default_images_folder, Constants.NOT_AVAILABLE)
+                path_spectr = os.path.join(self.default_images_folder, constants.NOT_AVAILABLE)
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
@@ -1015,10 +959,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
             label.setStyleSheet(f"color: {color};")
 
     def set_band_range(self, current_signal = None):
-        if current_signal is not None and not self.is_undef_freq(current_signal):
-            lower_freq = int(current_signal.at["inf_freq"])
-            upper_freq = int(current_signal.at["sup_freq"])
-            zipped = list(zip(Constants.BANDS, self.band_labels))
+        if current_signal is not None and not is_undef_freq(current_signal):
+            lower_freq = int(current_signal.at[constants.Signal.INF_FREQ])
+            upper_freq = int(current_signal.at[constants.Signal.SUP_FREQ])
+            zipped = list(zip(constants.BANDS, self.band_labels))
             for i, w in enumerate(zipped):
                 band, band_label = w
                 if lower_freq >= band.lower and lower_freq < band.upper:
@@ -1048,8 +992,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def go_to_web_page_signal(self):
         if self.current_signal_name:
             self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked}")
-            webbrowser.open(self.db.at[self.current_signal_name, "url"])
-            self.db.at[self.current_signal_name, "url_clicked"] = True
+            webbrowser.open(self.db.at[self.current_signal_name, constants.Signal.URL])
+            self.db.at[self.current_signal_name, constants.Signal.WIKI_CLICKED] = True
 
     def closeEvent(self, event):
         if self.download_window.isVisible():

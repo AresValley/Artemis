@@ -6,13 +6,15 @@ from shutil import rmtree
 import urllib3
 from zipfile import ZipFile
 from PyQt5.QtCore import QThread
-from utilities import checksum_ok, Constants
+import constants
+from utilities import checksum_ok
+import constants
 
 class ThreadStatus(Enum):
-    OK = auto()
+    OK                = auto()
     NO_CONNECTION_ERR = auto()
-    UNKNOWN_ERR = auto()
-    BAD_DOWNLOAD_ERR = auto()
+    UNKNOWN_ERR       = auto()
+    BAD_DOWNLOAD_ERR  = auto()
 
 class DownloadThread(QThread):
     def __init__(self):
@@ -30,8 +32,8 @@ class DownloadThread(QThread):
 
     def run(self):
         try:
-            db = urllib3.PoolManager().request('GET', Constants.DB_LOCATION)
-            # db = urllib.request.urlopen(Constants.DB_LOCATION)
+            db = urllib3.PoolManager().request('GET', constants.Database.LINK_LOC)
+            # db = urllib.request.urlopen(constants.Database.LINK_LOC)
             # raise urllib.error.URLError('Test')
         except urllib3.exceptions.MaxRetryError: # No internet connection.
             self.__status = ThreadStatus.NO_CONNECTION_ERR
@@ -40,11 +42,11 @@ class DownloadThread(QThread):
             self.reason = db.reason
             self.__status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
-        if not checksum_ok(db.data, "folder"):
+        if not checksum_ok(db.data, constants.ChecksumWhat.FOLDER):
             self.__status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
-        if os.path.exists(Constants.DATA_FOLDER):
-            rmtree(Constants.DATA_FOLDER)
+        if os.path.exists(constants.DATA_FOLDER):
+            rmtree(constants.DATA_FOLDER)
         try:
             # data_folder = db.read()
             with ZipFile(BytesIO(db.data)) as zipped:
