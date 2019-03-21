@@ -28,7 +28,7 @@ from download_window import DownloadWindow
 
 import constants
 
-from utilities import (reset_apply_remove_btn, 
+from utilities import (uncheck_and_emit, 
                        throwable_message,
                        is_valid_html_color,
                        connect_to,
@@ -73,11 +73,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
 
         connect_to(
-            objects_to_connect = [self.lower_freq_spinbox.valueChanged,
-                                  self.upper_freq_spinbox.valueChanged,
-                                  self.lower_freq_filter_unit.currentTextChanged,
-                                  self.upper_freq_filter_unit.currentTextChanged,
-                                  self.activate_low_freq_filter_btn.toggled],
+            events_to_connect = [self.lower_freq_spinbox.valueChanged,
+                                 self.upper_freq_spinbox.valueChanged,
+                                 self.lower_freq_filter_unit.currentTextChanged,
+                                 self.upper_freq_filter_unit.currentTextChanged,
+                                 self.activate_low_freq_filter_btn.toggled],
             fun_to_connect = self.set_min_value_upper_limit,
             fun_args = [self.lower_freq_filter_unit, 
                         self.lower_freq_spinbox, 
@@ -86,14 +86,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
 
         connect_to(
-            objects_to_connect = [self.lower_freq_spinbox.valueChanged,
-                                  self.upper_freq_spinbox.valueChanged,
-                                  self.lower_freq_filter_unit.currentTextChanged,
-                                  self.upper_freq_filter_unit.currentTextChanged,
-                                  self.activate_low_freq_filter_btn.clicked,
-                                  self.activate_up_freq_filter_btn.clicked,
-                                  self.lower_freq_confidence.valueChanged,
-                                  self.upper_freq_confidence.valueChanged],
+            events_to_connect = [self.lower_freq_spinbox.valueChanged,
+                                 self.upper_freq_spinbox.valueChanged,
+                                 self.lower_freq_filter_unit.currentTextChanged,
+                                 self.upper_freq_filter_unit.currentTextChanged,
+                                 self.activate_low_freq_filter_btn.clicked,
+                                 self.activate_up_freq_filter_btn.clicked,
+                                 self.lower_freq_confidence.valueChanged,
+                                 self.upper_freq_confidence.valueChanged],
             fun_to_connect = self.set_band_filter_label,
             fun_args = [self.activate_low_freq_filter_btn,
                         self.lower_freq_spinbox,
@@ -149,11 +149,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
         # Manage bandwidth filters.
 
         connect_to(
-            objects_to_connect = [self.lower_band_spinbox.valueChanged,
-                                  self.upper_band_spinbox.valueChanged,
-                                  self.lower_band_filter_unit.currentTextChanged,
-                                  self.upper_band_filter_unit.currentTextChanged,
-                                  self.activate_low_band_filter_btn.toggled],
+            events_to_connect = [self.lower_band_spinbox.valueChanged,
+                                 self.upper_band_spinbox.valueChanged,
+                                 self.lower_band_filter_unit.currentTextChanged,
+                                 self.upper_band_filter_unit.currentTextChanged,
+                                 self.activate_low_band_filter_btn.toggled],
             fun_to_connect = self.set_min_value_upper_limit,
             fun_args = [self.lower_band_filter_unit, 
                         self.lower_band_spinbox, 
@@ -162,14 +162,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         )
 
         connect_to(
-            objects_to_connect = [self.lower_band_spinbox.valueChanged,
-                                  self.upper_band_spinbox.valueChanged,
-                                  self.lower_band_filter_unit.currentTextChanged,
-                                  self.upper_band_filter_unit.currentTextChanged,
-                                  self.activate_low_band_filter_btn.clicked,
-                                  self.activate_up_band_filter_btn.clicked,
-                                  self.lower_band_confidence.valueChanged,
-                                  self.upper_band_confidence.valueChanged],
+            events_to_connect = [self.lower_band_spinbox.valueChanged,
+                                 self.upper_band_spinbox.valueChanged,
+                                 self.lower_band_filter_unit.currentTextChanged,
+                                 self.upper_band_filter_unit.currentTextChanged,
+                                 self.activate_low_band_filter_btn.clicked,
+                                 self.activate_up_band_filter_btn.clicked,
+                                 self.lower_band_confidence.valueChanged,
+                                 self.upper_band_confidence.valueChanged],
             fun_to_connect = self.set_band_filter_label,
             fun_args = [self.activate_low_band_filter_btn,
                         self.lower_band_spinbox,
@@ -315,10 +315,23 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.reset_location_filters_btn.clicked.connect(self.reset_location_filters)
         self.locations_list.itemClicked.connect(self.remove_if_unselected_location)
 
+        # Set ACF filter screen.
+        self.apply_remove_acf_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_acf_filter_btn.set_slave_filters([self.include_undef_acf, self.acf_spinbox, self.acf_confidence])
+        self.apply_remove_acf_filter_btn.clicked.connect(self.display_signals)
+        self.reset_acf_filters_btn.clicked.connect(self.reset_acf_filters)
+        self.acf_info_btn.clicked.connect(lambda : webbrowser.open(constants.ACF_DOCS))
+
+        connect_to(
+            events_to_connect = [self.acf_spinbox.valueChanged, self.acf_confidence.valueChanged],
+            fun_to_connect = self.set_acf_interval_label,
+            fun_args = None
+        )
+
         # Find available themes.
         self.default_images_folder = os.path.join(constants.Theme.FOLDER,
-                                         constants.Theme.DEFAULT,
-                                         constants.Theme.ICONS_FOLDER)
+                                                  constants.Theme.DEFAULT,
+                                                  constants.Theme.ICONS_FOLDER)
 
 # ##########################################################################################
 
@@ -358,6 +371,34 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         self.show()
 
+    def refresh_range_labels(self):
+        self.set_acf_interval_label()
+        self.set_band_filter_label(self.activate_low_band_filter_btn,
+                                   self.lower_band_spinbox,
+                                   self.lower_band_filter_unit,
+                                   self.lower_band_confidence,
+                                   self.activate_up_band_filter_btn,
+                                   self.upper_band_spinbox,
+                                   self.upper_band_filter_unit,
+                                   self.upper_band_confidence,
+                                   self.band_range_lbl)
+        self.set_band_filter_label(self.activate_low_freq_filter_btn,
+                                   self.lower_freq_spinbox,
+                                   self.lower_freq_filter_unit,
+                                   self.lower_freq_confidence,
+                                   self.activate_up_freq_filter_btn,
+                                   self.upper_freq_spinbox,
+                                   self.upper_freq_filter_unit,
+                                   self.upper_freq_confidence,
+                                   self.freq_range_lbl)
+
+    @pyqtSlot()
+    def show_theme(self, theme):
+        self.change_theme(theme)
+        self.display_specs(self.result_list.currentItem(), None)
+        self.refresh_range_labels()
+        self.audio_widget.refresh_btns_colors(self.active_color, self.inactive_color)
+
     def find_themes(self):
         themes = []
         for theme_folder in os.listdir(constants.Theme.FOLDER):
@@ -374,11 +415,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             new_theme = QAction(theme_name, self)
             self.menu_themes.addAction(new_theme)
 
-            @pyqtSlot()
-            def show_new_theme(theme):
-                self.change_theme(theme)
-                self.display_specs(self.result_list.currentItem(), None)
-            new_theme.triggered.connect(partial(show_new_theme, theme))
+            new_theme.triggered.connect(partial(self.show_theme, theme))
 
     @pyqtSlot()
     def change_theme(self, theme_path):
@@ -453,8 +490,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 self.active_color = constants.Theme.DEFAULT_ACTIVE_COLOR
                 self.inactive_color = constants.Theme.DEFAULT_INACTIVE_COLOR
 
-            self.audio_widget.refresh_btns_colors(self.active_color, self.inactive_color)
-
             try:
                 with open(os.path.join(constants.Theme.FOLDER, 
                           constants.Theme.CURRENT), "w") as current_theme:
@@ -468,7 +503,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             with open(current_theme_file) as current_theme:
                 theme = current_theme.read()
                 if theme != constants.Theme.DEFAULT:
-                    self.change_theme(theme)
+                    self.show_theme(theme)
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):
@@ -643,20 +678,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
         title = ''
         to_display = ''
         if activate_low_btn.isChecked():
-            to_display += str(lower_spinbox.value()) + ' ' + lower_unit.currentText()
             activate_low = True
             color = self.active_color
+            min_value = lower_spinbox.value()
             if lower_confidence.value() != 0:
-                to_display += ' - ' + str(lower_confidence.value()) + ' %'
+                min_value -= lower_spinbox.value() * lower_confidence.value() / 100
+            to_display += str(round(min_value, constants.MAX_DIGITS)) + ' ' + lower_unit.currentText()
         else:
             to_display += 'DC'
-        to_display += ' ÷ '
+        to_display += constants.RANGE_SEPARATOR
         if activate_up_btn.isChecked():
-            to_display += str(upper_spinbox.value()) + ' ' + upper_unit.currentText()
+            max_value = upper_spinbox.value()
             activate_high = True
             color = self.active_color
             if upper_confidence.value() != 0:
-                to_display += ' + ' + str(upper_confidence.value()) + ' %'
+                max_value += upper_spinbox.value() * upper_confidence.value() / 100
+            to_display += str(round(max_value, constants.MAX_DIGITS)) + ' ' + upper_unit.currentText()
         else:
             to_display += 'INF'
         if activate_low and activate_high:
@@ -673,6 +710,17 @@ class MyApp(QMainWindow, Ui_MainWindow):
         range_lbl.setStyleSheet(f'color: {color};')
 
     @pyqtSlot()
+    def set_acf_interval_label(self):
+        tolerance = self.acf_spinbox.value() * self.acf_confidence.value() / 100
+        if tolerance > 0:
+            to_display = f"Selected range:\n\n{round(self.acf_spinbox.value() - tolerance, constants.MAX_DIGITS)}" +\
+                constants.RANGE_SEPARATOR + f"{round(self.acf_spinbox.value() + tolerance, constants.MAX_DIGITS)} ms"
+        else:
+            to_display = f"Selected value:\n\n{self.acf_spinbox.value()} ms"
+        self.acf_range_lbl.setText(to_display)
+        self.acf_range_lbl.setStyleSheet(f"color: {self.active_color}")
+
+    @pyqtSlot()
     def activate_if_toggled(self, radio_btn, *widgets):
         toggled = True if radio_btn.isChecked() else False
         for w in widgets[:-1]: # Neglect the bool coming from the emitted signal.
@@ -682,14 +730,15 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def display_signals(self):
         text = self.search_bar.text()
         available_signals = 0
-        for index, signal in enumerate(self.signal_names):
-            if all([text.lower() in signal.lower()     ,
-                    self.frequency_filters_ok(signal)  ,
-                    self.band_filters_ok(signal)       ,
-                    self.category_filters_ok(signal)   ,
-                    self.mode_filters_ok(signal)       ,
-                    self.modulation_filters_ok(signal) ,
-                    self.location_filters_ok(signal)]) :
+        for index, signal_name in enumerate(self.signal_names):
+            if all([text.lower() in signal_name.lower()     ,
+                    self.frequency_filters_ok(signal_name)  ,
+                    self.band_filters_ok(signal_name)       ,
+                    self.category_filters_ok(signal_name)   ,
+                    self.mode_filters_ok(signal_name)       ,
+                    self.modulation_filters_ok(signal_name) ,
+                    self.location_filters_ok(signal_name)   ,
+                    self.acf_filters_ok(signal_name)]):
                 self.result_list.item(index).setHidden(False)
                 available_signals += 1
             else:
@@ -700,7 +749,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         if available_signals < self.total_signals:
             self.statusbar.setStyleSheet(f'color: {self.active_color}')
         else:
-            self.statusbar.setStyleSheet('color: #ffffff')
+            self.statusbar.setStyleSheet(f'color: {self.inactive_color}')
         self.statusbar.showMessage(f"{available_signals} out of {self.total_signals} signals displayed.")
 
     @pyqtSlot()
@@ -722,11 +771,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
             for f in self.frequency_filters_btns:
                 if f.isChecked():
                     f.setChecked(False)
-        reset_apply_remove_btn(apply_remove_btn)
+        uncheck_and_emit(apply_remove_btn)
         if include_undef_btn.isChecked():
             include_undef_btn.setChecked(False)
-        reset_apply_remove_btn(activate_low)
-        reset_apply_remove_btn(activate_up)
+        uncheck_and_emit(activate_low)
+        uncheck_and_emit(activate_up)
         lower_unit.setCurrentText("MHz")
         upper_unit.setCurrentText("MHz")
         lower_spinbox.setValue(default_val)
@@ -737,14 +786,15 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_cat_filters(self):
-        reset_apply_remove_btn(self.apply_remove_cat_filter_btn)
+        uncheck_and_emit(self.apply_remove_cat_filter_btn)
         for f in self.cat_filter_btns:
-            f.setChecked(False) if f.isChecked() else None
+            if f.isChecked():
+                f.setChecked(False)
         self.cat_at_least_one.setChecked(True)
 
     @pyqtSlot()
     def reset_mode_filters(self):
-        reset_apply_remove_btn(self.apply_remove_mode_filter_btn)
+        uncheck_and_emit(self.apply_remove_mode_filter_btn)
         for item in self.mode_tree_widget.selectedItems():
             item.setSelected(False)
         if self.include_unknown_modes_btn.isChecked():
@@ -752,7 +802,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_modulation_filters(self):
-        reset_apply_remove_btn(self.apply_remove_modulation_filter_btn)
+        uncheck_and_emit(self.apply_remove_modulation_filter_btn)
         self.search_bar_modulation.setText('')
         for i in range(self.modulation_list.count()):
             if self.modulation_list.item(i).isSelected():
@@ -760,11 +810,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_location_filters(self):
-        reset_apply_remove_btn(self.apply_remove_location_filter_btn)
+        uncheck_and_emit(self.apply_remove_location_filter_btn)
         self.search_bar_location.setText('')
         for i in range(self.locations_list.count()):
             if self.locations_list.item(i).isSelected():
                 self.locations_list.item(i).setSelected(False)
+
+    @pyqtSlot()
+    def reset_acf_filters(self):
+        uncheck_and_emit(self.apply_remove_acf_filter_btn)
+        if self.include_undef_acf.isChecked():
+            self.include_undef_acf.setChecked(False)
+        self.acf_spinbox.setValue(50)
+        self.acf_confidence.setValue(0)
 
     def frequency_filters_ok(self, signal_name):
         if not self.apply_remove_freq_filter_btn.isChecked():
@@ -885,6 +943,25 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 return True
         return False
 
+    def acf_filters_ok(self, signal_name):
+        if not self.apply_remove_acf_filter_btn.isChecked():
+            return True
+        signal_acf = self.db.at[signal_name, constants.Signal.ACF]
+        if signal_acf == constants.UNKNOWN:
+            if self.include_undef_acf.isChecked():
+                return True
+            else:
+                return False
+        else:
+            signal_acf = float(signal_acf.rstrip("ms"))
+            tolerance = self.acf_spinbox.value() * self.acf_confidence.value() / 100
+            upper_limit = self.acf_spinbox.value() + tolerance
+            lower_limit = self.acf_spinbox.value() - tolerance
+            if signal_acf <= upper_limit and signal_acf >= lower_limit:
+                return True
+            else:
+                return False
+        
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def display_specs(self, item, previous_item):
         self.display_spectrogram()
@@ -987,6 +1064,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.reset_mode_filters_btn.clicked.emit()
         self.reset_modulation_filters_btn.clicked.emit()
         self.reset_location_filters_btn.clicked.emit()
+        self.reset_acf_filters_btn.clicked.emit()
 
     @pyqtSlot()
     def go_to_web_page_signal(self):

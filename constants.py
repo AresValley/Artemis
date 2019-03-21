@@ -70,7 +70,7 @@ class Database(object):
                  Signal.INF_BAND,
                  Signal.SUP_BAND,
                  Signal.CATEGORY_CODE,)
-
+ACF_DOCS           = "https://aresvalley.com/documentation/"
 SEARCH_LABEL_IMG   = "search_icon.png"
 VOLUME_LABEL_IMG   = "volume.png"
 DATA_FOLDER        = "Data"
@@ -94,6 +94,8 @@ __UHF              = __Band(300 * 10**6, 3000 * 10**6)
 __SHF              = __Band(3 * 10**9, 30 * 10**9)
 __EHF              = __Band(30 * 10**9, 300 * 10**9)
 BANDS              = (__ELF, __SLF, __ULF, __VLF, __LF, __MF, __HF, __VHF, __UHF, __SHF, __EHF)
+MAX_DIGITS         = 3
+RANGE_SEPARATOR    = ' ÷ '
 CONVERSION_FACTORS = {"Hz" : 1, 
                       "kHz": 1000, 
                       "MHz": 1000000, 

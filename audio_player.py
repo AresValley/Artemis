@@ -11,7 +11,7 @@ import qtawesome as qta
 class AudioPlayer(QObject): # Maybe useless inheriting from QObject
     """
     This is the audio player widget. The only public methods are the __init__
-    method and set_audio_player, which loads the current file. Everything else
+    method, set_audio_player, which loads the current file and refresh_btns_colors. Everything else
     is managed internally.
     """
 

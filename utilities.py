@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMessageBox
 import constants
 
 
-def reset_apply_remove_btn(button):
+def uncheck_and_emit(button):
     if button.isChecked():
         button.setChecked(False)
         button.clicked.emit()
@@ -26,7 +26,7 @@ def checksum_ok(data, what):
     code.update(data)
     if what == constants.ChecksumWhat.FOLDER:
         n = 0
-    elif what == constants.ChecksumWhat.DB:
+    elif what == constants.ChecksumWhat.DB: # This is for a runtime check of db version and suggest an update..
         n = 1
     else:
         raise ValueError("Wrong entry name.")
@@ -40,9 +40,13 @@ def checksum_ok(data, what):
 def is_valid_html_color(color):
     return bool(re.match("#([a-zA-Z0-9]){6}", color))
 
-def connect_to(objects_to_connect, fun_to_connect, fun_args):
-        for signal in objects_to_connect:
+def connect_to(events_to_connect, fun_to_connect, fun_args):
+    if fun_args:
+        for signal in events_to_connect:
             signal.connect(partial(fun_to_connect, *fun_args))
+    else:
+        for signal in events_to_connect:
+            signal.connect(fun_to_connect)
 
 def filters_ok(spinbox, filter_unit, confidence, sign = 1):
         band_filter = spinbox.value() * constants.CONVERSION_FACTORS[filter_unit.currentText()]
