@@ -9,22 +9,9 @@ class ChecksumWhat(Enum):
     FOLDER = auto()
     DB = auto()
 
-class Theme(object):
-    FOLDER                 = "themes"
-    EXTENSION              = ".qss"
-    ICONS_FOLDER           = "icons"
-    DEFAULT                = "1-system"
-    CURRENT                = ".current_theme"
-    COLORS                 = "colors.txt"
-    COLOR_SEPARATOR        = "="
-    DEFAULT_ACTIVE_COLOR   = "#39eaff"
-    DEFAULT_INACTIVE_COLOR = "#9f9f9f"
-
 class Messages(object):
     NO_DB_AVAIL       = "No database available.\nGo to Updates->Update database."
     NO_DB             = "No database"
-    THEME_NOT_FOUND   = "Theme not found"
-    MISSING_THEME     = "Missing theme in " + Theme.FOLDER + " folder."
     NO_CONNECTION     = "No internet connection"
     NO_CONNECTION_MSG = "Unable to establish an internet connection."
     BAD_DOWNLOAD      = "Something went wrong"
@@ -70,6 +57,7 @@ class Database(object):
                  Signal.INF_BAND,
                  Signal.SUP_BAND,
                  Signal.CATEGORY_CODE,)
+                 
 ACF_DOCS           = "https://aresvalley.com/documentation/"
 SEARCH_LABEL_IMG   = "search_icon.png"
 VOLUME_LABEL_IMG   = "volume.png"

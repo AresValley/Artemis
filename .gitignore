@@ -8,3 +8,5 @@ pyinstaller_cmd.txt
 icons_imgs
 TestData
 themes/.current_theme
+*.bat
+*.sh

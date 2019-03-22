@@ -4,20 +4,20 @@ from glob import glob
 import webbrowser
 import os
 import sys
+from time import sleep
 
 from pandas import read_csv
 from PyQt5.QtWidgets import (QMainWindow,
                              QApplication,
-                             QAction,
                              qApp,
                              QDesktopWidget,
                              QListWidgetItem,
+                             QSplashScreen,
                              QTreeView,
                              QTreeWidgetItem,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo, 
-                          QSize, 
                           Qt,
                           pyqtSlot,)
 
@@ -27,10 +27,10 @@ from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
 
 import constants
+from themes import Theme
 
 from utilities import (uncheck_and_emit, 
                        throwable_message,
-                       is_valid_html_color,
                        connect_to,
                        filters_ok,
                        is_undef_freq,
@@ -54,8 +54,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.current_signal_name = ''
         self.signal_names = []
         self.total_signals = 0
-        self.active_color = constants.Theme.DEFAULT_ACTIVE_COLOR
-        self.inactive_color = constants.Theme.DEFAULT_INACTIVE_COLOR
+        self.theme = Theme(self)
 
         # Manage frequency filters.
         self.frequency_filters_btns = (
@@ -328,11 +327,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
             fun_args = None
         )
 
-        # Find available themes.
-        self.default_images_folder = os.path.join(constants.Theme.FOLDER,
-                                                  constants.Theme.DEFAULT,
-                                                  constants.Theme.ICONS_FOLDER)
-
 # ##########################################################################################
 
         self.load_db()
@@ -366,8 +360,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
 
-        self.find_themes()
-        self.set_theme()
+        self.theme.initialize()
 
         self.show()
 
@@ -391,119 +384,6 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                    self.upper_freq_filter_unit,
                                    self.upper_freq_confidence,
                                    self.freq_range_lbl)
-
-    @pyqtSlot()
-    def show_theme(self, theme):
-        self.change_theme(theme)
-        self.display_specs(self.result_list.currentItem(), None)
-        self.refresh_range_labels()
-        self.audio_widget.refresh_btns_colors(self.active_color, self.inactive_color)
-
-    def find_themes(self):
-        themes = []
-        for theme_folder in os.listdir(constants.Theme.FOLDER):
-            relative_folder = os.path.join(constants.Theme.FOLDER, theme_folder)
-            if os.path.isdir(os.path.abspath(relative_folder)):
-                relative_folder = os.path.join(constants.Theme.FOLDER, theme_folder)
-                themes.append(relative_folder)
-        for theme in themes:
-            theme_name = '&' + ' '.join(
-                map(lambda s: s.capitalize(), 
-                    os.path.basename(theme).split('-')[1].split('_')
-                )
-            )
-            new_theme = QAction(theme_name, self)
-            self.menu_themes.addAction(new_theme)
-
-            new_theme.triggered.connect(partial(self.show_theme, theme))
-
-    @pyqtSlot()
-    def change_theme(self, theme_path):
-        try:
-            with open(os.path.join(
-                          theme_path, 
-                          os.path.basename(theme_path).split('-')[1] + constants.Theme.EXTENSION)
-                     ) as stylesheet:
-                style = stylesheet.read()
-                self.setStyleSheet(style)
-                self.download_window.setStyleSheet(style)
-        except FileNotFoundError:
-            throwable_message(self, title = constants.Messages.THEME_NOT_FOUND,
-                              text = constants.Messages.MISSING_THEME).show()
-        else:
-            icons_path = os.path.join(theme_path, constants.Theme.ICONS_FOLDER)
-            default_icons_path = os.path.join(constants.Theme.FOLDER, constants.Theme.DEFAULT, constants.Theme.ICONS_FOLDER)
-
-            if os.path.exists(os.path.join(icons_path, constants.NOT_SELECTED)) and \
-               os.path.exists(os.path.join(icons_path, constants.NOT_AVAILABLE)):
-                self.default_images_folder = icons_path
-            else:
-                self.default_images_folder = default_icons_path
-
-            path_to_search_label = os.path.join(icons_path, constants.SEARCH_LABEL_IMG)
-            default_search_label = os.path.join(default_icons_path, constants.SEARCH_LABEL_IMG)
-
-            if os.path.exists(path_to_search_label):
-                self.search_label.setPixmap(QPixmap(path_to_search_label))
-                self.modulation_search_label.setPixmap(QPixmap(path_to_search_label))
-                self.location_search_label.setPixmap(QPixmap(path_to_search_label))
-            else:
-                self.search_label.setPixmap(QPixmap(default_search_label))
-                self.modulation_search_label.setPixmap(QPixmap(default_search_label))
-                self.location_search_label.setPixmap(QPixmap(default_search_label))
-            
-            self.search_label.setScaledContents(True)
-            self.modulation_search_label.setScaledContents(True)
-            self.location_search_label.setScaledContents(True)
-
-            path_to_volume_label = os.path.join(icons_path, constants.VOLUME_LABEL_IMG)
-            default_volume_label = os.path.join(default_icons_path, constants.VOLUME_LABEL_IMG)
-
-            if os.path.exists(path_to_volume_label):
-                self.volume_label.setPixmap(QPixmap(path_to_volume_label))
-            else:
-                self.volume_label.setPixmap(QPixmap(default_volume_label))
-
-            self.volume_label.setScaledContents(True)
-
-            path_to_colors = os.path.join(theme_path, constants.Theme.COLORS)
-            active_color_ok = False
-            inactive_color_ok = False
-            valid_format = False
-            valid_file = False
-            if os.path.exists(path_to_colors):
-                valid_file = True
-                with open(path_to_colors, "r") as colors_file:
-                    for line in colors_file:
-                        if constants.Theme.COLOR_SEPARATOR in line:
-                            valid_format = True
-                            quality, color = line.split(constants.Theme.COLOR_SEPARATOR)
-                            color = color.rstrip()
-                            if quality.lower() == constants.ACTIVE and is_valid_html_color(color):
-                                self.active_color = color
-                                active_color_ok = True
-                            if quality.lower() == constants.INACTIVE and is_valid_html_color(color):
-                                self.inactive_color = color
-                                inactive_color_ok = True
-            
-            if not all([valid_file, valid_format, active_color_ok, inactive_color_ok]):
-                self.active_color = constants.Theme.DEFAULT_ACTIVE_COLOR
-                self.inactive_color = constants.Theme.DEFAULT_INACTIVE_COLOR
-
-            try:
-                with open(os.path.join(constants.Theme.FOLDER, 
-                          constants.Theme.CURRENT), "w") as current_theme:
-                    current_theme.write(theme_path)
-            except:
-                pass
-
-    def set_theme(self):
-        current_theme_file = os.path.join(constants.Theme.FOLDER, constants.Theme.CURRENT)
-        if os.path.exists(current_theme_file):
-            with open(current_theme_file) as current_theme:
-                theme = current_theme.read()
-                if theme != constants.Theme.DEFAULT:
-                    self.show_theme(theme)
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):
@@ -1079,8 +959,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
         super().closeEvent(event)
 
 
-
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
+    img = QPixmap("splash.jpg")
+    img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
+    splash = QSplashScreen(img)
+    splash.show()
+    splash.showMessage("Loading database...")
+    sleep(2)
     w = MyApp()
+    splash.finish(w)
     sys.exit(my_app.exec_())
