@@ -5,6 +5,10 @@ class Ftype(object):
     FREQ = "freq"
     BAND = "band"
 
+class GfdType(Enum):
+    FREQ = auto()
+    LOC  = auto()
+
 class ChecksumWhat(Enum):
     FOLDER = auto()
     DB = auto()
@@ -84,6 +88,7 @@ __EHF              = __Band(30 * 10**9, 300 * 10**9)
 BANDS              = (__ELF, __SLF, __ULF, __VLF, __LF, __MF, __HF, __VHF, __UHF, __SHF, __EHF)
 MAX_DIGITS         = 3
 RANGE_SEPARATOR    = ' ÷ '
+GFD_SITE           = "http://qrg.globaltuners.com/"
 CONVERSION_FACTORS = {"Hz" : 1, 
                       "kHz": 1000, 
                       "MHz": 1000000, 

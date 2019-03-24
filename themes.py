@@ -18,7 +18,7 @@ class ThemeConstants(object):
     DEFAULT_ACTIVE_COLOR   = "#39eaff"
     DEFAULT_INACTIVE_COLOR = "#9f9f9f"
     THEME_NOT_FOUND        = "Theme not found"
-    MISSING_THEME          = "Missing theme in " + FOLDER + " folder."
+    MISSING_THEME          = "Missing theme in '" + FOLDER + "' folder."
 
 class Theme(object):
     def __init__(self, parent):

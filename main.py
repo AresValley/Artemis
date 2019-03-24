@@ -327,6 +327,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
             fun_args = None
         )
 
+        # GFD
+        self.freq_search_gfd_btn.clicked.connect(partial(self.go_to_gfd, constants.GfdType.FREQ))
+        self.location_search_gfd_btn.clicked.connect(partial(self.go_to_gfd, constants.GfdType.LOC))
+        self.gfd_line_edit.returnPressed.connect(partial(self.go_to_gfd, constants.GfdType.LOC))
+
 # ##########################################################################################
 
         self.load_db()
@@ -364,26 +369,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
         self.show()
 
-    def refresh_range_labels(self):
-        self.set_acf_interval_label()
-        self.set_band_filter_label(self.activate_low_band_filter_btn,
-                                   self.lower_band_spinbox,
-                                   self.lower_band_filter_unit,
-                                   self.lower_band_confidence,
-                                   self.activate_up_band_filter_btn,
-                                   self.upper_band_spinbox,
-                                   self.upper_band_filter_unit,
-                                   self.upper_band_confidence,
-                                   self.band_range_lbl)
-        self.set_band_filter_label(self.activate_low_freq_filter_btn,
-                                   self.lower_freq_spinbox,
-                                   self.lower_freq_filter_unit,
-                                   self.lower_freq_confidence,
-                                   self.activate_up_freq_filter_btn,
-                                   self.upper_freq_spinbox,
-                                   self.upper_freq_filter_unit,
-                                   self.upper_freq_confidence,
-                                   self.freq_range_lbl)
+    @pyqtSlot()
+    def go_to_gfd(self, by):
+        query = "/?q="
+        if by == constants.GfdType.FREQ:
+            value_in_mhz = self.freq_gfd.value() * constants.CONVERSION_FACTORS[self.unit_freq_gfd.currentText()] / constants.CONVERSION_FACTORS["MHz"]
+            query += str(value_in_mhz)
+        elif by == constants.GfdType.LOC:
+            query += self.gfd_line_edit.text()
+        try:
+            webbrowser.open(constants.GFD_SITE + query.lower())
+        except:
+            pass
+
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):

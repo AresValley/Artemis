@@ -2,7 +2,7 @@ import os
 import sys
 from pydub import AudioSegment
 from pygame import mixer
-from PyQt5.QtCore import QTimer, QTimer, pyqtSlot, QObject
+from PyQt5.QtCore import QTimer, pyqtSlot, QObject
 
 import constants
 import qtawesome as qta
