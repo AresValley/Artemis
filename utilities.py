@@ -13,12 +13,22 @@ def uncheck_and_emit(button):
         button.setChecked(False)
         button.clicked.emit()
 
-def throwable_message(cls, title, text, connection = None):
+def throwable_message(cls, title, text, 
+                      informative_text = None, 
+                      connection = None, 
+                      is_question = False, 
+                      default_btn = QMessageBox.Yes):
     msg = QMessageBox(cls)
     msg.setWindowTitle(title)
     msg.setText(text)
+    if informative_text:
+        msg.setInformativeText(informative_text)
     if connection:
         msg.finished.connect(connection)
+    if is_question:
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        msg.setDefaultButton(default_btn)
+    msg.adjustSize()
     return msg
 
 def checksum_ok(data, what):
@@ -26,7 +36,7 @@ def checksum_ok(data, what):
     code.update(data)
     if what == constants.ChecksumWhat.FOLDER:
         n = 0
-    elif what == constants.ChecksumWhat.DB: # This is for a runtime check of db version and suggest an update..
+    elif what == constants.ChecksumWhat.DB:
         n = 1
     else:
         raise ValueError("Wrong entry name.")

@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              qApp,
                              QDesktopWidget,
                              QListWidgetItem,
+                             QMessageBox,
                              QSplashScreen,
                              QTreeView,
                              QTreeWidgetItem,)
@@ -29,7 +30,8 @@ from download_window import DownloadWindow
 import constants
 from themes import Theme
 
-from utilities import (uncheck_and_emit, 
+from utilities import (checksum_ok,
+                       uncheck_and_emit, 
                        throwable_message,
                        connect_to,
                        filters_ok,
@@ -49,7 +51,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.set_initial_size()
         self.download_window = DownloadWindow()
         self.actionExit.triggered.connect(qApp.quit)
-        self.action_update_database.triggered.connect(self.download_db)
+        self.action_update_database.triggered.connect(self.ask_if_download)
+        self.action_check_db_ver.triggered.connect(self.check_db_ver)
         self.db = None
         self.current_signal_name = ''
         self.signal_names = []
@@ -334,14 +337,13 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
 # ##########################################################################################
 
-        self.load_db()
+        # self.load_db()
 
         # Left list widget and search bar.
         self.search_bar.textChanged.connect(self.display_signals)
-        self.result_list.addItems(self.signal_names)
         self.result_list.currentItemChanged.connect(self.display_specs)
-        self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab))                    
-        self.display_signals()
+        self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab))
+        # self.display_signals()
         self.audio_widget = AudioPlayer(self.play, 
                                         self.pause, 
                                         self.stop, 
@@ -365,8 +367,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
 
+# Final operations.
         self.theme.initialize()
-
+        self.load_db()
+        self.display_signals()
         self.show()
 
     @pyqtSlot()
@@ -456,6 +460,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.lower_band_confidence.setFixedWidth(120)
             self.upper_band_confidence.setFixedWidth(120)
 
+            self.freq_gfd.setFixedWidth(200)
+            self.unit_freq_gfd.setFixedWidth(120)
+
             self.audio_progress.setFixedHeight(20)
             self.volume.setStyleSheet("""
                 QSlider::groove:horizontal {
@@ -475,9 +482,57 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def download_db(self):
-        self.download_window.download_thread.finished.connect(self.show_downloaded_signals)
-        self.download_window.download_thread.start()
-        self.download_window.show()
+        if not self.download_window.isVisible():
+            self.download_window.download_thread.finished.connect(self.show_downloaded_signals)
+            self.download_window.download_thread.start()
+            self.download_window.show()
+        
+    @pyqtSlot()
+    def ask_if_download(self):
+        if not self.download_window.isVisible():
+            db_path = os.path.join(constants.DATA_FOLDER, constants.Database.NAME)
+            try:
+                with open(db_path, "rb") as file_db:
+                    db = file_db.read()
+            except:
+                self.download_db()
+            else:
+                if not checksum_ok(db, constants.ChecksumWhat.DB):
+                    self.download_db()
+                else:
+                    answer = throwable_message(self, title = constants.Messages.DB_UP_TO_DATE,
+                                               text = constants.Messages.DB_UP_TO_DATE_MSG,
+                                               informative_text = constants.Messages.DOWNLOAD_ANYWAY_QUESTION,
+                                               is_question = True,
+                                               default_btn = QMessageBox.No).exec()
+                    if answer == QMessageBox.Yes:
+                        self.download_db()
+
+    @pyqtSlot()
+    def check_db_ver(self):
+        if not self.download_window.isVisible():
+            db_path = os.path.join(constants.DATA_FOLDER, constants.Database.NAME)
+            answer = None
+            try:
+                with open(db_path, "rb") as file_db:
+                    db = file_db.read()
+            except:
+                answer = throwable_message(self, title = constants.Messages.NO_DB, 
+                                           text = constants.Messages.NO_DB_AVAIL,
+                                           informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                                           is_question = True).exec()
+            else:
+                if checksum_ok(db, constants.ChecksumWhat.DB):
+                    throwable_message(self, title = constants.Messages.DB_UP_TO_DATE, 
+                                      text = constants.Messages.DB_UP_TO_DATE_MSG).show()
+                                            
+                else:
+                    answer = throwable_message(self, title = constants.Messages.DB_NEW_VER,
+                                               text = constants.Messages.DB_NEW_VER_MSG,
+                                               informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                                               is_question = True).exec()
+            if answer == QMessageBox.Yes:
+                self.download_db()
 
     @pyqtSlot()
     def show_downloaded_signals(self):
@@ -497,14 +552,19 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                names = names,)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
-            throwable_message(self, title = constants.Messages.NO_DB, 
-                              text = constants.Messages.NO_DB_AVAIL).show()
+            answer = throwable_message(self, title = constants.Messages.NO_DB, 
+                                       text = constants.Messages.NO_DB_AVAIL,
+                                       informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                                       is_question = True).exec()
+            if answer == QMessageBox.Yes:
+                self.download_db()
         else:
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
             self.db.fillna(constants.UNKNOWN, inplace = True)
             self.db[constants.Signal.WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
+            self.result_list.addItems(self.signal_names)
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box, 
@@ -621,6 +681,8 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 available_signals += 1
             else:
                 self.result_list.item(index).setHidden(True)
+        # Remove selected item.
+        self.result_list.selectionModel().clear()
         self.update_status_tip(available_signals)
 
     def update_status_tip(self, available_signals):
@@ -959,12 +1021,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    img = QPixmap("splash.jpg")
-    img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
-    splash = QSplashScreen(img)
-    splash.show()
-    splash.showMessage("Loading database...")
-    sleep(2)
+    # img = QPixmap("splash.jpg")
+    # img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
+    # splash = QSplashScreen(img)
+    # splash.show()
+    # splash.showMessage("Loading database...")
+    # sleep(2)
     w = MyApp()
-    splash.finish(w)
+    # splash.finish(w)
     sys.exit(my_app.exec_())

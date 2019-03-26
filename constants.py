@@ -14,14 +14,18 @@ class ChecksumWhat(Enum):
     DB = auto()
 
 class Messages(object):
-    NO_DB_AVAIL       = "No database available.\nGo to Updates->Update database."
-    NO_DB             = "No database"
-    NO_CONNECTION     = "No internet connection"
-    NO_CONNECTION_MSG = "Unable to establish an internet connection."
-    BAD_DOWNLOAD      = "Something went wrong"
-    BAD_DOWNLOAD_MSG  = "Something went wrong with the downaload.\nCheck your internet connection and try again."
-    BAD_FILE          = "Bad file detected"
-    BAD_FILE_MSG      = "The downloaded file seems to be corrupted.\nThe old database has not been deleted and\nthe downloaded file has been discarded."
+    DB_UP_TO_DATE            = "Already up to date"
+    DB_UP_TO_DATE_MSG        = "No newer version to download."
+    DB_NEW_VER               = "New version available"
+    DB_NEW_VER_MSG           = "A new version of the database is available for download."
+    NO_DB_AVAIL              = "No database detected."
+    NO_DB                    = "No database"
+    DOWNLOAD_NOW_QUESTION    = "Do you want to download it now?"
+    DOWNLOAD_ANYWAY_QUESTION = "Do you want to download it anyway?"
+    NO_CONNECTION            = "No internet connection"
+    NO_CONNECTION_MSG        = "Unable to establish an internet connection."
+    BAD_DOWNLOAD             = "Something went wrong"
+    BAD_DOWNLOAD_MSG         = "Something went wrong with the downaload.\nCheck your internet connection and try again."
 
 class Signal(object):
     NAME          = "name"

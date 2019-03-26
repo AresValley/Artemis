@@ -28,11 +28,6 @@ class DownloadWindow(QWidget, Ui_Download_window):
                                                      text = Messages.BAD_DOWNLOAD_MSG,
                                                      connection = self.close)
 
-        # Never used (should exploit the checksum check for the single file)
-        self.bad_file_msg = throwable_message(self, title = Messages.BAD_FILE,
-                                              text = Messages.BAD_FILE_MSG,
-                                              connection = self.close)
-
         self.download_thread = DownloadThread()
         self.download_thread.finished.connect(self.wait_close)
 
@@ -44,10 +39,6 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     def show_bad_download_warning(self):
         self.bad_db_download_msg.show()
-        self.everything_ok = False
-
-    def show_bad_file_warning(self):
-        self.bad_file_msg.show()
         self.everything_ok = False
 
     @pyqtSlot()

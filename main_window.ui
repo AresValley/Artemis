@@ -178,7 +178,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <property name="movable">
         <bool>true</bool>
@@ -1775,7 +1775,7 @@ p, li { white-space: pre-wrap; }
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>4</number>
+            <number>0</number>
            </property>
            <property name="movable">
             <bool>true</bool>
@@ -4869,6 +4869,7 @@ QSlider::handle:horizontal {
     <property name="title">
      <string>Updates</string>
     </property>
+    <addaction name="action_check_db_ver"/>
     <addaction name="action_update_database"/>
    </widget>
    <widget class="QMenu" name="menu_themes">
@@ -4893,6 +4894,11 @@ QSlider::handle:horizontal {
   <action name="action_update_database">
    <property name="text">
     <string>Update database</string>
+   </property>
+  </action>
+  <action name="action_check_db_ver">
+   <property name="text">
+    <string>Check latest database version</string>
    </property>
   </action>
  </widget>
