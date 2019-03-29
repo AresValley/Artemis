@@ -1033,12 +1033,11 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    # img = QPixmap("splash.jpg")
+    img = QPixmap("Artemis3.500px.png")
     # img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
-    # splash = QSplashScreen(img)
-    # splash.show()
-    # splash.showMessage("Loading database...")
-    # sleep(2)
+    splash = QSplashScreen(img)
+    splash.show()
+    sleep(2)
     w = MyApp()
-    # splash.finish(w)
+    splash.finish(w)
     sys.exit(my_app.exec_())
