@@ -43,11 +43,11 @@ from utilities import (checksum_ok,
 
 import icon_rc
 
-qt_creator_file = resource_path("main_window.ui")
+qt_creator_file = resource_path("artemis.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 
-class MyApp(QMainWindow, Ui_MainWindow):
+class Artemis(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -1041,6 +1041,6 @@ if __name__ == '__main__':
     splash = QSplashScreen(img)
     splash.show()
     sleep(2)
-    w = MyApp()
+    w = Artemis()
     splash.finish(w)
     sys.exit(my_app.exec_())

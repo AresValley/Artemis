@@ -2,10 +2,10 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from threads import DownloadThread, ThreadStatus
-from utilities import pop_up
+from utilities import pop_up, resource_path
 from constants import Messages
 
-Ui_Download_window, _ = uic.loadUiType("download_db_window.ui")
+Ui_Download_window, _ = uic.loadUiType(resource_path("download_db_window.ui"))
 
 class DownloadWindow(QWidget, Ui_Download_window):
     def __init__(self):
