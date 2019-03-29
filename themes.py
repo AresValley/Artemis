@@ -3,7 +3,7 @@ import os
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
-import constants
+from constants import Constants
 from utilities import pop_up, is_valid_html_color
 
 class ThemeConstants(object):
@@ -93,14 +93,14 @@ class Theme(object):
                                               ThemeConstants.DEFAULT,
                                               ThemeConstants.ICONS_FOLDER)
 
-            if os.path.exists(os.path.join(icons_path, constants.NOT_SELECTED)) and \
-               os.path.exists(os.path.join(icons_path, constants.NOT_AVAILABLE)):
+            if os.path.exists(os.path.join(icons_path, Constants.NOT_SELECTED)) and \
+               os.path.exists(os.path.join(icons_path, Constants.NOT_AVAILABLE)):
                 self.__parent.default_images_folder = icons_path
             else:
                 self.__parent.default_images_folder = default_icons_path
 
-            path_to_search_label = os.path.join(icons_path, constants.SEARCH_LABEL_IMG)
-            default_search_label = os.path.join(default_icons_path, constants.SEARCH_LABEL_IMG)
+            path_to_search_label = os.path.join(icons_path, Constants.SEARCH_LABEL_IMG)
+            default_search_label = os.path.join(default_icons_path, Constants.SEARCH_LABEL_IMG)
 
             if os.path.exists(path_to_search_label):
                 self.__parent.search_label.setPixmap(QPixmap(path_to_search_label))
@@ -115,8 +115,8 @@ class Theme(object):
             self.__parent.modulation_search_label.setScaledContents(True)
             self.__parent.location_search_label.setScaledContents(True)
 
-            path_to_volume_label = os.path.join(icons_path, constants.VOLUME_LABEL_IMG)
-            default_volume_label = os.path.join(default_icons_path, constants.VOLUME_LABEL_IMG)
+            path_to_volume_label = os.path.join(icons_path, Constants.VOLUME_LABEL_IMG)
+            default_volume_label = os.path.join(default_icons_path, Constants.VOLUME_LABEL_IMG)
 
             if os.path.exists(path_to_volume_label):
                 self.__parent.volume_label.setPixmap(QPixmap(path_to_volume_label))
@@ -138,10 +138,10 @@ class Theme(object):
                             valid_format = True
                             quality, color = line.split(ThemeConstants.COLOR_SEPARATOR)
                             color = color.rstrip()
-                            if quality.lower() == constants.ACTIVE and is_valid_html_color(color):
+                            if quality.lower() == Constants.ACTIVE and is_valid_html_color(color):
                                 self.__parent.active_color = color
                                 active_color_ok = True
-                            if quality.lower() == constants.INACTIVE and is_valid_html_color(color):
+                            if quality.lower() == Constants.INACTIVE and is_valid_html_color(color):
                                 self.__parent.inactive_color = color
                                 inactive_color_ok = True
 

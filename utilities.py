@@ -7,7 +7,7 @@ from pandas import read_csv
 
 from PyQt5.QtWidgets import QMessageBox
 
-import constants
+from constants import Constants, Signal, Database, ChecksumWhat
 
 def resource_path(relative_path):
     try:
@@ -42,15 +42,15 @@ def pop_up(cls, title, text,
 def checksum_ok(data, what):
     code = hashlib.sha256()
     code.update(data)
-    if what == constants.ChecksumWhat.FOLDER:
+    if what == ChecksumWhat.FOLDER:
         n = 0
-    elif what == constants.ChecksumWhat.DB:
+    elif what == ChecksumWhat.DB:
         n = 1
     else:
         raise ValueError("Wrong entry name.")
     try:
-        reference = read_csv(constants.Database.LINK_REF,
-                             delimiter = constants.Database.DELIMITER).iat[-1, n]
+        reference = read_csv(Database.LINK_REF,
+                             delimiter = Database.DELIMITER).iat[-1, n]
     except:
         raise
     return code.hexdigest() == reference
@@ -67,18 +67,18 @@ def connect_to(events_to_connect, fun_to_connect, fun_args):
             event.connect(fun_to_connect)
 
 def filters_ok(spinbox, filter_unit, confidence, sign = 1):
-        band_filter = spinbox.value() * constants.CONVERSION_FACTORS[filter_unit.currentText()]
+        band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
         return band_filter + sign * (confidence.value() * band_filter) // 100
 
 def is_undef_freq(current_signal):
-    lower_freq = current_signal.at[constants.Signal.INF_FREQ]
-    upper_freq = current_signal.at[constants.Signal.SUP_FREQ]
-    return lower_freq == constants.UNKNOWN or upper_freq == constants.UNKNOWN
+    lower_freq = current_signal.at[Signal.INF_FREQ]
+    upper_freq = current_signal.at[Signal.SUP_FREQ]
+    return lower_freq == Constants.UNKNOWN or upper_freq == Constants.UNKNOWN
 
 def is_undef_band(current_signal):
-    lower_band = current_signal.at[constants.Signal.INF_BAND]
-    upper_band = current_signal.at[constants.Signal.SUP_BAND]
-    return lower_band == constants.UNKNOWN or upper_band == constants.UNKNOWN
+    lower_band = current_signal.at[Signal.INF_BAND]
+    upper_band = current_signal.at[Signal.SUP_BAND]
+    return lower_band == Constants.UNKNOWN or upper_band == Constants.UNKNOWN
 
 def change_unit(num):
     digits = len(num)

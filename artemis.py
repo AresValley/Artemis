@@ -27,7 +27,13 @@ from audio_player import AudioPlayer
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
 
-import constants
+from constants import (Constants,
+                       Ftype,
+                       GfdType,
+                       Database,
+                       ChecksumWhat,
+                       Messages,
+                       Signal,)
 from themes import Theme
 
 from utilities import (checksum_ok,
@@ -127,7 +133,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.upper_freq_confidence)
             )
 
-        self.apply_remove_freq_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_freq_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_freq_filter_btn.set_slave_filters(
             [
                 *self.frequency_filters_btns,
@@ -149,7 +155,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             ],
         )
         self.apply_remove_freq_filter_btn.clicked.connect(self.display_signals)
-        self.reset_frequency_filters_btn.clicked.connect(partial(self.reset_fb_filters, constants.Ftype.FREQ))
+        self.reset_frequency_filters_btn.clicked.connect(partial(self.reset_fb_filters, Ftype.FREQ))
 
         # Manage bandwidth filters.
 
@@ -203,7 +209,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.upper_band_confidence)
             )
 
-        self.apply_remove_band_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_band_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_band_filter_btn.set_slave_filters(
             [
                 self.include_undef_bands,
@@ -224,7 +230,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             ],
         )
         self.apply_remove_band_filter_btn.clicked.connect(self.display_signals)
-        self.reset_band_filters_btn.clicked.connect(partial(self.reset_fb_filters, constants.Ftype.BAND))
+        self.reset_band_filters_btn.clicked.connect(partial(self.reset_fb_filters, Ftype.BAND))
 
 #       Manage category filters
 
@@ -247,7 +253,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                                 self.number_stations_btn,
                                 self.time_signal_btn,]
 
-        self.apply_remove_cat_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_cat_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_cat_filter_btn.set_slave_filters([*self.cat_filter_btns,
                                                              self.cat_at_least_one,
                                                              self.cat_all])
@@ -293,16 +299,16 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.set_mode_tree_widget()
         self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
         self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
-        self.apply_remove_mode_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_mode_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget,
                                                              self.include_unknown_modes_btn])
         self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
 
         # Set modulation filter screen.
 
-        self.modulation_list.addItems(constants.MODULATIONS)
+        self.modulation_list.addItems(Constants.MODULATIONS)
         self.search_bar_modulation.textEdited.connect(self.show_matching_modulations)
-        self.apply_remove_modulation_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_modulation_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_modulation_filter_btn.set_slave_filters([self.search_bar_modulation,
                                                                    self.modulation_list])
         self.apply_remove_modulation_filter_btn.clicked.connect(self.display_signals)
@@ -311,9 +317,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Set location filter screen.
 
-        self.locations_list.addItems(constants.LOCATIONS)
+        self.locations_list.addItems(Constants.LOCATIONS)
         self.search_bar_location.textEdited.connect(self.show_matching_locations)
-        self.apply_remove_location_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_location_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_location_filter_btn.set_slave_filters([self.search_bar_location,
                                                                  self.locations_list])
         self.apply_remove_location_filter_btn.clicked.connect(self.display_signals)
@@ -321,11 +327,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.locations_list.itemClicked.connect(self.remove_if_unselected_location)
 
         # Set ACF filter screen.
-        self.apply_remove_acf_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
+        self.apply_remove_acf_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_acf_filter_btn.set_slave_filters([self.include_undef_acf, self.acf_spinbox, self.acf_confidence])
         self.apply_remove_acf_filter_btn.clicked.connect(self.display_signals)
         self.reset_acf_filters_btn.clicked.connect(self.reset_acf_filters)
-        self.acf_info_btn.clicked.connect(lambda : webbrowser.open(constants.ACF_DOCS))
+        self.acf_info_btn.clicked.connect(lambda : webbrowser.open(Constants.ACF_DOCS))
 
         connect_to(
             events_to_connect = [self.acf_spinbox.valueChanged, self.acf_confidence.valueChanged],
@@ -334,9 +340,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
         )
 
         # GFD
-        self.freq_search_gfd_btn.clicked.connect(partial(self.go_to_gfd, constants.GfdType.FREQ))
-        self.location_search_gfd_btn.clicked.connect(partial(self.go_to_gfd, constants.GfdType.LOC))
-        self.gfd_line_edit.returnPressed.connect(partial(self.go_to_gfd, constants.GfdType.LOC))
+        self.freq_search_gfd_btn.clicked.connect(partial(self.go_to_gfd, GfdType.FREQ))
+        self.location_search_gfd_btn.clicked.connect(partial(self.go_to_gfd, GfdType.LOC))
+        self.gfd_line_edit.returnPressed.connect(partial(self.go_to_gfd, GfdType.LOC))
 
 # ##########################################################################################
 
@@ -379,13 +385,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def go_to_gfd(self, by):
         query = "/?q="
-        if by == constants.GfdType.FREQ:
-            value_in_mhz = self.freq_gfd.value() * constants.CONVERSION_FACTORS[self.unit_freq_gfd.currentText()] / constants.CONVERSION_FACTORS["MHz"]
+        if by == GfdType.FREQ:
+            value_in_mhz = self.freq_gfd.value() * Constants.CONVERSION_FACTORS[self.unit_freq_gfd.currentText()] / Constants.CONVERSION_FACTORS["MHz"]
             query += str(value_in_mhz)
-        elif by == constants.GfdType.LOC:
+        elif by == GfdType.LOC:
             query += self.gfd_line_edit.text()
         try:
-            webbrowser.open(constants.GFD_SITE + query.lower())
+            webbrowser.open(Constants.GFD_SITE + query.lower())
         except:
             pass
 
@@ -417,7 +423,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 item.setHidden(True)
 
     def set_mode_tree_widget(self):
-        for parent, children in constants.MODES.items():
+        for parent, children in Constants.MODES.items():
             iparent = QTreeWidgetItem([parent])
             self.mode_tree_widget.addTopLevelItem(iparent)
             for child in children:
@@ -427,11 +433,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     def manage_mode_selections(self):
         selected_items = self.mode_tree_widget.selectedItems()
-        parents = constants.MODES.keys()
+        parents = Constants.MODES.keys()
         for parent in parents:
             for item in selected_items:
                 if parent == item.text(0):
-                    for i in range(len(constants.MODES[parent])):
+                    for i in range(len(Constants.MODES[parent])):
                         item.child(i).setSelected(True)
 
     def set_initial_size(self):
@@ -493,7 +499,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def ask_if_download(self):
         if not self.download_window.isVisible():
-            db_path = os.path.join(constants.DATA_FOLDER, constants.Database.NAME)
+            db_path = os.path.join(Constants.DATA_FOLDER, Database.NAME)
             try:
                 with open(db_path, "rb") as file_db:
                     db = file_db.read()
@@ -501,17 +507,17 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 self.download_db()
             else:
                 try:
-                    is_checksum_ok = checksum_ok(db, constants.ChecksumWhat.DB)
+                    is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
                 except:
-                    pop_up(self, title = constants.Messages.NO_CONNECTION,
-                           text = constants.Messages.NO_CONNECTION_MSG).show()
+                    pop_up(self, title = Messages.NO_CONNECTION,
+                           text = Messages.NO_CONNECTION_MSG).show()
                 else:
                     if not is_checksum_ok:
                         self.download_db()
                     else:
-                        answer = pop_up(self, title = constants.Messages.DB_UP_TO_DATE,
-                                        text = constants.Messages.DB_UP_TO_DATE_MSG,
-                                        informative_text = constants.Messages.DOWNLOAD_ANYWAY_QUESTION,
+                        answer = pop_up(self, title = Messages.DB_UP_TO_DATE,
+                                        text = Messages.DB_UP_TO_DATE_MSG,
+                                        informative_text = Messages.DOWNLOAD_ANYWAY_QUESTION,
                                         is_question = True,
                                         default_btn = QMessageBox.No).exec()
                         if answer == QMessageBox.Yes:
@@ -520,31 +526,31 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def check_db_ver(self):
         if not self.download_window.isVisible():
-            db_path = os.path.join(constants.DATA_FOLDER, constants.Database.NAME)
+            db_path = os.path.join(Constants.DATA_FOLDER, Database.NAME)
             answer = None
             try:
                 with open(db_path, "rb") as file_db:
                     db = file_db.read()
             except:
-                answer = pop_up(self, title = constants.Messages.NO_DB,
-                                text = constants.Messages.NO_DB_AVAIL,
-                                informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                answer = pop_up(self, title = Messages.NO_DB,
+                                text = Messages.NO_DB_AVAIL,
+                                informative_text = Messages.DOWNLOAD_NOW_QUESTION,
                                 is_question = True).exec()
             else:
                 try:
-                    is_checksum_ok = checksum_ok(db, constants.ChecksumWhat.DB)
+                    is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
                 except:
-                    pop_up(self, title = constants.Messages.NO_CONNECTION,
-                           text = constants.Messages.NO_CONNECTION_MSG).show()
+                    pop_up(self, title = Messages.NO_CONNECTION,
+                           text = Messages.NO_CONNECTION_MSG).show()
                 else:
                     if is_checksum_ok:
-                        pop_up(self, title = constants.Messages.DB_UP_TO_DATE,
-                               text = constants.Messages.DB_UP_TO_DATE_MSG).show()
+                        pop_up(self, title = Messages.DB_UP_TO_DATE,
+                               text = Messages.DB_UP_TO_DATE_MSG).show()
 
                     else:
-                        answer = pop_up(self, title = constants.Messages.DB_NEW_VER,
-                                        text = constants.Messages.DB_NEW_VER_MSG,
-                                        informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                        answer = pop_up(self, title = Messages.DB_NEW_VER,
+                                        text = Messages.DB_NEW_VER_MSG,
+                                        informative_text = Messages.DOWNLOAD_NOW_QUESTION,
                                         is_question = True).exec()
                         if answer == QMessageBox.Yes:
                             self.download_db()
@@ -557,27 +563,27 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.display_signals()
 
     def load_db(self):
-        names = constants.Database.NAMES
+        names = Database.NAMES
         try:
-            self.db = read_csv(os.path.join(constants.DATA_FOLDER, constants.Database.NAME),
-                               sep = constants.Database.DELIMITER,
+            self.db = read_csv(os.path.join(Constants.DATA_FOLDER, Database.NAME),
+                               sep = Database.DELIMITER,
                                header = None,
                                index_col = 0,
-                               dtype = {name : str for name in constants.Database.STRINGS},
+                               dtype = {name : str for name in Database.STRINGS},
                                names = names,)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
-            answer = pop_up(self, title = constants.Messages.NO_DB,
-                            text = constants.Messages.NO_DB_AVAIL,
-                            informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+            answer = pop_up(self, title = Messages.NO_DB,
+                            text = Messages.NO_DB_AVAIL,
+                            informative_text = Messages.DOWNLOAD_NOW_QUESTION,
                             is_question = True).exec()
             if answer == QMessageBox.Yes:
                 self.download_db()
         else:
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
-            self.db.fillna(constants.UNKNOWN, inplace = True)
-            self.db[constants.Signal.WIKI_CLICKED] = False
+            self.db.fillna(Constants.UNKNOWN, inplace = True)
+            self.db[Signal.WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
             self.result_list.addItems(self.signal_names)
 
@@ -594,8 +600,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
             upper_units = upper_combo_box.currentText()
             lower_value = lower_spin_box.value()
             upper_value = upper_spin_box.value()
-            inf_limit = (lower_value * constants.CONVERSION_FACTORS[lower_units]) \
-                // constants.CONVERSION_FACTORS[upper_units]
+            inf_limit = (lower_value * Constants.CONVERSION_FACTORS[lower_units]) \
+                // Constants.CONVERSION_FACTORS[upper_units]
             counter = 0
             while inf_limit > upper_spin_box.maximum():
                 counter += 1
@@ -636,17 +642,17 @@ class Artemis(QMainWindow, Ui_MainWindow):
             min_value = lower_spinbox.value()
             if lower_confidence.value() != 0:
                 min_value -= lower_spinbox.value() * lower_confidence.value() / 100
-            to_display += str(round(min_value, constants.MAX_DIGITS)) + ' ' + lower_unit.currentText()
+            to_display += str(round(min_value, Constants.MAX_DIGITS)) + ' ' + lower_unit.currentText()
         else:
             to_display += 'DC'
-        to_display += constants.RANGE_SEPARATOR
+        to_display += Constants.RANGE_SEPARATOR
         if activate_up_btn.isChecked():
             max_value = upper_spinbox.value()
             activate_high = True
             color = self.active_color
             if upper_confidence.value() != 0:
                 max_value += upper_spinbox.value() * upper_confidence.value() / 100
-            to_display += str(round(max_value, constants.MAX_DIGITS)) + ' ' + upper_unit.currentText()
+            to_display += str(round(max_value, Constants.MAX_DIGITS)) + ' ' + upper_unit.currentText()
         else:
             to_display += 'INF'
         if activate_low and activate_high:
@@ -666,8 +672,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def set_acf_interval_label(self):
         tolerance = self.acf_spinbox.value() * self.acf_confidence.value() / 100
         if tolerance > 0:
-            to_display = f"Selected range:\n\n{round(self.acf_spinbox.value() - tolerance, constants.MAX_DIGITS)}" +\
-                constants.RANGE_SEPARATOR + f"{round(self.acf_spinbox.value() + tolerance, constants.MAX_DIGITS)} ms"
+            to_display = f"Selected range:\n\n{round(self.acf_spinbox.value() - tolerance, Constants.MAX_DIGITS)}" +\
+                Constants.RANGE_SEPARATOR + f"{round(self.acf_spinbox.value() + tolerance, Constants.MAX_DIGITS)} ms"
         else:
             to_display = f"Selected value:\n\n{self.acf_spinbox.value()} ms"
         self.acf_range_lbl.setText(to_display)
@@ -709,7 +715,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_fb_filters(self, ftype):
-        if ftype != constants.Ftype.FREQ and ftype != constants.Ftype.BAND:
+        if ftype != Ftype.FREQ and ftype != Ftype.BAND:
             raise ValueError("Wrong ftype in function 'reset_fb_filters'")
         apply_remove_btn  = getattr(self, 'apply_remove_'  + ftype + '_filter_btn')
         include_undef_btn = getattr(self, 'include_undef_' + ftype + 's')
@@ -721,8 +727,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
         upper_spinbox     = getattr(self, 'upper_'         + ftype + '_spinbox')
         lower_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
         upper_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
-        default_val = 1 if ftype == constants.Ftype.FREQ else 5000
-        if ftype == constants.Ftype.FREQ:
+        default_val = 1 if ftype == Ftype.FREQ else 5000
+        if ftype == Ftype.FREQ:
             for f in self.frequency_filters_btns:
                 if f.isChecked():
                     f.setChecked(False)
@@ -789,12 +795,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 return False
 
-        signal_freqs = (int(self.db.at[signal_name, constants.Signal.INF_FREQ]),
-                        int(self.db.at[signal_name, constants.Signal.SUP_FREQ]))
+        signal_freqs = (int(self.db.at[signal_name, Signal.INF_FREQ]),
+                        int(self.db.at[signal_name, Signal.SUP_FREQ]))
 
         band_filter_ok = False
         any_checked = False
-        for btn, band_limits in zip(self.frequency_filters_btns, constants.BANDS):
+        for btn, band_limits in zip(self.frequency_filters_btns, Constants.BANDS):
             if btn.isChecked():
                 any_checked = True
                 if signal_freqs[0] < band_limits.upper and signal_freqs[1] >= band_limits.lower:
@@ -826,8 +832,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 return False
 
-        signal_bands = (int(self.db.at[signal_name, constants.Signal.INF_BAND]),
-                        int(self.db.at[signal_name, constants.Signal.SUP_BAND]))
+        signal_bands = (int(self.db.at[signal_name, Signal.INF_BAND]),
+                        int(self.db.at[signal_name, Signal.SUP_BAND]))
 
         lower_limit_ok = True
         upper_limit_ok = True
@@ -846,7 +852,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def category_filters_ok(self, signal_name):
         if not self.apply_remove_cat_filter_btn.isChecked():
             return True
-        cat_code = self.db.at[signal_name, constants.Signal.CATEGORY_CODE]
+        cat_code = self.db.at[signal_name, Signal.CATEGORY_CODE]
         cat_checked = 0
         positive_cases = 0
         for index, cat in enumerate(self.cat_filter_btns):
@@ -862,15 +868,15 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def mode_filters_ok(self, signal_name):
         if not self.apply_remove_mode_filter_btn.isChecked():
             return True
-        signal_mode = self.db.at[signal_name, constants.Signal.MODE]
-        if signal_mode == constants.UNKNOWN:
+        signal_mode = self.db.at[signal_name, Signal.MODE]
+        if signal_mode == Constants.UNKNOWN:
             if self.include_unknown_modes_btn.isChecked():
                 return True
             else:
                 return False
         selected_items = [item for item in self.mode_tree_widget.selectedItems()]
         selected_items_text = [i.text(0) for i in selected_items]
-        parents = [item for item in selected_items_text if item in constants.MODES.keys()]
+        parents = [item for item in selected_items_text if item in Constants.MODES.keys()]
         children = [item for item in selected_items_text if item not in parents]
         ok = []
         for item in selected_items:
@@ -883,7 +889,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def modulation_filters_ok(self, signal_name):
         if not self.apply_remove_modulation_filter_btn.isChecked():
             return True
-        signal_modulation = self.db.at[signal_name, constants.Signal.MODULATION]
+        signal_modulation = self.db.at[signal_name, Signal.MODULATION]
         for item in self.modulation_list.selectedItems():
             if item.text() == signal_modulation:
                 return True
@@ -892,7 +898,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def location_filters_ok(self, signal_name):
         if not self.apply_remove_location_filter_btn.isChecked():
             return True
-        signal_location = self.db.at[signal_name, constants.Signal.LOCATION]
+        signal_location = self.db.at[signal_name, Signal.LOCATION]
         for item in self.locations_list.selectedItems():
             if item.text() == signal_location:
                 return True
@@ -901,8 +907,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def acf_filters_ok(self, signal_name):
         if not self.apply_remove_acf_filter_btn.isChecked():
             return True
-        signal_acf = self.db.at[signal_name, constants.Signal.ACF]
-        if signal_acf == constants.UNKNOWN:
+        signal_acf = self.db.at[signal_name, Signal.ACF]
+        if signal_acf == Constants.UNKNOWN:
             if self.include_undef_acf.isChecked():
                 return True
             else:
@@ -926,31 +932,31 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.name_lab.setAlignment(Qt.AlignHCenter)
             current_signal = self.db.loc[self.current_signal_name]
             self.url_button.setEnabled(True)
-            if not current_signal.at[constants.Signal.WIKI_CLICKED]:
+            if not current_signal.at[Signal.WIKI_CLICKED]:
                 self.url_button.setStyleSheet(f"color: {self.url_button.colors.active};")
             else:
                 self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked};")
-            category_code = current_signal.at[constants.Signal.CATEGORY_CODE]
+            category_code = current_signal.at[Signal.CATEGORY_CODE]
             undef_freq = is_undef_freq(current_signal)
             undef_band = is_undef_band(current_signal)
             if not undef_freq:
-                self.freq_lab.setText(format_numbers(current_signal.at[constants.Signal.INF_FREQ],
-                                                     current_signal.at[constants.Signal.SUP_FREQ])
+                self.freq_lab.setText(format_numbers(current_signal.at[Signal.INF_FREQ],
+                                                     current_signal.at[Signal.SUP_FREQ])
                 )
             else:
                 self.freq_lab.setText("Undefined")
             if not undef_band:
-                self.band_lab.setText(format_numbers(current_signal.at[constants.Signal.INF_BAND],
-                                                     current_signal.at[constants.Signal.SUP_BAND])
+                self.band_lab.setText(format_numbers(current_signal.at[Signal.INF_BAND],
+                                                     current_signal.at[Signal.SUP_BAND])
                 )
             else:
                 self.band_lab.setText("Undefined")
 
-            self.mode_lab.setText(current_signal.at[constants.Signal.MODE])
-            self.modul_lab.setText(current_signal.at[constants.Signal.MODULATION])
-            self.loc_lab.setText(current_signal.at[constants.Signal.LOCATION])
-            self.acf_lab.setText(current_signal.at[constants.Signal.ACF])
-            self.description_text.setText(current_signal.at[constants.Signal.DESCRIPTION])
+            self.mode_lab.setText(current_signal.at[Signal.MODE])
+            self.modul_lab.setText(current_signal.at[Signal.MODULATION])
+            self.loc_lab.setText(current_signal.at[Signal.LOCATION])
+            self.acf_lab.setText(current_signal.at[Signal.ACF])
+            self.description_text.setText(current_signal.at[Signal.DESCRIPTION])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
                     cat_lab.setStyleSheet(f"color: {self.inactive_color};")
@@ -965,22 +971,22 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.name_lab.setText("No Signal")
             self.name_lab.setAlignment(Qt.AlignHCenter)
             for lab in self.property_labels:
-                lab.setText(constants.UNKNOWN)
+                lab.setText(Constants.UNKNOWN)
             for lab in self.category_labels:
                 lab.setStyleSheet(f"color: {self.inactive_color};")
             self.set_band_range()
             self.audio_widget.set_audio_player()
 
     def display_spectrogram(self):
-        default_pic = os.path.join(self.default_images_folder, constants.NOT_SELECTED)
+        default_pic = os.path.join(self.default_images_folder, Constants.NOT_SELECTED)
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
-            path_spectr = os.path.join(constants.DATA_FOLDER,
-                                       constants.SPECTRA_FOLDER,
-                                       spectrogram_name + constants.SPECTRA_EXT)
+            path_spectr = os.path.join(Constants.DATA_FOLDER,
+                                       Constants.SPECTRA_FOLDER,
+                                       spectrogram_name + Constants.SPECTRA_EXT)
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join(self.default_images_folder, constants.NOT_AVAILABLE)
+                path_spectr = os.path.join(self.default_images_folder, Constants.NOT_AVAILABLE)
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
@@ -992,9 +998,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     def set_band_range(self, current_signal = None):
         if current_signal is not None and not is_undef_freq(current_signal):
-            lower_freq = int(current_signal.at[constants.Signal.INF_FREQ])
-            upper_freq = int(current_signal.at[constants.Signal.SUP_FREQ])
-            zipped = list(zip(constants.BANDS, self.band_labels))
+            lower_freq = int(current_signal.at[Signal.INF_FREQ])
+            upper_freq = int(current_signal.at[Signal.SUP_FREQ])
+            zipped = list(zip(Constants.BANDS, self.band_labels))
             for i, w in enumerate(zipped):
                 band, band_label = w
                 if lower_freq >= band.lower and lower_freq < band.upper:
@@ -1025,8 +1031,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def go_to_web_page_signal(self):
         if self.current_signal_name:
             self.url_button.setStyleSheet(f"color: {self.url_button.colors.clicked}")
-            webbrowser.open(self.db.at[self.current_signal_name, constants.Signal.URL])
-            self.db.at[self.current_signal_name, constants.Signal.WIKI_CLICKED] = True
+            webbrowser.open(self.db.at[self.current_signal_name, Signal.URL])
+            self.db.at[self.current_signal_name, Signal.WIKI_CLICKED] = True
 
     def closeEvent(self, event):
         if self.download_window.isVisible():
