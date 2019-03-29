@@ -2,7 +2,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from threads import DownloadThread, ThreadStatus
-from utilities import throwable_message
+from utilities import pop_up
 from constants import Messages
 
 Ui_Download_window, _ = uic.loadUiType("download_db_window.ui")
@@ -20,13 +20,13 @@ class DownloadWindow(QWidget, Ui_Download_window):
         )
         self.everything_ok = True
 
-        self.no_internet_msg = throwable_message(self, title = Messages.NO_CONNECTION, 
-                                                 text = Messages.NO_CONNECTION_MSG, 
-                                                 connection = self.close)
+        self.no_internet_msg = pop_up(self, title = Messages.NO_CONNECTION,
+                                      text = Messages.NO_CONNECTION_MSG,
+                                      connection = self.close)
 
-        self.bad_db_download_msg = throwable_message(self, title = Messages.BAD_DOWNLOAD,
-                                                     text = Messages.BAD_DOWNLOAD_MSG,
-                                                     connection = self.close)
+        self.bad_db_download_msg = pop_up(self, title = Messages.BAD_DOWNLOAD,
+                                          text = Messages.BAD_DOWNLOAD_MSG,
+                                          connection = self.close)
 
         self.download_thread = DownloadThread()
         self.download_thread.finished.connect(self.wait_close)
@@ -45,7 +45,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
     def terminate_process(self):
         if self.download_thread.isRunning():
             self.download_thread.terminate()
-            self.download_thread.wait()    
+            self.download_thread.wait()
         self.close()
 
     @pyqtSlot()

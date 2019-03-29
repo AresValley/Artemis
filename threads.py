@@ -42,9 +42,15 @@ class DownloadThread(QThread):
             self.reason = db.reason
             self.__status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
-        if not checksum_ok(db.data, constants.ChecksumWhat.FOLDER):
-            self.__status = ThreadStatus.BAD_DOWNLOAD_ERR
+        try:
+            is_checksum_ok = checksum_ok(db.data, constants.ChecksumWhat.FOLDER)
+        except:
+            self.__status = ThreadStatus.NO_CONNECTION_ERR
             return
+        else:
+            if not is_checksum_ok:
+                self.__status = ThreadStatus.BAD_DOWNLOAD_ERR
+                return
         if os.path.exists(constants.DATA_FOLDER):
             rmtree(constants.DATA_FOLDER)
         try:

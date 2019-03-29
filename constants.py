@@ -22,7 +22,7 @@ class Messages(object):
     NO_DB                    = "No database"
     DOWNLOAD_NOW_QUESTION    = "Do you want to download it now?"
     DOWNLOAD_ANYWAY_QUESTION = "Do you want to download it anyway?"
-    NO_CONNECTION            = "No internet connection"
+    NO_CONNECTION            = "No connection"
     NO_CONNECTION_MSG        = "Unable to establish an internet connection."
     BAD_DOWNLOAD             = "Something went wrong"
     BAD_DOWNLOAD_MSG         = "Something went wrong with the downaload.\nCheck your internet connection and try again."

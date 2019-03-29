@@ -18,7 +18,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QTreeWidgetItem,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
-from PyQt5.QtCore import (QFileInfo, 
+from PyQt5.QtCore import (QFileInfo,
                           Qt,
                           pyqtSlot,)
 
@@ -31,8 +31,8 @@ import constants
 from themes import Theme
 
 from utilities import (checksum_ok,
-                       uncheck_and_emit, 
-                       throwable_message,
+                       uncheck_and_emit,
+                       pop_up,
                        connect_to,
                        filters_ok,
                        is_undef_freq,
@@ -81,9 +81,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                  self.upper_freq_filter_unit.currentTextChanged,
                                  self.activate_low_freq_filter_btn.toggled],
             fun_to_connect = self.set_min_value_upper_limit,
-            fun_args = [self.lower_freq_filter_unit, 
-                        self.lower_freq_spinbox, 
-                        self.upper_freq_filter_unit, 
+            fun_args = [self.lower_freq_filter_unit,
+                        self.lower_freq_spinbox,
+                        self.upper_freq_filter_unit,
                         self.upper_freq_spinbox]
         )
 
@@ -134,7 +134,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             ],
             self.activate_low_freq_filter_btn,
             [
-                self.lower_freq_spinbox, 
+                self.lower_freq_spinbox,
                 self.lower_freq_filter_unit,
                 self.lower_freq_confidence,
             ],
@@ -157,9 +157,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                  self.upper_band_filter_unit.currentTextChanged,
                                  self.activate_low_band_filter_btn.toggled],
             fun_to_connect = self.set_min_value_upper_limit,
-            fun_args = [self.lower_band_filter_unit, 
-                        self.lower_band_spinbox, 
-                        self.upper_band_filter_unit, 
+            fun_args = [self.lower_band_filter_unit,
+                        self.lower_band_spinbox,
+                        self.upper_band_filter_unit,
                         self.upper_band_spinbox]
         )
 
@@ -209,7 +209,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             ],
             self.activate_low_band_filter_btn,
             [
-                self.lower_band_spinbox, 
+                self.lower_band_spinbox,
                 self.lower_band_filter_unit,
                 self.lower_band_confidence,
             ],
@@ -244,7 +244,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                 self.number_stations_btn,
                                 self.time_signal_btn,]
 
-        self.apply_remove_cat_filter_btn.set_texts(constants.APPLY, constants.REMOVE)   
+        self.apply_remove_cat_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
         self.apply_remove_cat_filter_btn.set_slave_filters([*self.cat_filter_btns,
                                                              self.cat_at_least_one,
                                                              self.cat_all])
@@ -291,7 +291,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
         self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
         self.apply_remove_mode_filter_btn.set_texts(constants.APPLY, constants.REMOVE)
-        self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget, 
+        self.apply_remove_mode_filter_btn.set_slave_filters([self.mode_tree_widget,
                                                              self.include_unknown_modes_btn])
         self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
 
@@ -344,10 +344,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
         self.result_list.currentItemChanged.connect(self.display_specs)
         self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab))
         # self.display_signals()
-        self.audio_widget = AudioPlayer(self.play, 
-                                        self.pause, 
-                                        self.stop, 
-                                        self.volume, 
+        self.audio_widget = AudioPlayer(self.play,
+                                        self.pause,
+                                        self.stop,
+                                        self.volume,
                                         self.audio_progress,
                                         self.active_color,
                                         self.inactive_color)
@@ -486,7 +486,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.download_window.download_thread.finished.connect(self.show_downloaded_signals)
             self.download_window.download_thread.start()
             self.download_window.show()
-        
+
     @pyqtSlot()
     def ask_if_download(self):
         if not self.download_window.isVisible():
@@ -497,16 +497,22 @@ class MyApp(QMainWindow, Ui_MainWindow):
             except:
                 self.download_db()
             else:
-                if not checksum_ok(db, constants.ChecksumWhat.DB):
-                    self.download_db()
+                try:
+                    is_checksum_ok = checksum_ok(db, constants.ChecksumWhat.DB)
+                except:
+                    pop_up(self, title = constants.Messages.NO_CONNECTION,
+                           text = constants.Messages.NO_CONNECTION_MSG).show()
                 else:
-                    answer = throwable_message(self, title = constants.Messages.DB_UP_TO_DATE,
-                                               text = constants.Messages.DB_UP_TO_DATE_MSG,
-                                               informative_text = constants.Messages.DOWNLOAD_ANYWAY_QUESTION,
-                                               is_question = True,
-                                               default_btn = QMessageBox.No).exec()
-                    if answer == QMessageBox.Yes:
+                    if not is_checksum_ok:
                         self.download_db()
+                    else:
+                        answer = pop_up(self, title = constants.Messages.DB_UP_TO_DATE,
+                                        text = constants.Messages.DB_UP_TO_DATE_MSG,
+                                        informative_text = constants.Messages.DOWNLOAD_ANYWAY_QUESTION,
+                                        is_question = True,
+                                        default_btn = QMessageBox.No).exec()
+                        if answer == QMessageBox.Yes:
+                            self.download_db()
 
     @pyqtSlot()
     def check_db_ver(self):
@@ -517,22 +523,28 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 with open(db_path, "rb") as file_db:
                     db = file_db.read()
             except:
-                answer = throwable_message(self, title = constants.Messages.NO_DB, 
-                                           text = constants.Messages.NO_DB_AVAIL,
-                                           informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
-                                           is_question = True).exec()
+                answer = pop_up(self, title = constants.Messages.NO_DB,
+                                text = constants.Messages.NO_DB_AVAIL,
+                                informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                                is_question = True).exec()
             else:
-                if checksum_ok(db, constants.ChecksumWhat.DB):
-                    throwable_message(self, title = constants.Messages.DB_UP_TO_DATE, 
-                                      text = constants.Messages.DB_UP_TO_DATE_MSG).show()
-                                            
+                try:
+                    is_checksum_ok = checksum_ok(db, constants.ChecksumWhat.DB)
+                except:
+                    pop_up(self, title = constants.Messages.NO_CONNECTION,
+                           text = constants.Messages.NO_CONNECTION_MSG).show()
                 else:
-                    answer = throwable_message(self, title = constants.Messages.DB_NEW_VER,
-                                               text = constants.Messages.DB_NEW_VER_MSG,
-                                               informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
-                                               is_question = True).exec()
-            if answer == QMessageBox.Yes:
-                self.download_db()
+                    if is_checksum_ok:
+                        pop_up(self, title = constants.Messages.DB_UP_TO_DATE,
+                               text = constants.Messages.DB_UP_TO_DATE_MSG).show()
+
+                    else:
+                        answer = pop_up(self, title = constants.Messages.DB_NEW_VER,
+                                        text = constants.Messages.DB_NEW_VER_MSG,
+                                        informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                                        is_question = True).exec()
+                        if answer == QMessageBox.Yes:
+                            self.download_db()
 
     @pyqtSlot()
     def show_downloaded_signals(self):
@@ -544,7 +556,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
     def load_db(self):
         names = constants.Database.NAMES
         try:
-            self.db = read_csv(os.path.join(constants.DATA_FOLDER, constants.Database.NAME), 
+            self.db = read_csv(os.path.join(constants.DATA_FOLDER, constants.Database.NAME),
                                sep = constants.Database.DELIMITER,
                                header = None,
                                index_col = 0,
@@ -552,10 +564,10 @@ class MyApp(QMainWindow, Ui_MainWindow):
                                names = names,)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
-            answer = throwable_message(self, title = constants.Messages.NO_DB, 
-                                       text = constants.Messages.NO_DB_AVAIL,
-                                       informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
-                                       is_question = True).exec()
+            answer = pop_up(self, title = constants.Messages.NO_DB,
+                            text = constants.Messages.NO_DB_AVAIL,
+                            informative_text = constants.Messages.DOWNLOAD_NOW_QUESTION,
+                            is_question = True).exec()
             if answer == QMessageBox.Yes:
                 self.download_db()
         else:
@@ -567,9 +579,9 @@ class MyApp(QMainWindow, Ui_MainWindow):
             self.result_list.addItems(self.signal_names)
 
     @pyqtSlot()
-    def set_min_value_upper_limit(self, lower_combo_box, 
-                                  lower_spin_box, 
-                                  upper_combo_box, 
+    def set_min_value_upper_limit(self, lower_combo_box,
+                                  lower_spin_box,
+                                  upper_combo_box,
                                   upper_spin_box):
         if lower_spin_box.isEnabled():
             unit_conversion = {'Hz' : ['kHz', 'MHz', 'GHz'],
@@ -592,23 +604,23 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 upper_combo_box.disconnect()
                 upper_combo_box.setCurrentText(new_unit)
                 upper_combo_box.currentTextChanged.connect(
-                    partial(self.set_min_value_upper_limit, 
-                            lower_combo_box, 
-                            lower_spin_box, 
-                            upper_combo_box, 
+                    partial(self.set_min_value_upper_limit,
+                            lower_combo_box,
+                            lower_spin_box,
+                            upper_combo_box,
                             upper_spin_box)
                 )
 
     @pyqtSlot()
-    def set_band_filter_label(self, 
-                              activate_low_btn, 
-                              lower_spinbox, 
-                              lower_unit, 
-                              lower_confidence, 
-                              activate_up_btn, 
-                              upper_spinbox, 
-                              upper_unit, 
-                              upper_confidence, 
+    def set_band_filter_label(self,
+                              activate_low_btn,
+                              lower_spinbox,
+                              lower_unit,
+                              lower_confidence,
+                              activate_up_btn,
+                              upper_spinbox,
+                              upper_unit,
+                              upper_confidence,
                               range_lbl):
         activate_low = False
         activate_high = False
@@ -774,7 +786,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
             else:
                 return False
 
-        signal_freqs = (int(self.db.at[signal_name, constants.Signal.INF_FREQ]), 
+        signal_freqs = (int(self.db.at[signal_name, constants.Signal.INF_FREQ]),
                         int(self.db.at[signal_name, constants.Signal.SUP_FREQ]))
 
         band_filter_ok = False
@@ -787,12 +799,12 @@ class MyApp(QMainWindow, Ui_MainWindow):
         lower_limit_ok = True
         upper_limit_ok = True
         if self.activate_low_freq_filter_btn.isChecked():
-            if not signal_freqs[1] >= filters_ok(self.lower_freq_spinbox, 
+            if not signal_freqs[1] >= filters_ok(self.lower_freq_spinbox,
                                                  self.lower_freq_filter_unit,
                                                  self.lower_freq_confidence, -1):
                 lower_limit_ok = False
         if self.activate_up_freq_filter_btn.isChecked():
-            if not signal_freqs[0] < filters_ok(self.upper_freq_spinbox, 
+            if not signal_freqs[0] < filters_ok(self.upper_freq_spinbox,
                                                 self.upper_freq_filter_unit,
                                                 self.upper_freq_confidence):
                 upper_limit_ok = False
@@ -811,18 +823,18 @@ class MyApp(QMainWindow, Ui_MainWindow):
             else:
                 return False
 
-        signal_bands = (int(self.db.at[signal_name, constants.Signal.INF_BAND]), 
+        signal_bands = (int(self.db.at[signal_name, constants.Signal.INF_BAND]),
                         int(self.db.at[signal_name, constants.Signal.SUP_BAND]))
 
         lower_limit_ok = True
         upper_limit_ok = True
         if self.activate_low_band_filter_btn.isChecked():
-            if not signal_bands[1] >= filters_ok(self.lower_band_spinbox, 
+            if not signal_bands[1] >= filters_ok(self.lower_band_spinbox,
                                                  self.lower_band_filter_unit,
                                                  self.lower_band_confidence, -1):
                 lower_limit_ok = False
         if self.activate_up_band_filter_btn.isChecked():
-            if not signal_bands[0] < filters_ok(self.upper_band_spinbox, 
+            if not signal_bands[0] < filters_ok(self.upper_band_spinbox,
                                                 self.upper_band_filter_unit,
                                                 self.upper_band_confidence):
                 upper_limit_ok = False
@@ -836,7 +848,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
         positive_cases = 0
         for index, cat in enumerate(self.cat_filter_btns):
             if cat.isChecked():
-                cat_checked += 1 
+                cat_checked += 1
                 if cat_code[index] == '1':
                     positive_cases += 1
         if self.cat_at_least_one.isChecked():
@@ -901,7 +913,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 return True
             else:
                 return False
-        
+
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def display_specs(self, item, previous_item):
         self.display_spectrogram()
@@ -955,14 +967,14 @@ class MyApp(QMainWindow, Ui_MainWindow):
                 lab.setStyleSheet(f"color: {self.inactive_color};")
             self.set_band_range()
             self.audio_widget.set_audio_player()
-        
+
     def display_spectrogram(self):
         default_pic = os.path.join(self.default_images_folder, constants.NOT_SELECTED)
         item = self.result_list.currentItem()
         if item:
             spectrogram_name = item.text()
-            path_spectr = os.path.join(constants.DATA_FOLDER, 
-                                       constants.SPECTRA_FOLDER, 
+            path_spectr = os.path.join(constants.DATA_FOLDER,
+                                       constants.SPECTRA_FOLDER,
                                        spectrogram_name + constants.SPECTRA_EXT)
             if not QFileInfo(path_spectr).exists():
                 path_spectr = os.path.join(self.default_images_folder, constants.NOT_AVAILABLE)

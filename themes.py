@@ -4,8 +4,7 @@ from PyQt5.QtWidgets import QAction
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
 import constants
-from utilities import (throwable_message,
-                       is_valid_html_color,)
+from utilities import pop_up, is_valid_html_color
 
 class ThemeConstants(object):
     FOLDER                 = "themes"
@@ -69,7 +68,7 @@ class Theme(object):
                 themes.append(relative_folder)
         for theme_path in themes:
             theme_name = '&' + ' '.join(
-                map(lambda s: s.capitalize(), 
+                map(lambda s: s.capitalize(),
                     os.path.basename(theme_path).split('-')[1].split('_')
                 )
             )
@@ -81,17 +80,17 @@ class Theme(object):
         try:
             with open(os.path.join(
                       self.__theme_path,
-                      os.path.basename(self.__theme_path).split('-')[1] + ThemeConstants.EXTENSION)) as stylesheet:
+                      os.path.basename(self.__theme_path).split('-')[1] + ThemeConstants.EXTENSION), "r") as stylesheet:
                 style = stylesheet.read()
                 self.__parent.setStyleSheet(style)
                 self.__parent.download_window.setStyleSheet(style)
         except FileNotFoundError:
-            throwable_message(self.__parent, title = ThemeConstants.THEME_NOT_FOUND,
-                              text = ThemeConstants.MISSING_THEME).show()
+            pop_up(self.__parent, title = ThemeConstants.THEME_NOT_FOUND,
+                   text = ThemeConstants.MISSING_THEME).show()
         else:
             icons_path = os.path.join(self.__theme_path, ThemeConstants.ICONS_FOLDER)
-            default_icons_path = os.path.join(ThemeConstants.FOLDER, 
-                                              ThemeConstants.DEFAULT, 
+            default_icons_path = os.path.join(ThemeConstants.FOLDER,
+                                              ThemeConstants.DEFAULT,
                                               ThemeConstants.ICONS_FOLDER)
 
             if os.path.exists(os.path.join(icons_path, constants.NOT_SELECTED)) and \
@@ -111,7 +110,7 @@ class Theme(object):
                 self.__parent.search_label.setPixmap(QPixmap(default_search_label))
                 self.__parent.modulation_search_label.setPixmap(QPixmap(default_search_label))
                 self.__parent.location_search_label.setPixmap(QPixmap(default_search_label))
-            
+
             self.__parent.search_label.setScaledContents(True)
             self.__parent.modulation_search_label.setScaledContents(True)
             self.__parent.location_search_label.setScaledContents(True)
@@ -145,13 +144,13 @@ class Theme(object):
                             if quality.lower() == constants.INACTIVE and is_valid_html_color(color):
                                 self.__parent.inactive_color = color
                                 inactive_color_ok = True
-            
+
             if not all([valid_file, valid_format, active_color_ok, inactive_color_ok]):
                 self.__parent.active_color = ThemeConstants.DEFAULT_ACTIVE_COLOR
                 self.__parent.inactive_color = ThemeConstants.DEFAULT_INACTIVE_COLOR
 
             try:
-                with open(os.path.join(ThemeConstants.FOLDER, 
+                with open(os.path.join(ThemeConstants.FOLDER,
                           ThemeConstants.CURRENT), "w") as current_theme:
                     current_theme.write(self.__theme_path)
             except:
@@ -160,7 +159,7 @@ class Theme(object):
     def initialize(self):
         current_theme_file = os.path.join(ThemeConstants.FOLDER, ThemeConstants.CURRENT)
         if os.path.exists(current_theme_file):
-            with open(current_theme_file) as current_theme_path:
+            with open(current_theme_file, "r") as current_theme_path:
                 theme_path = current_theme_path.read()
                 if theme_path != ThemeConstants.DEFAULT:
                     self.__apply(theme_path)

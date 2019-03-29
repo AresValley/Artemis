@@ -13,11 +13,11 @@ def uncheck_and_emit(button):
         button.setChecked(False)
         button.clicked.emit()
 
-def throwable_message(cls, title, text, 
-                      informative_text = None, 
-                      connection = None, 
-                      is_question = False, 
-                      default_btn = QMessageBox.Yes):
+def pop_up(cls, title, text,
+           informative_text = None, 
+           connection = None,
+           is_question = False,
+           default_btn = QMessageBox.Yes):
     msg = QMessageBox(cls)
     msg.setWindowTitle(title)
     msg.setText(text)
@@ -41,10 +41,10 @@ def checksum_ok(data, what):
     else:
         raise ValueError("Wrong entry name.")
     try:
-        reference = read_csv(constants.Database.LINK_REF, 
+        reference = read_csv(constants.Database.LINK_REF,
                              delimiter = constants.Database.DELIMITER).iat[-1, n]
-    except HTTPError:
-        return False
+    except:
+        raise
     return code.hexdigest() == reference
 
 def is_valid_html_color(color):
@@ -52,11 +52,11 @@ def is_valid_html_color(color):
 
 def connect_to(events_to_connect, fun_to_connect, fun_args):
     if fun_args:
-        for signal in events_to_connect:
-            signal.connect(partial(fun_to_connect, *fun_args))
+        for event in events_to_connect:
+            event.connect(partial(fun_to_connect, *fun_args))
     else:
-        for signal in events_to_connect:
-            signal.connect(fun_to_connect)
+        for event in events_to_connect:
+            event.connect(fun_to_connect)
 
 def filters_ok(spinbox, filter_unit, confidence, sign = 1):
         band_filter = spinbox.value() * constants.CONVERSION_FACTORS[filter_unit.currentText()]
@@ -95,7 +95,7 @@ def format_numbers(lower, upper):
         lower = int(lower)
     if upper.is_integer():
         upper = int(upper)
-    if pre_lower != pre_upper:    
+    if pre_lower != pre_upper:
         return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
     else:
         return f"{lower:,} {units[lower_factor]}"
