@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Download database</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="icon.qrc">
+    <normaloff>:/icons/Artemis3.ico</normaloff>:/icons/Artemis3.ico</iconset>
+  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
@@ -78,6 +82,8 @@ Please wait...</string>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
  <connections/>
 </ui>

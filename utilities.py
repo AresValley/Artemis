@@ -1,12 +1,20 @@
 from functools import partial
 import hashlib
 import re
+import sys
+import os
 from pandas import read_csv
 
 from PyQt5.QtWidgets import QMessageBox
 
 import constants
 
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 def uncheck_and_emit(button):
     if button.isChecked():
@@ -14,7 +22,7 @@ def uncheck_and_emit(button):
         button.clicked.emit()
 
 def pop_up(cls, title, text,
-           informative_text = None, 
+           informative_text = None,
            connection = None,
            is_question = False,
            default_btn = QMessageBox.Yes):

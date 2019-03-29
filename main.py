@@ -38,9 +38,12 @@ from utilities import (checksum_ok,
                        is_undef_freq,
                        is_undef_band,
                        change_unit,
-                       format_numbers)
+                       format_numbers,
+                       resource_path,)
 
-qt_creator_file = "main_window.ui"
+import icon_rc
+
+qt_creator_file = resource_path("main_window.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 
@@ -1033,7 +1036,7 @@ class MyApp(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    img = QPixmap("Artemis3.500px.png")
+    img = QPixmap(":/icons/Artemis3.500px.png")
     # img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
     splash = QSplashScreen(img)
     splash.show()
