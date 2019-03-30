@@ -26,7 +26,7 @@ from audio_player import AudioPlayer
 
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
-
+from switchable_label import SwitchableLabel, SwitchableLabelIterable
 from constants import (Constants,
                        Ftype,
                        GfdType,
@@ -35,7 +35,6 @@ from constants import (Constants,
                        Messages,
                        Signal,)
 from themes import Theme
-
 from utilities import (checksum_ok,
                        uncheck_and_emit,
                        pop_up,

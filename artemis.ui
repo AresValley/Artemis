@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1206</width>
-    <height>634</height>
+    <height>674</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -178,7 +178,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
        </property>
        <property name="movable">
         <bool>true</bool>
@@ -4592,6 +4592,802 @@ www.qrg.globaltuners.com</string>
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Rx/Tx Conditions</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_20">
+         <item row="0" column="0">
+          <widget class="QTabWidget" name="tabWidget">
+           <widget class="QWidget" name="tab_2">
+            <attribute name="title">
+             <string>Now</string>
+            </attribute>
+            <layout class="QGridLayout" name="gridLayout_22">
+             <item row="0" column="0" colspan="3">
+              <layout class="QHBoxLayout" name="horizontalLayout_40">
+               <item>
+                <widget class="QWidget" name="widget_12" native="true">
+                 <layout class="QGridLayout" name="gridLayout_21">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_19">
+                    <property name="font">
+                     <font>
+                      <pointsize>9</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                      <underline>true</underline>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>X-Rays</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0" colspan="3">
+                   <layout class="QHBoxLayout" name="horizontalLayout_29">
+                    <item>
+                     <widget class="QLabel" name="label_21">
+                      <property name="text">
+                       <string>Radio Blackout</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_14" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_28">
+                       <item>
+                        <widget class="SwitchableLabel" name="r0_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>R0</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="r1_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>R1</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="r2_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>R2</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="r3_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>R3</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="r4_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>R4</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="r5_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>R5</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="3" column="0" colspan="2">
+                   <widget class="QLabel" name="label_29">
+                    <property name="font">
+                     <font>
+                      <pointsize>9</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                      <underline>true</underline>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Protons-Electrons Flux</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0" colspan="3">
+                   <layout class="QHBoxLayout" name="horizontalLayout_38">
+                    <item>
+                     <widget class="QLabel" name="label_30">
+                      <property name="text">
+                       <string>Solar Radiation Storm</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_15" native="true">
+                      <layout class="QHBoxLayout" name="horizontalLayout_36">
+                       <item>
+                        <widget class="SwitchableLabel" name="s0_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>S0</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="s1_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>S1</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="s2_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>S2</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="s3_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>S3</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="s4_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>S4</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="SwitchableLabel" name="s5_now_lbl">
+                         <property name="font">
+                          <font>
+                           <weight>75</weight>
+                           <bold>true</bold>
+                          </font>
+                         </property>
+                         <property name="text">
+                          <string>S5</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_37">
+                    <property name="font">
+                     <font>
+                      <pointsize>9</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                      <underline>true</underline>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Solar Activity</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_32">
+                    <item>
+                     <widget class="QLabel" name="label_38">
+                      <property name="text">
+                       <string>K-Index</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="k_index_lbl">
+                      <property name="text">
+                       <string>-</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="6" column="2">
+                   <layout class="QHBoxLayout" name="horizontalLayout_33">
+                    <item>
+                     <widget class="QLabel" name="label_40">
+                      <property name="text">
+                       <string>A-Index</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="a_index_lbl">
+                      <property name="text">
+                       <string>-</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="7" column="0">
+                   <widget class="QWidget" name="widget_16" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_8">
+                     <item>
+                      <widget class="QLabel" name="k_ex_sev_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>EXTREMELY SEVERE
+STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="k_very_sev_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>VERY SEVERE STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="k_sev_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>SEVERE STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="k_maj_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>MAJOR STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="k_min_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>MINOR STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="active_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>ACTIVE</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="k_unsettled_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>UNSETTLED</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="k_quiet_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>QUIET</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="k_very_quiet_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>VERY QUIET</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="inactive_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>INACTIVE</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="7" column="2">
+                   <widget class="QWidget" name="widget_17" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_9">
+                     <item>
+                      <widget class="QLabel" name="a_sev_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>SEVERE STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="a_maj_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>MAJOR STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="a_min_storm_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>MINOR STORM</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="a_active_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>ACTIVE</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="a_unsettled_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>UNSETTLED</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="a_quiet_lbl">
+                       <property name="font">
+                        <font>
+                         <pointsize>7</pointsize>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>QUIET</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="8" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_34">
+                    <item>
+                     <widget class="QLabel" name="label_58">
+                      <property name="text">
+                       <string>SFI</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="sfi_lbl">
+                      <property name="text">
+                       <string>-</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="8" column="2">
+                   <layout class="QHBoxLayout" name="horizontalLayout_35">
+                    <item>
+                     <widget class="QLabel" name="label_60">
+                      <property name="text">
+                       <string>SN</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="sn_lbl">
+                      <property name="text">
+                       <string>-</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="9" column="0">
+                   <widget class="QLabel" name="label_62">
+                    <property name="text">
+                     <string>Geomagnetic Storm (now)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="9" column="2">
+                   <widget class="QWidget" name="widget_18" native="true">
+                    <layout class="QHBoxLayout" name="horizontalLayout_30">
+                     <item>
+                      <widget class="SwitchableLabel" name="g0_now_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G0</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g1_now_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G1</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g2_now_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G2</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g3_now_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G3</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g4_now_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G4</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g5_now_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G5</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="10" column="0" colspan="2">
+                   <widget class="QLabel" name="label_63">
+                    <property name="text">
+                     <string>Geomagnetic Storm (MAX 24 hrs)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="10" column="2">
+                   <widget class="QWidget" name="widget_19" native="true">
+                    <layout class="QHBoxLayout" name="horizontalLayout_31">
+                     <item>
+                      <widget class="SwitchableLabel" name="g0_today_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G0</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g1_today_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G1</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g2_today_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G2</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g3_tofday_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G3</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g4_today_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G4</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="SwitchableLabel" name="g5_today_lbl">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>G5</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item row="1" column="0" colspan="3">
+                   <layout class="QHBoxLayout" name="horizontalLayout_37">
+                    <item>
+                     <widget class="QLabel" name="label_20">
+                      <property name="text">
+                       <string>Peak Flux Class</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="peak_flux_lbl">
+                      <property name="text">
+                       <string>-</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QWidget" name="widget_13" native="true">
+                 <layout class="QHBoxLayout" name="horizontalLayout_39">
+                  <item>
+                   <widget class="QLabel" name="label_76">
+                    <property name="font">
+                     <font>
+                      <pointsize>15</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
+                      <underline>true</underline>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Protons-Electrons Flux</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="info_now_btn">
+               <property name="text">
+                <string>Info</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QPushButton" name="update_now_btn">
+               <property name="text">
+                <string>Update</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QProgressBar" name="update_now_bar">
+               <property name="maximum">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
+               </property>
+               <property name="textVisible">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_10">
+            <attribute name="title">
+             <string>Tab 2</string>
+            </attribute>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -4907,6 +5703,11 @@ QSlider::handle:horizontal {
    <class>DoubleTextButton</class>
    <extends>QPushButton</extends>
    <header>double_text_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SwitchableLabel</class>
+   <extends>QLabel</extends>
+   <header>switchable_label.h</header>
   </customwidget>
  </customwidgets>
  <resources>

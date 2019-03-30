@@ -33,8 +33,6 @@ class DownloadThread(QThread):
     def run(self):
         try:
             db = urllib3.PoolManager().request('GET', Database.LINK_LOC)
-            # db = urllib.request.urlopen(constants.Database.LINK_LOC)
-            # raise urllib.error.URLError('Test')
         except urllib3.exceptions.MaxRetryError: # No internet connection.
             self.__status = ThreadStatus.NO_CONNECTION_ERR
             return
@@ -54,7 +52,6 @@ class DownloadThread(QThread):
         if os.path.exists(Constants.DATA_FOLDER):
             rmtree(Constants.DATA_FOLDER)
         try:
-            # data_folder = db.read()
             with ZipFile(BytesIO(db.data)) as zipped:
                 zipped.extractall()
         except:
