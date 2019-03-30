@@ -68,6 +68,12 @@ class Database(object):
 
 class Constants(object):
     ACF_DOCS           = "https://aresvalley.com/documentation/"
+    FORECAST_XRAY      = "https://services.swpc.noaa.gov/text/goes-xray-flux-primary.txt"
+    FORECAST_PROT      = "https://services.swpc.noaa.gov/text/goes-particle-flux-primary.txt"
+    FORECAST_AK_IND    = "https://services.swpc.noaa.gov/text/wwv.txt"
+    FORECAST_SGAS      = "https://services.swpc.noaa.gov/text/sgas.txt"
+    FORECAST_G         = "https://services.swpc.noaa.gov/text/3-day-forecast.txt"
+    FORECAST_INFO      = "https://www.swpc.noaa.gov/sites/default/files/images/NOAAscales.pdf"
     SEARCH_LABEL_IMG   = "search_icon.png"
     VOLUME_LABEL_IMG   = "volume.png"
     DATA_FOLDER        = "Data"

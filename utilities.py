@@ -107,3 +107,6 @@ def format_numbers(lower, upper):
         return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
     else:
         return f"{lower:,} {units[lower_factor]}"
+
+def double_split(string):
+    return [i.split() for i in string.splitlines()]

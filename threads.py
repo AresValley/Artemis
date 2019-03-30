@@ -8,7 +8,6 @@ from zipfile import ZipFile
 from PyQt5.QtCore import QThread
 from constants import Constants, Database, ChecksumWhat
 from utilities import checksum_ok
-import constants
 
 class ThreadStatus(Enum):
     OK                = auto()
@@ -54,5 +53,30 @@ class DownloadThread(QThread):
         try:
             with ZipFile(BytesIO(db.data)) as zipped:
                 zipped.extractall()
+        except:
+            self.__status = ThreadStatus.UNKNOWN_ERR
+
+
+class UpadteSpaceWeatherThread(QThread):
+    def __init__(self, space_weather_data):
+        super().__init__()
+        self.__status = ThreadStatus.OK
+        self.__space_weather_data = space_weather_data
+
+    @property
+    def status(self):
+        return self.__status
+
+    def __del__(self):
+        self.terminate()
+        self.wait()
+
+    def run(self):
+        try:
+            self.__space_weather_data.xray = str(urllib3.PoolManager().request('GET', Constants.FORECAST_XRAY).data)
+            self.__space_weather_data.prot_el = str(urllib3.PoolManager().request('GET', Constants.FORECAST_PROT).data)
+            self.__space_weather_data.ak_index = str(urllib3.PoolManager().request('GET', Constants.FORECAST_AK_IND).data)
+            self.__space_weather_data.sgas = str(urllib3.PoolManager().request('GET', Constants.FORECAST_SGAS).data)
+            self.__space_weather_data.geo_storm = str(urllib3.PoolManager().request('GET', Constants.FORECAST_G).data)
         except:
             self.__status = ThreadStatus.UNKNOWN_ERR

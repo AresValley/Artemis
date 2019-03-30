@@ -23,7 +23,7 @@ from PyQt5.QtCore import (QFileInfo,
                           pyqtSlot,)
 
 from audio_player import AudioPlayer
-
+from space_weather_data import SpaceWeatherData
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
 from switchable_label import SwitchableLabel, SwitchableLabelIterable
@@ -345,13 +345,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 # ##########################################################################################
 
-        # self.load_db()
-
         # Left list widget and search bar.
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.currentItemChanged.connect(self.display_specs)
         self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab))
-        # self.display_signals()
         self.audio_widget = AudioPlayer(self.play,
                                         self.pause,
                                         self.stop,
@@ -375,11 +372,32 @@ class Artemis(QMainWindow, Ui_MainWindow):
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
 
+        # Space weather
+        self.info_now_btn.clicked.connect(lambda : webbrowser.open(Constants.FORECAST_INFO))
+        self.update_now_btn.clicked.connect(self.start_update_space_weather)
+        self.space_weather_data = SpaceWeatherData()
+        self.space_weather_data.update_complete.connect(self.update_space_weather)
+
 # Final operations.
         self.theme.initialize()
         self.load_db()
         self.display_signals()
         self.show()
+
+    @pyqtSlot()
+    def start_update_space_weather(self):
+        self.update_now_bar.setMaximum(self.update_now_bar.minimum())
+        self.space_weather_data.update()
+
+    @pyqtSlot(bool)
+    def update_space_weather(self, status_ok):
+        self.update_now_bar.setMaximum(self.update_now_bar.minimum() + 1)
+        if status_ok:
+            print('ok') # Insert labels values and colors here.
+        else:
+            pop_up(self, title = Messages.BAD_DOWNLOAD,
+                   text = Messages.BAD_DOWNLOAD_MSG).show()
+        self.space_weather_data.remove_data()
 
     @pyqtSlot()
     def go_to_gfd(self, by):
@@ -393,7 +411,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
             webbrowser.open(Constants.GFD_SITE + query.lower())
         except:
             pass
-
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):

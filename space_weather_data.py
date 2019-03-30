@@ -1,9 +1,9 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
 
-from threads import UpadteForecastThread, ThreadStatus
+from threads import UpadteSpaceWeatherThread, ThreadStatus
 from utilities import double_split
 
-class ForecastData(QObject):
+class SpaceWeatherData(QObject):
     update_complete = pyqtSignal(bool)
 
     def __init__(self):
@@ -13,7 +13,7 @@ class ForecastData(QObject):
         self.ak_index = ''
         self.sgas = ''
         self.geo_storm = ''
-        self.__update_thread = UpadteForecastThread(self)
+        self.__update_thread = UpadteSpaceWeatherThread(self)
         self.__update_thread.finished.connect(self.__parse_and_emit_signal)
 
     @pyqtSlot()
@@ -21,11 +21,11 @@ class ForecastData(QObject):
         self.__update_thread.start()
 
     def __parse_data(self):
-        self.xray = double_split(str(self.xray))
-        self.prot_el = double_split(str(self.prot_el))
-        self.ak_index = double_split(str(self.ak_index))
-        self.sgas = double_split(str(self.sgas))
-        self.geo_storm = double_split(str(self.geo_storm))
+        self.xray = double_split(self.xray)
+        self.prot_el = double_split(self.prot_el)
+        self.ak_index = double_split(self.ak_index)
+        self.sgas = double_split(self.sgas)
+        self.geo_storm = double_split(self.geo_storm)
 
     def remove_data(self):
         self.xray = ''
