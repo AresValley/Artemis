@@ -1771,6 +1771,9 @@ p, li { white-space: pre-wrap; }
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <widget class="QTabWidget" name="all_filter_tabs">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true"/>
            </property>
@@ -3538,6 +3541,9 @@ Inactive</string>
                  <bold>true</bold>
                 </font>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="editTriggers">
                 <set>QAbstractItemView::NoEditTriggers</set>
                </property>
@@ -3815,6 +3821,9 @@ Inactive</string>
                    <font>
                     <pointsize>12</pointsize>
                    </font>
+                  </property>
+                  <property name="focusPolicy">
+                   <enum>Qt::NoFocus</enum>
                   </property>
                   <property name="selectionMode">
                    <enum>QAbstractItemView::MultiSelection</enum>
