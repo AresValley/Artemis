@@ -11,13 +11,15 @@ class SwitchableLabel(QLabel):
         self.switch_off_color = off
 
     def switch_on(self):
-        self.setStyleSheet(f"background-color: {self.switch_on_color}")
+        self.setStyleSheet(f"""background-color: {self.switch_on_color};
+        color:#000000;""")
 
     def switch_off(self):
-        self.setStyleSheet(f"background-color: {self.switch_off_color}")
+        self.setStyleSheet(f"""background-color: {self.switch_off_color};
+        color:#000000;""")
 
 
-class SwitchableLabelIterable(object):
+class SwitchableLabelsIterable(object):
     def __init__(self, *labels):
         self.labels = labels
 
@@ -25,9 +27,9 @@ class SwitchableLabelIterable(object):
         for lab in self.labels:
             yield lab
 
-    def switch_on(label):
+    def switch_on(self, label):
         for lab in self.labels:
-            if lab == label:
+            if lab is label:
                 lab.switch_on()
             else:
                 lab.switch_off()

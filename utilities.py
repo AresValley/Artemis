@@ -1,6 +1,5 @@
 from functools import partial
 import hashlib
-import re
 import sys
 import os
 from pandas import read_csv
@@ -42,9 +41,9 @@ def pop_up(cls, title, text,
 def checksum_ok(data, what):
     code = hashlib.sha256()
     code.update(data)
-    if what == ChecksumWhat.FOLDER:
+    if what is ChecksumWhat.FOLDER:
         n = 0
-    elif what == ChecksumWhat.DB:
+    elif what is ChecksumWhat.DB:
         n = 1
     else:
         raise ValueError("Wrong entry name.")
@@ -54,9 +53,6 @@ def checksum_ok(data, what):
     except:
         raise
     return code.hexdigest() == reference
-
-def is_valid_html_color(color):
-    return bool(re.match("#([a-zA-Z0-9]){6}", color))
 
 def connect_to(events_to_connect, fun_to_connect, fun_args):
     if fun_args:
@@ -107,6 +103,3 @@ def format_numbers(lower, upper):
         return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
     else:
         return f"{lower:,} {units[lower_factor]}"
-
-def double_split(string):
-    return [i.split() for i in string.splitlines()]

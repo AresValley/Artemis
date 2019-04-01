@@ -1,10 +1,11 @@
 from functools import partial
 import os
+import re
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
 from constants import Constants
-from utilities import pop_up, is_valid_html_color
+from utilities import pop_up
 
 class ThemeConstants(object):
     FOLDER                 = "themes"
@@ -138,6 +139,7 @@ class Theme(object):
                             valid_format = True
                             quality, color = line.split(ThemeConstants.COLOR_SEPARATOR)
                             color = color.rstrip()
+                            is_valid_html_color = lambda color : bool(re.match("#([a-zA-Z0-9]){6}", color))
                             if quality.lower() == Constants.ACTIVE and is_valid_html_color(color):
                                 self.__parent.active_color = color
                                 active_color_ok = True

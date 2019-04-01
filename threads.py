@@ -73,10 +73,10 @@ class UpadteSpaceWeatherThread(QThread):
 
     def run(self):
         try:
-            self.__space_weather_data.xray = str(urllib3.PoolManager().request('GET', Constants.FORECAST_XRAY).data)
-            self.__space_weather_data.prot_el = str(urllib3.PoolManager().request('GET', Constants.FORECAST_PROT).data)
-            self.__space_weather_data.ak_index = str(urllib3.PoolManager().request('GET', Constants.FORECAST_AK_IND).data)
-            self.__space_weather_data.sgas = str(urllib3.PoolManager().request('GET', Constants.FORECAST_SGAS).data)
-            self.__space_weather_data.geo_storm = str(urllib3.PoolManager().request('GET', Constants.FORECAST_G).data)
+            self.__space_weather_data.xray = str(urllib3.PoolManager().request('GET', Constants.FORECAST_XRAY).data, 'utf-8')
+            self.__space_weather_data.prot_el = str(urllib3.PoolManager().request('GET', Constants.FORECAST_PROT).data, 'utf-8')
+            self.__space_weather_data.ak_index = str(urllib3.PoolManager().request('GET', Constants.FORECAST_AK_IND).data, 'utf-8')
+            self.__space_weather_data.sgas = str(urllib3.PoolManager().request('GET', Constants.FORECAST_SGAS).data, 'utf-8')
+            self.__space_weather_data.geo_storm = str(urllib3.PoolManager().request('GET', Constants.FORECAST_G).data, 'utf-8')
         except:
             self.__status = ThreadStatus.UNKNOWN_ERR

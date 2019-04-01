@@ -1,4 +1,5 @@
 from collections import namedtuple
+from itertools import chain
 from functools import partial
 from glob import glob
 import webbrowser
@@ -26,14 +27,15 @@ from audio_player import AudioPlayer
 from space_weather_data import SpaceWeatherData
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
-from switchable_label import SwitchableLabel, SwitchableLabelIterable
+from switchable_label import SwitchableLabel, SwitchableLabelsIterable
 from constants import (Constants,
                        Ftype,
                        GfdType,
                        Database,
                        ChecksumWhat,
                        Messages,
-                       Signal,)
+                       Signal,
+                       Colors,)
 from themes import Theme
 from utilities import (checksum_ok,
                        uncheck_and_emit,
@@ -377,6 +379,81 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.update_now_btn.clicked.connect(self.start_update_space_weather)
         self.space_weather_data = SpaceWeatherData()
         self.space_weather_data.update_complete.connect(self.update_space_weather)
+        self.switchable_r_labels = SwitchableLabelsIterable(self.r0_now_lbl,
+                                                            self.r1_now_lbl,
+                                                            self.r2_now_lbl,
+                                                            self.r3_now_lbl,
+                                                            self.r4_now_lbl,
+                                                            self.r5_now_lbl,)
+        self.switchable_s_labels = SwitchableLabelsIterable(self.s0_now_lbl,
+                                                            self.s1_now_lbl,
+                                                            self.s2_now_lbl,
+                                                            self.s3_now_lbl,
+                                                            self.s4_now_lbl,
+                                                            self.s5_now_lbl,)
+        self.switchable_g_now_labels = SwitchableLabelsIterable(self.g0_now_lbl,
+                                                                self.g1_now_lbl,
+                                                                self.g2_now_lbl,
+                                                                self.g3_now_lbl,
+                                                                self.g4_now_lbl,
+                                                                self.g5_now_lbl)
+        self.switchable_g_today_labels = SwitchableLabelsIterable(self.g0_today_lbl,
+                                                                  self.g1_today_lbl,
+                                                                  self.g2_today_lbl,
+                                                                  self.g3_today_lbl,
+                                                                  self.g4_today_lbl,
+                                                                  self.g5_today_lbl)
+        colors_array = [[Colors.WHITE_LIGHT,  Colors.WHITE_DARK],
+                        [Colors.BLUE_LIGHT,   Colors.BLUE_DARK],
+                        [Colors.GREEN_LIGHT,  Colors.GREEN_DARK],
+                        [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
+                        [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
+                        [Colors.RED_LIGHT, Colors.RED_DARK]]
+
+        for lab, [light_color, dark_color] in zip(chain(self.switchable_r_labels,
+                                                        self.switchable_s_labels,
+                                                        self.switchable_g_now_labels,
+                                                        self.switchable_g_today_labels),
+                                                  colors_array * 4):
+            lab.set_colors(light_color, dark_color)
+
+        k_storms_colors = [[Colors.RED_LIGHT, Colors.RED_DARK],
+                           [Colors.RED2_LIGHT, Colors.RED2_DARK],
+                           [Colors.RED3_LIGHT, Colors.RED3_DARK],
+                           [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
+                           [Colors.ORANGE2_LIGHT, Colors.ORANGE2_DARK],
+                           [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
+                           [Colors.GREEN3_LIGHT, Colors.GREEN3_DARK],
+                           [Colors.GREEN2_LIGHT, Colors.GREEN2_DARK],
+                           [Colors.GREEN_LIGHT, Colors.GREEN_DARK],
+                           [Colors.BLUE_LIGHT, Colors.BLUE_DARK]]
+        a_storm_colors = [[Colors.RED_LIGHT, Colors.RED_DARK],
+                          [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
+                          [Colors.ORANGE2_LIGHT, Colors.ORANGE2_DARK],
+                          [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
+                          [Colors.GREEN_LIGHT, Colors.GREEN_DARK],
+                          [Colors.BLUE_LIGHT, Colors.BLUE_DARK]]
+
+        self.k_storm_labels = SwitchableLabelsIterable(self.k_ex_sev_storm_lbl,
+                                                       self.k_very_sev_storm_lbl,
+                                                       self.k_sev_storm_lbl,
+                                                       self.k_maj_storm_lbl,
+                                                       self.k_min_storm_lbl,
+                                                       self.k_active_lbl,
+                                                       self.k_unsettled_lbl,
+                                                       self.k_quiet_lbl,
+                                                       self.k_very_quiet_lbl,
+                                                       self.k_inactive_lbl)
+        self.a_storm_labels = SwitchableLabelsIterable(self.a_sev_storm_lbl,
+                                                       self.a_maj_storm_lbl,
+                                                       self.a_min_storm_lbl,
+                                                       self.a_active_lbl,
+                                                       self.a_unsettled_lbl,
+                                                       self.a_quiet_lbl)
+
+        for lab, [light_color, dark_color] in zip(chain(self.k_storm_labels, self.a_storm_labels),
+                                                  chain(k_storms_colors, a_storm_colors)):
+            lab.set_colors(light_color, dark_color)
 
 # Final operations.
         self.theme.initialize()
@@ -393,7 +470,129 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def update_space_weather(self, status_ok):
         self.update_now_bar.setMaximum(self.update_now_bar.minimum() + 1)
         if status_ok:
-            print('ok') # Insert labels values and colors here.
+            xray_long = float(self.space_weather_data.xray[-1][7])
+            format_text = lambda letter, power : letter + f"{xray_long * 10**power:.1f}"
+            if xray_long < 1e-8 and xray_long != -1.00e+05:
+                self.peak_flux_lbl.setText(format_text("<A", 8))
+            elif xray_long >= 1e-8 and xray_long < 1e-7:
+                self.peak_flux_lbl.setText(format_text("A", 8))
+            elif xray_long >= 1e-7 and xray_long < 1e-6:
+                self.peak_flux_lbl.setText(format_text("B", 7))
+            elif xray_long >= 1e-6 and xray_long < 1e-5:
+                self.peak_flux_lbl.setText(format_text("C", 6))
+            elif xray_long >= 1e-5 and xray_long < 1e-4:
+                self.peak_flux_lbl.setText(format_text("M", 5))
+            elif xray_long >= 1e-4:
+                self.peak_flux_lbl.setText(format_text("X", 4))
+            elif xray_long == -1.00e+05:
+                self.peak_flux_lbl.setText("No Data")
+
+            if xray_long < 1e-5 and xray_long != -1.00e+05:
+                self.switchable_r_labels.switch_on(self.r0_now_lbl)
+            elif xray_long >= 1e-5 and xray_long < 5e-5:
+                self.switchable_r_labels.switch_on(self.r1_now_lbl)
+            elif xray_long >= 5e-5 and xray_long < 1e-4:
+                self.switchable_r_labels.switch_on(self.r2_now_lbl)
+            elif xray_long >= 1e-4 and xray_long < 1e-3:
+                self.switchable_r_labels.switch_on(self.r3_now_lbl)
+            elif xray_long >= 1e-3 and xray_long < 2e-3:
+                self.switchable_r_labels.switch_on(self.r4_now_lbl)
+            elif xray_long >= 2e-3:
+                self.switchable_r_labels.switch_on(self.r5_now_lbl)
+            elif xray_long == -1.00e+05:
+                self.switchable_r_labels.switch_off_all()
+
+            pro10 = float(self.space_weather_data.prot_el[-1][8])
+            if pro10 < 10 and pro10 != -1.00e+05:
+                self.switchable_s_labels.switch_on(self.s0_now_lbl)
+            elif pro10 >= 10 and pro10 < 100:
+                self.switchable_s_labels.switch_on(self.s1_now_lbl)
+            elif pro10 >= 100 and pro10 < 1000:
+                self.switchable_s_labels.switch_on(self.s2_now_lbl)
+            elif pro10 >= 1000 and pro10 < 10000:
+                self.switchable_s_labels.switch_on(self.s3_now_lbl)
+            elif pro10 >= 10000 and pro10 < 100000:
+                self.switchable_s_labels.switch_on(self.s4_now_lbl)
+            elif pro10 >= 100000:
+                self.switchable_s_labels.switch_on(self.s5_now_lbl)
+            elif pro10 == -1.00e+05:
+                self.switchable_s_labels.switch_off_all()
+
+            k_index = int(self.space_weather_data.ak_index[8][11].replace('.', ''))
+            self.k_index_lbl.setText(str(k_index))
+            a_index = int(self.space_weather_data.ak_index[7][7].replace('.', ''))
+            self.a_index_lbl.setText(str(a_index))
+
+            if k_index == 0:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_inactive_lbl)
+            elif k_index == 1:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_very_quiet_lbl)
+            elif k_index == 2:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_quiet_lbl)
+            elif k_index == 3:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_unsettled_lbl)
+            elif k_index == 4:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_active_lbl)
+            elif k_index == 5:
+                self.switchable_g_now_labels.switch_on(self.g1_now_lbl)
+                self.k_storm_labels.switch_on(self.k_min_storm_lbl)
+            elif k_index == 6:
+                self.switchable_g_now_labels.switch_on(self.g2_now_lbl)
+                self.k_storm_labels.switch_on(self.k_maj_storm_lbl)
+            elif k_index == 7:
+                self.switchable_g_now_labels.switch_on(self.g3_now_lbl)
+                self.k_storm_labels.switch_on(self.k_sev_storm_lbl)
+            elif k_index == 8:
+                self.switchable_g_now_labels.switch_on(self.g4_now_lbl)
+                self.k_storm_labels.switch_on(self.k_very_sev_storm_lbl)
+            elif k_index == 9:
+                self.switchable_g_now_labels.switch_on(self.g5_now_lbl)
+                self.k_storm_labels.switch_on(self.k_ex_sev_storm_lbl)
+
+            if a_index >= 0 and a_index < 8:
+                self.a_storm_labels.switch_on(self.a_quiet_lbl)
+            elif a_index >= 8 and a_index < 16:
+                self.a_storm_labels.switch_on(self.a_unsettled_lbl)
+            elif a_index >= 16 and a_index < 30:
+                self.a_storm_labels.switch_on(self.a_active_lbl)
+            elif a_index >= 30 and a_index < 50:
+                self.a_storm_labels.switch_on(self.a_min_storm_lbl)
+            elif a_index >= 50 and a_index < 100:
+                self.a_storm_labels.switch_on(self.a_maj_storm_lbl)
+            elif a_index >= 100 and a_index < 400:
+                self.a_storm_labels.switch_on(self.a_sev_storm_lbl)
+
+            index = self.space_weather_data.geo_storm[6].index("was") + 1
+            k_index_24_hmax = int(self.space_weather_data.geo_storm[6][index])
+            if k_index_24_hmax == 0:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+            elif k_index_24_hmax == 1:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+            elif k_index_24_hmax == 2:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+            elif k_index_24_hmax == 3:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+            elif k_index_24_hmax == 4:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+            elif k_index_24_hmax == 5:
+                self.switchable_g_today_labels.switch_on(self.g1_today_lbl)
+            elif k_index_24_hmax == 6:
+                self.switchable_g_today_labels.switch_on(self.g2_today_lbl)
+            elif k_index_24_hmax == 7:
+                self.switchable_g_today_labels.switch_on(self.g3_today_lbl)
+            elif k_index_24_hmax == 8:
+                self.switchable_g_today_labels.switch_on(self.g4_today_lbl)
+            elif k_index_24_hmax == 9:
+                self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
+
+            self.sfi_lbl.setText(self.space_weather_data.ak_index[7][2].replace('.', '').lstrip('0'))
+            self.sn_lbl.setText([x[4] for i, x in enumerate(self.space_weather_data.sgas) if "SSN" in x][0].lstrip('0'))
+
         else:
             pop_up(self, title = Messages.BAD_DOWNLOAD,
                    text = Messages.BAD_DOWNLOAD_MSG).show()
@@ -402,10 +601,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def go_to_gfd(self, by):
         query = "/?q="
-        if by == GfdType.FREQ:
+        if by is GfdType.FREQ:
             value_in_mhz = self.freq_gfd.value() * Constants.CONVERSION_FACTORS[self.unit_freq_gfd.currentText()] / Constants.CONVERSION_FACTORS["MHz"]
             query += str(value_in_mhz)
-        elif by == GfdType.LOC:
+        elif by is GfdType.LOC:
             query += self.gfd_line_edit.text()
         try:
             webbrowser.open(Constants.GFD_SITE + query.lower())
@@ -1060,9 +1259,9 @@ if __name__ == '__main__':
     my_app = QApplication(sys.argv)
     img = QPixmap(":/icons/Artemis3.500px.png")
     # img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
-    splash = QSplashScreen(img)
-    splash.show()
-    sleep(2)
+    # splash = QSplashScreen(img)
+    # splash.show()
+    # sleep(2)
     w = Artemis()
-    splash.finish(w)
+    # splash.finish(w)
     sys.exit(my_app.exec_())
