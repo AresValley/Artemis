@@ -415,21 +415,21 @@ class Artemis(QMainWindow, Ui_MainWindow):
                                                         self.switchable_g_now_labels,
                                                         self.switchable_g_today_labels),
                                                   colors_array * 4):
-            lab.set_colors(light_color, dark_color)
+            lab.set_colors(None, None)
 
         k_storms_colors = [[Colors.RED_LIGHT, Colors.RED_DARK],
                            [Colors.RED2_LIGHT, Colors.RED2_DARK],
                            [Colors.RED3_LIGHT, Colors.RED3_DARK],
-                           [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
                            [Colors.ORANGE2_LIGHT, Colors.ORANGE2_DARK],
+                           [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
                            [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
-                           [Colors.GREEN3_LIGHT, Colors.GREEN3_DARK],
                            [Colors.GREEN2_LIGHT, Colors.GREEN2_DARK],
+                           [Colors.GREEN3_LIGHT, Colors.GREEN3_DARK],
                            [Colors.GREEN_LIGHT, Colors.GREEN_DARK],
                            [Colors.BLUE_LIGHT, Colors.BLUE_DARK]]
         a_storm_colors = [[Colors.RED_LIGHT, Colors.RED_DARK],
-                          [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
                           [Colors.ORANGE2_LIGHT, Colors.ORANGE2_DARK],
+                          [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
                           [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
                           [Colors.GREEN_LIGHT, Colors.GREEN_DARK],
                           [Colors.BLUE_LIGHT, Colors.BLUE_DARK]]
@@ -453,7 +453,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         for lab, [light_color, dark_color] in zip(chain(self.k_storm_labels, self.a_storm_labels),
                                                   chain(k_storms_colors, a_storm_colors)):
-            lab.set_colors(light_color, dark_color)
+            lab.set_colors(None, None)
 
 # Final operations.
         self.theme.initialize()
@@ -571,27 +571,56 @@ class Artemis(QMainWindow, Ui_MainWindow):
             k_index_24_hmax = int(self.space_weather_data.geo_storm[6][index])
             if k_index_24_hmax == 0:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("S0 - S1 (<-120 dBm)")
             elif k_index_24_hmax == 1:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("S0 - S1 (<-120 dBm)")
             elif k_index_24_hmax == 2:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("S1 - S2 (-115 dBm)")
             elif k_index_24_hmax == 3:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("S2 - S3 (-110 dBm)")
             elif k_index_24_hmax == 4:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("S3 - S4 (-100 dBm)")
             elif k_index_24_hmax == 5:
                 self.switchable_g_today_labels.switch_on(self.g1_today_lbl)
+                self.expected_noise_lbl.setText("S4 - S6 (-90 dBm)")
             elif k_index_24_hmax == 6:
                 self.switchable_g_today_labels.switch_on(self.g2_today_lbl)
+                self.expected_noise_lbl.setText("S6 - S9 (-80 dBm)")
             elif k_index_24_hmax == 7:
                 self.switchable_g_today_labels.switch_on(self.g3_today_lbl)
+                self.expected_noise_lbl.setText("S9 - S20 (>-60 dBm)")
             elif k_index_24_hmax == 8:
                 self.switchable_g_today_labels.switch_on(self.g4_today_lbl)
+                self.expected_noise_lbl.setText("S20 - S30 (>-60 dBm)")
             elif k_index_24_hmax == 9:
                 self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
+                self.expected_noise_lbl.setText("S30+ (>>-60 dBm)")
+            self.expected_noise_lbl.setStyleSheet(f"""
+            color:#ffffff;
+            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #4776e6 ,stop: 1 #8e54e9);""")
 
-            self.sfi_lbl.setText(self.space_weather_data.ak_index[7][2].replace('.', '').lstrip('0'))
-            self.sn_lbl.setText([x[4] for i, x in enumerate(self.space_weather_data.sgas) if "SSN" in x][0].lstrip('0'))
+            val = int(self.space_weather_data.ak_index[7][2].replace('.', ''))
+            self.sfi_lbl.setText(f"{val}")
+            val = int([x[4] for x in self.space_weather_data.sgas if "SSN" in x][0])
+            self.sn_lbl.setText(f"{val:d}")
+
+            forecast_labels = (self.forecast_lbl_0,
+                               self.forecast_lbl_1,
+                               self.forecast_lbl_2,
+                               self.forecast_lbl_3,
+                               self.forecast_lbl_4,
+                               self.forecast_lbl_5,
+                               self.forecast_lbl_6,
+                               self.forecast_lbl_7,
+                               self.forecast_lbl_8)
+            for label, pixmap in zip(forecast_labels, self.space_weather_data.images):
+                label.setText('')
+                label.setPixmap(pixmap)
+                label.setScaledContents(True)
 
         else:
             pop_up(self, title = Messages.BAD_DOWNLOAD,
@@ -632,7 +661,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def show_matching_strings(self, list_elements, text):
         for index in range(list_elements.count()):
             item = list_elements.item(index)
-            if text.upper() in item.text() or item.isSelected():
+            if text.lower() in item.text().lower() or item.isSelected():
                 item.setHidden(False)
             else:
                 item.setHidden(True)

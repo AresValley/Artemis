@@ -11,12 +11,24 @@ class SwitchableLabel(QLabel):
         self.switch_off_color = off
 
     def switch_on(self):
-        self.setStyleSheet(f"""background-color: {self.switch_on_color};
-        color:#000000;""")
+        if self.switch_on_color and self.switch_off_color:
+            self.setStyleSheet(f"""background-color: {self.switch_on_color};
+            color:#000000;""")
+        else:
+            self.setStyleSheet("""
+            color:#ffffff;
+            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #4776e6 ,stop: 1 #8e54e9);
+            """)
 
     def switch_off(self):
-        self.setStyleSheet(f"""background-color: {self.switch_off_color};
-        color:#000000;""")
+        if self.switch_on_color and self.switch_off_color:
+            self.setStyleSheet(f"""background-color: {self.switch_off_color};
+            color:#000000;""")
+        else:
+            self.setStyleSheet("""
+            color:#ffffff;
+            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);
+            """)
 
 
 class SwitchableLabelsIterable(object):

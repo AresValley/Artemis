@@ -1,7 +1,7 @@
 from functools import partial
 import os
 import re
-from PyQt5.QtWidgets import QAction
+from PyQt5.QtWidgets import QAction, QActionGroup
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
 from constants import Constants
@@ -29,6 +29,7 @@ class Theme(object):
         self.__parent.default_images_folder = os.path.join(ThemeConstants.FOLDER,
                                                            ThemeConstants.DEFAULT,
                                                            ThemeConstants.ICONS_FOLDER)
+        self.__theme_names = {}
         self.__detect_themes()
 
     def __refresh_range_labels(self):
@@ -60,21 +61,26 @@ class Theme(object):
         self.__refresh_range_labels()
         self.__parent.audio_widget.refresh_btns_colors(self.__parent.active_color, self.__parent.inactive_color)
 
+    def __pretty_name(self, bad_name):
+        return ' '.join(
+            map(lambda s: s.capitalize(),
+                bad_name.split('-')[1].split('_')
+            )
+        )
+
     def __detect_themes(self):
         themes = []
+        ag = QActionGroup(self.__parent, exclusive = True)
         for theme_folder in os.listdir(ThemeConstants.FOLDER):
             relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
             if os.path.isdir(os.path.abspath(relative_folder)):
                 relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
                 themes.append(relative_folder)
         for theme_path in themes:
-            theme_name = '&' + ' '.join(
-                map(lambda s: s.capitalize(),
-                    os.path.basename(theme_path).split('-')[1].split('_')
-                )
-            )
-            new_theme = QAction(theme_name, self.__parent)
+            theme_name = '&' + self.__pretty_name(os.path.basename(theme_path))
+            new_theme = ag.addAction(QAction(theme_name, self.__parent, checkable = True))
             self.__parent.menu_themes.addAction(new_theme)
+            self.__theme_names[theme_name.lstrip('&')] = new_theme
             new_theme.triggered.connect(partial(self.__apply, theme_path))
 
     def __change(self):
@@ -163,5 +169,9 @@ class Theme(object):
         if os.path.exists(current_theme_file):
             with open(current_theme_file, "r") as current_theme_path:
                 theme_path = current_theme_path.read()
+                theme_name = self.__pretty_name(os.path.basename(theme_path))
+                self.__theme_names[theme_name].setChecked(True)
                 if theme_path != ThemeConstants.DEFAULT:
                     self.__apply(theme_path)
+        else:
+            self.__theme_names[self.__pretty_name(ThemeConstants.DEFAULT)].setChecked(True)

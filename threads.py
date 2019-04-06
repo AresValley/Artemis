@@ -78,5 +78,14 @@ class UpadteSpaceWeatherThread(QThread):
             self.__space_weather_data.ak_index = str(urllib3.PoolManager().request('GET', Constants.FORECAST_AK_IND).data, 'utf-8')
             self.__space_weather_data.sgas = str(urllib3.PoolManager().request('GET', Constants.FORECAST_SGAS).data, 'utf-8')
             self.__space_weather_data.geo_storm = str(urllib3.PoolManager().request('GET', Constants.FORECAST_G).data, 'utf-8')
+            self.__space_weather_data.images[0].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_0).data)
+            self.__space_weather_data.images[1].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_1).data)
+            self.__space_weather_data.images[2].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_2).data)
+            self.__space_weather_data.images[3].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_3).data)
+            self.__space_weather_data.images[4].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_4).data)
+            self.__space_weather_data.images[5].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_5).data)
+            self.__space_weather_data.images[6].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_6).data)
+            self.__space_weather_data.images[7].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_7).data)
+            self.__space_weather_data.images[8].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_8).data)
         except:
             self.__status = ThreadStatus.UNKNOWN_ERR
