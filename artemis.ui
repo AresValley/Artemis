@@ -6005,7 +6005,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                     </property>
                     <property name="font">
                      <font>
-                      <pointsize>9</pointsize>
+                      <pointsize>12</pointsize>
                      </font>
                     </property>
                     <property name="text">
