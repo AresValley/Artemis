@@ -463,8 +463,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def start_update_space_weather(self):
-        self.update_now_bar.setMaximum(self.update_now_bar.minimum())
-        self.space_weather_data.update()
+        if not self.space_weather_data.is_updating:
+            self.update_now_bar.setMaximum(self.update_now_bar.minimum())
+            self.space_weather_data.update()
 
     @pyqtSlot(bool)
     def update_space_weather(self, status_ok):

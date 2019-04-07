@@ -24,6 +24,10 @@ class SpaceWeatherData(QObject):
         self.__update_thread = UpadteSpaceWeatherThread(self)
         self.__update_thread.finished.connect(self.__parse_and_emit_signal)
 
+    @property
+    def is_updating(self):
+        return self.__update_thread.isRunning()
+
     @pyqtSlot()
     def update(self):
         self.__update_thread.start()
@@ -42,6 +46,15 @@ class SpaceWeatherData(QObject):
         self.ak_index = ''
         self.sgas = ''
         self.geo_storm = ''
+        self.images = [QPixmap(),
+                       QPixmap(),
+                       QPixmap(),
+                       QPixmap(),
+                       QPixmap(),
+                       QPixmap(),
+                       QPixmap(),
+                       QPixmap(),
+                       QPixmap()]
 
     @pyqtSlot()
     def __parse_and_emit_signal(self):
