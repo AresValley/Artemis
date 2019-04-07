@@ -27,7 +27,7 @@ from audio_player import AudioPlayer
 from space_weather_data import SpaceWeatherData
 from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
-from switchable_label import SwitchableLabel, SwitchableLabelsIterable
+from switchable_label import SwitchableLabelsIterable
 from constants import (Constants,
                        Ftype,
                        GfdType,
@@ -376,7 +376,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Space weather
         self.info_now_btn.clicked.connect(lambda : webbrowser.open(Constants.FORECAST_INFO))
-        self.update_now_btn.clicked.connect(self.start_update_space_weather)
+        self.update_now_bar.clicked.connect(self.start_update_space_weather)
+        self.update_now_bar.set_idle()
         self.space_weather_data = SpaceWeatherData()
         self.space_weather_data.update_complete.connect(self.update_space_weather)
         self.switchable_r_labels = SwitchableLabelsIterable(self.r0_now_lbl,
@@ -464,12 +465,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def start_update_space_weather(self):
         if not self.space_weather_data.is_updating:
-            self.update_now_bar.setMaximum(self.update_now_bar.minimum())
+            self.update_now_bar.set_updating()
             self.space_weather_data.update()
 
     @pyqtSlot(bool)
     def update_space_weather(self, status_ok):
-        self.update_now_bar.setMaximum(self.update_now_bar.minimum() + 1)
+        self.update_now_bar.set_idle()
         if status_ok:
             xray_long = float(self.space_weather_data.xray[-1][7])
             format_text = lambda letter, power : letter + f"{xray_long * 10**power:.1f}"

@@ -97,8 +97,12 @@ def format_numbers(lower, upper):
     upper = int(upper) / upper_factor
     if lower.is_integer():
         lower = int(lower)
+    else:
+        lower = round(lower, 2)
     if upper.is_integer():
         upper = int(upper)
+    else:
+        upper = round(upper, 2)
     if pre_lower != pre_upper:
         return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
     else:
