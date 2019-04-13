@@ -14,11 +14,12 @@ class ThreadStatus(Enum):
     NO_CONNECTION_ERR = auto()
     UNKNOWN_ERR       = auto()
     BAD_DOWNLOAD_ERR  = auto()
+    UNDEFINED         = auto()
 
 class DownloadThread(QThread):
     def __init__(self):
         super().__init__()
-        self.__status = ThreadStatus.OK
+        self.__status = ThreadStatus.UNDEFINED
         self.reason = 0
 
     @property
@@ -55,12 +56,14 @@ class DownloadThread(QThread):
                 zipped.extractall()
         except:
             self.__status = ThreadStatus.UNKNOWN_ERR
+        else:
+            self.__status = ThreadStatus.OK
 
 
 class UpadteSpaceWeatherThread(QThread):
     def __init__(self, space_weather_data):
         super().__init__()
-        self.__status = ThreadStatus.OK
+        self.__status = ThreadStatus.UNDEFINED
         self.__space_weather_data = space_weather_data
 
     @property
@@ -89,3 +92,5 @@ class UpadteSpaceWeatherThread(QThread):
             self.__space_weather_data.images[8].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_8).data)
         except:
             self.__status = ThreadStatus.UNKNOWN_ERR
+        else:
+            self.__status = ThreadStatus.OK

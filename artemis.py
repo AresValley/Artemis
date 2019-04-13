@@ -1,7 +1,6 @@
 from collections import namedtuple
 from itertools import chain
 from functools import partial
-from glob import glob
 import webbrowser
 import os
 import sys
@@ -15,7 +14,6 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QListWidgetItem,
                              QMessageBox,
                              QSplashScreen,
-                             QTreeView,
                              QTreeWidgetItem,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
@@ -25,7 +23,6 @@ from PyQt5.QtCore import (QFileInfo,
 
 from audio_player import AudioPlayer
 from space_weather_data import SpaceWeatherData
-from double_text_button import DoubleTextButton
 from download_window import DownloadWindow
 from switchable_label import SwitchableLabelsIterable
 from constants import (Constants,
@@ -44,11 +41,10 @@ from utilities import (checksum_ok,
                        filters_ok,
                        is_undef_freq,
                        is_undef_band,
-                       change_unit,
                        format_numbers,
                        resource_path,)
 
-import icon_rc
+# import icon_rc
 
 qt_creator_file = resource_path("artemis.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
@@ -60,6 +56,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.set_initial_size()
         self.download_window = DownloadWindow()
+        self.download_window.complete.connect(self.show_downloaded_signals)
         self.actionExit.triggered.connect(qApp.quit)
         self.action_update_database.triggered.connect(self.ask_if_download)
         self.action_check_db_ver.triggered.connect(self.check_db_ver)
@@ -456,11 +453,21 @@ class Artemis(QMainWindow, Ui_MainWindow):
                                                   chain(k_storms_colors, a_storm_colors)):
             lab.set_colors(None, None)
 
+        self.forecast_labels = (self.forecast_lbl_0,
+                                self.forecast_lbl_1,
+                                self.forecast_lbl_2,
+                                self.forecast_lbl_3,
+                                self.forecast_lbl_4,
+                                self.forecast_lbl_5,
+                                self.forecast_lbl_6,
+                                self.forecast_lbl_7,
+                                self.forecast_lbl_8)
+        self.forecast_label_container.labels = self.forecast_labels
+
 # Final operations.
         self.theme.initialize()
         self.load_db()
         self.display_signals()
-        self.show()
 
     @pyqtSlot()
     def start_update_space_weather(self):
@@ -610,20 +617,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
             val = int([x[4] for x in self.space_weather_data.sgas if "SSN" in x][0])
             self.sn_lbl.setText(f"{val:d}")
 
-            forecast_labels = (self.forecast_lbl_0,
-                               self.forecast_lbl_1,
-                               self.forecast_lbl_2,
-                               self.forecast_lbl_3,
-                               self.forecast_lbl_4,
-                               self.forecast_lbl_5,
-                               self.forecast_lbl_6,
-                               self.forecast_lbl_7,
-                               self.forecast_lbl_8)
-            for label, pixmap in zip(forecast_labels, self.space_weather_data.images):
+            for label, pixmap in zip(self.forecast_labels, self.space_weather_data.images):
                 label.setText('')
-                label.setPixmap(pixmap)
-                label.setScaledContents(True)
-
+                label.pixmap = pixmap
+                label.setPixmap(pixmap.scaled(label.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+                label.setStyleSheet("background-color: transparent;")
         else:
             pop_up(self, title = Messages.BAD_DOWNLOAD,
                    text = Messages.BAD_DOWNLOAD_MSG).show()
@@ -687,10 +685,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
                         item.child(i).setSelected(True)
 
     def set_initial_size(self):
-        """
-        Function to handle high resolution screens. The function sets bigger sizes
-        for all the relevant fixed-size widgets.
-        """
+        """Function to handle high resolution screens. The function sets bigger sizes
+        for all the relevant fixed-size widgets."""
         d = QDesktopWidget().availableGeometry()
         w = d.width()
         h = d.height()
@@ -738,7 +734,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def download_db(self):
         if not self.download_window.isVisible():
-            self.download_window.download_thread.finished.connect(self.show_downloaded_signals)
             self.download_window.download_thread.start()
             self.download_window.show()
 
@@ -782,6 +777,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
                                 text = Messages.NO_DB_AVAIL,
                                 informative_text = Messages.DOWNLOAD_NOW_QUESTION,
                                 is_question = True).exec()
+                if answer == QMessageBox.Yes:
+                    self.download_db()
             else:
                 try:
                     is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
@@ -792,7 +789,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     if is_checksum_ok:
                         pop_up(self, title = Messages.DB_UP_TO_DATE,
                                text = Messages.DB_UP_TO_DATE_MSG).show()
-
                     else:
                         answer = pop_up(self, title = Messages.DB_NEW_VER,
                                         text = Messages.DB_NEW_VER_MSG,
@@ -803,10 +799,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def show_downloaded_signals(self):
-        if self.download_window.everything_ok:
-            self.search_bar.setEnabled(True)
-            self.load_db()
-            self.display_signals()
+        self.search_bar.setEnabled(True)
+        self.load_db()
+        self.display_signals()
 
     def load_db(self):
         names = Database.NAMES
@@ -831,7 +826,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.db.fillna(Constants.UNKNOWN, inplace = True)
             self.db[Signal.WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
+            self.result_list.clear()
             self.result_list.addItems(self.signal_names)
+            self.result_list.setCurrentItem(None)
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box,
@@ -845,7 +842,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
             lower_units = lower_combo_box.currentText()
             upper_units = upper_combo_box.currentText()
             lower_value = lower_spin_box.value()
-            upper_value = upper_spin_box.value()
             inf_limit = (lower_value * Constants.CONVERSION_FACTORS[lower_units]) \
                 // Constants.CONVERSION_FACTORS[upper_units]
             counter = 0
@@ -949,7 +945,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 self.result_list.item(index).setHidden(True)
         # Remove selected item.
-        self.result_list.selectionModel().clear()
+        self.result_list.setCurrentItem(None)
         self.update_status_tip(available_signals)
 
     def update_status_tip(self, available_signals):
@@ -1123,7 +1119,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         selected_items = [item for item in self.mode_tree_widget.selectedItems()]
         selected_items_text = [i.text(0) for i in selected_items]
         parents = [item for item in selected_items_text if item in Constants.MODES.keys()]
-        children = [item for item in selected_items_text if item not in parents]
         ok = []
         for item in selected_items:
             if item.text(0) in parents:
@@ -1288,11 +1283,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    img = QPixmap(":/icons/Artemis3.500px.png")
-    # img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
+    # img = QPixmap(":/icons/Artemis3.500px.png")
     # splash = QSplashScreen(img)
     # splash.show()
     # sleep(2)
-    w = Artemis()
+    artemis = Artemis()
+    artemis.show()
     # splash.finish(w)
     sys.exit(my_app.exec_())
