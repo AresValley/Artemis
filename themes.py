@@ -182,12 +182,13 @@ class Theme(object):
                                 if quality.lower() == Constants.INACTIVE:
                                     self.__parent.inactive_color = color[0]
                                     inactive_color_ok = True
-                                if quality.lower() == Constants.LABEL_ON_COLOR:
-                                    switch_on_color_ok = True
-                                    self.__forecast_labels.set("switch_on_colors", color)
-                                if quality.lower() == Constants.LABEL_OFF_COLOR:
-                                    switch_off_color_ok = True
-                                    self.__forecast_labels.set("switch_off_colors", color)
+                                if len(color) == 2:
+                                    if quality.lower() == Constants.LABEL_ON_COLOR:
+                                        switch_on_color_ok = True
+                                        self.__forecast_labels.set("switch_on_colors", color)
+                                    if quality.lower() == Constants.LABEL_OFF_COLOR:
+                                        switch_off_color_ok = True
+                                        self.__forecast_labels.set("switch_off_colors", color)
                                 if quality.lower() == Constants.TEXT_COLOR:
                                     text_color_ok = True
                                     self.__forecast_labels.set("text_color", color[0])
@@ -197,9 +198,8 @@ class Theme(object):
                 self.__parent.inactive_color = ThemeConstants.DEFAULT_INACTIVE_COLOR
 
             if not (switch_on_color_ok and switch_off_color_ok):
-                for label in self.__forecast_labels:
-                    label.switch_on_colors = ThemeConstants.DEFAULT_ON_COLORS
-                    label.switch_off_colors = ThemeConstants.DEFAULT_OFF_COLORS
+                self.__forecast_labels.set("switch_on_colors", ThemeConstants.DEFAULT_ON_COLORS)
+                self.__forecast_labels.set("switch_off_colors", ThemeConstants.DEFAULT_OFF_COLORS)
 
             if not text_color_ok:
                 self.__forecast_labels.set("text_color", ThemeConstants.DEFAULT_TEXT_COLOR)
