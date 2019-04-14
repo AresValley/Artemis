@@ -66,30 +66,6 @@ class Database(object):
                  Signal.SUP_BAND,
                  Signal.CATEGORY_CODE,)
 
-class Colors(object):
-    RED_DARK      = "#4d0000"
-    RED_LIGHT     = "#ff0000"
-    RED2_DARK     = "#4c0c00"
-    RED2_LIGHT    = "#ff2700"
-    RED3_DARK     = "#4b1100"
-    RED3_LIGHT    = "#ff3a00"
-    ORANGE_DARK   = "#4d2e00"
-    ORANGE_LIGHT  = "#ffad33"
-    ORANGE2_DARK  = "#4c2000"
-    ORANGE2_LIGHT = "#ff6c00"
-    GREEN_DARK    = "#003300"
-    GREEN_LIGHT   = "#33ff33"
-    GREEN2_DARK   = "#424d00"
-    GREEN2_LIGHT  = "#dcff00"
-    GREEN3_DARK   = "#344d00"
-    GREEN3_LIGHT  = "#aeff00"
-    BLUE_DARK     = "#000033"
-    BLUE_LIGHT    = "#3333ff"
-    WHITE_DARK    = "#333333"
-    WHITE_LIGHT   = "#d9b3ff"
-    YELLOW_DARK   = "#333300"
-    YELLOW_LIGHT  = "#ffff33"
-
 class Constants(object):
     CLICK_TO_UPDATE_STR = "Click to update"
     UPDATING_STR        = "Updating..."
@@ -117,6 +93,9 @@ class Constants(object):
     AUDIO_FOLDER        = "Audio"
     ACTIVE              = "active"
     INACTIVE            = "inactive"
+    LABEL_ON_COLOR      = "on"
+    LABEL_OFF_COLOR     = "off"
+    TEXT_COLOR          = "text"
     NOT_AVAILABLE       = "spectrumnotavailable.png"
     NOT_SELECTED        = "nosignalselected.png"
     __Band              = namedtuple("Band", ["lower", "upper"])

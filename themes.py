@@ -1,10 +1,12 @@
 from functools import partial
+from itertools import chain
 import os
 import re
 from PyQt5.QtWidgets import QAction, QActionGroup
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
 from constants import Constants
+from switchable_label import SwitchableLabelsIterable
 from utilities import pop_up
 
 class ThemeConstants(object):
@@ -15,8 +17,11 @@ class ThemeConstants(object):
     CURRENT                = ".current_theme"
     COLORS                 = "colors.txt"
     COLOR_SEPARATOR        = "="
-    DEFAULT_ACTIVE_COLOR   = "#39eaff"
+    DEFAULT_ACTIVE_COLOR   = "#000000"
     DEFAULT_INACTIVE_COLOR = "#9f9f9f"
+    DEFAULT_OFF_COLORS     = "#000000", "#434343"
+    DEFAULT_ON_COLORS      = "#4b79a1", "#283e51"
+    DEFAULT_TEXT_COLOR     = "#ffffff"
     THEME_NOT_FOUND        = "Theme not found"
     MISSING_THEME          = "Missing theme in '" + FOLDER + "' folder."
 
@@ -25,10 +30,25 @@ class Theme(object):
         self.__parent = parent
         self.__parent.active_color = ThemeConstants.DEFAULT_ACTIVE_COLOR
         self.__parent.inactive_color = ThemeConstants.DEFAULT_INACTIVE_COLOR
-        self.__theme_path = ThemeConstants.DEFAULT
+
+        self.__theme_path = ""
+        self.__current_theme = ""
+
         self.__parent.default_images_folder = os.path.join(ThemeConstants.FOLDER,
                                                            ThemeConstants.DEFAULT,
                                                            ThemeConstants.ICONS_FOLDER)
+
+        self.__forecast_labels =  SwitchableLabelsIterable(*list(chain(self.__parent.switchable_r_labels,
+                                                                       self.__parent.switchable_s_labels,
+                                                                       self.__parent.switchable_g_now_labels,
+                                                                       self.__parent.switchable_g_today_labels,
+                                                                       self.__parent.k_storm_labels,
+                                                                       self.__parent.a_storm_labels,
+                                                                       [self.__parent.expected_noise_lbl])))
+
+        self.__forecast_labels.set("switch_on_colors", ThemeConstants.DEFAULT_ON_COLORS)
+        self.__forecast_labels.set("switch_off_colors", ThemeConstants.DEFAULT_OFF_COLORS)
+
         self.__theme_names = {}
         self.__detect_themes()
 
@@ -43,6 +63,7 @@ class Theme(object):
                                             self.__parent.upper_band_filter_unit,
                                             self.__parent.upper_band_confidence,
                                             self.__parent.band_range_lbl)
+
         self.__parent.set_band_filter_label(self.__parent.activate_low_freq_filter_btn,
                                             self.__parent.lower_freq_spinbox,
                                             self.__parent.lower_freq_filter_unit,
@@ -56,10 +77,12 @@ class Theme(object):
     @pyqtSlot()
     def __apply(self, theme_path):
         self.__theme_path = theme_path
-        self.__change()
-        self.__parent.display_specs(self.__parent.result_list.currentItem(), None)
-        self.__refresh_range_labels()
-        self.__parent.audio_widget.refresh_btns_colors(self.__parent.active_color, self.__parent.inactive_color)
+        if self.__theme_path != self.__current_theme:
+            self.__change()
+            self.__parent.display_specs(self.__parent.result_list.currentItem(), None)
+            self.__refresh_range_labels()
+            self.__parent.audio_widget.refresh_btns_colors(self.__parent.active_color, self.__parent.inactive_color)
+            self.__forecast_labels.refresh()
 
     def __pretty_name(self, bad_name):
         return ' '.join(
@@ -135,27 +158,52 @@ class Theme(object):
             path_to_colors = os.path.join(self.__theme_path, ThemeConstants.COLORS)
             active_color_ok = False
             inactive_color_ok = False
-            valid_format = False
-            valid_file = False
+            switch_on_color_ok = False
+            switch_off_color_ok = False
+            text_color_ok = False
+
             if os.path.exists(path_to_colors):
-                valid_file = True
+                is_valid_html_color = lambda colors : all([bool(re.match("#([a-zA-Z0-9]){6}", color)) for color in colors])
                 with open(path_to_colors, "r") as colors_file:
                     for line in colors_file:
                         if ThemeConstants.COLOR_SEPARATOR in line:
-                            valid_format = True
                             quality, color = line.split(ThemeConstants.COLOR_SEPARATOR)
                             color = color.rstrip()
-                            is_valid_html_color = lambda color : bool(re.match("#([a-zA-Z0-9]){6}", color))
-                            if quality.lower() == Constants.ACTIVE and is_valid_html_color(color):
-                                self.__parent.active_color = color
-                                active_color_ok = True
-                            if quality.lower() == Constants.INACTIVE and is_valid_html_color(color):
-                                self.__parent.inactive_color = color
-                                inactive_color_ok = True
+                            if ',' in color:
+                                color = [c.rstrip().lstrip() for c in color.split(',')]
+                            else:
+                                color = [color]
+                            if len(color) > 2:
+                                break
+                            if is_valid_html_color(color):
+                                if quality.lower() == Constants.ACTIVE:
+                                    self.__parent.active_color = color[0]
+                                    active_color_ok = True
+                                if quality.lower() == Constants.INACTIVE:
+                                    self.__parent.inactive_color = color[0]
+                                    inactive_color_ok = True
+                                if quality.lower() == Constants.LABEL_ON_COLOR:
+                                    switch_on_color_ok = True
+                                    self.__forecast_labels.set("switch_on_colors", color)
+                                if quality.lower() == Constants.LABEL_OFF_COLOR:
+                                    switch_off_color_ok = True
+                                    self.__forecast_labels.set("switch_off_colors", color)
+                                if quality.lower() == Constants.TEXT_COLOR:
+                                    text_color_ok = True
+                                    self.__forecast_labels.set("text_color", color[0])
 
-            if not all([valid_file, valid_format, active_color_ok, inactive_color_ok]):
+            if not (active_color_ok and inactive_color_ok):
                 self.__parent.active_color = ThemeConstants.DEFAULT_ACTIVE_COLOR
                 self.__parent.inactive_color = ThemeConstants.DEFAULT_INACTIVE_COLOR
+
+            if not (switch_on_color_ok and switch_off_color_ok):
+                for label in self.__forecast_labels:
+                    label.switch_on_colors = ThemeConstants.DEFAULT_ON_COLORS
+                    label.switch_off_colors = ThemeConstants.DEFAULT_OFF_COLORS
+
+            if not text_color_ok:
+                self.__forecast_labels.set("text_color", ThemeConstants.DEFAULT_TEXT_COLOR)
+            self.__current_theme = self.__theme_path
 
             try:
                 with open(os.path.join(ThemeConstants.FOLDER,
@@ -171,7 +219,7 @@ class Theme(object):
                 theme_path = current_theme_path.read()
                 theme_name = self.__pretty_name(os.path.basename(theme_path))
                 self.__theme_names[theme_name].setChecked(True)
-                if theme_path != ThemeConstants.DEFAULT:
-                    self.__apply(theme_path)
+                self.__apply(theme_path)
         else:
             self.__theme_names[self.__pretty_name(ThemeConstants.DEFAULT)].setChecked(True)
+            self.__apply(os.path.join(ThemeConstants.FOLDER, ThemeConstants.DEFAULT))

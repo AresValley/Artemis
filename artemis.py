@@ -1,5 +1,4 @@
 from collections import namedtuple
-from itertools import chain
 from functools import partial
 import webbrowser
 import os
@@ -31,8 +30,7 @@ from constants import (Constants,
                        Database,
                        ChecksumWhat,
                        Messages,
-                       Signal,
-                       Colors,)
+                       Signal,)
 from themes import Theme
 from utilities import (checksum_ok,
                        uncheck_and_emit,
@@ -64,6 +62,66 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.current_signal_name = ''
         self.signal_names = []
         self.total_signals = 0
+        self.switchable_r_labels = SwitchableLabelsIterable(self.r0_now_lbl,
+                                                            self.r1_now_lbl,
+                                                            self.r2_now_lbl,
+                                                            self.r3_now_lbl,
+                                                            self.r4_now_lbl,
+                                                            self.r5_now_lbl,)
+
+        self.switchable_s_labels = SwitchableLabelsIterable(self.s0_now_lbl,
+                                                            self.s1_now_lbl,
+                                                            self.s2_now_lbl,
+                                                            self.s3_now_lbl,
+                                                            self.s4_now_lbl,
+                                                            self.s5_now_lbl,)
+
+        self.switchable_g_now_labels = SwitchableLabelsIterable(self.g0_now_lbl,
+                                                                self.g1_now_lbl,
+                                                                self.g2_now_lbl,
+                                                                self.g3_now_lbl,
+                                                                self.g4_now_lbl,
+                                                                self.g5_now_lbl)
+
+        self.switchable_g_today_labels = SwitchableLabelsIterable(self.g0_today_lbl,
+                                                                  self.g1_today_lbl,
+                                                                  self.g2_today_lbl,
+                                                                  self.g3_today_lbl,
+                                                                  self.g4_today_lbl,
+                                                                  self.g5_today_lbl)
+
+        self.k_storm_labels = SwitchableLabelsIterable(self.k_ex_sev_storm_lbl,
+                                                       self.k_very_sev_storm_lbl,
+                                                       self.k_sev_storm_lbl,
+                                                       self.k_maj_storm_lbl,
+                                                       self.k_min_storm_lbl,
+                                                       self.k_active_lbl,
+                                                       self.k_unsettled_lbl,
+                                                       self.k_quiet_lbl,
+                                                       self.k_very_quiet_lbl,
+                                                       self.k_inactive_lbl)
+
+        self.a_storm_labels = SwitchableLabelsIterable(self.a_sev_storm_lbl,
+                                                       self.a_maj_storm_lbl,
+                                                       self.a_min_storm_lbl,
+                                                       self.a_active_lbl,
+                                                       self.a_unsettled_lbl,
+                                                       self.a_quiet_lbl)
+
+        self.forecast_labels = (self.forecast_lbl_0,
+                                self.forecast_lbl_1,
+                                self.forecast_lbl_2,
+                                self.forecast_lbl_3,
+                                self.forecast_lbl_4,
+                                self.forecast_lbl_5,
+                                self.forecast_lbl_6,
+                                self.forecast_lbl_7,
+                                self.forecast_lbl_8)
+
+        for lab in self.forecast_labels:
+            lab.set_default_stylesheet()
+
+        self.forecast_label_container.labels = self.forecast_labels
         self.theme = Theme(self)
 
         # Manage frequency filters.
@@ -377,92 +435,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.update_now_bar.set_idle()
         self.space_weather_data = SpaceWeatherData()
         self.space_weather_data.update_complete.connect(self.update_space_weather)
-        self.switchable_r_labels = SwitchableLabelsIterable(self.r0_now_lbl,
-                                                            self.r1_now_lbl,
-                                                            self.r2_now_lbl,
-                                                            self.r3_now_lbl,
-                                                            self.r4_now_lbl,
-                                                            self.r5_now_lbl,)
-        self.switchable_s_labels = SwitchableLabelsIterable(self.s0_now_lbl,
-                                                            self.s1_now_lbl,
-                                                            self.s2_now_lbl,
-                                                            self.s3_now_lbl,
-                                                            self.s4_now_lbl,
-                                                            self.s5_now_lbl,)
-        self.switchable_g_now_labels = SwitchableLabelsIterable(self.g0_now_lbl,
-                                                                self.g1_now_lbl,
-                                                                self.g2_now_lbl,
-                                                                self.g3_now_lbl,
-                                                                self.g4_now_lbl,
-                                                                self.g5_now_lbl)
-        self.switchable_g_today_labels = SwitchableLabelsIterable(self.g0_today_lbl,
-                                                                  self.g1_today_lbl,
-                                                                  self.g2_today_lbl,
-                                                                  self.g3_today_lbl,
-                                                                  self.g4_today_lbl,
-                                                                  self.g5_today_lbl)
-        colors_array = [[Colors.WHITE_LIGHT,  Colors.WHITE_DARK],
-                        [Colors.BLUE_LIGHT,   Colors.BLUE_DARK],
-                        [Colors.GREEN_LIGHT,  Colors.GREEN_DARK],
-                        [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
-                        [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
-                        [Colors.RED_LIGHT, Colors.RED_DARK]]
-
-        for lab, [light_color, dark_color] in zip(chain(self.switchable_r_labels,
-                                                        self.switchable_s_labels,
-                                                        self.switchable_g_now_labels,
-                                                        self.switchable_g_today_labels),
-                                                  colors_array * 4):
-            lab.set_colors(None, None)
-
-        k_storms_colors = [[Colors.RED_LIGHT, Colors.RED_DARK],
-                           [Colors.RED2_LIGHT, Colors.RED2_DARK],
-                           [Colors.RED3_LIGHT, Colors.RED3_DARK],
-                           [Colors.ORANGE2_LIGHT, Colors.ORANGE2_DARK],
-                           [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
-                           [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
-                           [Colors.GREEN2_LIGHT, Colors.GREEN2_DARK],
-                           [Colors.GREEN3_LIGHT, Colors.GREEN3_DARK],
-                           [Colors.GREEN_LIGHT, Colors.GREEN_DARK],
-                           [Colors.BLUE_LIGHT, Colors.BLUE_DARK]]
-        a_storm_colors = [[Colors.RED_LIGHT, Colors.RED_DARK],
-                          [Colors.ORANGE2_LIGHT, Colors.ORANGE2_DARK],
-                          [Colors.ORANGE_LIGHT, Colors.ORANGE_DARK],
-                          [Colors.YELLOW_LIGHT, Colors.YELLOW_DARK],
-                          [Colors.GREEN_LIGHT, Colors.GREEN_DARK],
-                          [Colors.BLUE_LIGHT, Colors.BLUE_DARK]]
-
-        self.k_storm_labels = SwitchableLabelsIterable(self.k_ex_sev_storm_lbl,
-                                                       self.k_very_sev_storm_lbl,
-                                                       self.k_sev_storm_lbl,
-                                                       self.k_maj_storm_lbl,
-                                                       self.k_min_storm_lbl,
-                                                       self.k_active_lbl,
-                                                       self.k_unsettled_lbl,
-                                                       self.k_quiet_lbl,
-                                                       self.k_very_quiet_lbl,
-                                                       self.k_inactive_lbl)
-        self.a_storm_labels = SwitchableLabelsIterable(self.a_sev_storm_lbl,
-                                                       self.a_maj_storm_lbl,
-                                                       self.a_min_storm_lbl,
-                                                       self.a_active_lbl,
-                                                       self.a_unsettled_lbl,
-                                                       self.a_quiet_lbl)
-
-        for lab, [light_color, dark_color] in zip(chain(self.k_storm_labels, self.a_storm_labels),
-                                                  chain(k_storms_colors, a_storm_colors)):
-            lab.set_colors(None, None)
-
-        self.forecast_labels = (self.forecast_lbl_0,
-                                self.forecast_lbl_1,
-                                self.forecast_lbl_2,
-                                self.forecast_lbl_3,
-                                self.forecast_lbl_4,
-                                self.forecast_lbl_5,
-                                self.forecast_lbl_6,
-                                self.forecast_lbl_7,
-                                self.forecast_lbl_8)
-        self.forecast_label_container.labels = self.forecast_labels
 
 # Final operations.
         self.theme.initialize()
@@ -580,37 +552,35 @@ class Artemis(QMainWindow, Ui_MainWindow):
             k_index_24_hmax = int(self.space_weather_data.geo_storm[6][index])
             if k_index_24_hmax == 0:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("S0 - S1 (<-120 dBm)")
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index_24_hmax == 1:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("S0 - S1 (<-120 dBm)")
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index_24_hmax == 2:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("S1 - S2 (-115 dBm)")
+                self.expected_noise_lbl.setText("  S1 - S2 (-115 dBm)  ")
             elif k_index_24_hmax == 3:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("S2 - S3 (-110 dBm)")
+                self.expected_noise_lbl.setText("  S2 - S3 (-110 dBm)  ")
             elif k_index_24_hmax == 4:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("S3 - S4 (-100 dBm)")
+                self.expected_noise_lbl.setText("  S3 - S4 (-100 dBm)  ")
             elif k_index_24_hmax == 5:
                 self.switchable_g_today_labels.switch_on(self.g1_today_lbl)
-                self.expected_noise_lbl.setText("S4 - S6 (-90 dBm)")
+                self.expected_noise_lbl.setText("  S4 - S6 (-90 dBm)  ")
             elif k_index_24_hmax == 6:
                 self.switchable_g_today_labels.switch_on(self.g2_today_lbl)
-                self.expected_noise_lbl.setText("S6 - S9 (-80 dBm)")
+                self.expected_noise_lbl.setText("  S6 - S9 (-80 dBm)  ")
             elif k_index_24_hmax == 7:
                 self.switchable_g_today_labels.switch_on(self.g3_today_lbl)
-                self.expected_noise_lbl.setText("S9 - S20 (>-60 dBm)")
+                self.expected_noise_lbl.setText("  S9 - S20 (>-60 dBm)  ")
             elif k_index_24_hmax == 8:
                 self.switchable_g_today_labels.switch_on(self.g4_today_lbl)
-                self.expected_noise_lbl.setText("S20 - S30 (>-60 dBm)")
+                self.expected_noise_lbl.setText("  S20 - S30 (>-60 dBm)  ")
             elif k_index_24_hmax == 9:
                 self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
-                self.expected_noise_lbl.setText("S30+ (>>-60 dBm)")
-            self.expected_noise_lbl.setStyleSheet(f"""
-            color:#ffffff;
-            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #4776e6 ,stop: 1 #8e54e9);""")
+                self.expected_noise_lbl.setText("  S30+ (>>-60 dBm)  ")
+            self.expected_noise_lbl.switch_on()
 
             val = int(self.space_weather_data.ak_index[7][2].replace('.', ''))
             self.sfi_lbl.setText(f"{val}")
@@ -618,10 +588,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.sn_lbl.setText(f"{val:d}")
 
             for label, pixmap in zip(self.forecast_labels, self.space_weather_data.images):
-                label.setText('')
                 label.pixmap = pixmap
-                label.setPixmap(pixmap.scaled(label.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
-                label.setStyleSheet("background-color: transparent;")
+                label.make_transparent()
+                label.apply_pixmap()
         else:
             pop_up(self, title = Messages.BAD_DOWNLOAD,
                    text = Messages.BAD_DOWNLOAD_MSG).show()
@@ -998,8 +967,15 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def reset_mode_filters(self):
         uncheck_and_emit(self.apply_remove_mode_filter_btn)
+        parents = Constants.MODES.keys()
+        selected_children = []
         for item in self.mode_tree_widget.selectedItems():
-            item.setSelected(False)
+            if item.text(0) in parents:
+                item.setSelected(False)
+            else:
+                selected_children.append(item)
+        for children in selected_children:
+            children.setSelected(False)
         if self.include_unknown_modes_btn.isChecked():
             self.include_unknown_modes_btn.setChecked(False)
 

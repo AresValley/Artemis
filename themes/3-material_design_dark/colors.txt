@@ -1,2 +1,4 @@
 active=#88cc00
 inactive=#546E7A
+off=#304352,#d7d2cc
+on=#3ca55c,#b5ac49

@@ -1,2 +1,5 @@
-active=#4da6ff
+active=#4545e5
 inactive=#546E7A
+off=#283048,#859398
+on=#4776e6, #8e54e9
+text=#ffffff

@@ -3,32 +3,26 @@ from PyQt5.QtWidgets import QLabel
 class SwitchableLabel(QLabel):
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.switch_on_color = None
-        self.switch_off_color = None
-
-    def set_colors(self, on, off):
-        self.switch_on_color = on
-        self.switch_off_color = off
+        self.switch_on_colors = ()
+        self.switch_off_colors = ()
+        self.text_color = ''
+        self.is_on = False
 
     def switch_on(self):
-        if self.switch_on_color and self.switch_off_color:
-            self.setStyleSheet(f"""background-color: {self.switch_on_color};
-            color:#000000;""")
-        else:
-            self.setStyleSheet("""
-            color:#ffffff;
-            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #4776e6 ,stop: 1 #8e54e9);
-            """)
+        self.is_on = True
+        self.__apply_colors(*self.switch_on_colors)
 
     def switch_off(self):
-        if self.switch_on_color and self.switch_off_color:
-            self.setStyleSheet(f"""background-color: {self.switch_off_color};
-            color:#000000;""")
-        else:
-            self.setStyleSheet("""
-            color:#ffffff;
-            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);
-            """)
+        self.is_on = False
+        self.__apply_colors(*self.switch_off_colors)
+
+    def __apply_colors(self, start, end):
+        self.setStyleSheet(
+            f"""
+            color:{self.text_color};
+            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 {start} ,stop: 1 {end});
+            """
+        )
 
 
 class SwitchableLabelsIterable(object):
@@ -49,3 +43,14 @@ class SwitchableLabelsIterable(object):
     def switch_off_all(self):
         for lab in self.labels:
             lab.switch_off()
+
+    def set(self, attr, value):
+        for lab in self.labels:
+            setattr(lab, attr, value)
+
+    def refresh(self):
+        for lab in self.labels:
+            if lab.is_on:
+                lab.switch_on()
+            else:
+                lab.switch_off()

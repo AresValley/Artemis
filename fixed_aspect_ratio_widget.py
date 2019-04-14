@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import QSize
 
 class FixedAspectRatioWidget(QWidget):
     space = 10
@@ -16,4 +17,4 @@ class FixedAspectRatioWidget(QWidget):
             h_lbl = h / 9 - self.space
 
         for label in self.labels:
-            label.rescale(w_lbl, h_lbl)
+            label.rescale(QSize(w_lbl, h_lbl))
