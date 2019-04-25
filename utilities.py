@@ -54,7 +54,7 @@ def checksum_ok(data, what):
         raise
     return code.hexdigest() == reference
 
-def connect_to(events_to_connect, fun_to_connect, fun_args):
+def connect_events_to_func(events_to_connect, fun_to_connect, fun_args):
     if fun_args:
         for event in events_to_connect:
             event.connect(partial(fun_to_connect, *fun_args))
@@ -62,7 +62,7 @@ def connect_to(events_to_connect, fun_to_connect, fun_args):
         for event in events_to_connect:
             event.connect(fun_to_connect)
 
-def filters_ok(spinbox, filter_unit, confidence, sign = 1):
+def filters_limit(spinbox, filter_unit, confidence, sign = 1):
         band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
         return band_filter + sign * (confidence.value() * band_filter) // 100
 
@@ -76,7 +76,7 @@ def is_undef_band(current_signal):
     upper_band = current_signal.at[Signal.SUP_BAND]
     return lower_band == Constants.UNKNOWN or upper_band == Constants.UNKNOWN
 
-def change_unit(num):
+def _change_unit(num):
     digits = len(num)
     if digits < 4:
         return 1
@@ -89,8 +89,8 @@ def change_unit(num):
 
 def format_numbers(lower, upper):
     units = {1: 'Hz', 1000: 'kHz', 10**6: 'MHz', 10**9: 'GHz'}
-    lower_factor = change_unit(lower)
-    upper_factor = change_unit(upper)
+    lower_factor = _change_unit(lower)
+    upper_factor = _change_unit(upper)
     pre_lower = lower
     pre_upper = upper
     lower = int(lower) / lower_factor

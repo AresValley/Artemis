@@ -35,8 +35,8 @@ from themes import Theme
 from utilities import (checksum_ok,
                        uncheck_and_emit,
                        pop_up,
-                       connect_to,
-                       filters_ok,
+                       connect_events_to_func,
+                       filters_limit,
                        is_undef_freq,
                        is_undef_band,
                        format_numbers,
@@ -139,7 +139,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.ehf_filter_btn,
         )
 
-        connect_to(
+        connect_events_to_func(
             events_to_connect = [self.lower_freq_spinbox.valueChanged,
                                  self.upper_freq_spinbox.valueChanged,
                                  self.lower_freq_filter_unit.currentTextChanged,
@@ -152,7 +152,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                         self.upper_freq_spinbox]
         )
 
-        connect_to(
+        connect_events_to_func(
             events_to_connect = [self.lower_freq_spinbox.valueChanged,
                                  self.upper_freq_spinbox.valueChanged,
                                  self.lower_freq_filter_unit.currentTextChanged,
@@ -215,7 +215,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Manage bandwidth filters.
 
-        connect_to(
+        connect_events_to_func(
             events_to_connect = [self.lower_band_spinbox.valueChanged,
                                  self.upper_band_spinbox.valueChanged,
                                  self.lower_band_filter_unit.currentTextChanged,
@@ -228,7 +228,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                         self.upper_band_spinbox]
         )
 
-        connect_to(
+        connect_events_to_func(
             events_to_connect = [self.lower_band_spinbox.valueChanged,
                                  self.upper_band_spinbox.valueChanged,
                                  self.lower_band_filter_unit.currentTextChanged,
@@ -389,7 +389,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.reset_acf_filters_btn.clicked.connect(self.reset_acf_filters)
         self.acf_info_btn.clicked.connect(lambda : webbrowser.open(Constants.ACF_DOCS))
 
-        connect_to(
+        connect_events_to_func(
             events_to_connect = [self.acf_spinbox.valueChanged, self.acf_confidence.valueChanged],
             fun_to_connect = self.set_acf_interval_label,
             fun_args = None
@@ -1026,12 +1026,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
         lower_limit_ok = True
         upper_limit_ok = True
         if self.activate_low_freq_filter_btn.isChecked():
-            if not signal_freqs[1] >= filters_ok(self.lower_freq_spinbox,
+            if not signal_freqs[1] >= filters_limit(self.lower_freq_spinbox,
                                                  self.lower_freq_filter_unit,
                                                  self.lower_freq_confidence, -1):
                 lower_limit_ok = False
         if self.activate_up_freq_filter_btn.isChecked():
-            if not signal_freqs[0] < filters_ok(self.upper_freq_spinbox,
+            if not signal_freqs[0] < filters_limit(self.upper_freq_spinbox,
                                                 self.upper_freq_filter_unit,
                                                 self.upper_freq_confidence):
                 upper_limit_ok = False
@@ -1056,12 +1056,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
         lower_limit_ok = True
         upper_limit_ok = True
         if self.activate_low_band_filter_btn.isChecked():
-            if not signal_bands[1] >= filters_ok(self.lower_band_spinbox,
+            if not signal_bands[1] >= filters_limit(self.lower_band_spinbox,
                                                  self.lower_band_filter_unit,
                                                  self.lower_band_confidence, -1):
                 lower_limit_ok = False
         if self.activate_up_band_filter_btn.isChecked():
-            if not signal_bands[0] < filters_ok(self.upper_band_spinbox,
+            if not signal_bands[0] < filters_limit(self.upper_band_spinbox,
                                                 self.upper_band_filter_unit,
                                                 self.upper_band_confidence):
                 upper_limit_ok = False
