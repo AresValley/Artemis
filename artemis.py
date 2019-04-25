@@ -1,6 +1,5 @@
 from collections import namedtuple
 from functools import partial
-from glob import glob
 import webbrowser
 import os
 import sys
@@ -14,7 +13,6 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QListWidgetItem,
                              QMessageBox,
                              QSplashScreen,
-                             QTreeView,
                              QTreeWidgetItem,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
@@ -23,10 +21,9 @@ from PyQt5.QtCore import (QFileInfo,
                           pyqtSlot,)
 
 from audio_player import AudioPlayer
-
-from double_text_button import DoubleTextButton
+from space_weather_data import SpaceWeatherData
 from download_window import DownloadWindow
-
+from switchable_label import SwitchableLabelsIterable
 from constants import (Constants,
                        Ftype,
                        GfdType,
@@ -35,7 +32,6 @@ from constants import (Constants,
                        Messages,
                        Signal,)
 from themes import Theme
-
 from utilities import (checksum_ok,
                        uncheck_and_emit,
                        pop_up,
@@ -43,11 +39,10 @@ from utilities import (checksum_ok,
                        filters_ok,
                        is_undef_freq,
                        is_undef_band,
-                       change_unit,
                        format_numbers,
                        resource_path,)
 
-import icon_rc
+# import icon_rc
 
 qt_creator_file = resource_path("artemis.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
@@ -59,6 +54,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.set_initial_size()
         self.download_window = DownloadWindow()
+        self.download_window.complete.connect(self.show_downloaded_signals)
         self.actionExit.triggered.connect(qApp.quit)
         self.action_update_database.triggered.connect(self.ask_if_download)
         self.action_check_db_ver.triggered.connect(self.check_db_ver)
@@ -66,6 +62,66 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.current_signal_name = ''
         self.signal_names = []
         self.total_signals = 0
+        self.switchable_r_labels = SwitchableLabelsIterable(self.r0_now_lbl,
+                                                            self.r1_now_lbl,
+                                                            self.r2_now_lbl,
+                                                            self.r3_now_lbl,
+                                                            self.r4_now_lbl,
+                                                            self.r5_now_lbl,)
+
+        self.switchable_s_labels = SwitchableLabelsIterable(self.s0_now_lbl,
+                                                            self.s1_now_lbl,
+                                                            self.s2_now_lbl,
+                                                            self.s3_now_lbl,
+                                                            self.s4_now_lbl,
+                                                            self.s5_now_lbl,)
+
+        self.switchable_g_now_labels = SwitchableLabelsIterable(self.g0_now_lbl,
+                                                                self.g1_now_lbl,
+                                                                self.g2_now_lbl,
+                                                                self.g3_now_lbl,
+                                                                self.g4_now_lbl,
+                                                                self.g5_now_lbl)
+
+        self.switchable_g_today_labels = SwitchableLabelsIterable(self.g0_today_lbl,
+                                                                  self.g1_today_lbl,
+                                                                  self.g2_today_lbl,
+                                                                  self.g3_today_lbl,
+                                                                  self.g4_today_lbl,
+                                                                  self.g5_today_lbl)
+
+        self.k_storm_labels = SwitchableLabelsIterable(self.k_ex_sev_storm_lbl,
+                                                       self.k_very_sev_storm_lbl,
+                                                       self.k_sev_storm_lbl,
+                                                       self.k_maj_storm_lbl,
+                                                       self.k_min_storm_lbl,
+                                                       self.k_active_lbl,
+                                                       self.k_unsettled_lbl,
+                                                       self.k_quiet_lbl,
+                                                       self.k_very_quiet_lbl,
+                                                       self.k_inactive_lbl)
+
+        self.a_storm_labels = SwitchableLabelsIterable(self.a_sev_storm_lbl,
+                                                       self.a_maj_storm_lbl,
+                                                       self.a_min_storm_lbl,
+                                                       self.a_active_lbl,
+                                                       self.a_unsettled_lbl,
+                                                       self.a_quiet_lbl)
+
+        self.forecast_labels = (self.forecast_lbl_0,
+                                self.forecast_lbl_1,
+                                self.forecast_lbl_2,
+                                self.forecast_lbl_3,
+                                self.forecast_lbl_4,
+                                self.forecast_lbl_5,
+                                self.forecast_lbl_6,
+                                self.forecast_lbl_7,
+                                self.forecast_lbl_8)
+
+        for lab in self.forecast_labels:
+            lab.set_default_stylesheet()
+
+        self.forecast_label_container.labels = self.forecast_labels
         self.theme = Theme(self)
 
         # Manage frequency filters.
@@ -346,13 +402,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 # ##########################################################################################
 
-        # self.load_db()
-
         # Left list widget and search bar.
         self.search_bar.textChanged.connect(self.display_signals)
         self.result_list.currentItemChanged.connect(self.display_specs)
         self.result_list.itemDoubleClicked.connect(lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab))
-        # self.display_signals()
         self.audio_widget = AudioPlayer(self.play,
                                         self.pause,
                                         self.stop,
@@ -376,25 +429,185 @@ class Artemis(QMainWindow, Ui_MainWindow):
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
 
+        # Space weather
+        self.info_now_btn.clicked.connect(lambda : webbrowser.open(Constants.FORECAST_INFO))
+        self.update_now_bar.clicked.connect(self.start_update_space_weather)
+        self.update_now_bar.set_idle()
+        self.space_weather_data = SpaceWeatherData()
+        self.space_weather_data.update_complete.connect(self.update_space_weather)
+
 # Final operations.
         self.theme.initialize()
         self.load_db()
         self.display_signals()
-        self.show()
+
+    @pyqtSlot()
+    def start_update_space_weather(self):
+        if not self.space_weather_data.is_updating:
+            self.update_now_bar.set_updating()
+            self.space_weather_data.update()
+
+    @pyqtSlot(bool)
+    def update_space_weather(self, status_ok):
+        self.update_now_bar.set_idle()
+        if status_ok:
+            xray_long = float(self.space_weather_data.xray[-1][7])
+            format_text = lambda letter, power : letter + f"{xray_long * 10**power:.1f}"
+            if xray_long < 1e-8 and xray_long != -1.00e+05:
+                self.peak_flux_lbl.setText(format_text("<A", 8))
+            elif xray_long >= 1e-8 and xray_long < 1e-7:
+                self.peak_flux_lbl.setText(format_text("A", 8))
+            elif xray_long >= 1e-7 and xray_long < 1e-6:
+                self.peak_flux_lbl.setText(format_text("B", 7))
+            elif xray_long >= 1e-6 and xray_long < 1e-5:
+                self.peak_flux_lbl.setText(format_text("C", 6))
+            elif xray_long >= 1e-5 and xray_long < 1e-4:
+                self.peak_flux_lbl.setText(format_text("M", 5))
+            elif xray_long >= 1e-4:
+                self.peak_flux_lbl.setText(format_text("X", 4))
+            elif xray_long == -1.00e+05:
+                self.peak_flux_lbl.setText("No Data")
+
+            if xray_long < 1e-5 and xray_long != -1.00e+05:
+                self.switchable_r_labels.switch_on(self.r0_now_lbl)
+            elif xray_long >= 1e-5 and xray_long < 5e-5:
+                self.switchable_r_labels.switch_on(self.r1_now_lbl)
+            elif xray_long >= 5e-5 and xray_long < 1e-4:
+                self.switchable_r_labels.switch_on(self.r2_now_lbl)
+            elif xray_long >= 1e-4 and xray_long < 1e-3:
+                self.switchable_r_labels.switch_on(self.r3_now_lbl)
+            elif xray_long >= 1e-3 and xray_long < 2e-3:
+                self.switchable_r_labels.switch_on(self.r4_now_lbl)
+            elif xray_long >= 2e-3:
+                self.switchable_r_labels.switch_on(self.r5_now_lbl)
+            elif xray_long == -1.00e+05:
+                self.switchable_r_labels.switch_off_all()
+
+            pro10 = float(self.space_weather_data.prot_el[-1][8])
+            if pro10 < 10 and pro10 != -1.00e+05:
+                self.switchable_s_labels.switch_on(self.s0_now_lbl)
+            elif pro10 >= 10 and pro10 < 100:
+                self.switchable_s_labels.switch_on(self.s1_now_lbl)
+            elif pro10 >= 100 and pro10 < 1000:
+                self.switchable_s_labels.switch_on(self.s2_now_lbl)
+            elif pro10 >= 1000 and pro10 < 10000:
+                self.switchable_s_labels.switch_on(self.s3_now_lbl)
+            elif pro10 >= 10000 and pro10 < 100000:
+                self.switchable_s_labels.switch_on(self.s4_now_lbl)
+            elif pro10 >= 100000:
+                self.switchable_s_labels.switch_on(self.s5_now_lbl)
+            elif pro10 == -1.00e+05:
+                self.switchable_s_labels.switch_off_all()
+
+            k_index = int(self.space_weather_data.ak_index[8][11].replace('.', ''))
+            self.k_index_lbl.setText(str(k_index))
+            a_index = int(self.space_weather_data.ak_index[7][7].replace('.', ''))
+            self.a_index_lbl.setText(str(a_index))
+
+            if k_index == 0:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_inactive_lbl)
+            elif k_index == 1:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_very_quiet_lbl)
+            elif k_index == 2:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_quiet_lbl)
+            elif k_index == 3:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_unsettled_lbl)
+            elif k_index == 4:
+                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
+                self.k_storm_labels.switch_on(self.k_active_lbl)
+            elif k_index == 5:
+                self.switchable_g_now_labels.switch_on(self.g1_now_lbl)
+                self.k_storm_labels.switch_on(self.k_min_storm_lbl)
+            elif k_index == 6:
+                self.switchable_g_now_labels.switch_on(self.g2_now_lbl)
+                self.k_storm_labels.switch_on(self.k_maj_storm_lbl)
+            elif k_index == 7:
+                self.switchable_g_now_labels.switch_on(self.g3_now_lbl)
+                self.k_storm_labels.switch_on(self.k_sev_storm_lbl)
+            elif k_index == 8:
+                self.switchable_g_now_labels.switch_on(self.g4_now_lbl)
+                self.k_storm_labels.switch_on(self.k_very_sev_storm_lbl)
+            elif k_index == 9:
+                self.switchable_g_now_labels.switch_on(self.g5_now_lbl)
+                self.k_storm_labels.switch_on(self.k_ex_sev_storm_lbl)
+
+            if a_index >= 0 and a_index < 8:
+                self.a_storm_labels.switch_on(self.a_quiet_lbl)
+            elif a_index >= 8 and a_index < 16:
+                self.a_storm_labels.switch_on(self.a_unsettled_lbl)
+            elif a_index >= 16 and a_index < 30:
+                self.a_storm_labels.switch_on(self.a_active_lbl)
+            elif a_index >= 30 and a_index < 50:
+                self.a_storm_labels.switch_on(self.a_min_storm_lbl)
+            elif a_index >= 50 and a_index < 100:
+                self.a_storm_labels.switch_on(self.a_maj_storm_lbl)
+            elif a_index >= 100 and a_index < 400:
+                self.a_storm_labels.switch_on(self.a_sev_storm_lbl)
+
+            index = self.space_weather_data.geo_storm[6].index("was") + 1
+            k_index_24_hmax = int(self.space_weather_data.geo_storm[6][index])
+            if k_index_24_hmax == 0:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
+            elif k_index_24_hmax == 1:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
+            elif k_index_24_hmax == 2:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("  S1 - S2 (-115 dBm)  ")
+            elif k_index_24_hmax == 3:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("  S2 - S3 (-110 dBm)  ")
+            elif k_index_24_hmax == 4:
+                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
+                self.expected_noise_lbl.setText("  S3 - S4 (-100 dBm)  ")
+            elif k_index_24_hmax == 5:
+                self.switchable_g_today_labels.switch_on(self.g1_today_lbl)
+                self.expected_noise_lbl.setText("  S4 - S6 (-90 dBm)  ")
+            elif k_index_24_hmax == 6:
+                self.switchable_g_today_labels.switch_on(self.g2_today_lbl)
+                self.expected_noise_lbl.setText("  S6 - S9 (-80 dBm)  ")
+            elif k_index_24_hmax == 7:
+                self.switchable_g_today_labels.switch_on(self.g3_today_lbl)
+                self.expected_noise_lbl.setText("  S9 - S20 (>-60 dBm)  ")
+            elif k_index_24_hmax == 8:
+                self.switchable_g_today_labels.switch_on(self.g4_today_lbl)
+                self.expected_noise_lbl.setText("  S20 - S30 (>-60 dBm)  ")
+            elif k_index_24_hmax == 9:
+                self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
+                self.expected_noise_lbl.setText("  S30+ (>>-60 dBm)  ")
+            self.expected_noise_lbl.switch_on()
+
+            val = int(self.space_weather_data.ak_index[7][2].replace('.', ''))
+            self.sfi_lbl.setText(f"{val}")
+            val = int([x[4] for x in self.space_weather_data.sgas if "SSN" in x][0])
+            self.sn_lbl.setText(f"{val:d}")
+
+            for label, pixmap in zip(self.forecast_labels, self.space_weather_data.images):
+                label.pixmap = pixmap
+                label.make_transparent()
+                label.apply_pixmap()
+        else:
+            pop_up(self, title = Messages.BAD_DOWNLOAD,
+                   text = Messages.BAD_DOWNLOAD_MSG).show()
+        self.space_weather_data.remove_data()
 
     @pyqtSlot()
     def go_to_gfd(self, by):
         query = "/?q="
-        if by == GfdType.FREQ:
+        if by is GfdType.FREQ:
             value_in_mhz = self.freq_gfd.value() * Constants.CONVERSION_FACTORS[self.unit_freq_gfd.currentText()] / Constants.CONVERSION_FACTORS["MHz"]
             query += str(value_in_mhz)
-        elif by == GfdType.LOC:
+        elif by is GfdType.LOC:
             query += self.gfd_line_edit.text()
         try:
             webbrowser.open(Constants.GFD_SITE + query.lower())
         except:
             pass
-
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):
@@ -417,7 +630,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def show_matching_strings(self, list_elements, text):
         for index in range(list_elements.count()):
             item = list_elements.item(index)
-            if text.upper() in item.text() or item.isSelected():
+            if text.lower() in item.text().lower() or item.isSelected():
                 item.setHidden(False)
             else:
                 item.setHidden(True)
@@ -441,10 +654,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
                         item.child(i).setSelected(True)
 
     def set_initial_size(self):
-        """
-        Function to handle high resolution screens. The function sets bigger sizes
-        for all the relevant fixed-size widgets.
-        """
+        """Function to handle high resolution screens. The function sets bigger sizes
+        for all the relevant fixed-size widgets."""
         d = QDesktopWidget().availableGeometry()
         w = d.width()
         h = d.height()
@@ -492,7 +703,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def download_db(self):
         if not self.download_window.isVisible():
-            self.download_window.download_thread.finished.connect(self.show_downloaded_signals)
             self.download_window.download_thread.start()
             self.download_window.show()
 
@@ -536,6 +746,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
                                 text = Messages.NO_DB_AVAIL,
                                 informative_text = Messages.DOWNLOAD_NOW_QUESTION,
                                 is_question = True).exec()
+                if answer == QMessageBox.Yes:
+                    self.download_db()
             else:
                 try:
                     is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
@@ -546,7 +758,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     if is_checksum_ok:
                         pop_up(self, title = Messages.DB_UP_TO_DATE,
                                text = Messages.DB_UP_TO_DATE_MSG).show()
-
                     else:
                         answer = pop_up(self, title = Messages.DB_NEW_VER,
                                         text = Messages.DB_NEW_VER_MSG,
@@ -557,10 +768,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def show_downloaded_signals(self):
-        if self.download_window.everything_ok:
-            self.search_bar.setEnabled(True)
-            self.load_db()
-            self.display_signals()
+        self.search_bar.setEnabled(True)
+        self.load_db()
+        self.display_signals()
 
     def load_db(self):
         names = Database.NAMES
@@ -585,7 +795,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.db.fillna(Constants.UNKNOWN, inplace = True)
             self.db[Signal.WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
+            self.result_list.clear()
             self.result_list.addItems(self.signal_names)
+            self.result_list.setCurrentItem(None)
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box,
@@ -599,7 +811,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
             lower_units = lower_combo_box.currentText()
             upper_units = upper_combo_box.currentText()
             lower_value = lower_spin_box.value()
-            upper_value = upper_spin_box.value()
             inf_limit = (lower_value * Constants.CONVERSION_FACTORS[lower_units]) \
                 // Constants.CONVERSION_FACTORS[upper_units]
             counter = 0
@@ -703,7 +914,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 self.result_list.item(index).setHidden(True)
         # Remove selected item.
-        self.result_list.selectionModel().clear()
+        self.result_list.setCurrentItem(None)
         self.update_status_tip(available_signals)
 
     def update_status_tip(self, available_signals):
@@ -756,8 +967,15 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def reset_mode_filters(self):
         uncheck_and_emit(self.apply_remove_mode_filter_btn)
+        parents = Constants.MODES.keys()
+        selected_children = []
         for item in self.mode_tree_widget.selectedItems():
-            item.setSelected(False)
+            if item.text(0) in parents:
+                item.setSelected(False)
+            else:
+                selected_children.append(item)
+        for children in selected_children:
+            children.setSelected(False)
         if self.include_unknown_modes_btn.isChecked():
             self.include_unknown_modes_btn.setChecked(False)
 
@@ -877,7 +1095,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         selected_items = [item for item in self.mode_tree_widget.selectedItems()]
         selected_items_text = [i.text(0) for i in selected_items]
         parents = [item for item in selected_items_text if item in Constants.MODES.keys()]
-        children = [item for item in selected_items_text if item not in parents]
         ok = []
         for item in selected_items:
             if item.text(0) in parents:
@@ -1042,11 +1259,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    img = QPixmap(":/icons/Artemis3.500px.png")
-    # img = img.scaled(600, 600, aspectRatioMode = Qt.KeepAspectRatio)
-    splash = QSplashScreen(img)
-    splash.show()
-    sleep(2)
-    w = Artemis()
-    splash.finish(w)
+    # img = QPixmap(":/icons/Artemis3.500px.png")
+    # splash = QSplashScreen(img)
+    # splash.show()
+    # sleep(2)
+    artemis = Artemis()
+    artemis.show()
+    # splash.finish(w)
     sys.exit(my_app.exec_())

@@ -1,5 +1,5 @@
 from PyQt5 import uic
-from PyQt5.QtCore import Qt, pyqtSlot
+from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QWidget
 from threads import DownloadThread, ThreadStatus
 from utilities import pop_up, resource_path
@@ -8,6 +8,9 @@ from constants import Messages
 Ui_Download_window, _ = uic.loadUiType(resource_path("download_db_window.ui"))
 
 class DownloadWindow(QWidget, Ui_Download_window):
+
+    complete = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -18,7 +21,6 @@ class DownloadWindow(QWidget, Ui_Download_window):
             Qt.WindowCloseButtonHint #|
             # Qt.WindowStaysOnTopHint
         )
-        self.everything_ok = True
 
         self.no_internet_msg = pop_up(self, title = Messages.NO_CONNECTION,
                                       text = Messages.NO_CONNECTION_MSG,
@@ -30,16 +32,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
         self.download_thread = DownloadThread()
         self.download_thread.finished.connect(self.wait_close)
-
         self.cancel_btn.clicked.connect(self.terminate_process)
-
-    def show_no_connection_warning(self):
-        self.no_internet_msg.show()
-        self.everything_ok = False
-
-    def show_bad_download_warning(self):
-        self.bad_db_download_msg.show()
-        self.everything_ok = False
 
     @pyqtSlot()
     def terminate_process(self):
@@ -50,12 +43,13 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     @pyqtSlot()
     def wait_close(self):
-        if self.download_thread.status == ThreadStatus.OK:
+        if self.download_thread.status is ThreadStatus.OK:
+            self.complete.emit()
             self.close()
-        elif self.download_thread.status == ThreadStatus.NO_CONNECTION_ERR:
-            self.show_no_connection_warning()
-        elif self.download_thread.status == ThreadStatus.BAD_DOWNLOAD_ERR:
-            self.show_bad_download_warning()
+        elif self.download_thread.status is ThreadStatus.NO_CONNECTION_ERR:
+            self.no_internet_msg.show()
+        elif self.download_thread.status is ThreadStatus.BAD_DOWNLOAD_ERR:
+            self.bad_db_download_msg.show()
         else:
             self.close()
 

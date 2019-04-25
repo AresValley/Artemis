@@ -137,7 +137,7 @@ QLabel {
 QDialog {
 	background-color: transparent;
 	color: #949a9c;
-} 
+}
 
 QTextBrowser {
 	background-color: transparent;
@@ -157,15 +157,15 @@ QLineEdit {
 QLineEdit:hover {
 	border-width: 1px;
     border-radius: 10px;
-	border-style: solid; 
-	border-color: #4545e5 ; 
+	border-style: solid;
+	border-color: #4545e5 ;
 }
 
 QLineEdit:focus {
 	border-width: 1px;
     border-radius: 10px;
-	border-style: solid; 
-	border-color: #4545e5 ; 
+	border-style: solid;
+	border-color: #4545e5 ;
 }
 
 /*************************************
@@ -307,7 +307,7 @@ QComboBox::drop-down {
     subcontrol-origin: padding;
     subcontrol-position: top right;
     width: 20px;
-    border-top-right-radius: 2px; 
+    border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
 }
 
@@ -433,6 +433,7 @@ TreeViewMenu (Mode)
 QTreeView {
 	background-color: transparent;
     selection-background-color: transparent;
+	border: 0px;
 }
 
 QTreeView::item {
