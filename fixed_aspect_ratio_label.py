@@ -9,7 +9,7 @@ class FixedAspectRatioLabel(QLabel):
     def set_default_stylesheet(self):
         self.setStyleSheet("""
             color: #ffffff;
-            background-color: #666666;
+            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #304352 ,stop: 1 #d7d2cc);
         """)
 
     def make_transparent(self):
