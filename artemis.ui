@@ -6160,7 +6160,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="text">
-                        <string>E.M.E→</string>
+                        <string>E.M.E.→</string>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -6185,7 +6185,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="text">
-                        <string>50 MHz in EU→</string>
+                        <string>50 MHz E-skip in EU→</string>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -6260,7 +6260,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="text">
-                        <string>144 MHz in EU→</string>
+                        <string>144 MHz E-skip in EU→</string>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -6335,7 +6335,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="text">
-                        <string>144 MHz in NA→</string>
+                        <string>144 MHz E-skip in NA→</string>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -6360,7 +6360,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="text">
-                        <string>70 MHz in EU→</string>
+                        <string>70 MHz E-skip in EU→</string>
                        </property>
                        <property name="alignment">
                         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
