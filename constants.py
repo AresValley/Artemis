@@ -1,17 +1,21 @@
 from collections import namedtuple
 from enum import Enum, auto
 
+
 class Ftype(object):
     FREQ = "freq"
     BAND = "band"
+
 
 class GfdType(Enum):
     FREQ = auto()
     LOC  = auto()
 
+
 class ChecksumWhat(Enum):
     FOLDER = auto()
     DB = auto()
+
 
 class Messages(object):
     DB_UP_TO_DATE            = "Already up to date"
@@ -27,6 +31,7 @@ class Messages(object):
     BAD_DOWNLOAD             = "Something went wrong"
     BAD_DOWNLOAD_MSG         = "Something went wrong with the downaload.\nCheck your internet connection and try again."
 
+
 class Signal(object):
     NAME          = "name"
     INF_FREQ      = "inf_freq"
@@ -41,6 +46,7 @@ class Signal(object):
     CATEGORY_CODE = "category_code"
     ACF           = "acf"
     WIKI_CLICKED  = "url_clicked"
+
 
 class Database(object):
     LINK_LOC  = "https://aresvalley.com/Storage/Artemis/Database/data.zip"
@@ -66,25 +72,26 @@ class Database(object):
                  Signal.SUP_BAND,
                  Signal.CATEGORY_CODE,)
 
+
 class Constants(object):
     CLICK_TO_UPDATE_STR = "Click to update"
     UPDATING_STR        = "Updating..."
     ACF_DOCS            = "https://aresvalley.com/documentation/"
     FORECAST_XRAY       = "https://services.swpc.noaa.gov/text/goes-xray-flux-primary.txt"
-    FORECAST_PROT       = "https://services.swpc.noaa.gov/text/goes-particle-flux-primary.txt"
-    FORECAST_AK_IND     = "https://services.swpc.noaa.gov/text/wwv.txt"
+    FORECAST_PROT_EL    = "https://services.swpc.noaa.gov/text/goes-particle-flux-primary.txt"
+    FORECAST_AK_INDEX   = "https://services.swpc.noaa.gov/text/wwv.txt"
     FORECAST_SGAS       = "https://services.swpc.noaa.gov/text/sgas.txt"
-    FORECAST_G          = "https://services.swpc.noaa.gov/text/3-day-forecast.txt"
+    FORECAST_GEO_STORM  = "https://services.swpc.noaa.gov/text/3-day-forecast.txt"
     FORECAST_INFO       = "https://www.swpc.noaa.gov/sites/default/files/images/NOAAscales.pdf"
-    FORECAST_IMG_0      = "http://www.mmmonvhf.de/eme/eme.png"
-    FORECAST_IMG_1      = "http://www.mmmonvhf.de/ms/ms.png"
-    FORECAST_IMG_2      = "http://www.mmmonvhf.de/es/es.png"
-    FORECAST_IMG_3      = "http://www.mmmonvhf.de/solar/solar.png"
-    FORECAST_IMG_4      = "http://amunters.home.xs4all.nl/eskipstatusNA.gif"
-    FORECAST_IMG_5      = "http://amunters.home.xs4all.nl/aurorastatus.gif"
-    FORECAST_IMG_6      = "http://amunters.home.xs4all.nl/eskipstatus.gif"
-    FORECAST_IMG_7      = "http://amunters.home.xs4all.nl/eskip50status.gif"
-    FORECAST_IMG_8      = "http://amunters.home.xs4all.nl/eskip70status.gif"
+    FORECAST_IMGS       = ["http://www.mmmonvhf.de/eme/eme.png",
+                           "http://www.mmmonvhf.de/ms/ms.png",
+                           "http://www.mmmonvhf.de/es/es.png",
+                           "http://www.mmmonvhf.de/solar/solar.png",
+                           "http://amunters.home.xs4all.nl/eskipstatusNA.gif",
+                           "http://amunters.home.xs4all.nl/aurorastatus.gif",
+                           "http://amunters.home.xs4all.nl/eskipstatus.gif",
+                           "http://amunters.home.xs4all.nl/eskip50status.gif",
+                           "http://amunters.home.xs4all.nl/eskip70status.gif"]
     SEARCH_LABEL_IMG    = "search_icon.png"
     VOLUME_LABEL_IMG    = "volume.png"
     DATA_FOLDER         = "Data"

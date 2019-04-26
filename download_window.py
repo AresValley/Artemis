@@ -7,6 +7,7 @@ from constants import Messages
 
 Ui_Download_window, _ = uic.loadUiType(resource_path("download_db_window.ui"))
 
+
 class DownloadWindow(QWidget, Ui_Download_window):
 
     complete = pyqtSignal()

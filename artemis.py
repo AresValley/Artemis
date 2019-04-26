@@ -42,7 +42,8 @@ from utilities import (checksum_ok,
                        format_numbers,
                        resource_path,)
 
-# import icon_rc
+import icon_rc
+
 
 qt_creator_file = resource_path("artemis.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)

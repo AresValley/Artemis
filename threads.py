@@ -1,3 +1,4 @@
+import asyncio
 from enum import Enum, auto
 from io import BytesIO
 import os.path
@@ -7,6 +8,8 @@ from zipfile import ZipFile
 from PyQt5.QtCore import QThread
 from constants import Constants, Database, ChecksumWhat
 from utilities import checksum_ok
+import aiohttp
+
 
 class ThreadStatus(Enum):
     OK                = auto()
@@ -14,6 +17,7 @@ class ThreadStatus(Enum):
     UNKNOWN_ERR       = auto()
     BAD_DOWNLOAD_ERR  = auto()
     UNDEFINED         = auto()
+
 
 class DownloadThread(QThread):
     def __init__(self):
@@ -73,24 +77,33 @@ class UpadteSpaceWeatherThread(QThread):
         self.terminate()
         self.wait()
 
-    def run(self):
-        get_request_data = lambda link: urllib3.PoolManager().request('GET', link).data
+    async def __download_resource(self, session, link):
+        resp = await session.get(link)
+        return await resp.read()
+
+    async def __download_property(self, session, property_name):
+        link = getattr(Constants, "FORECAST_" + property_name.upper())
+        data = await self.__download_resource(session, link)
+        setattr(self.__space_weather_data, property_name, str(data, 'utf-8'))
+
+    async def __download_image(self, session, n):
+        im = await self.__download_resource(session, Constants.FORECAST_IMGS[n])
+        self.__space_weather_data.images[n].loadFromData(im)
+
+    async def __download_resources(self, *links):
+        session = aiohttp.ClientSession()
+        properties = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
         try:
-            self.__space_weather_data.xray = str(get_request_data(Constants.FORECAST_XRAY), 'utf-8')
-            self.__space_weather_data.prot_el = str(get_request_data(Constants.FORECAST_PROT), 'utf-8')
-            self.__space_weather_data.ak_index = str(get_request_data(Constants.FORECAST_AK_IND), 'utf-8')
-            self.__space_weather_data.sgas = str(get_request_data(Constants.FORECAST_SGAS), 'utf-8')
-            self.__space_weather_data.geo_storm = str(get_request_data(Constants.FORECAST_G), 'utf-8')
-            self.__space_weather_data.images[0].loadFromData(get_request_data(Constants.FORECAST_IMG_0))
-            self.__space_weather_data.images[1].loadFromData(get_request_data(Constants.FORECAST_IMG_1))
-            self.__space_weather_data.images[2].loadFromData(get_request_data(Constants.FORECAST_IMG_2))
-            self.__space_weather_data.images[3].loadFromData(get_request_data(Constants.FORECAST_IMG_3))
-            self.__space_weather_data.images[4].loadFromData(get_request_data(Constants.FORECAST_IMG_4))
-            self.__space_weather_data.images[5].loadFromData(get_request_data(Constants.FORECAST_IMG_5))
-            self.__space_weather_data.images[6].loadFromData(get_request_data(Constants.FORECAST_IMG_6))
-            self.__space_weather_data.images[7].loadFromData(get_request_data(Constants.FORECAST_IMG_7))
-            self.__space_weather_data.images[8].loadFromData(get_request_data(Constants.FORECAST_IMG_8))
+            t = [asyncio.create_task(self.__download_property(session, p)) for p in properties]
+            tot_images = range(len(Constants.FORECAST_IMGS))
+            t1 = [asyncio.create_task(self.__download_image(session, im_number)) for im_number in tot_images]
+            await asyncio.gather(*t, *t1)
         except Exception:
             self.__status = ThreadStatus.UNKNOWN_ERR
         else:
             self.__status = ThreadStatus.OK
+        finally:
+            await session.close()
+
+    def run(self):
+        asyncio.run(self.__download_resources())
