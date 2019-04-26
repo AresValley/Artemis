@@ -38,13 +38,13 @@ class Theme(object):
                                                            ThemeConstants.DEFAULT,
                                                            ThemeConstants.ICONS_FOLDER)
 
-        self.__forecast_labels =  SwitchableLabelsIterable(*list(chain(self.__parent.switchable_r_labels,
-                                                                       self.__parent.switchable_s_labels,
-                                                                       self.__parent.switchable_g_now_labels,
-                                                                       self.__parent.switchable_g_today_labels,
-                                                                       self.__parent.k_storm_labels,
-                                                                       self.__parent.a_storm_labels,
-                                                                       [self.__parent.expected_noise_lbl])))
+        self.__forecast_labels = SwitchableLabelsIterable(*list(chain(self.__parent.switchable_r_labels,
+                                                                      self.__parent.switchable_s_labels,
+                                                                      self.__parent.switchable_g_now_labels,
+                                                                      self.__parent.switchable_g_today_labels,
+                                                                      self.__parent.k_storm_labels,
+                                                                      self.__parent.a_storm_labels,
+                                                                      [self.__parent.expected_noise_lbl])))
 
         self.__forecast_labels.set("switch_on_colors", ThemeConstants.DEFAULT_ON_COLORS)
         self.__forecast_labels.set("switch_off_colors", ThemeConstants.DEFAULT_OFF_COLORS)
@@ -209,7 +209,7 @@ class Theme(object):
                 with open(os.path.join(ThemeConstants.FOLDER,
                           ThemeConstants.CURRENT), "w") as current_theme:
                     current_theme.write(self.__theme_path)
-            except:
+            except Exception:
                 pass
 
     def initialize(self):

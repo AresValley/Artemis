@@ -50,7 +50,7 @@ def checksum_ok(data, what):
     try:
         reference = read_csv(Database.LINK_REF,
                              delimiter = Database.DELIMITER).iat[-1, n]
-    except:
+    except Exception:
         raise
     return code.hexdigest() == reference
 

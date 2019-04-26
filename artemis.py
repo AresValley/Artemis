@@ -606,7 +606,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             query += self.gfd_line_edit.text()
         try:
             webbrowser.open(Constants.GFD_SITE + query.lower())
-        except:
+        except Exception:
             pass
 
     @pyqtSlot(QListWidgetItem)
@@ -713,12 +713,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
             try:
                 with open(db_path, "rb") as file_db:
                     db = file_db.read()
-            except:
+            except Exception:
                 self.download_db()
             else:
                 try:
                     is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
-                except:
+                except Exception:
                     pop_up(self, title = Messages.NO_CONNECTION,
                            text = Messages.NO_CONNECTION_MSG).show()
                 else:
@@ -741,7 +741,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             try:
                 with open(db_path, "rb") as file_db:
                     db = file_db.read()
-            except:
+            except Exception:
                 answer = pop_up(self, title = Messages.NO_DB,
                                 text = Messages.NO_DB_AVAIL,
                                 informative_text = Messages.DOWNLOAD_NOW_QUESTION,
@@ -751,7 +751,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 try:
                     is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
-                except:
+                except Exception:
                     pop_up(self, title = Messages.NO_CONNECTION,
                            text = Messages.NO_CONNECTION_MSG).show()
                 else:

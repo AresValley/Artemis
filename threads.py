@@ -1,6 +1,5 @@
 from enum import Enum, auto
 from io import BytesIO
-from os import mkdir
 import os.path
 from shutil import rmtree
 import urllib3
@@ -42,7 +41,7 @@ class DownloadThread(QThread):
             return
         try:
             is_checksum_ok = checksum_ok(db.data, ChecksumWhat.FOLDER)
-        except:
+        except Exception:
             self.__status = ThreadStatus.NO_CONNECTION_ERR
             return
         else:
@@ -54,7 +53,7 @@ class DownloadThread(QThread):
         try:
             with ZipFile(BytesIO(db.data)) as zipped:
                 zipped.extractall()
-        except:
+        except Exception:
             self.__status = ThreadStatus.UNKNOWN_ERR
         else:
             self.__status = ThreadStatus.OK
@@ -75,22 +74,23 @@ class UpadteSpaceWeatherThread(QThread):
         self.wait()
 
     def run(self):
+        get_request_data = lambda link: urllib3.PoolManager().request('GET', link).data
         try:
-            self.__space_weather_data.xray = str(urllib3.PoolManager().request('GET', Constants.FORECAST_XRAY).data, 'utf-8')
-            self.__space_weather_data.prot_el = str(urllib3.PoolManager().request('GET', Constants.FORECAST_PROT).data, 'utf-8')
-            self.__space_weather_data.ak_index = str(urllib3.PoolManager().request('GET', Constants.FORECAST_AK_IND).data, 'utf-8')
-            self.__space_weather_data.sgas = str(urllib3.PoolManager().request('GET', Constants.FORECAST_SGAS).data, 'utf-8')
-            self.__space_weather_data.geo_storm = str(urllib3.PoolManager().request('GET', Constants.FORECAST_G).data, 'utf-8')
-            self.__space_weather_data.images[0].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_0).data)
-            self.__space_weather_data.images[1].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_1).data)
-            self.__space_weather_data.images[2].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_2).data)
-            self.__space_weather_data.images[3].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_3).data)
-            self.__space_weather_data.images[4].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_4).data)
-            self.__space_weather_data.images[5].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_5).data)
-            self.__space_weather_data.images[6].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_6).data)
-            self.__space_weather_data.images[7].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_7).data)
-            self.__space_weather_data.images[8].loadFromData(urllib3.PoolManager().request('GET', Constants.FORECAST_IMG_8).data)
-        except:
+            self.__space_weather_data.xray = str(get_request_data(Constants.FORECAST_XRAY), 'utf-8')
+            self.__space_weather_data.prot_el = str(get_request_data(Constants.FORECAST_PROT), 'utf-8')
+            self.__space_weather_data.ak_index = str(get_request_data(Constants.FORECAST_AK_IND), 'utf-8')
+            self.__space_weather_data.sgas = str(get_request_data(Constants.FORECAST_SGAS), 'utf-8')
+            self.__space_weather_data.geo_storm = str(get_request_data(Constants.FORECAST_G), 'utf-8')
+            self.__space_weather_data.images[0].loadFromData(get_request_data(Constants.FORECAST_IMG_0))
+            self.__space_weather_data.images[1].loadFromData(get_request_data(Constants.FORECAST_IMG_1))
+            self.__space_weather_data.images[2].loadFromData(get_request_data(Constants.FORECAST_IMG_2))
+            self.__space_weather_data.images[3].loadFromData(get_request_data(Constants.FORECAST_IMG_3))
+            self.__space_weather_data.images[4].loadFromData(get_request_data(Constants.FORECAST_IMG_4))
+            self.__space_weather_data.images[5].loadFromData(get_request_data(Constants.FORECAST_IMG_5))
+            self.__space_weather_data.images[6].loadFromData(get_request_data(Constants.FORECAST_IMG_6))
+            self.__space_weather_data.images[7].loadFromData(get_request_data(Constants.FORECAST_IMG_7))
+            self.__space_weather_data.images[8].loadFromData(get_request_data(Constants.FORECAST_IMG_8))
+        except Exception:
             self.__status = ThreadStatus.UNKNOWN_ERR
         else:
             self.__status = ThreadStatus.OK
