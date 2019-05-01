@@ -7143,10 +7143,19 @@ QSlider::handle:horizontal {
     <addaction name="action_sigidwiki_com"/>
     <addaction name="action_add_a_signal"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="action_aresvalley_com"/>
+    <addaction name="action_forum"/>
+    <addaction name="action_rtl_sdr_com"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuUpdates"/>
    <addaction name="menu_themes"/>
    <addaction name="menuSigidwiki"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="styleSheet">
@@ -7176,6 +7185,21 @@ QSlider::handle:horizontal {
   <action name="action_add_a_signal">
    <property name="text">
     <string>Add a signal</string>
+   </property>
+  </action>
+  <action name="action_forum">
+   <property name="text">
+    <string>Forum</string>
+   </property>
+  </action>
+  <action name="action_aresvalley_com">
+   <property name="text">
+    <string>aresvalley.com</string>
+   </property>
+  </action>
+  <action name="action_rtl_sdr_com">
+   <property name="text">
+    <string>RTL-SDR.com</string>
    </property>
   </action>
  </widget>

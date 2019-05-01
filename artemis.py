@@ -67,6 +67,15 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.action_add_a_signal.triggered.connect(
             lambda: webbrowser.open(Constants.ADD_SIGNAL_LINK)
         )
+        self.action_aresvalley_com.triggered.connect(
+            lambda: webbrowser.open(Constants.ARESVALLEY_LINK)
+        )
+        self.action_forum.triggered.connect(
+            lambda: webbrowser.open(Constants.FORUM_LINK)
+        )
+        self.action_rtl_sdr_com.triggered.connect(
+            lambda: webbrowser.open(Constants.RTL_SDL_LINK)
+        )
         self.db = None
         self.current_signal_name = ''
         self.signal_names = []
