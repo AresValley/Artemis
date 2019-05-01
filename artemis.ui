@@ -7136,9 +7136,17 @@ QSlider::handle:horizontal {
      <string>Themes</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuSigidwiki">
+    <property name="title">
+     <string>Sigidwiki</string>
+    </property>
+    <addaction name="action_sigidwiki_com"/>
+    <addaction name="action_add_a_signal"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuUpdates"/>
    <addaction name="menu_themes"/>
+   <addaction name="menuSigidwiki"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="styleSheet">
@@ -7158,6 +7166,16 @@ QSlider::handle:horizontal {
   <action name="action_check_db_ver">
    <property name="text">
     <string>Check latest database version</string>
+   </property>
+  </action>
+  <action name="action_sigidwiki_com">
+   <property name="text">
+    <string>sigidwiki.com</string>
+   </property>
+  </action>
+  <action name="action_add_a_signal">
+   <property name="text">
+    <string>Add a signal</string>
    </property>
   </action>
  </widget>

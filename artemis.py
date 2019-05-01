@@ -43,7 +43,7 @@ from utilities import (checksum_ok,
                        format_numbers,
                        resource_path,)
 
-import icon_rc
+# import icon_rc
 
 
 qt_creator_file = resource_path("artemis.ui")
@@ -61,6 +61,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.actionExit.triggered.connect(qApp.quit)
         self.action_update_database.triggered.connect(self.ask_if_download)
         self.action_check_db_ver.triggered.connect(self.check_db_ver)
+        self.action_sigidwiki_com.triggered.connect(
+            lambda: webbrowser.open(Constants.SIGIDWIKI)
+        )
+        self.action_add_a_signal.triggered.connect(
+            lambda: webbrowser.open(Constants.ADD_SIGNAL_LINK)
+        )
         self.db = None
         self.current_signal_name = ''
         self.signal_names = []

@@ -75,6 +75,8 @@ class Database(object):
 
 class Constants(object):
     CLICK_TO_UPDATE_STR = "Click to update"
+    SIGIDWIKI           = "https://www.sigidwiki.com/wiki/Signal_Identification_Guide"
+    ADD_SIGNAL_LINK     = "https://www.sigidwiki.com/index.php/Special:FormEdit/Signal/?preload=Signal_Identification_Wiki:Signal_form_preload_text"
     UPDATING_STR        = "Updating..."
     ACF_DOCS            = "https://aresvalley.com/documentation/"
     FORECAST_XRAY       = "https://services.swpc.noaa.gov/text/goes-xray-flux-primary.txt"
