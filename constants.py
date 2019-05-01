@@ -89,11 +89,11 @@ class Constants(object):
                            "http://www.mmmonvhf.de/ms/ms.png",
                            "http://www.mmmonvhf.de/es/es.png",
                            "http://www.mmmonvhf.de/solar/solar.png",
-                           "http://amunters.home.xs4all.nl/eskipstatusNA.gif",
-                           "http://amunters.home.xs4all.nl/aurorastatus.gif",
-                           "http://amunters.home.xs4all.nl/eskipstatus.gif",
                            "http://amunters.home.xs4all.nl/eskip50status.gif",
-                           "http://amunters.home.xs4all.nl/eskip70status.gif"]
+                           "http://amunters.home.xs4all.nl/eskip70status.gif",
+                           "http://amunters.home.xs4all.nl/eskipstatus.gif",
+                           "https://amunters.home.xs4all.nl/eskipstatusNA.gif",
+                           "https://amunters.home.xs4all.nl/aurorastatus.gif"]
     SEARCH_LABEL_IMG    = "search_icon.png"
     VOLUME_LABEL_IMG    = "volume.png"
     DATA_FOLDER         = "Data"
