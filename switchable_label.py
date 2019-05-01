@@ -1,7 +1,8 @@
 from PyQt5.QtWidgets import QLabel
 
+
 class SwitchableLabel(QLabel):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.switch_on_colors = ()
         self.switch_off_colors = ()

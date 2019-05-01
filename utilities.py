@@ -21,10 +21,10 @@ def uncheck_and_emit(button):
         button.clicked.emit()
 
 def pop_up(cls, title, text,
-           informative_text = None,
-           connection = None,
-           is_question = False,
-           default_btn = QMessageBox.Yes):
+           informative_text=None,
+           connection=None,
+           is_question=False,
+           default_btn=QMessageBox.Yes):
     msg = QMessageBox(cls)
     msg.setWindowTitle(title)
     msg.setText(text)
@@ -48,21 +48,23 @@ def checksum_ok(data, what):
     else:
         raise ValueError("Wrong entry name.")
     try:
-        reference = read_csv(Database.LINK_REF,
-                             delimiter = Database.DELIMITER).iat[-1, n]
+        reference = read_csv(
+            Database.LINK_REF,
+            delimiter=Database.DELIMITER
+        ).iat[-1, n]
     except Exception:
         raise
     return code.hexdigest() == reference
 
 def connect_events_to_func(events_to_connect, fun_to_connect, fun_args):
-    if fun_args:
+    if fun_args is not None:
         for event in events_to_connect:
             event.connect(partial(fun_to_connect, *fun_args))
     else:
         for event in events_to_connect:
             event.connect(fun_to_connect)
 
-def filters_limit(spinbox, filter_unit, confidence, sign = 1):
+def filters_limit(spinbox, filter_unit, confidence, sign=1):
         band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
         return band_filter + sign * (confidence.value() * band_filter) // 100
 

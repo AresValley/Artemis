@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import pyqtSlot
 
 class DoubleTextButton(QPushButton):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.clicked.connect(self.__manage_click)
 
@@ -10,11 +10,11 @@ class DoubleTextButton(QPushButton):
         self.__text_a = text_a
         self.__text_b = text_b
 
-    def set_slave_filters(self, simple_ones = None, 
-                          radio_1 = None,
-                          ruled_by_radio_1 = None, 
-                          radio_2 = None,
-                          ruled_by_radio_2 = None):
+    def set_slave_filters(self, simple_ones=None,
+                          radio_1=None,
+                          ruled_by_radio_1=None,
+                          radio_2=None,
+                          ruled_by_radio_2=None):
         self.__simple_ones = simple_ones
         self.__ruled_by_radio_1 = ruled_by_radio_1
         self.__radio_1 = radio_1

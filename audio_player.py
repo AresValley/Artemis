@@ -1,5 +1,4 @@
 import os
-import sys
 from pydub import AudioSegment
 from pygame import mixer
 from PyQt5.QtCore import QTimer, pyqtSlot, QObject
@@ -9,11 +8,9 @@ import qtawesome as qta
 
 
 class AudioPlayer(QObject): # Maybe useless inheriting from QObject
-    """
-    This is the audio player widget. The only public methods are the __init__
-    method, set_audio_player, which loads the current file and refresh_btns_colors. Everything else
-    is managed internally.
-    """
+    """This is the audio player widget. The only public methods are the __init__
+    method, set_audio_player, which loads the current file and refresh_btns_colors.
+    Everything else is managed internally."""
 
     __time_step = 500 # Milliseconds.
 
@@ -40,19 +37,21 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
 
     def refresh_btns_colors(self, active_color, inactive_color):
         self.__play.setIcon(qta.icon('fa5.play-circle',
-                                     color = active_color,
-                                     color_disabled = inactive_color))
+                                     color=active_color,
+                                     color_disabled=inactive_color))
         self.__pause.setIcon(qta.icon('fa5.pause-circle',
-                                      color = active_color,
-                                      color_disabled = inactive_color))
+                                      color=active_color,
+                                      color_disabled=inactive_color))
         self.__stop.setIcon(qta.icon('fa5.stop-circle',
-                                     color = active_color,
-                                     color_disabled = inactive_color))
+                                     color=active_color,
+                                     color_disabled=inactive_color))
 
     @pyqtSlot()
     def __set_volume(self):
         if mixer.get_init():
-            mixer.music.set_volume(self.__volume.value() / self.__volume.maximum())
+            mixer.music.set_volume(
+                self.__volume.value() / self.__volume.maximum()
+            )
 
     def __reset_audio_widget(self):
         if mixer.get_init():
@@ -82,7 +81,11 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
     def set_audio_player(self, fname = ""):
         self.__first_call = True
         self.__reset_audio_widget()
-        full_name = os.path.join(Constants.DATA_FOLDER, Constants.AUDIO_FOLDER, fname + '.ogg')
+        full_name = os.path.join(
+            Constants.DATA_FOLDER,
+            Constants.AUDIO_FOLDER,
+            fname + '.ogg'
+        )
         if os.path.exists(full_name):
             self.__play.setEnabled(True)
             self.__audio_file = full_name
@@ -92,8 +95,10 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
         if not self.__paused:
             if self.__first_call:
                 self.__first_call = False
-                mixer.init(frequency = AudioSegment.from_ogg(self.__audio_file).frame_rate,
-                           buffer = 2048)
+                mixer.init(frequency=AudioSegment.from_ogg(
+                                self.__audio_file
+                            ).frame_rate,
+                           buffer=2048)
                 mixer.music.load(self.__audio_file)
                 self.__set_volume()
                 self.__set_max_progress_bar()

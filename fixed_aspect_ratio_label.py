@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtCore import Qt
 
+
 class FixedAspectRatioLabel(QLabel):
     def __init__(self, parent = None):
         super().__init__(parent)
@@ -20,7 +21,9 @@ class FixedAspectRatioLabel(QLabel):
         if self.pixmap:
             self.setPixmap(
                 self.pixmap.scaled(
-                    self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation))
+                    self.size(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation
+                )
+            )
 
     def rescale(self, size):
         self.resize(size)
