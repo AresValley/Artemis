@@ -2,11 +2,12 @@ from PyQt5.QtWidgets import QProgressBar
 from PyQt5.QtCore import Qt, pyqtSignal
 from constants import Constants
 
+
 class ClickableProgressBar(QProgressBar):
 
     clicked = pyqtSignal()
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         self.__text = ''
         super().__init__(parent)
 

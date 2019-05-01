@@ -7,6 +7,7 @@ from constants import Messages
 
 Ui_Download_window, _ = uic.loadUiType(resource_path("download_db_window.ui"))
 
+
 class DownloadWindow(QWidget, Ui_Download_window):
 
     complete = pyqtSignal()
@@ -22,13 +23,13 @@ class DownloadWindow(QWidget, Ui_Download_window):
             # Qt.WindowStaysOnTopHint
         )
 
-        self.no_internet_msg = pop_up(self, title = Messages.NO_CONNECTION,
-                                      text = Messages.NO_CONNECTION_MSG,
-                                      connection = self.close)
+        self.no_internet_msg = pop_up(self, title=Messages.NO_CONNECTION,
+                                      text=Messages.NO_CONNECTION_MSG,
+                                      connection=self.close)
 
-        self.bad_db_download_msg = pop_up(self, title = Messages.BAD_DOWNLOAD,
-                                          text = Messages.BAD_DOWNLOAD_MSG,
-                                          connection = self.close)
+        self.bad_db_download_msg = pop_up(self, title=Messages.BAD_DOWNLOAD,
+                                          text=Messages.BAD_DOWNLOAD_MSG,
+                                          connection=self.close)
 
         self.download_thread = DownloadThread()
         self.download_thread.finished.connect(self.wait_close)

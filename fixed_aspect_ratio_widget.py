@@ -1,9 +1,10 @@
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import QSize
 
+
 class FixedAspectRatioWidget(QWidget):
     space = 10
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.labels = []
 
