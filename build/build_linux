@@ -1,0 +1,4 @@
+pyinstaller --onefile artemis_linux.spec
+cp -r ../themes dist
+mv dist dist_linux
+rm -rf build
