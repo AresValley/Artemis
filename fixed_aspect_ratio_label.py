@@ -8,14 +8,16 @@ class FixedAspectRatioLabel(QLabel):
         self.pixmap = None
 
     def set_default_stylesheet(self):
-        self.setStyleSheet("""
-            color: #ffffff;
-            background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #304352 ,stop: 1 #d7d2cc);
-        """)
+        self.setStyleSheet("border: 3px;")
+        # self.setStyleSheet("""
+        #     color: #ffffff;
+        #     background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #304352 ,stop: 1 #d7d2cc);
+        # """)
 
     def make_transparent(self):
         self.setText('')
-        self.setStyleSheet("background-color: transparent;")
+        self.setStyleSheet("border: 0px;")
+        # self.setStyleSheet("background-color: transparent;")
 
     def apply_pixmap(self):
         if self.pixmap:

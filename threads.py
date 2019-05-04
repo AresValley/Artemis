@@ -66,7 +66,7 @@ class DownloadThread(_BaseDownloadThread):
             self.status = ThreadStatus.OK
 
 
-class UpadteSpaceWeatherThread(_BaseDownloadThread):
+class UpdateSpaceWeatherThread(_BaseDownloadThread):
 
     __properties = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
 
@@ -79,12 +79,12 @@ class UpadteSpaceWeatherThread(_BaseDownloadThread):
         return await resp.read()
 
     async def __download_property(self, session, property_name):
-        link = getattr(Constants, "FORECAST_" + property_name.upper())
+        link = getattr(Constants, "SPACE_WEATHER_" + property_name.upper())
         data = await self.__download_resource(session, link)
         setattr(self.__space_weather_data, property_name, str(data, 'utf-8'))
 
     async def __download_image(self, session, n):
-        im = await self.__download_resource(session, Constants.FORECAST_IMGS[n])
+        im = await self.__download_resource(session, Constants.SPACE_WEATHER_IMGS[n])
         self.__space_weather_data.images[n].loadFromData(im)
 
     async def __download_resources(self, *links):
@@ -96,7 +96,7 @@ class UpadteSpaceWeatherThread(_BaseDownloadThread):
                     asyncio.create_task(self.__download_property(session, p))
                 )
 
-            tot_images = range(len(Constants.FORECAST_IMGS))
+            tot_images = range(len(Constants.SPACE_WEATHER_IMGS))
             t1 = []
             for im_number in tot_images:
                 t1.append(

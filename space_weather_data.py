@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
-from threads import UpadteSpaceWeatherThread, ThreadStatus
+from threads import UpdateSpaceWeatherThread, ThreadStatus
 
 
 class SpaceWeatherData(QObject):
@@ -24,7 +24,7 @@ class SpaceWeatherData(QObject):
             QPixmap(),
             QPixmap()
         ]
-        self.__update_thread = UpadteSpaceWeatherThread(self)
+        self.__update_thread = UpdateSpaceWeatherThread(self)
         self.__update_thread.finished.connect(self.__parse_and_emit_signal)
 
     @property

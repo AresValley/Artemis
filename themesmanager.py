@@ -10,7 +10,7 @@ from switchable_label import SwitchableLabelsIterable
 from utilities import pop_up
 
 
-class ThemeConstants(object):
+class ThemeConstants:
     FOLDER                 = "themes"
     EXTENSION              = ".qss"
     ICONS_FOLDER           = "icons"
@@ -26,7 +26,7 @@ class ThemeConstants(object):
     THEME_NOT_FOUND        = "Theme not found"
     MISSING_THEME          = "Missing theme in '" + FOLDER + "' folder."
 
-class Theme(object):
+class ThemeManager:
     def __init__(self, parent):
         self.__parent = parent
         self.__parent.active_color = ThemeConstants.DEFAULT_ACTIVE_COLOR
@@ -41,7 +41,7 @@ class Theme(object):
             ThemeConstants.ICONS_FOLDER
         )
 
-        self.__forecast_labels = SwitchableLabelsIterable(
+        self.__space_weather_labels = SwitchableLabelsIterable(
             *list(
                 chain(
                     self.__parent.switchable_r_labels,
@@ -55,11 +55,11 @@ class Theme(object):
             )
         )
 
-        self.__forecast_labels.set(
+        self.__space_weather_labels.set(
             "switch_on_colors",
             ThemeConstants.DEFAULT_ON_COLORS
         )
-        self.__forecast_labels.set(
+        self.__space_weather_labels.set(
             "switch_off_colors", ThemeConstants.DEFAULT_OFF_COLORS
         )
 
@@ -106,7 +106,7 @@ class Theme(object):
                 self.__parent.active_color,
                 self.__parent.inactive_color
             )
-            self.__forecast_labels.refresh()
+            self.__space_weather_labels.refresh()
 
     def __pretty_name(self, bad_name):
         return ' '.join(
@@ -257,20 +257,20 @@ class Theme(object):
                                         inactive_color_ok = True
                                     if quality.lower() == Constants.TEXT_COLOR:
                                         text_color_ok = True
-                                        self.__forecast_labels.set(
+                                        self.__space_weather_labels.set(
                                             "text_color",
                                             color
                                         )
                                 if color_len == 2:
                                     if quality.lower() == Constants.LABEL_ON_COLOR:
                                         switch_on_color_ok = True
-                                        self.__forecast_labels.set(
+                                        self.__space_weather_labels.set(
                                             "switch_on_colors",
                                             color
                                         )
                                     if quality.lower() == Constants.LABEL_OFF_COLOR:
                                         switch_off_color_ok = True
-                                        self.__forecast_labels.set(
+                                        self.__space_weather_labels.set(
                                             "switch_off_colors",
                                             color
                                         )
@@ -280,17 +280,17 @@ class Theme(object):
                 self.__parent.inactive_color = ThemeConstants.DEFAULT_INACTIVE_COLOR
 
             if not (switch_on_color_ok and switch_off_color_ok):
-                self.__forecast_labels.set(
+                self.__space_weather_labels.set(
                     "switch_on_colors",
                     ThemeConstants.DEFAULT_ON_COLORS
                 )
-                self.__forecast_labels.set(
+                self.__space_weather_labels.set(
                     "switch_off_colors",
                     ThemeConstants.DEFAULT_OFF_COLORS
                 )
 
             if not text_color_ok:
-                self.__forecast_labels.set(
+                self.__space_weather_labels.set(
                     "text_color",
                     ThemeConstants.DEFAULT_TEXT_COLOR
                 )
@@ -305,7 +305,7 @@ class Theme(object):
             except Exception:
                 pass
 
-    def initialize(self):
+    def start(self):
         current_theme_file = os.path.join(
             ThemeConstants.FOLDER,
             ThemeConstants.CURRENT

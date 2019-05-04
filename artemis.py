@@ -23,6 +23,7 @@ from PyQt5.QtCore import (QFileInfo,
 
 from audio_player import AudioPlayer
 from space_weather_data import SpaceWeatherData
+from forecastdata import ForecastData
 from download_window import DownloadWindow
 from switchable_label import SwitchableLabelsIterable
 from constants import (Constants,
@@ -31,8 +32,9 @@ from constants import (Constants,
                        Database,
                        ChecksumWhat,
                        Messages,
-                       Signal,)
-from themes import Theme
+                       Signal,
+                       Months)
+from themesmanager import ThemeManager
 from utilities import (checksum_ok,
                        uncheck_and_emit,
                        pop_up,
@@ -80,6 +82,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.current_signal_name = ''
         self.signal_names = []
         self.total_signals = 0
+
         self.switchable_r_labels = SwitchableLabelsIterable(
             self.r0_now_lbl,
             self.r1_now_lbl,
@@ -138,23 +141,23 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.a_quiet_lbl
         )
 
-        self.forecast_labels = (
-            self.forecast_lbl_0,
-            self.forecast_lbl_1,
-            self.forecast_lbl_2,
-            self.forecast_lbl_3,
-            self.forecast_lbl_4,
-            self.forecast_lbl_5,
-            self.forecast_lbl_6,
-            self.forecast_lbl_7,
-            self.forecast_lbl_8
+        self.space_weather_labels = (
+            self.space_weather_lbl_0,
+            self.space_weather_lbl_1,
+            self.space_weather_lbl_2,
+            self.space_weather_lbl_3,
+            self.space_weather_lbl_4,
+            self.space_weather_lbl_5,
+            self.space_weather_lbl_6,
+            self.space_weather_lbl_7,
+            self.space_weather_lbl_8
         )
 
-        for lab in self.forecast_labels:
+        for lab in self.space_weather_labels:
             lab.set_default_stylesheet()
 
-        self.forecast_label_container.labels = self.forecast_labels
-        self.theme = Theme(self)
+        self.space_weather_label_container.labels = self.space_weather_labels
+        self.theme_manager = ThemeManager(self)
 
         # Manage frequency filters.
         self.frequency_filters_btns = (
@@ -501,17 +504,51 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Space weather
         self.info_now_btn.clicked.connect(
-            lambda : webbrowser.open(Constants.FORECAST_INFO)
+            lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
         )
         self.update_now_bar.clicked.connect(self.start_update_space_weather)
         self.update_now_bar.set_idle()
         self.space_weather_data = SpaceWeatherData()
         self.space_weather_data.update_complete.connect(self.update_space_weather)
 
+        # Forecast
+        self.forecast_info_btn.clicked.connect(
+            lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
+        )
+        self.update_forecast_bar.clicked.connect(self.start_update_forecast)
+        self.update_forecast_bar.set_idle()
+        self.forecast_data = ForecastData()
+        self.today_forecast_labels = []
+        self.today_p1_forecast_labels = []
+        self.today_p2_forecast_labels = []
+        self.all_forecast_labels = []
+        flags = ['', 'p1_', 'p2_']
+        for flag in flags:
+            title_lbl = getattr(self, "today_" + flag + "lbl")
+            title_lbl.setText("-")
+            for index in range(20):
+                label = getattr(
+                    self,
+                    "forecast_today_" + flag + str(index) + "_lbl"
+                )
+                label.setText(Constants.UNKNOWN)
+                self.all_forecast_labels.append(label)
+                if flag == flags[0]:
+                    self.today_forecast_labels.append(label)
+                if flag == flags[1]:
+                    self.today_p1_forecast_labels.append(label)
+                if flag == flags[2]:
+                    self.today_p2_forecast_labels.append(label)
+
+
 # Final operations.
-        self.theme.initialize()
+        self.theme_manager.start()
         self.load_db()
         self.display_signals()
+
+    @pyqtSlot()
+    def start_update_forecast(self):
+        pass
 
     @pyqtSlot()
     def start_update_space_weather(self):
@@ -659,7 +696,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             val = int([x[4] for x in self.space_weather_data.sgas if "SSN" in x][0])
             self.sn_lbl.setText(f"{val:d}")
 
-            for label, pixmap in zip(self.forecast_labels, self.space_weather_data.images):
+            for label, pixmap in zip(self.space_weather_labels, self.space_weather_data.images):
                 label.pixmap = pixmap
                 label.make_transparent()
                 label.apply_pixmap()
