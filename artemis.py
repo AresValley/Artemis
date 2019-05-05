@@ -32,8 +32,7 @@ from constants import (Constants,
                        Database,
                        ChecksumWhat,
                        Messages,
-                       Signal,
-                       Months)
+                       Signal,)
 from themesmanager import ThemeManager
 from utilities import (checksum_ok,
                        uncheck_and_emit,
@@ -157,6 +156,17 @@ class Artemis(QMainWindow, Ui_MainWindow):
             lab.set_default_stylesheet()
 
         self.space_weather_label_container.labels = self.space_weather_labels
+        self.space_weather_label_name_container.labels = [
+            self.eme_lbl,
+            self.ms_lbl,
+            self.muf_lbl,
+            self.hi_lbl,
+            self.eu50_lbl,
+            self.eu70_lbl,
+            self.eu144_lbl,
+            self.na_lbl,
+            self.aurora_lbl
+        ]
         self.theme_manager = ThemeManager(self)
 
         # Manage frequency filters.
@@ -455,7 +465,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         )
         self.apply_remove_acf_filter_btn.clicked.connect(self.display_signals)
         self.reset_acf_filters_btn.clicked.connect(self.reset_acf_filters)
-        self.acf_info_btn.clicked.connect(lambda : webbrowser.open(Constants.ACF_DOCS))
+        self.acf_info_btn.clicked.connect(lambda: webbrowser.open(Constants.ACF_DOCS))
 
         connect_events_to_func(
             events_to_connect=[self.acf_spinbox.valueChanged,
@@ -561,7 +571,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.update_now_bar.set_idle()
         if status_ok:
             xray_long = float(self.space_weather_data.xray[-1][7])
-            format_text = lambda letter, power : letter + f"{xray_long * 10**power:.1f}"
+            format_text = lambda letter, power: letter + f"{xray_long * 10**power:.1f}"
             if xray_long < 1e-8 and xray_long != -1.00e+05:
                 self.peak_flux_lbl.setText(format_text("<A", 8))
             elif xray_long >= 1e-8 and xray_long < 1e-7:

@@ -27,7 +27,6 @@ class _BaseDownloadThread(QThread):
     def __del__(self):
         self.terminate()
         self.wait()
-        super().__del__()
 
 
 class DownloadThread(_BaseDownloadThread):

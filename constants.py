@@ -82,24 +82,6 @@ class ForecastColors:
     KP5_COLOR     = "#BEE3FE"
 
 
-class Months:
-    MONTS = [
-          "0",
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-    ]
-
-
 class Constants:
     CLICK_TO_UPDATE_STR     = "Click to update"
     SIGIDWIKI               = "https://www.sigidwiki.com/wiki/Signal_Identification_Guide"
