@@ -1113,6 +1113,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def reset_modulation_filters(self):
         uncheck_and_emit(self.apply_remove_modulation_filter_btn)
         self.search_bar_modulation.setText('')
+        self.show_matching_strings(
+            self.modulation_list,
+            self.search_bar_modulation.text()
+        )
         for i in range(self.modulation_list.count()):
             if self.modulation_list.item(i).isSelected():
                 self.modulation_list.item(i).setSelected(False)
@@ -1121,6 +1125,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def reset_location_filters(self):
         uncheck_and_emit(self.apply_remove_location_filter_btn)
         self.search_bar_location.setText('')
+        self.show_matching_strings(
+            self.locations_list,
+            self.search_bar_location.text()
+        )
         for i in range(self.locations_list.count()):
             if self.locations_list.item(i).isSelected():
                 self.locations_list.item(i).setSelected(False)
