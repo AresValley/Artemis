@@ -6,6 +6,7 @@ to_do.txt
 csv_info.txt
 pyinstaller_cmd.txt
 themes/.current_theme
-*.bat
+launch.bat
+designer.bat
 *.sh
 .vscode/

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1387</width>
-    <height>761</height>
+    <width>1458</width>
+    <height>795</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>ARTEMIS3</string>
+   <string>ARTΣMIS 3.0</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -197,7 +197,7 @@
          </size>
         </property>
         <attribute name="title">
-         <string>Main</string>
+         <string>Signal</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="1" column="0">
@@ -4681,7 +4681,10 @@ www.qrg.globaltuners.com</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_20">
          <item row="0" column="0">
-          <widget class="QTabWidget" name="tabWidget">
+          <widget class="QTabWidget" name="weather_tab_widget">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
            <widget class="QWidget" name="tab_2">
             <attribute name="title">
              <string>Now</string>
@@ -4751,6 +4754,9 @@ www.qrg.globaltuners.com</string>
                     <property name="text">
                      <string>Radio Blackout</string>
                     </property>
+                    <property name="indent">
+                     <number>25</number>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -4775,8 +4781,7 @@ www.qrg.globaltuners.com</string>
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R0</string>
@@ -4796,8 +4801,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R1</string>
@@ -4817,8 +4821,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R2</string>
@@ -4838,8 +4841,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R3</string>
@@ -4859,8 +4861,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R4</string>
@@ -4880,8 +4881,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R5</string>
@@ -4935,6 +4935,9 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                     <property name="text">
                      <string>Solar Radiation Storm</string>
                     </property>
+                    <property name="indent">
+                     <number>25</number>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -4959,8 +4962,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S0</string>
@@ -4980,8 +4982,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S1</string>
@@ -5001,8 +5002,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S2</string>
@@ -5022,8 +5022,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S3</string>
@@ -5043,8 +5042,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S4</string>
@@ -5064,8 +5062,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S5</string>
@@ -5794,8 +5791,7 @@ STORM</string>
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G0</string>
@@ -5815,8 +5811,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G1</string>
@@ -5836,8 +5831,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G2</string>
@@ -5857,8 +5851,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G3</string>
@@ -5878,8 +5871,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G4</string>
@@ -5899,8 +5891,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G5</string>
@@ -5935,8 +5926,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G0</string>
@@ -5956,8 +5946,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G1</string>
@@ -5977,8 +5966,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G2</string>
@@ -5998,8 +5986,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G3</string>
@@ -6019,8 +6006,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G4</string>
@@ -6040,8 +6026,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G5</string>
@@ -6075,6 +6060,9 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                     </property>
                     <property name="text">
                      <string>Peak Flux Class</string>
+                    </property>
+                    <property name="indent">
+                     <number>25</number>
                     </property>
                    </widget>
                   </item>
@@ -6138,240 +6126,282 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
-                    <layout class="QGridLayout" name="gridLayout_23" columnstretch="0,0">
-                     <property name="leftMargin">
-                      <number>9</number>
-                     </property>
-                     <property name="verticalSpacing">
-                      <number>0</number>
-                     </property>
-                     <item row="0" column="0">
-                      <widget class="QLabel" name="label_23">
+                    <layout class="QHBoxLayout" name="horizontalLayout_44">
+                     <item>
+                      <widget class="FixedAspectRatioWidget" name="space_weather_label_name_container" native="true">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                          <horstretch>0</horstretch>
                          <verstretch>0</verstretch>
                         </sizepolicy>
                        </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
+                       <property name="layoutDirection">
+                        <enum>Qt::LeftToRight</enum>
                        </property>
-                       <property name="text">
-                        <string>E.M.E.→</string>
+                       <property name="styleSheet">
+                        <string notr="true"/>
                        </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
+                       <layout class="QVBoxLayout" name="verticalLayout_14">
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="eme_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>E.M.E.→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="ms_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>Meteor Scatter→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="muf_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>M.U.F.→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="hi_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>Hystorical Index→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="eu50_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="frameShape">
+                           <enum>QFrame::NoFrame</enum>
+                          </property>
+                          <property name="text">
+                           <string>50 MHz E-skip in EU→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="eu70_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>70 MHz E-skip in EU→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="eu144_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>144 MHz E-skip in EU→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="na_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>144 MHz E-skip in NA→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="FixedAspectRatioLabel" name="aurora_lbl">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="font">
+                           <font>
+                            <pointsize>13</pointsize>
+                            <italic>false</italic>
+                           </font>
+                          </property>
+                          <property name="layoutDirection">
+                           <enum>Qt::LeftToRight</enum>
+                          </property>
+                          <property name="text">
+                           <string>VHF Aurora→</string>
+                          </property>
+                          <property name="alignment">
+                           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                          </property>
+                          <property name="margin">
+                           <number>15</number>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
                       </widget>
                      </item>
-                     <item row="4" column="0">
-                      <widget class="QLabel" name="label_27">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>50 MHz E-skip in EU→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="8" column="0">
-                      <widget class="QLabel" name="label_33">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>VHF Aurora→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="3" column="0">
-                      <widget class="QLabel" name="label_26">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Hystorical Index→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="6" column="0">
-                      <widget class="QLabel" name="label_31">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>144 MHz E-skip in EU→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="2" column="0">
-                      <widget class="QLabel" name="label_25">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>M.U.F.→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="1" column="0">
-                      <widget class="QLabel" name="label_24">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>Meteor Scatter→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="7" column="0">
-                      <widget class="QLabel" name="label_32">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>144 MHz E-skip in NA→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="5" column="0">
-                      <widget class="QLabel" name="label_28">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="font">
-                        <font>
-                         <pointsize>13</pointsize>
-                         <italic>false</italic>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string>70 MHz E-skip in EU→</string>
-                       </property>
-                       <property name="alignment">
-                        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                       </property>
-                       <property name="margin">
-                        <number>15</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item row="0" column="1" rowspan="9">
-                      <widget class="FixedAspectRatioWidget" name="forecast_label_container" native="true">
+                     <item>
+                      <widget class="FixedAspectRatioWidget" name="space_weather_label_container" native="true">
                        <property name="sizePolicy">
                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                          <horstretch>0</horstretch>
@@ -6380,7 +6410,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_10">
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_0">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_0">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6415,7 +6445,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_1">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_1">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6444,7 +6474,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_2">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_2">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6473,7 +6503,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_3">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_3">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6502,7 +6532,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_4">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_4">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6531,7 +6561,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_5">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_5">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6560,7 +6590,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_6">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_6">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6589,7 +6619,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_7">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_7">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6618,7 +6648,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                          </widget>
                         </item>
                         <item>
-                         <widget class="FixedAspectRatioLabel" name="forecast_lbl_8">
+                         <widget class="FixedAspectRatioLabel" name="space_weather_lbl_8">
                           <property name="sizePolicy">
                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                             <horstretch>0</horstretch>
@@ -6822,13 +6852,16 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                      <number>1</number>
                     </property>
                     <property name="value">
-                     <number>-1</number>
+                     <number>0</number>
                     </property>
                     <property name="alignment">
                      <set>Qt::AlignCenter</set>
                     </property>
                     <property name="textVisible">
                      <bool>true</bool>
+                    </property>
+                    <property name="invertedAppearance">
+                     <bool>false</bool>
                     </property>
                     <property name="format">
                      <string>%p%</string>
@@ -6844,8 +6877,1540 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
            </widget>
            <widget class="QWidget" name="tab_10">
             <attribute name="title">
-             <string>Tab 2</string>
+             <string>Forecast</string>
             </attribute>
+            <layout class="QGridLayout" name="gridLayout_24">
+             <item row="32" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_15_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="36" column="1" colspan="2">
+              <widget class="QLabel" name="label_71">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>21 - 00</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="35" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_18_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="35" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_18_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="35" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_18_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="34" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_17_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="33" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_16_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="36" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_19_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="30" column="1" colspan="2">
+              <widget class="QLabel" name="label_65">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>03 - 06</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_5_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="32" column="1" colspan="2">
+              <widget class="QLabel" name="label_67">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>09 - 12</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="1" colspan="2">
+              <widget class="QLabel" name="label_54">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Major</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_11_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="33" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_16_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="31" column="1" colspan="2">
+              <widget class="QLabel" name="label_66">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>06 - 09</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_11_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_6_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="36" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_19_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="32" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_15_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="31" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_14_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="29" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_12_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="34" column="1" colspan="2">
+              <widget class="QLabel" name="label_69">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>15 - 18</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="33" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_16_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="30" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_13_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_8_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="28" column="1" colspan="3">
+              <widget class="QLabel" name="label_61">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Kp Index Forecast</string>
+               </property>
+              </widget>
+             </item>
+             <item row="31" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_14_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="29" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_12_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="30" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_13_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="34" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_17_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="29" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_12_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="34" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_17_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="33" column="1" colspan="2">
+              <widget class="QLabel" name="label_68">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>12 - 15</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="29" column="1" colspan="2">
+              <widget class="QLabel" name="label_64">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>00 - 03</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="35" column="1" colspan="2">
+              <widget class="QLabel" name="label_70">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>18 - 21</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="32" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_15_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="30" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_13_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_7_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="36" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_19_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="31" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_14_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_7_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="1" colspan="2">
+              <widget class="QLabel" name="label_53">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Minor</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_5_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_9_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="22" column="1" colspan="2">
+              <widget class="QLabel" name="label_55">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <underline>false</underline>
+                </font>
+               </property>
+               <property name="text">
+                <string>High Lat.</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_5_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="26" column="1" colspan="6">
+              <widget class="Line" name="line_5">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="1" colspan="2">
+              <widget class="QLabel" name="label_48">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>R1 - R2</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_11_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_3_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="1" colspan="2">
+              <widget class="QLabel" name="label_49">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>&gt; R3</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_10_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="11" column="1" colspan="3">
+              <widget class="QLabel" name="label_47">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Radio Blackout Act.</string>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_9_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_4_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_10_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_10_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_6_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="17" column="1" colspan="3">
+              <widget class="QLabel" name="label_50">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Geomagnetic Act.</string>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_7_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="1" colspan="2">
+              <widget class="QLabel" name="label_56">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Minor</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_4_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="18" column="1" colspan="2">
+              <widget class="QLabel" name="label_51">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <underline>false</underline>
+                </font>
+               </property>
+               <property name="text">
+                <string>Mid Lat.</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="1" colspan="2">
+              <widget class="QLabel" name="label_59">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Major</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_4_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_8_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_9_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="1" colspan="2">
+              <widget class="QLabel" name="label_52">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Active</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_8_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="1" colspan="2">
+              <widget class="QLabel" name="label_57">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Active</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_6_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="14" column="1" colspan="6">
+              <widget class="Line" name="line_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1" colspan="2">
+              <widget class="QLabel" name="label_46">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Proton flare</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="3">
+              <widget class="QLabel" name="label_41">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Solar Radiation Storm</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLabel" name="today_lbl">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>today</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1" colspan="3">
+              <widget class="QLabel" name="label_43">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Event Probabilities</string>
+               </property>
+              </widget>
+             </item>
+             <item row="37" column="1">
+              <widget class="QPushButton" name="forecast_info_btn">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Info</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_0_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_3_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_1_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_1_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="QLabel" name="today_p1_lbl">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>today+1</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="6">
+              <widget class="QLabel" name="today_p2_lbl">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>today+2</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_0_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="9" column="1" colspan="6">
+              <widget class="Line" name="line_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1" colspan="3">
+              <widget class="QLabel" name="label_44">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Class M flare</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_2_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_2_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_1_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0" colspan="7">
+              <widget class="Line" name="line_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="37" column="2" colspan="5">
+              <widget class="ClickableProgressBar" name="update_forecast_bar">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="maximum">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="textVisible">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_3_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1" colspan="3">
+              <widget class="QLabel" name="label_42">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>S1 or Greater</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1" colspan="3">
+              <widget class="QLabel" name="label_45">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Class X flare</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_2_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_0_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </widget>
          </item>
@@ -7108,7 +8673,7 @@ QSlider::handle:horizontal {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1387</width>
+     <width>1458</width>
      <height>21</height>
     </rect>
    </property>
@@ -7229,6 +8794,16 @@ QSlider::handle:horizontal {
    <class>FixedAspectRatioLabel</class>
    <extends>QLabel</extends>
    <header>fixed_aspect_ratio_label.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SingleColorSwitchableLabel</class>
+   <extends>QLabel</extends>
+   <header>switchable_label.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MultiColorSwitchableLabel</class>
+   <extends>QLabel</extends>
+   <header>switchable_label.h</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -12,10 +12,10 @@ class FixedAspectRatioWidget(QWidget):
         h, w = self.height(), self.width()
         h_lbl = h / 9 - self.space
         w_lbl = 5 * h_lbl
-
-        if w_lbl > w:
-            w_lbl = w
-            h_lbl = h / 9 - self.space
+        w_pad = w - 10
+        if w_lbl > w_pad:
+            w_lbl = w_pad
+            h_lbl = w_pad / 5
 
         for label in self.labels:
             label.rescale(QSize(w_lbl, h_lbl))

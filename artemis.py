@@ -22,7 +22,7 @@ from PyQt5.QtCore import (QFileInfo,
                           pyqtSlot,)
 
 from audio_player import AudioPlayer
-from space_weather_data import SpaceWeatherData
+from weatherdata import SpaceWeatherData, ForecastData
 from download_window import DownloadWindow
 from switchable_label import SwitchableLabelsIterable
 from constants import (Constants,
@@ -32,7 +32,7 @@ from constants import (Constants,
                        ChecksumWhat,
                        Messages,
                        Signal,)
-from themes import Theme
+from themesmanager import ThemeManager
 from utilities import (checksum_ok,
                        uncheck_and_emit,
                        pop_up,
@@ -80,6 +80,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.current_signal_name = ''
         self.signal_names = []
         self.total_signals = 0
+
         self.switchable_r_labels = SwitchableLabelsIterable(
             self.r0_now_lbl,
             self.r1_now_lbl,
@@ -138,23 +139,34 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.a_quiet_lbl
         )
 
-        self.forecast_labels = (
-            self.forecast_lbl_0,
-            self.forecast_lbl_1,
-            self.forecast_lbl_2,
-            self.forecast_lbl_3,
-            self.forecast_lbl_4,
-            self.forecast_lbl_5,
-            self.forecast_lbl_6,
-            self.forecast_lbl_7,
-            self.forecast_lbl_8
+        self.space_weather_labels = (
+            self.space_weather_lbl_0,
+            self.space_weather_lbl_1,
+            self.space_weather_lbl_2,
+            self.space_weather_lbl_3,
+            self.space_weather_lbl_4,
+            self.space_weather_lbl_5,
+            self.space_weather_lbl_6,
+            self.space_weather_lbl_7,
+            self.space_weather_lbl_8
         )
 
-        for lab in self.forecast_labels:
+        for lab in self.space_weather_labels:
             lab.set_default_stylesheet()
 
-        self.forecast_label_container.labels = self.forecast_labels
-        self.theme = Theme(self)
+        self.space_weather_label_container.labels = self.space_weather_labels
+        self.space_weather_label_name_container.labels = [
+            self.eme_lbl,
+            self.ms_lbl,
+            self.muf_lbl,
+            self.hi_lbl,
+            self.eu50_lbl,
+            self.eu70_lbl,
+            self.eu144_lbl,
+            self.na_lbl,
+            self.aurora_lbl
+        ]
+        self.theme_manager = ThemeManager(self)
 
         # Manage frequency filters.
         self.frequency_filters_btns = (
@@ -452,7 +464,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         )
         self.apply_remove_acf_filter_btn.clicked.connect(self.display_signals)
         self.reset_acf_filters_btn.clicked.connect(self.reset_acf_filters)
-        self.acf_info_btn.clicked.connect(lambda : webbrowser.open(Constants.ACF_DOCS))
+        self.acf_info_btn.clicked.connect(lambda: webbrowser.open(Constants.ACF_DOCS))
 
         connect_events_to_func(
             events_to_connect=[self.acf_spinbox.valueChanged,
@@ -501,17 +513,33 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Space weather
         self.info_now_btn.clicked.connect(
-            lambda : webbrowser.open(Constants.FORECAST_INFO)
+            lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
         )
         self.update_now_bar.clicked.connect(self.start_update_space_weather)
         self.update_now_bar.set_idle()
         self.space_weather_data = SpaceWeatherData()
         self.space_weather_data.update_complete.connect(self.update_space_weather)
 
+        # Forecast
+        self.forecast_info_btn.clicked.connect(
+            lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
+        )
+        self.forecast_data = ForecastData(self)
+        self.update_forecast_bar.clicked.connect(self.start_update_forecast)
+        self.update_forecast_bar.set_idle()
+        self.forecast_data.update_complete.connect(self.update_forecast)
+
+
 # Final operations.
-        self.theme.initialize()
+        self.theme_manager.start()
         self.load_db()
         self.display_signals()
+
+    @pyqtSlot()
+    def start_update_forecast(self):
+        if not self.forecast_data.is_updating:
+            self.update_forecast_bar.set_updating()
+            self.forecast_data.update()
 
     @pyqtSlot()
     def start_update_space_weather(self):
@@ -520,11 +548,21 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.space_weather_data.update()
 
     @pyqtSlot(bool)
+    def update_forecast(self, status_ok):
+        self.update_forecast_bar.set_idle()
+        if status_ok:
+            self.forecast_data.update_all_labels()
+        elif not self.closing:
+            pop_up(self, title=Messages.BAD_DOWNLOAD,
+                   text=Messages.BAD_DOWNLOAD_MSG).show()
+        self.forecast_data.remove_data()
+
+    @pyqtSlot(bool)
     def update_space_weather(self, status_ok):
         self.update_now_bar.set_idle()
         if status_ok:
             xray_long = float(self.space_weather_data.xray[-1][7])
-            format_text = lambda letter, power : letter + f"{xray_long * 10**power:.1f}"
+            format_text = lambda letter, power: letter + f"{xray_long * 10**power:.1f}"
             if xray_long < 1e-8 and xray_long != -1.00e+05:
                 self.peak_flux_lbl.setText(format_text("<A", 8))
             elif xray_long >= 1e-8 and xray_long < 1e-7:
@@ -579,33 +617,44 @@ class Artemis(QMainWindow, Ui_MainWindow):
             if k_index == 0:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_inactive_lbl)
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index == 1:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_very_quiet_lbl)
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index == 2:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_quiet_lbl)
+                self.expected_noise_lbl.setText("  S1 - S2 (-115 dBm)  ")
             elif k_index == 3:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_unsettled_lbl)
+                self.expected_noise_lbl.setText("  S2 - S3 (-110 dBm)  ")
             elif k_index == 4:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_active_lbl)
+                self.expected_noise_lbl.setText("  S3 - S4 (-100 dBm)  ")
             elif k_index == 5:
                 self.switchable_g_now_labels.switch_on(self.g1_now_lbl)
                 self.k_storm_labels.switch_on(self.k_min_storm_lbl)
+                self.expected_noise_lbl.setText("  S4 - S6 (-90 dBm)  ")
             elif k_index == 6:
                 self.switchable_g_now_labels.switch_on(self.g2_now_lbl)
                 self.k_storm_labels.switch_on(self.k_maj_storm_lbl)
+                self.expected_noise_lbl.setText("  S6 - S9 (-80 dBm)  ")
             elif k_index == 7:
                 self.switchable_g_now_labels.switch_on(self.g3_now_lbl)
                 self.k_storm_labels.switch_on(self.k_sev_storm_lbl)
+                self.expected_noise_lbl.setText("  S9 - S20 (>-60 dBm)  ")
             elif k_index == 8:
                 self.switchable_g_now_labels.switch_on(self.g4_now_lbl)
                 self.k_storm_labels.switch_on(self.k_very_sev_storm_lbl)
+                self.expected_noise_lbl.setText("  S20 - S30 (>-60 dBm)  ")
             elif k_index == 9:
                 self.switchable_g_now_labels.switch_on(self.g5_now_lbl)
                 self.k_storm_labels.switch_on(self.k_ex_sev_storm_lbl)
+                self.expected_noise_lbl.setText("  S30+ (>>-60 dBm)  ")
+            self.expected_noise_lbl.switch_on()
 
             if a_index >= 0 and a_index < 8:
                 self.a_storm_labels.switch_on(self.a_quiet_lbl)
@@ -624,42 +673,31 @@ class Artemis(QMainWindow, Ui_MainWindow):
             k_index_24_hmax = int(self.space_weather_data.geo_storm[6][index])
             if k_index_24_hmax == 0:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index_24_hmax == 1:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index_24_hmax == 2:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S1 - S2 (-115 dBm)  ")
             elif k_index_24_hmax == 3:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S2 - S3 (-110 dBm)  ")
             elif k_index_24_hmax == 4:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S3 - S4 (-100 dBm)  ")
             elif k_index_24_hmax == 5:
                 self.switchable_g_today_labels.switch_on(self.g1_today_lbl)
-                self.expected_noise_lbl.setText("  S4 - S6 (-90 dBm)  ")
             elif k_index_24_hmax == 6:
                 self.switchable_g_today_labels.switch_on(self.g2_today_lbl)
-                self.expected_noise_lbl.setText("  S6 - S9 (-80 dBm)  ")
             elif k_index_24_hmax == 7:
                 self.switchable_g_today_labels.switch_on(self.g3_today_lbl)
-                self.expected_noise_lbl.setText("  S9 - S20 (>-60 dBm)  ")
             elif k_index_24_hmax == 8:
                 self.switchable_g_today_labels.switch_on(self.g4_today_lbl)
-                self.expected_noise_lbl.setText("  S20 - S30 (>-60 dBm)  ")
             elif k_index_24_hmax == 9:
                 self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
-                self.expected_noise_lbl.setText("  S30+ (>>-60 dBm)  ")
-            self.expected_noise_lbl.switch_on()
 
             val = int(self.space_weather_data.ak_index[7][2].replace('.', ''))
             self.sfi_lbl.setText(f"{val}")
             val = int([x[4] for x in self.space_weather_data.sgas if "SSN" in x][0])
             self.sn_lbl.setText(f"{val:d}")
 
-            for label, pixmap in zip(self.forecast_labels, self.space_weather_data.images):
+            for label, pixmap in zip(self.space_weather_labels, self.space_weather_data.images):
                 label.pixmap = pixmap
                 label.make_transparent()
                 label.apply_pixmap()
@@ -729,7 +767,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     def set_initial_size(self):
         """Function to handle high resolution screens. The function sets bigger
-        sizes for all the relevant fixed-size widgets."""
+        sizes for all the relevant fixed-size widgets.
+        Also by default it sets the size to 3/4 of the available space
+        both vertically and horizontally."""
         d = QDesktopWidget().availableGeometry()
         w = d.width()
         h = d.height()
@@ -1066,6 +1106,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def reset_modulation_filters(self):
         uncheck_and_emit(self.apply_remove_modulation_filter_btn)
         self.search_bar_modulation.setText('')
+        self.show_matching_strings(
+            self.modulation_list,
+            self.search_bar_modulation.text()
+        )
         for i in range(self.modulation_list.count()):
             if self.modulation_list.item(i).isSelected():
                 self.modulation_list.item(i).setSelected(False)
@@ -1074,6 +1118,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def reset_location_filters(self):
         uncheck_and_emit(self.apply_remove_location_filter_btn)
         self.search_bar_location.setText('')
+        self.show_matching_strings(
+            self.locations_list,
+            self.search_bar_location.text()
+        )
         for i in range(self.locations_list.count()):
             if self.locations_list.item(i).isSelected():
                 self.locations_list.item(i).setSelected(False)
@@ -1366,6 +1414,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.download_window.close()
         if self.space_weather_data.is_updating:
             self.space_weather_data.shutdown_thread()
+        if self.forecast_data.is_updating:
+            self.forecast_data.shutdown_thread()
         super().closeEvent(event)
 
 

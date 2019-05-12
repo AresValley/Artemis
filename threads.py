@@ -19,7 +19,7 @@ class ThreadStatus(Enum):
     UNDEFINED         = auto()
 
 
-class _BaseDownloadThread(QThread):
+class BaseDownloadThread(QThread):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.status = ThreadStatus.UNDEFINED
@@ -27,10 +27,9 @@ class _BaseDownloadThread(QThread):
     def __del__(self):
         self.terminate()
         self.wait()
-        super().__del__()
 
 
-class DownloadThread(_BaseDownloadThread):
+class DownloadThread(BaseDownloadThread):
     def __init__(self):
         super().__init__()
         self.reason = 0
@@ -66,7 +65,13 @@ class DownloadThread(_BaseDownloadThread):
             self.status = ThreadStatus.OK
 
 
-class UpadteSpaceWeatherThread(_BaseDownloadThread):
+class _AsyncDownloader:
+    async def _download_resource(self, session, link):
+        resp = await session.get(link)
+        return await resp.read()
+
+
+class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
 
     __properties = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
 
@@ -74,20 +79,16 @@ class UpadteSpaceWeatherThread(_BaseDownloadThread):
         super().__init__()
         self.__space_weather_data = space_weather_data
 
-    async def __download_resource(self, session, link):
-        resp = await session.get(link)
-        return await resp.read()
-
     async def __download_property(self, session, property_name):
-        link = getattr(Constants, "FORECAST_" + property_name.upper())
-        data = await self.__download_resource(session, link)
+        link = getattr(Constants, "SPACE_WEATHER_" + property_name.upper())
+        data = await self._download_resource(session, link)
         setattr(self.__space_weather_data, property_name, str(data, 'utf-8'))
 
     async def __download_image(self, session, n):
-        im = await self.__download_resource(session, Constants.FORECAST_IMGS[n])
+        im = await self._download_resource(session, Constants.SPACE_WEATHER_IMGS[n])
         self.__space_weather_data.images[n].loadFromData(im)
 
-    async def __download_resources(self, *links):
+    async def _download_resources(self):
         session = aiohttp.ClientSession()
         try:
             t = []
@@ -96,7 +97,7 @@ class UpadteSpaceWeatherThread(_BaseDownloadThread):
                     asyncio.create_task(self.__download_property(session, p))
                 )
 
-            tot_images = range(len(Constants.FORECAST_IMGS))
+            tot_images = range(len(Constants.SPACE_WEATHER_IMGS))
             t1 = []
             for im_number in tot_images:
                 t1.append(
@@ -112,4 +113,53 @@ class UpadteSpaceWeatherThread(_BaseDownloadThread):
 
     def run(self):
         self.status = ThreadStatus.UNDEFINED
-        asyncio.run(self.__download_resources())
+        asyncio.run(self._download_resources())
+
+
+class UpdateForecastThread(BaseDownloadThread, _AsyncDownloader):
+
+    class _PropertyName(Enum):
+        FORECAST = auto()
+        PROBABILITIES = auto()
+
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
+
+    async def __download_property(self, session, link, prop_name):
+        resp = await self._download_resource(session, link)
+        resp = str(resp, 'utf-8')
+        if prop_name is self._PropertyName.FORECAST:
+            self.parent.forecast = resp
+        if prop_name is self._PropertyName.PROBABILITIES:
+            self.parent.probabilities = resp
+
+    async def _download_resources(self):
+        session = aiohttp.ClientSession()
+        try:
+            await asyncio.gather(
+                asyncio.create_task(
+                    self.__download_property(
+                        session,
+                        Constants.SPACE_WEATHER_GEO_STORM,
+                        self._PropertyName.FORECAST
+                    )
+                ),
+                asyncio.create_task(
+                    self.__download_property(
+                        session,
+                        Constants.FORECAST_PROBABILITIES,
+                        self._PropertyName.PROBABILITIES
+                    )
+                )
+            )
+        except Exception:
+            self.status = ThreadStatus.UNKNOWN_ERR
+        else:
+            self.status = ThreadStatus.OK
+        finally:
+            await session.close()
+
+    def run(self):
+        self.status = ThreadStatus.UNDEFINED
+        asyncio.run(self._download_resources())
