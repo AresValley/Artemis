@@ -22,8 +22,7 @@ from PyQt5.QtCore import (QFileInfo,
                           pyqtSlot,)
 
 from audio_player import AudioPlayer
-from space_weather_data import SpaceWeatherData
-from forecastdata import ForecastData
+from weatherdata import SpaceWeatherData, ForecastData
 from download_window import DownloadWindow
 from switchable_label import SwitchableLabelsIterable
 from constants import (Constants,
@@ -525,30 +524,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.forecast_info_btn.clicked.connect(
             lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
         )
+        self.forecast_data = ForecastData(self)
         self.update_forecast_bar.clicked.connect(self.start_update_forecast)
         self.update_forecast_bar.set_idle()
-        self.forecast_data = ForecastData()
-        self.today_forecast_labels = []
-        self.today_p1_forecast_labels = []
-        self.today_p2_forecast_labels = []
-        self.all_forecast_labels = []
-        flags = ['', 'p1_', 'p2_']
-        for flag in flags:
-            title_lbl = getattr(self, "today_" + flag + "lbl")
-            title_lbl.setText("-")
-            for index in range(20):
-                label = getattr(
-                    self,
-                    "forecast_today_" + flag + str(index) + "_lbl"
-                )
-                label.setText(Constants.UNKNOWN)
-                self.all_forecast_labels.append(label)
-                if flag == flags[0]:
-                    self.today_forecast_labels.append(label)
-                if flag == flags[1]:
-                    self.today_p1_forecast_labels.append(label)
-                if flag == flags[2]:
-                    self.today_p2_forecast_labels.append(label)
+        self.forecast_data.update_complete.connect(self.update_forecast)
 
 
 # Final operations.
@@ -558,13 +537,25 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def start_update_forecast(self):
-        pass
+        if not self.forecast_data.is_updating:
+            self.update_forecast_bar.set_updating()
+            self.forecast_data.update()
 
     @pyqtSlot()
     def start_update_space_weather(self):
         if not self.space_weather_data.is_updating:
             self.update_now_bar.set_updating()
             self.space_weather_data.update()
+
+    @pyqtSlot(bool)
+    def update_forecast(self, status_ok):
+        self.update_forecast_bar.set_idle()
+        if status_ok:
+            self.forecast_data.update_all_labels()
+        elif not self.closing:
+            pop_up(self, title=Messages.BAD_DOWNLOAD,
+                   text=Messages.BAD_DOWNLOAD_MSG).show()
+        self.forecast_data.remove_data()
 
     @pyqtSlot(bool)
     def update_space_weather(self, status_ok):
@@ -1421,6 +1412,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.download_window.close()
         if self.space_weather_data.is_updating:
             self.space_weather_data.shutdown_thread()
+        if self.forecast_data.is_updating:
+            self.forecast_data.shutdown_thread()
         super().closeEvent(event)
 
 

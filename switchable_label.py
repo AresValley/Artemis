@@ -6,6 +6,7 @@ class _BaseSwitchableLabel(QLabel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.is_on = False
+        self.level = 0
 
     def switch_on(self):
         self.is_on = True
@@ -44,12 +45,17 @@ class SingleColorSwitchableLabel(_BaseSwitchableLabel):
         self.active_color = ForecastColors.WARNING_COLOR
 
     def switch_on(self):
-        super().switch_on()
-        self.setStyleSheet(f"background-color: {self.active_color};")
+        if self.level >= 30:
+            super().switch_on()
+            self.setStyleSheet(f"color: {self.active_color}"
+            # f"""background-color: {self.active_color};
+            # color: #000000;"""
+            )
 
     def switch_off(self):
         super().switch_off()
-        self.setStyleSheet("background-color: transparent;")
+        # self.setStyleSheet("""background-color: transparent;""")
+        self.setStyleSheet("")
 
 
 class MultiColorSwitchableLabel(_BaseSwitchableLabel):
@@ -64,18 +70,20 @@ class MultiColorSwitchableLabel(_BaseSwitchableLabel):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.level = 0
 
     def switch_on(self):
         if 5 <= self.level <= 9:
             super().switch_on()
-            self.setStyleSheet(f"""
-            background-color: {self.LEVEL_COLORS[self.level]};
-            """)
+            self.setStyleSheet(f"color: {self.LEVEL_COLORS[self.level]}"
+            # f"""background-color: {self.LEVEL_COLORS[self.level]};
+            # color: #000000;
+            # """
+            )
 
     def switch_off(self):
         super().switch_off()
-        self.setStyleSheet("background-color: transparent;")
+        # self.setStyleSheet("background-color: transparent;")
+        self.setStyleSheet("")
 
 
 class SwitchableLabelsIterable:

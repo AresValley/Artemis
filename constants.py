@@ -91,6 +91,7 @@ class Constants:
     RTL_SDL_LINK            = "https://www.rtl-sdr.com/"
     UPDATING_STR            = "Updating..."
     ACF_DOCS                = "https://aresvalley.com/documentation/"
+    FORECAST_PROBABILITIES  = "https://services.swpc.noaa.gov/text/sgarf.txt"
     SPACE_WEATHER_XRAY      = "https://services.swpc.noaa.gov/text/goes-xray-flux-primary.txt"
     SPACE_WEATHER_PROT_EL   = "https://services.swpc.noaa.gov/text/goes-particle-flux-primary.txt"
     SPACE_WEATHER_AK_INDEX  = "https://services.swpc.noaa.gov/text/wwv.txt"

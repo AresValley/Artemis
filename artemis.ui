@@ -178,7 +178,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <property name="movable">
         <bool>true</bool>
@@ -197,7 +197,7 @@
          </size>
         </property>
         <attribute name="title">
-         <string>Main</string>
+         <string>Signal</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="1" column="0">
@@ -4683,7 +4683,7 @@ www.qrg.globaltuners.com</string>
          <item row="0" column="0">
           <widget class="QTabWidget" name="weather_tab_widget">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="tab_2">
             <attribute name="title">
@@ -4781,8 +4781,7 @@ www.qrg.globaltuners.com</string>
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R0</string>
@@ -4802,8 +4801,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R1</string>
@@ -4823,8 +4821,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R2</string>
@@ -4844,8 +4841,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R3</string>
@@ -4865,8 +4861,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R4</string>
@@ -4886,8 +4881,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>R5</string>
@@ -4968,8 +4962,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S0</string>
@@ -4989,8 +4982,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S1</string>
@@ -5010,8 +5002,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S2</string>
@@ -5031,8 +5022,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S3</string>
@@ -5052,8 +5042,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S4</string>
@@ -5073,8 +5062,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                         </font>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>S5</string>
@@ -5803,8 +5791,7 @@ STORM</string>
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G0</string>
@@ -5824,8 +5811,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G1</string>
@@ -5845,8 +5831,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G2</string>
@@ -5866,8 +5851,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G3</string>
@@ -5887,8 +5871,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G4</string>
@@ -5908,8 +5891,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G5</string>
@@ -5944,8 +5926,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G0</string>
@@ -5965,8 +5946,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G1</string>
@@ -5986,8 +5966,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G2</string>
@@ -6007,8 +5986,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G3</string>
@@ -6028,8 +6006,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G4</string>
@@ -6049,8 +6026,7 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                           </font>
                          </property>
                          <property name="styleSheet">
-                          <string notr="true">color:#ffffff;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,stop: 1 #859398);</string>
+                          <string notr="true"/>
                          </property>
                          <property name="text">
                           <string>G5</string>
@@ -6904,38 +6880,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              <string>Forecast</string>
             </attribute>
             <layout class="QGridLayout" name="gridLayout_24">
-             <item row="34" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_17_lbl">
-               <property name="text">
-                <string>TextLabel</string>
+             <item row="32" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_15_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="35" column="4">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_18_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="35" column="5">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_18_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="35" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_18_lbl">
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -6946,6 +6898,11 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="36" column="1" colspan="2">
               <widget class="QLabel" name="label_71">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>21 - 00</string>
                </property>
@@ -6954,108 +6911,78 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
+             <item row="35" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_18_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="35" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_18_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="35" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_18_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="34" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_17_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
              <item row="33" column="4">
               <widget class="MultiColorSwitchableLabel" name="forecast_today_16_lbl">
-               <property name="text">
-                <string>TextLabel</string>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="36" column="4">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_19_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="33" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_16_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="35" column="1" colspan="2">
-              <widget class="QLabel" name="label_70">
-               <property name="text">
-                <string>18 - 21</string>
-               </property>
-               <property name="indent">
-                <number>25</number>
-               </property>
-              </widget>
-             </item>
-             <item row="32" column="5">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_15_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="34" column="1" colspan="2">
-              <widget class="QLabel" name="label_69">
-               <property name="text">
-                <string>15 - 18</string>
-               </property>
-               <property name="indent">
-                <number>25</number>
-               </property>
-              </widget>
-             </item>
-             <item row="33" column="5">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_16_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="32" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_15_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="34" column="4">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_17_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="33" column="1" colspan="2">
-              <widget class="QLabel" name="label_68">
-               <property name="text">
-                <string>12 - 15</string>
-               </property>
-               <property name="indent">
-                <number>25</number>
-               </property>
-              </widget>
-             </item>
-             <item row="34" column="5">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_17_lbl">
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7066,86 +6993,12 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="36" column="5">
               <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_19_lbl">
-               <property name="text">
-                <string>TextLabel</string>
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="36" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_19_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="32" column="4">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_15_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="30" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_13_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="31" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_14_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="29" column="4">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_12_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="29" column="6">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_12_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="25" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_11_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="25" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_11_lbl">
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7156,11 +7009,269 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="30" column="1" colspan="2">
               <widget class="QLabel" name="label_65">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>03 - 06</string>
                </property>
                <property name="indent">
                 <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_5_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="32" column="1" colspan="2">
+              <widget class="QLabel" name="label_67">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>09 - 12</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="1" colspan="2">
+              <widget class="QLabel" name="label_54">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Major</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_11_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="33" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_16_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="31" column="1" colspan="2">
+              <widget class="QLabel" name="label_66">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>06 - 09</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_11_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_6_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="36" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_19_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="32" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_15_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="31" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_14_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="29" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_12_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="34" column="1" colspan="2">
+              <widget class="QLabel" name="label_69">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>15 - 18</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="33" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_16_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="30" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_13_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_8_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
               </widget>
              </item>
@@ -7178,8 +7289,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="30" column="4">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_13_lbl">
+             <item row="31" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_14_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7190,6 +7307,12 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="29" column="5">
               <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_12_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7200,6 +7323,12 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="30" column="5">
               <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_13_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7208,8 +7337,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="31" column="4">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_14_lbl">
+             <item row="34" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_17_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7218,8 +7353,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="31" column="5">
-              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_14_lbl">
+             <item row="29" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_12_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7228,10 +7369,31 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="32" column="1" colspan="2">
-              <widget class="QLabel" name="label_67">
+             <item row="34" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_17_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
-                <string>09 - 12</string>
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="33" column="1" colspan="2">
+              <widget class="QLabel" name="label_68">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>12 - 15</string>
                </property>
                <property name="indent">
                 <number>25</number>
@@ -7240,6 +7402,11 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="29" column="1" colspan="2">
               <widget class="QLabel" name="label_64">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>00 - 03</string>
                </property>
@@ -7248,18 +7415,29 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="31" column="1" colspan="2">
-              <widget class="QLabel" name="label_66">
+             <item row="35" column="1" colspan="2">
+              <widget class="QLabel" name="label_70">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="text">
-                <string>06 - 09</string>
+                <string>18 - 21</string>
                </property>
                <property name="indent">
                 <number>25</number>
                </property>
               </widget>
              </item>
-             <item row="20" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_7_lbl">
+             <item row="32" column="5">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p1_15_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7268,68 +7446,110 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="21" column="1" colspan="2">
-              <widget class="QLabel" name="label_54">
+             <item row="30" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_13_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
-                <string>Major</string>
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_7_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="36" column="4">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_19_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="31" column="6">
+              <widget class="MultiColorSwitchableLabel" name="forecast_today_p2_14_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_7_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="1" colspan="2">
+              <widget class="QLabel" name="label_53">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Minor</string>
                </property>
                <property name="indent">
                 <number>50</number>
                </property>
               </widget>
              </item>
-             <item row="21" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_8_lbl">
-               <property name="text">
-                <string>TextLabel</string>
+             <item row="13" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_5_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
                </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="23" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_9_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="24" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_10_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="24" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_10_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="21" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_8_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="21" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_8_lbl">
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7340,6 +7560,12 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="23" column="6">
               <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_9_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7352,7 +7578,8 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
               <widget class="QLabel" name="label_55">
                <property name="font">
                 <font>
-                 <pointsize>10</pointsize>
+                 <pointsize>9</pointsize>
+                 <underline>false</underline>
                 </font>
                </property>
                <property name="text">
@@ -7363,197 +7590,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="24" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_10_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="25" column="1" colspan="2">
-              <widget class="QLabel" name="label_59">
-               <property name="text">
-                <string>Major</string>
-               </property>
-               <property name="indent">
-                <number>50</number>
-               </property>
-              </widget>
-             </item>
-             <item row="23" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_9_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="24" column="1" colspan="2">
-              <widget class="QLabel" name="label_56">
-               <property name="text">
-                <string>Minor</string>
-               </property>
-               <property name="indent">
-                <number>50</number>
-               </property>
-              </widget>
-             </item>
-             <item row="25" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_11_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="23" column="1" colspan="2">
-              <widget class="QLabel" name="label_57">
-               <property name="text">
-                <string>Active</string>
-               </property>
-               <property name="indent">
-                <number>50</number>
-               </property>
-              </widget>
-             </item>
-             <item row="19" column="1" colspan="2">
-              <widget class="QLabel" name="label_52">
-               <property name="text">
-                <string>Active</string>
-               </property>
-               <property name="indent">
-                <number>50</number>
-               </property>
-              </widget>
-             </item>
-             <item row="19" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_6_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="19" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_6_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="20" column="1" colspan="2">
-              <widget class="QLabel" name="label_53">
-               <property name="text">
-                <string>Minor</string>
-               </property>
-               <property name="indent">
-                <number>50</number>
-               </property>
-              </widget>
-             </item>
-             <item row="20" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_7_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="12" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_4_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="18" column="1" colspan="2">
-              <widget class="QLabel" name="label_51">
-               <property name="font">
-                <font>
-                 <pointsize>10</pointsize>
-                </font>
-               </property>
-               <property name="text">
-                <string>Mid Lat.</string>
-               </property>
-               <property name="indent">
-                <number>25</number>
-               </property>
-              </widget>
-             </item>
              <item row="13" column="4">
               <widget class="SingleColorSwitchableLabel" name="forecast_today_5_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="19" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_6_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="20" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_7_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="13" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_5_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="17" column="1" colspan="3">
-              <widget class="QLabel" name="label_50">
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
-               <property name="text">
-                <string>Geomagnetic Act.</string>
-               </property>
-              </widget>
-             </item>
-             <item row="13" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_5_lbl">
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7577,6 +7621,11 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="12" column="1" colspan="2">
               <widget class="QLabel" name="label_48">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>R1 - R2</string>
                </property>
@@ -7585,8 +7634,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="12" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_4_lbl">
+             <item row="25" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_11_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7597,6 +7652,43 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
              </item>
              <item row="8" column="6">
               <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_3_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="13" column="1" colspan="2">
+              <widget class="QLabel" name="label_49">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>&gt; R3</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_10_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7619,8 +7711,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="12" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_4_lbl">
+             <item row="23" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_9_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7629,7 +7727,356 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="0" column="1" colspan="2">
+             <item row="12" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_4_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_10_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_10_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_6_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="17" column="1" colspan="3">
+              <widget class="QLabel" name="label_50">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Geomagnetic Act.</string>
+               </property>
+              </widget>
+             </item>
+             <item row="20" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_7_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="24" column="1" colspan="2">
+              <widget class="QLabel" name="label_56">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Minor</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_4_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="18" column="1" colspan="2">
+              <widget class="QLabel" name="label_51">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <underline>false</underline>
+                </font>
+               </property>
+               <property name="text">
+                <string>Mid Lat.</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="25" column="1" colspan="2">
+              <widget class="QLabel" name="label_59">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Major</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="12" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_4_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_8_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_9_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="1" colspan="2">
+              <widget class="QLabel" name="label_52">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Active</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="21" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_8_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="23" column="1" colspan="2">
+              <widget class="QLabel" name="label_57">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                 <italic>false</italic>
+                </font>
+               </property>
+               <property name="text">
+                <string>Active</string>
+               </property>
+               <property name="indent">
+                <number>50</number>
+               </property>
+              </widget>
+             </item>
+             <item row="19" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_6_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="14" column="1" colspan="6">
+              <widget class="Line" name="line_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="1" colspan="2">
+              <widget class="QLabel" name="label_46">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Proton flare</string>
+               </property>
+               <property name="indent">
+                <number>25</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="3">
+              <widget class="QLabel" name="label_41">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Solar Radiation Storm</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="4">
+              <widget class="QLabel" name="today_lbl">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>today</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1" colspan="3">
+              <widget class="QLabel" name="label_43">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>Event Probabilities</string>
+               </property>
+              </widget>
+             </item>
+             <item row="37" column="1">
               <widget class="QPushButton" name="forecast_info_btn">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -7642,16 +8089,67 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="9" column="1" colspan="6">
-              <widget class="Line" name="line_3">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+             <item row="3" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_0_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
                </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="8" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_3_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_1_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_1_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
                </property>
               </widget>
              </item>
@@ -7701,22 +8199,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="2" column="1" colspan="3">
-              <widget class="QLabel" name="label_41">
+             <item row="3" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_0_lbl">
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
-               <property name="text">
-                <string>Solar Radiation Storm</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_0_lbl">
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7725,18 +8215,42 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="3" column="1" colspan="3">
-              <widget class="QLabel" name="label_42">
+             <item row="9" column="1" colspan="6">
+              <widget class="Line" name="line_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="1" colspan="3">
+              <widget class="QLabel" name="label_44">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="text">
-                <string>S1 or Greater</string>
+                <string>Class M flare</string>
                </property>
                <property name="indent">
                 <number>25</number>
                </property>
               </widget>
              </item>
-             <item row="3" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_0_lbl">
+             <item row="7" column="6">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_2_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7745,7 +8259,52 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="0" column="3" colspan="4">
+             <item row="7" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_2_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_1_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0" colspan="7">
+              <widget class="Line" name="line_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="37" column="2" colspan="5">
               <widget class="ClickableProgressBar" name="update_forecast_bar">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -7773,31 +8332,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="1" column="4">
-              <widget class="QLabel" name="today_lbl">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
+             <item row="8" column="4">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_3_lbl">
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
                  <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
-               <property name="text">
-                <string>today</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_1_lbl">
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7806,75 +8348,28 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="6" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_1_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1" colspan="3">
-              <widget class="QLabel" name="label_43">
+             <item row="3" column="1" colspan="3">
+              <widget class="QLabel" name="label_42">
                <property name="font">
                 <font>
-                 <pointsize>11</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
+                 <pointsize>9</pointsize>
                 </font>
                </property>
                <property name="text">
-                <string>Event Probabilities</string>
-               </property>
-              </widget>
-             </item>
-             <item row="6" column="1" colspan="3">
-              <widget class="QLabel" name="label_44">
-               <property name="text">
-                <string>Class M flare</string>
+                <string>S1 or Greater</string>
                </property>
                <property name="indent">
                 <number>25</number>
                </property>
               </widget>
              </item>
-             <item row="6" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_1_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_0_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0" colspan="7">
-              <widget class="Line" name="line_2">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
              <item row="7" column="1" colspan="3">
               <widget class="QLabel" name="label_45">
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
                <property name="text">
                 <string>Class X flare</string>
                </property>
@@ -7883,48 +8378,14 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="8" column="1" colspan="2">
-              <widget class="QLabel" name="label_46">
-               <property name="text">
-                <string>Proton flare</string>
-               </property>
-               <property name="indent">
-                <number>25</number>
-               </property>
-              </widget>
-             </item>
-             <item row="8" column="4">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_3_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_2_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="7" column="6">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p2_2_lbl">
-               <property name="text">
-                <string>TextLabel</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
              <item row="7" column="4">
               <widget class="SingleColorSwitchableLabel" name="forecast_today_2_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -7933,36 +8394,19 @@ background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,stop:0 #283048 ,sto
                </property>
               </widget>
              </item>
-             <item row="8" column="5">
-              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_3_lbl">
+             <item row="3" column="5">
+              <widget class="SingleColorSwitchableLabel" name="forecast_today_p1_0_lbl">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="13" column="1" colspan="2">
-              <widget class="QLabel" name="label_49">
-               <property name="text">
-                <string>&gt; R3</string>
-               </property>
-               <property name="indent">
-                <number>25</number>
-               </property>
-              </widget>
-             </item>
-             <item row="14" column="1" colspan="6">
-              <widget class="Line" name="line_4">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
