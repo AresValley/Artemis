@@ -617,33 +617,44 @@ class Artemis(QMainWindow, Ui_MainWindow):
             if k_index == 0:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_inactive_lbl)
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index == 1:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_very_quiet_lbl)
+                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index == 2:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_quiet_lbl)
+                self.expected_noise_lbl.setText("  S1 - S2 (-115 dBm)  ")
             elif k_index == 3:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_unsettled_lbl)
+                self.expected_noise_lbl.setText("  S2 - S3 (-110 dBm)  ")
             elif k_index == 4:
                 self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
                 self.k_storm_labels.switch_on(self.k_active_lbl)
+                self.expected_noise_lbl.setText("  S3 - S4 (-100 dBm)  ")
             elif k_index == 5:
                 self.switchable_g_now_labels.switch_on(self.g1_now_lbl)
                 self.k_storm_labels.switch_on(self.k_min_storm_lbl)
+                self.expected_noise_lbl.setText("  S4 - S6 (-90 dBm)  ")
             elif k_index == 6:
                 self.switchable_g_now_labels.switch_on(self.g2_now_lbl)
                 self.k_storm_labels.switch_on(self.k_maj_storm_lbl)
+                self.expected_noise_lbl.setText("  S6 - S9 (-80 dBm)  ")
             elif k_index == 7:
                 self.switchable_g_now_labels.switch_on(self.g3_now_lbl)
                 self.k_storm_labels.switch_on(self.k_sev_storm_lbl)
+                self.expected_noise_lbl.setText("  S9 - S20 (>-60 dBm)  ")
             elif k_index == 8:
                 self.switchable_g_now_labels.switch_on(self.g4_now_lbl)
                 self.k_storm_labels.switch_on(self.k_very_sev_storm_lbl)
+                self.expected_noise_lbl.setText("  S20 - S30 (>-60 dBm)  ")
             elif k_index == 9:
                 self.switchable_g_now_labels.switch_on(self.g5_now_lbl)
                 self.k_storm_labels.switch_on(self.k_ex_sev_storm_lbl)
+                self.expected_noise_lbl.setText("  S30+ (>>-60 dBm)  ")
+            self.expected_noise_lbl.switch_on()
 
             if a_index >= 0 and a_index < 8:
                 self.a_storm_labels.switch_on(self.a_quiet_lbl)
@@ -662,35 +673,24 @@ class Artemis(QMainWindow, Ui_MainWindow):
             k_index_24_hmax = int(self.space_weather_data.geo_storm[6][index])
             if k_index_24_hmax == 0:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index_24_hmax == 1:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index_24_hmax == 2:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S1 - S2 (-115 dBm)  ")
             elif k_index_24_hmax == 3:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S2 - S3 (-110 dBm)  ")
             elif k_index_24_hmax == 4:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-                self.expected_noise_lbl.setText("  S3 - S4 (-100 dBm)  ")
             elif k_index_24_hmax == 5:
                 self.switchable_g_today_labels.switch_on(self.g1_today_lbl)
-                self.expected_noise_lbl.setText("  S4 - S6 (-90 dBm)  ")
             elif k_index_24_hmax == 6:
                 self.switchable_g_today_labels.switch_on(self.g2_today_lbl)
-                self.expected_noise_lbl.setText("  S6 - S9 (-80 dBm)  ")
             elif k_index_24_hmax == 7:
                 self.switchable_g_today_labels.switch_on(self.g3_today_lbl)
-                self.expected_noise_lbl.setText("  S9 - S20 (>-60 dBm)  ")
             elif k_index_24_hmax == 8:
                 self.switchable_g_today_labels.switch_on(self.g4_today_lbl)
-                self.expected_noise_lbl.setText("  S20 - S30 (>-60 dBm)  ")
             elif k_index_24_hmax == 9:
                 self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
-                self.expected_noise_lbl.setText("  S30+ (>>-60 dBm)  ")
-            self.expected_noise_lbl.switch_on()
 
             val = int(self.space_weather_data.ak_index[7][2].replace('.', ''))
             self.sfi_lbl.setText(f"{val}")
@@ -767,7 +767,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     def set_initial_size(self):
         """Function to handle high resolution screens. The function sets bigger
-        sizes for all the relevant fixed-size widgets."""
+        sizes for all the relevant fixed-size widgets.
+        Also by default it sets the size to 3/4 of the available space
+        both vertically and horizontally."""
         d = QDesktopWidget().availableGeometry()
         w = d.width()
         h = d.height()
