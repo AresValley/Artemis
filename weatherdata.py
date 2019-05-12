@@ -104,12 +104,12 @@ class ForecastData(_BaseWeatherData):
         super().__init__()
         self.forecast = ''
         self.probabilities = ''
-        self.labels_table = []
-        self.solar_row = None
-        self.event_row = None
-        self.rb_now_row = None
-        self.ga_now_row = None
-        self.kp_index_row = None
+        self.__labels_table = []
+        self.__solar_row = None
+        self.__event_row = None
+        self.__rb_now_row = None
+        self.__ga_now_row = None
+        self.__kp_index_row = None
         self._update_thread = UpdateForecastThread(self)
         self._update_thread.finished.connect(self._parse_and_emit_signal)
         self.today_lbl = parent.today_lbl
@@ -145,7 +145,9 @@ class ForecastData(_BaseWeatherData):
     def _parse_data(self):
         self.forecast = self.forecast.splitlines()
         # Remove possible '(G\d)' from the kp_index table
-        self.probabilities = re.sub('(G\d)', lambda obj: '', self.probabilities)
+        self.probabilities = re.sub(
+            '(G\d)', lambda obj: '', self.probabilities
+        )
         self.probabilities = self.probabilities.splitlines()
 
     def __split_lists(self):
@@ -159,42 +161,42 @@ class ForecastData(_BaseWeatherData):
         return None
 
     def __get_rows(self):
-        self.solar_row = self.__find_row_with(
+        self.__solar_row = self.__find_row_with(
             self.forecast,
             self.ROW_KEYWORDS["solar_row"]
         )
-        self.event_row = self.__find_row_with(
+        self.__event_row = self.__find_row_with(
             self.probabilities,
             self.ROW_KEYWORDS["event_row"]
         )
-        self.rb_now_row = self.__find_row_with(
+        self.__rb_now_row = self.__find_row_with(
             self.forecast,
             self.ROW_KEYWORDS["rb_now_row"]
         )
-        self.ga_now_row = self.__find_row_with(
+        self.__ga_now_row = self.__find_row_with(
             self.probabilities,
             self.ROW_KEYWORDS["ga_now_row"]
         )
-        self.kp_index_row = self.__find_row_with(
+        self.__kp_index_row = self.__find_row_with(
             self.forecast,
             self.ROW_KEYWORDS["kp_index_row"]
         )
 
         is_none = lambda x: x is None
         if any([
-            is_none(self.solar_row),
-            is_none(self.event_row),
-            is_none(self.rb_now_row),
-            is_none(self.ga_now_row),
-            is_none(self.kp_index_row)
+            is_none(self.__solar_row),
+            is_none(self.__event_row),
+            is_none(self.__rb_now_row),
+            is_none(self.__ga_now_row),
+            is_none(self.__kp_index_row)
         ]):
-            raise Exception
+            raise Exception('Missing Rows')
 
     def __set_dates(self):
-        month = self.forecast[self.solar_row - 1][0]
-        today = self.forecast[self.solar_row - 1][1]
-        today_p1 = self.forecast[self.solar_row - 1][3]
-        today_p2 = self.forecast[self.solar_row - 1][5]
+        month = self.forecast[self.__solar_row - 1][0]
+        today = self.forecast[self.__solar_row - 1][1]
+        today_p1 = self.forecast[self.__solar_row - 1][3]
+        today_p2 = self.forecast[self.__solar_row - 1][5]
         self.today_lbl.setText(month + ' ' + today)
         self.today_p1_lbl.setText(month + ' ' + today_p1)
         self.today_p2_lbl.setText(month + ' ' + today_p2)
@@ -203,72 +205,72 @@ class ForecastData(_BaseWeatherData):
         get_first_split = lambda x: x.split("/")[0]
         get_second_split = lambda x: x.split("/")[1]
         get_third_split = lambda x: x.split("/")[2]
-        self.labels_table = [
+        self.__labels_table = [
             [
-                [self.forecast, self.solar_row, 3, None],
-                [self.probabilities, self.event_row + 1, 2, get_first_split],
-                [self.probabilities, self.event_row + 2, 2, get_first_split],
-                [self.probabilities, self.event_row + 3, 1, get_first_split],
-                [self.forecast, self.rb_now_row, 1, None],
-                [self.forecast, self.rb_now_row + 1, 3, None],
-                [self.probabilities, self.ga_now_row + 2, 1, get_first_split],
-                [self.probabilities, self.ga_now_row + 3, 2, get_first_split],
-                [self.probabilities, self.ga_now_row + 4, 2, get_first_split],
-                [self.probabilities, self.ga_now_row + 6, 1, get_first_split],
-                [self.probabilities, self.ga_now_row + 7, 2, get_first_split],
-                [self.probabilities, self.ga_now_row + 8, 2, get_first_split],
-                [self.forecast, self.kp_index_row + 3, 1, None],
-                [self.forecast, self.kp_index_row + 4, 1, None],
-                [self.forecast, self.kp_index_row + 5, 1, None],
-                [self.forecast, self.kp_index_row + 6, 1, None],
-                [self.forecast, self.kp_index_row + 7, 1, None],
-                [self.forecast, self.kp_index_row + 8, 1, None],
-                [self.forecast, self.kp_index_row + 9, 1, None],
-                [self.forecast, self.kp_index_row + 10, 1, None]
+                [self.forecast, self.__solar_row, 3, None],
+                [self.probabilities, self.__event_row + 1, 2, get_first_split],
+                [self.probabilities, self.__event_row + 2, 2, get_first_split],
+                [self.probabilities, self.__event_row + 3, 1, get_first_split],
+                [self.forecast, self.__rb_now_row, 1, None],
+                [self.forecast, self.__rb_now_row + 1, 3, None],
+                [self.probabilities, self.__ga_now_row + 2, 1, get_first_split],
+                [self.probabilities, self.__ga_now_row + 3, 2, get_first_split],
+                [self.probabilities, self.__ga_now_row + 4, 2, get_first_split],
+                [self.probabilities, self.__ga_now_row + 6, 1, get_first_split],
+                [self.probabilities, self.__ga_now_row + 7, 2, get_first_split],
+                [self.probabilities, self.__ga_now_row + 8, 2, get_first_split],
+                [self.forecast, self.__kp_index_row + 3, 1, None],
+                [self.forecast, self.__kp_index_row + 4, 1, None],
+                [self.forecast, self.__kp_index_row + 5, 1, None],
+                [self.forecast, self.__kp_index_row + 6, 1, None],
+                [self.forecast, self.__kp_index_row + 7, 1, None],
+                [self.forecast, self.__kp_index_row + 8, 1, None],
+                [self.forecast, self.__kp_index_row + 9, 1, None],
+                [self.forecast, self.__kp_index_row + 10, 1, None]
             ],
             [
-                [self.forecast, self.solar_row, 4, None],
-                [self.probabilities, self.event_row + 1, 2, get_second_split],
-                [self.probabilities, self.event_row + 2, 2, get_second_split],
-                [self.probabilities, self.event_row + 3, 1, get_second_split],
-                [self.forecast, self.rb_now_row, 2, None],
-                [self.forecast, self.rb_now_row + 1, 4, None],
-                [self.probabilities, self.ga_now_row + 2, 1, get_second_split],
-                [self.probabilities, self.ga_now_row + 3, 2, get_second_split],
-                [self.probabilities, self.ga_now_row + 4, 2, get_second_split],
-                [self.probabilities, self.ga_now_row + 6, 1, get_second_split],
-                [self.probabilities, self.ga_now_row + 7, 2, get_second_split],
-                [self.probabilities, self.ga_now_row + 8, 2, get_second_split],
-                [self.forecast, self.kp_index_row + 3, 2, None],
-                [self.forecast, self.kp_index_row + 4, 2, None],
-                [self.forecast, self.kp_index_row + 5, 2, None],
-                [self.forecast, self.kp_index_row + 6, 2, None],
-                [self.forecast, self.kp_index_row + 7, 2, None],
-                [self.forecast, self.kp_index_row + 8, 2, None],
-                [self.forecast, self.kp_index_row + 9, 2, None],
-                [self.forecast, self.kp_index_row + 10, 2, None]
+                [self.forecast, self.__solar_row, 4, None],
+                [self.probabilities, self.__event_row + 1, 2, get_second_split],
+                [self.probabilities, self.__event_row + 2, 2, get_second_split],
+                [self.probabilities, self.__event_row + 3, 1, get_second_split],
+                [self.forecast, self.__rb_now_row, 2, None],
+                [self.forecast, self.__rb_now_row + 1, 4, None],
+                [self.probabilities, self.__ga_now_row + 2, 1, get_second_split],
+                [self.probabilities, self.__ga_now_row + 3, 2, get_second_split],
+                [self.probabilities, self.__ga_now_row + 4, 2, get_second_split],
+                [self.probabilities, self.__ga_now_row + 6, 1, get_second_split],
+                [self.probabilities, self.__ga_now_row + 7, 2, get_second_split],
+                [self.probabilities, self.__ga_now_row + 8, 2, get_second_split],
+                [self.forecast, self.__kp_index_row + 3, 2, None],
+                [self.forecast, self.__kp_index_row + 4, 2, None],
+                [self.forecast, self.__kp_index_row + 5, 2, None],
+                [self.forecast, self.__kp_index_row + 6, 2, None],
+                [self.forecast, self.__kp_index_row + 7, 2, None],
+                [self.forecast, self.__kp_index_row + 8, 2, None],
+                [self.forecast, self.__kp_index_row + 9, 2, None],
+                [self.forecast, self.__kp_index_row + 10, 2, None]
             ],
             [
-                [self.forecast, self.solar_row, 5, None],
-                [self.probabilities, self.event_row + 1, 2, get_third_split],
-                [self.probabilities, self.event_row + 2, 2, get_third_split],
-                [self.probabilities, self.event_row + 3, 1, get_third_split],
-                [self.forecast, self.rb_now_row, 3, None],
-                [self.forecast, self.rb_now_row + 1, 5, None],
-                [self.probabilities, self.ga_now_row + 2, 1, get_third_split],
-                [self.probabilities, self.ga_now_row + 3, 2, get_third_split],
-                [self.probabilities, self.ga_now_row + 4, 2, get_third_split],
-                [self.probabilities, self.ga_now_row + 6, 1, get_third_split],
-                [self.probabilities, self.ga_now_row + 7, 2, get_third_split],
-                [self.probabilities, self.ga_now_row + 8, 2, get_third_split],
-                [self.forecast, self.kp_index_row + 3, 3, None],
-                [self.forecast, self.kp_index_row + 4, 3, None],
-                [self.forecast, self.kp_index_row + 5, 3, None],
-                [self.forecast, self.kp_index_row + 6, 3, None],
-                [self.forecast, self.kp_index_row + 7, 3, None],
-                [self.forecast, self.kp_index_row + 8, 3, None],
-                [self.forecast, self.kp_index_row + 9, 3, None],
-                [self.forecast, self.kp_index_row + 10, 3, None]
+                [self.forecast, self.__solar_row, 5, None],
+                [self.probabilities, self.__event_row + 1, 2, get_third_split],
+                [self.probabilities, self.__event_row + 2, 2, get_third_split],
+                [self.probabilities, self.__event_row + 3, 1, get_third_split],
+                [self.forecast, self.__rb_now_row, 3, None],
+                [self.forecast, self.__rb_now_row + 1, 5, None],
+                [self.probabilities, self.__ga_now_row + 2, 1, get_third_split],
+                [self.probabilities, self.__ga_now_row + 3, 2, get_third_split],
+                [self.probabilities, self.__ga_now_row + 4, 2, get_third_split],
+                [self.probabilities, self.__ga_now_row + 6, 1, get_third_split],
+                [self.probabilities, self.__ga_now_row + 7, 2, get_third_split],
+                [self.probabilities, self.__ga_now_row + 8, 2, get_third_split],
+                [self.forecast, self.__kp_index_row + 3, 3, None],
+                [self.forecast, self.__kp_index_row + 4, 3, None],
+                [self.forecast, self.__kp_index_row + 5, 3, None],
+                [self.forecast, self.__kp_index_row + 6, 3, None],
+                [self.forecast, self.__kp_index_row + 7, 3, None],
+                [self.forecast, self.__kp_index_row + 8, 3, None],
+                [self.forecast, self.__kp_index_row + 9, 3, None],
+                [self.forecast, self.__kp_index_row + 10, 3, None]
             ]
         ]
 
@@ -288,7 +290,7 @@ class ForecastData(_BaseWeatherData):
             return True
 
     def __set_labels_values(self):
-        for lbl_list, table in zip(self.__all_lbls, self.labels_table):
+        for lbl_list, table in zip(self.__all_lbls, self.__labels_table):
             for lbl, row in zip(lbl_list, table):
                 lbl.switch_off()
                 value = self.__get_lbl_value(*row)
