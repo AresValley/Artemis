@@ -152,6 +152,8 @@ class Constants:
     APPLY                   = "Apply"
     REMOVE                  = "Remove"
     UNKNOWN                 = "N/A"
+    EXTRACTING_MSG          = "Extracting..."
+    EXTRACTING_CODE         = -1
     MODULATIONS             = ("8VSB",
                                "AFSK",
                                "AM",
