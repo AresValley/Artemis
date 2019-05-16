@@ -51,6 +51,7 @@ Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 
 class Artemis(QMainWindow, Ui_MainWindow):
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
@@ -425,7 +426,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Set modulation filter screen.
 
-        self.modulation_list.addItems(Constants.MODULATIONS)
         self.search_bar_modulation.textEdited.connect(self.show_matching_modulations)
         self.apply_remove_modulation_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_modulation_filter_btn.set_slave_filters(
@@ -440,7 +440,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Set location filter screen.
 
-        self.locations_list.addItems(Constants.LOCATIONS)
         self.search_bar_location.textEdited.connect(self.show_matching_locations)
         self.apply_remove_location_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_location_filter_btn.set_slave_filters(
@@ -817,7 +816,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot()
     def download_db(self):
         if not self.download_window.isVisible():
-            self.download_window.download_thread.start()
+            self.download_window.start_download()
             self.download_window.show()
 
     @pyqtSlot()
@@ -912,6 +911,30 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.result_list.clear()
             self.result_list.addItems(self.signal_names)
             self.result_list.setCurrentItem(None)
+            self.modulation_list.addItems(self.collect_modulations())
+            self.locations_list.addItems(self.collect_locations())
+
+    def collect_locations(self):
+        all_locs = self.db[Signal.LOCATION]
+        all_locs = list(
+            set(
+                all_locs[all_locs != Constants.UNKNOWN]
+            )
+        )
+        all_locs.sort()
+        all_locs.insert(0, Constants.UNKNOWN)
+        return all_locs
+
+    def collect_modulations(self):
+        modulations = self.db[Signal.MODULATION]
+        modulations = list(
+            set(
+                modulations[modulations != Constants.UNKNOWN]
+            )
+        )
+        modulations.sort()
+        modulations.insert(0, Constants.UNKNOWN)
+        return modulations
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box,

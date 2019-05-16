@@ -143,10 +143,13 @@ class ForecastData(_BaseWeatherData):
         ]
 
     def _parse_data(self):
-        self.forecast = self.forecast.splitlines()
         # Remove possible '(G\d)' from the kp_index table
+        self.forecast = re.sub(
+            '\(G\d\)', lambda obj: '', self.forecast
+        )
+        self.forecast = self.forecast.splitlines()
         self.probabilities = re.sub(
-            '(G\d)', lambda obj: '', self.probabilities
+            '\(G\d\)', lambda obj: '', self.probabilities
         )
         self.probabilities = self.probabilities.splitlines()
 

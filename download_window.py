@@ -23,18 +23,21 @@ class DownloadWindow(QWidget, Ui_Download_window):
             # Qt.WindowStaysOnTopHint
         )
 
-        self.no_internet_msg = pop_up(self, title=Messages.NO_CONNECTION,
-                                      text=Messages.NO_CONNECTION_MSG,
-                                      connection=self.close)
+        self.__no_internet_msg = pop_up(self, title=Messages.NO_CONNECTION,
+                                        text=Messages.NO_CONNECTION_MSG,
+                                        connection=self.close)
 
-        self.bad_db_download_msg = pop_up(self, title=Messages.BAD_DOWNLOAD,
-                                          text=Messages.BAD_DOWNLOAD_MSG,
-                                          connection=self.close)
+        self.__bad_db_download_msg = pop_up(self, title=Messages.BAD_DOWNLOAD,
+                                            text=Messages.BAD_DOWNLOAD_MSG,
+                                            connection=self.close)
 
-        self.download_thread = DownloadThread()
-        self.download_thread.finished.connect(self.wait_close)
-        self.download_thread.progress.connect(self.__display_progress)
-        self.cancel_btn.clicked.connect(self.terminate_process)
+        self.__download_thread = DownloadThread()
+        self.__download_thread.finished.connect(self.__wait_close)
+        self.__download_thread.progress.connect(self.__display_progress)
+        self.cancel_btn.clicked.connect(self.__terminate_process)
+
+    def start_download(self):
+        self.__download_thread.start()
 
     def __downlaod_format_str(self, n, speed):
         return f"Downloaded MB: {n}\nSpeed: {speed} MB/s"
@@ -51,26 +54,26 @@ class DownloadWindow(QWidget, Ui_Download_window):
             self.status_lbl.setText(Constants.EXTRACTING_MSG + '\n')
 
     @pyqtSlot()
-    def terminate_process(self):
-        if self.download_thread.isRunning():
-            self.download_thread.terminate()
-            self.download_thread.wait()
+    def __terminate_process(self):
+        if self.__download_thread.isRunning():
+            self.__download_thread.terminate()
+            self.__download_thread.wait()
         self.close()
 
     @pyqtSlot()
-    def wait_close(self):
-        if self.download_thread.status is ThreadStatus.OK:
+    def __wait_close(self):
+        if self.__download_thread.status is ThreadStatus.OK:
             self.complete.emit()
             self.close()
-        elif self.download_thread.status is ThreadStatus.NO_CONNECTION_ERR:
-            self.no_internet_msg.show()
-        elif self.download_thread.status is ThreadStatus.BAD_DOWNLOAD_ERR:
-            self.bad_db_download_msg.show()
+        elif self.__download_thread.status is ThreadStatus.NO_CONNECTION_ERR:
+            self.__no_internet_msg.show()
+        elif self.__download_thread.status is ThreadStatus.BAD_DOWNLOAD_ERR:
+            self.__bad_db_download_msg.show()
         else:
             self.close()
 
     def reject(self):
-        if self.download_thread.isRunning():
-            self.download_thread.terminate()
-            self.download_thread.wait()
+        if self.__download_thread.isRunning():
+            self.__download_thread.terminate()
+            self.__download_thread.wait()
         super().reject()

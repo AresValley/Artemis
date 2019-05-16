@@ -74,10 +74,9 @@ class MultiColorSwitchableLabel(_BaseSwitchableLabel):
     def switch_on(self):
         if 5 <= self.level <= 9:
             super().switch_on()
-            self.setStyleSheet(f"color: {self.LEVEL_COLORS[self.level]}"
-            # f"""background-color: {self.LEVEL_COLORS[self.level]};
-            # color: #000000;
-            # """
+            self.setStyleSheet(
+                f"""color: {self.LEVEL_COLORS[self.level]};
+                text-decoration: underline;"""
             )
 
     def switch_off(self):
