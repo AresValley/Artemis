@@ -915,26 +915,21 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.locations_list.addItems(self.collect_locations())
 
     def collect_locations(self):
-        all_locs = self.db[Signal.LOCATION]
-        all_locs = list(
-            set(
-                all_locs[all_locs != Constants.UNKNOWN]
-            )
-        )
-        all_locs.sort()
-        all_locs.insert(0, Constants.UNKNOWN)
-        return all_locs
+        return self.collect_list(Signal.LOCATION)
 
     def collect_modulations(self):
-        modulations = self.db[Signal.MODULATION]
-        modulations = list(
+        return self.collect_list(Signal.MODULATION)
+
+    def collect_list(self, list_property):
+        values = self.db[list_property]
+        values = list(
             set(
-                modulations[modulations != Constants.UNKNOWN]
+                values[values != Constants.UNKNOWN]
             )
         )
-        modulations.sort()
-        modulations.insert(0, Constants.UNKNOWN)
-        return modulations
+        values.sort()
+        values.insert(0, Constants.UNKNOWN)
+        return values
 
     @pyqtSlot()
     def set_min_value_upper_limit(self, lower_combo_box,
