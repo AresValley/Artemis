@@ -911,14 +911,16 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.result_list.clear()
             self.result_list.addItems(self.signal_names)
             self.result_list.setCurrentItem(None)
-            self.modulation_list.addItems(self.collect_modulations())
-            self.locations_list.addItems(self.collect_locations())
-
-    def collect_locations(self):
-        return self.collect_list(Signal.LOCATION)
-
-    def collect_modulations(self):
-        return self.collect_list(Signal.MODULATION)
+            self.modulation_list.addItems(
+                self.collect_list(
+                    Signal.MODULATION
+                )
+            )
+            self.locations_list.addItems(
+                self.collect_list(
+                    Signal.LOCATION
+                )
+            )
 
     def collect_list(self, list_property):
         values = self.db[list_property]
