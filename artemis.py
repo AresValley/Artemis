@@ -3,7 +3,7 @@ from functools import partial
 import webbrowser
 import os
 import sys
-from time import sleep
+from time import sleep, time
 
 from pandas import read_csv
 
@@ -1444,8 +1444,11 @@ if __name__ == '__main__':
     # img = QPixmap(":/icons/Artemis3.500px.png")
     # splash = QSplashScreen(img)
     # splash.show()
-    # sleep(2)
+    # start= time()
+    # while time()-start < 2:
+    #     sleep(0.001)
+    #     my_app.processEvents()
+    # splash.close()
     artemis = Artemis()
     artemis.show()
-    # splash.finish(w)
     sys.exit(my_app.exec_())
