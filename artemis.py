@@ -1032,7 +1032,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def activate_if_toggled(self, radio_btn, *widgets):
-        toggled = True if radio_btn.isChecked() else False
+        toggled = radio_btn.isChecked()
         for w in widgets[:-1]: # Neglect the bool coming from the emitted signal.
             w.setEnabled(toggled)
 
