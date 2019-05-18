@@ -14,7 +14,7 @@ class ThemeConstants:
     FOLDER                 = "themes"
     EXTENSION              = ".qss"
     ICONS_FOLDER           = "icons"
-    DEFAULT                = "1-dark"
+    DEFAULT                = "dark"
     CURRENT                = ".current_theme"
     COLORS                 = "colors.txt"
     COLOR_SEPARATOR        = "="
@@ -117,7 +117,7 @@ class ThemeManager:
     def __pretty_name(self, bad_name):
         return ' '.join(
             map(lambda s: s.capitalize(),
-                bad_name.split('-')[1].split('_')
+                bad_name.split('_')
             )
         )
 
@@ -125,7 +125,7 @@ class ThemeManager:
         themes = []
         ag = QActionGroup(self.__parent, exclusive=True)
         if os.path.exists(ThemeConstants.FOLDER):
-            for theme_folder in os.listdir(ThemeConstants.FOLDER):
+            for theme_folder in sorted(os.listdir(ThemeConstants.FOLDER)):
                 relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
                 if os.path.isdir(os.path.abspath(relative_folder)):
                     relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
@@ -157,7 +157,7 @@ class ThemeManager:
             return match_ok(colors)
 
     def __change(self):
-        theme_name = os.path.basename(self.__theme_path).split('-')[1] + ThemeConstants.EXTENSION
+        theme_name = os.path.basename(self.__theme_path) + ThemeConstants.EXTENSION
         try:
             with open(
                 os.path.join(self.__theme_path, theme_name), "r"

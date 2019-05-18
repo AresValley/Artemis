@@ -922,12 +922,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 )
             )
 
-    def collect_list(self, list_property):
+    def collect_list(self, list_property, separator=';'):
         values = self.db[list_property]
         values = list(
-            set(
-                values[values != Constants.UNKNOWN]
-            )
+            set([
+                x.strip() for value in values[values != Constants.UNKNOWN]
+                    for x in value.split(separator)
+            ])
         )
         values.sort()
         values.insert(0, Constants.UNKNOWN)
@@ -1249,7 +1250,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 return False
         selected_items = [item for item in self.mode_tree_widget.selectedItems()]
         selected_items_text = [i.text(0) for i in selected_items]
-        parents = [item for item in selected_items_text if item in Constants.MODES.keys()]
+        parents = [
+            item for item in selected_items_text
+                if item in Constants.MODES.keys()
+        ]
         ok = []
         for item in selected_items:
             if item.text(0) in parents:
@@ -1261,9 +1265,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def modulation_filters_ok(self, signal_name):
         if not self.apply_remove_modulation_filter_btn.isChecked():
             return True
-        signal_modulation = self.db.at[signal_name, Signal.MODULATION]
+        signal_modulation = [
+            x.strip() for x in self.db.at[signal_name, Signal.MODULATION].split(',')
+        ]
         for item in self.modulation_list.selectedItems():
-            if item.text() == signal_modulation:
+            if item.text() in signal_modulation:
                 return True
         return False
 
@@ -1298,7 +1304,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def display_specs(self, item, previous_item):
         self.display_spectrogram()
-        if item:
+        if item is not None:
             self.current_signal_name = item.text()
             self.name_lab.setText(self.current_signal_name)
             self.name_lab.setAlignment(Qt.AlignHCenter)
@@ -1383,12 +1389,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
-    def activate_band_category(self, band_label, activate = True):
+    def activate_band_category(self, band_label, activate=True):
         color = self.active_color if activate else self.inactive_color
         for label in band_label:
             label.setStyleSheet(f"color: {color};")
 
-    def set_band_range(self, current_signal = None):
+    def set_band_range(self, current_signal=None):
         if current_signal is not None and not is_undef_freq(current_signal):
             lower_freq = int(current_signal.at[Signal.INF_FREQ])
             upper_freq = int(current_signal.at[Signal.SUP_FREQ])
