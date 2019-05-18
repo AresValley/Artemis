@@ -43,7 +43,7 @@ from utilities import (checksum_ok,
                        format_numbers,
                        resource_path,)
 
-# import icon_rc
+# import default_imgs_rc
 
 
 qt_creator_file = resource_path("artemis.ui")
@@ -1363,7 +1363,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     def display_spectrogram(self):
         default_pic = os.path.join(
-            self.default_images_folder,
+            Constants.DEFAULT_IMGS_FOLDER,
             Constants.NOT_SELECTED
         )
         item = self.result_list.currentItem()
@@ -1376,7 +1376,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             )
             if not QFileInfo(path_spectr).exists():
                 path_spectr = os.path.join(
-                    self.default_images_folder,
+                    Constants.DEFAULT_IMGS_FOLDER,
                     Constants.NOT_AVAILABLE
                 )
         else:
@@ -1441,14 +1441,14 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    # img = QPixmap(":/icons/Artemis3.500px.png")
-    # splash = QSplashScreen(img)
-    # splash.show()
-    # start= time()
-    # while time()-start < 2:
-    #     sleep(0.001)
-    #     my_app.processEvents()
-    # splash.close()
+    img = QPixmap(":/icon/default_pics/Artemis3.500px.png")
+    splash = QSplashScreen(img)
+    splash.show()
+    start= time()
+    while time() - start < 2:
+        sleep(0.001)
+        my_app.processEvents()
+    splash.close()
     artemis = Artemis()
     artemis.show()
     sys.exit(my_app.exec_())

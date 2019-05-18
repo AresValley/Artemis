@@ -1,5 +1,6 @@
 from collections import namedtuple
 from enum import Enum, auto
+import os.path
 
 
 class Ftype:
@@ -154,3 +155,4 @@ class Constants:
     UNKNOWN                 = "N/A"
     EXTRACTING_MSG          = "Extracting..."
     EXTRACTING_CODE         = -1
+    DEFAULT_IMGS_FOLDER     = os.path.join(":", "pics", "default_pics")

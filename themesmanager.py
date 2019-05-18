@@ -14,7 +14,7 @@ class ThemeConstants:
     FOLDER                 = "themes"
     EXTENSION              = ".qss"
     ICONS_FOLDER           = "icons"
-    DEFAULT                = "1-system"
+    DEFAULT                = "1-dark"
     CURRENT                = ".current_theme"
     COLORS                 = "colors.txt"
     COLOR_SEPARATOR        = "="
@@ -25,6 +25,8 @@ class ThemeConstants:
     DEFAULT_TEXT_COLOR     = "#ffffff"
     THEME_NOT_FOUND        = "Theme not found"
     MISSING_THEME          = "Missing theme in '" + FOLDER + "' folder."
+    MISSING_THEME_FOLDER   = FOLDER + " folder not found.\nOnly the basic theme is available."
+    THEME_FOLDER_NOT_FOUND = FOLDER + " folder not found"
 
 class ThemeManager:
     def __init__(self, parent):
@@ -95,18 +97,22 @@ class ThemeManager:
     @pyqtSlot()
     def __apply(self, theme_path):
         self.__theme_path = theme_path
-        if self.__theme_path != self.__current_theme:
-            self.__change()
-            self.__parent.display_specs(
-                item=self.__parent.result_list.currentItem(),
-                previous_item=None
-            )
-            self.__refresh_range_labels()
-            self.__parent.audio_widget.refresh_btns_colors(
-                self.__parent.active_color,
-                self.__parent.inactive_color
-            )
-            self.__space_weather_labels.refresh()
+        if os.path.exists(theme_path):
+            if self.__theme_path != self.__current_theme:
+                self.__change()
+                self.__parent.display_specs(
+                    item=self.__parent.result_list.currentItem(),
+                    previous_item=None
+                )
+                self.__refresh_range_labels()
+                self.__parent.audio_widget.refresh_btns_colors(
+                    self.__parent.active_color,
+                    self.__parent.inactive_color
+                )
+                self.__space_weather_labels.refresh()
+        else:
+            pop_up(self.__parent, title=ThemeConstants.THEME_NOT_FOUND,
+                   text=ThemeConstants.MISSING_THEME).show()
 
     def __pretty_name(self, bad_name):
         return ' '.join(
@@ -118,22 +124,26 @@ class ThemeManager:
     def __detect_themes(self):
         themes = []
         ag = QActionGroup(self.__parent, exclusive=True)
-        for theme_folder in os.listdir(ThemeConstants.FOLDER):
-            relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
-            if os.path.isdir(os.path.abspath(relative_folder)):
+        if os.path.exists(ThemeConstants.FOLDER):
+            for theme_folder in os.listdir(ThemeConstants.FOLDER):
                 relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
-                themes.append(relative_folder)
-        for theme_path in themes:
-            theme_name = '&' + self.__pretty_name(os.path.basename(theme_path))
-            new_theme = ag.addAction(
-                QAction(
-                    theme_name,
-                    self.__parent, checkable=True
+                if os.path.isdir(os.path.abspath(relative_folder)):
+                    relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
+                    themes.append(relative_folder)
+            for theme_path in themes:
+                theme_name = '&' + self.__pretty_name(os.path.basename(theme_path))
+                new_theme = ag.addAction(
+                    QAction(
+                        theme_name,
+                        self.__parent, checkable=True
+                    )
                 )
-            )
-            self.__parent.menu_themes.addAction(new_theme)
-            self.__theme_names[theme_name.lstrip('&')] = new_theme
-            new_theme.triggered.connect(partial(self.__apply, theme_path))
+                self.__parent.menu_themes.addAction(new_theme)
+                self.__theme_names[theme_name.lstrip('&')] = new_theme
+                new_theme.triggered.connect(partial(self.__apply, theme_path))
+        else:
+            pop_up(self.__parent, title=ThemeConstants.THEME_FOLDER_NOT_FOUND,
+                   text=ThemeConstants.MISSING_THEME_FOLDER).show()
 
     def __is_valid_html_color(self, colors):
         pattern = "#([a-zA-Z0-9]){6}"
@@ -314,15 +324,25 @@ class ThemeManager:
             with open(current_theme_file, "r") as current_theme_path:
                 theme_path = current_theme_path.read()
                 theme_name = self.__pretty_name(os.path.basename(theme_path))
-                self.__theme_names[theme_name].setChecked(True)
-                self.__apply(theme_path)
+                try:
+                    self.__theme_names[theme_name].setChecked(True)
+                except Exception:
+                    pop_up(self.__parent, title=ThemeConstants.THEME_NOT_FOUND,
+                           text=ThemeConstants.MISSING_THEME).show()
+                else:
+                    self.__apply(theme_path)
         else:
-            self.__theme_names[
-                self.__pretty_name(ThemeConstants.DEFAULT)
-            ].setChecked(True)
-            self.__apply(
-                os.path.join(
-                    ThemeConstants.FOLDER,
-                    ThemeConstants.DEFAULT
+            try:
+                self.__theme_names[
+                    self.__pretty_name(ThemeConstants.DEFAULT)
+                ].setChecked(True)
+            except Exception:
+                pop_up(self.__parent, title=ThemeConstants.THEME_NOT_FOUND,
+                       text=ThemeConstants.MISSING_THEME).show()
+            else:
+                self.__apply(
+                    os.path.join(
+                        ThemeConstants.FOLDER,
+                        ThemeConstants.DEFAULT
+                    )
                 )
-            )

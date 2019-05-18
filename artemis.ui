@@ -20,8 +20,8 @@
    <string>ARTΣMIS 3.0</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/icons/Artemis3.ico</normaloff>:/icons/Artemis3.ico</iconset>
+   <iconset resource="default_imgs.qrc">
+    <normaloff>:/icon/default_pics/Artemis3.ico</normaloff>:/icon/default_pics/Artemis3.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -9542,7 +9542,7 @@ QSlider::handle:horizontal {
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="icon.qrc"/>
+  <include location="default_imgs.qrc"/>
  </resources>
  <connections/>
 </ui>
