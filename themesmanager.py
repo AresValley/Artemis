@@ -25,8 +25,8 @@ class ThemeConstants:
     DEFAULT_TEXT_COLOR     = "#ffffff"
     THEME_NOT_FOUND        = "Theme not found"
     MISSING_THEME          = "Missing theme in '" + FOLDER + "' folder."
-    MISSING_THEME_FOLDER   = FOLDER + " folder not found.\nOnly the basic theme is available."
-    THEME_FOLDER_NOT_FOUND = FOLDER + " folder not found"
+    MISSING_THEME_FOLDER   = "'" + FOLDER + "'" + " folder not found.\nOnly the basic theme is available."
+    THEME_FOLDER_NOT_FOUND = "'" + FOLDER + "'" + " folder not found"
 
 class ThemeManager:
     def __init__(self, parent):
