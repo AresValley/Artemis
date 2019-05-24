@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QSplashScreen,
                              QTreeWidgetItem,)
 from PyQt5.QtGui import QPixmap
-from PyQt5 import uic
+from PyQt5 import uic, QtGui
 from PyQt5.QtCore import (QFileInfo,
                           Qt,
                           pyqtSlot,)
@@ -56,6 +56,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.set_initial_size()
+        self.setWindowIcon(QtGui.QIcon(":/icon/default_pics/Artemis3.500px.png"))
         self.closing = False
         self.download_window = DownloadWindow()
         self.download_window.complete.connect(self.show_downloaded_signals)
