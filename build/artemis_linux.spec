@@ -1,0 +1,47 @@
+# -*- mode: python -*-
+
+block_cipher = None
+
+
+a = Analysis(['../artemis.py'],
+             pathex=['../'],
+             binaries=[],
+             datas=[('../artemis.ui', '.'),
+                    ('../audio_player.py', '.'),
+                    ('../clickable_progress_bar.py', '.'),
+                    ('../constants.py', '.'),
+                    ('../double_text_button.py', '.'),
+                    ('../download_db_window.ui', '.'),
+                    ('../download_window.py', '.'),
+                    ('../fixed_aspect_ratio_label.py', '.'),
+                    ('../fixed_aspect_ratio_widget.py', '.'),
+                    ('../icon.qrc', '.'),
+                    ('../icon_rc.py', '.'),
+                    ('../space_weather_data.py', '.'),
+                    ('../switchable_label.py', '.'),
+                    ('../themes.py', '.'),
+                    ('../threads.py', '.'),
+                    ('../utilities.py', '.')],
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
+exe = EXE(pyz,
+          a.scripts,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
+          [],
+          name='artemis',
+          debug=False,
+          bootloader_ignore_signals=False,
+          strip=False,
+          upx=True,
+          runtime_tmpdir=None,
+          console=True )
