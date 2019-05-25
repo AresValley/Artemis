@@ -9,10 +9,12 @@ Ui_Download_window, _ = uic.loadUiType(resource_path("download_db_window.ui"))
 
 
 class DownloadWindow(QWidget, Ui_Download_window):
+    """Subclass QWidget and Ui_Download_window. It is the window displayed during the database download."""
 
     complete = pyqtSignal()
 
     def __init__(self):
+        """Initialize the window."""
         super().__init__()
         self.setupUi(self)
         self.setWindowFlags(
@@ -37,17 +39,21 @@ class DownloadWindow(QWidget, Ui_Download_window):
         self.cancel_btn.clicked.connect(self.__terminate_process)
 
     def start_download(self):
+        """Start the download thread."""
         self.__download_thread.start()
 
     def __downlaod_format_str(self, n, speed):
+        """Return a well-formatted string with downloaded MB and speed."""
         return f"Downloaded MB: {n}\nSpeed: {speed} MB/s"
 
     def show(self):
+        """Extends QWidget.show. Set downloaded MB and speed to zero."""
         self.status_lbl.setText(self.__downlaod_format_str(0, 0))
         super().show()
 
     @pyqtSlot(int, float)
     def __display_progress(self, progress, speed):
+        """Display the downloaded MB and speed."""
         if progress != Constants.EXTRACTING_CODE:
             self.status_lbl.setText(self.__downlaod_format_str(progress, speed))
         elif progress == Constants.EXTRACTING_CODE:
@@ -55,6 +61,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     @pyqtSlot()
     def __terminate_process(self):
+        """Terminate the download thread and close."""
         if self.__download_thread.isRunning():
             self.__download_thread.terminate()
             self.__download_thread.wait()
@@ -62,6 +69,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     @pyqtSlot()
     def __wait_close(self):
+        """Decide the action based on the download thread status and close."""
         if self.__download_thread.status is ThreadStatus.OK:
             self.complete.emit()
             self.close()
@@ -73,6 +81,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
             self.close()
 
     def reject(self):
+        """Extends QWidget.reject. Terminate the download thread."""
         if self.__download_thread.isRunning():
             self.__download_thread.terminate()
             self.__download_thread.wait()
