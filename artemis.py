@@ -41,7 +41,8 @@ from utilities import (checksum_ok,
                        is_undef_freq,
                        is_undef_band,
                        format_numbers,
-                       resource_path,)
+                       resource_path,
+                       safe_cast)
 
 # import default_imgs_rc
 
@@ -51,8 +52,10 @@ Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 
 class Artemis(QMainWindow, Ui_MainWindow):
+    """Main application class."""
 
     def __init__(self):
+        """Set all connections of the application."""
         super().__init__()
         self.setupUi(self)
         self.set_initial_size()
@@ -481,8 +484,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         # Left list widget and search bar.
         self.search_bar.textChanged.connect(self.display_signals)
-        self.result_list.currentItemChanged.connect(self.display_specs)
-        self.result_list.itemDoubleClicked.connect(
+        self.signals_list.currentItemChanged.connect(self.display_specs)
+        self.signals_list.itemDoubleClicked.connect(
             lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab)
         )
         self.audio_widget = AudioPlayer(
@@ -536,18 +539,31 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def start_update_forecast(self):
+        """Start the update of the 3-day forecast screen.
+
+        Start the corresponding thread.
+        """
         if not self.forecast_data.is_updating:
             self.update_forecast_bar.set_updating()
             self.forecast_data.update()
 
     @pyqtSlot()
     def start_update_space_weather(self):
+        """Start the update of the space weather screen.
+
+        Start the corresponding thread.
+        """
         if not self.space_weather_data.is_updating:
             self.update_now_bar.set_updating()
             self.space_weather_data.update()
 
     @pyqtSlot(bool)
     def update_forecast(self, status_ok):
+        """Update the 3-day forecast screen after a successful download.
+
+        If the download was not successful throw a warning. In any case remove
+        the downloaded data.
+        """
         self.update_forecast_bar.set_idle()
         if status_ok:
             self.forecast_data.update_all_labels()
@@ -558,9 +574,14 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot(bool)
     def update_space_weather(self, status_ok):
+        """Update the space weather screen after a successful download.
+
+        If the download was not successful throw a warning. In any case remove
+        the downloaded data.
+        """
         self.update_now_bar.set_idle()
         if status_ok:
-            xray_long = float(self.space_weather_data.xray[-1][7])
+            xray_long = safe_cast(self.space_weather_data.xray[-1][7], float)
             format_text = lambda letter, power: letter + f"{xray_long * 10**power:.1f}"
             if xray_long < 1e-8 and xray_long != -1.00e+05:
                 self.peak_flux_lbl.setText(format_text("<A", 8))
@@ -592,7 +613,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             elif xray_long == -1.00e+05:
                 self.switchable_r_labels.switch_off_all()
 
-            pro10 = float(self.space_weather_data.prot_el[-1][8])
+            pro10 = safe_cast(self.space_weather_data.prot_el[-1][8], float)
             if pro10 < 10 and pro10 != -1.00e+05:
                 self.switchable_s_labels.switch_on(self.s0_now_lbl)
             elif pro10 >= 10 and pro10 < 100:
@@ -608,9 +629,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
             elif pro10 == -1.00e+05:
                 self.switchable_s_labels.switch_off_all()
 
-            k_index = int(self.space_weather_data.ak_index[8][11].replace('.', ''))
+            k_index = safe_cast(
+                self.space_weather_data.ak_index[8][11].replace('.', ''), int
+            )
             self.k_index_lbl.setText(str(k_index))
-            a_index = int(self.space_weather_data.ak_index[7][7].replace('.', ''))
+            a_index = safe_cast(
+                self.space_weather_data.ak_index[7][7].replace('.', ''), int
+            )
             self.a_index_lbl.setText(str(a_index))
 
             if k_index == 0:
@@ -669,7 +694,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 self.a_storm_labels.switch_on(self.a_sev_storm_lbl)
 
             index = self.space_weather_data.geo_storm[6].index("was") + 1
-            k_index_24_hmax = int(self.space_weather_data.geo_storm[6][index])
+            k_index_24_hmax = safe_cast(
+                self.space_weather_data.geo_storm[6][index], int
+            )
             if k_index_24_hmax == 0:
                 self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
             elif k_index_24_hmax == 1:
@@ -691,12 +718,18 @@ class Artemis(QMainWindow, Ui_MainWindow):
             elif k_index_24_hmax == 9:
                 self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
 
-            val = int(self.space_weather_data.ak_index[7][2].replace('.', ''))
+            val = safe_cast(
+                self.space_weather_data.ak_index[7][2].replace('.', ''), int
+            )
             self.sfi_lbl.setText(f"{val}")
-            val = int([x[4] for x in self.space_weather_data.sgas if "SSN" in x][0])
+            val = safe_cast(
+                [x[4] for x in self.space_weather_data.sgas
+                    if "SSN" in x][0], int
+            )
             self.sn_lbl.setText(f"{val:d}")
 
-            for label, pixmap in zip(self.space_weather_labels, self.space_weather_data.images):
+            for label, pixmap in zip(self.space_weather_labels,
+                                     self.space_weather_data.images):
                 label.pixmap = pixmap
                 label.make_transparent()
                 label.apply_pixmap()
@@ -707,6 +740,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def go_to_gfd(self, by):
+        """Open a browser tab with the GFD site.
+
+        Make the search by frequency or location.
+        Argument:
+        by -- either GfdType.FREQ or GfdType.LOC.
+        """
         query = "/?q="
         if by is GfdType.FREQ:
             value_in_mhz = self.freq_gfd.value() \
@@ -722,23 +761,37 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):
+        """If an item is unselected from the modulations list, remove the item."""
         if not item.isSelected():
             self.show_matching_modulations(self.search_bar_modulation.text())
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_location(self, item):
+        """If an item is unselected from the locations list, remove the item."""
         if not item.isSelected():
             self.show_matching_locations(self.search_bar_location.text())
 
     @pyqtSlot(str)
     def show_matching_modulations(self, text):
+        """Show the modulations which matches 'text'.
+
+        The match criterion is defined in 'show_matching_strings'."""
         self.show_matching_strings(self.modulation_list, text)
 
     @pyqtSlot(str)
     def show_matching_locations(self, text):
+        """Show the locations which matches 'text'.
+
+        The match criterion is defined in 'show_matching_strings'."""
         self.show_matching_strings(self.locations_list, text)
 
     def show_matching_strings(self, list_elements, text):
+        """Show all elements of QListWidget the matches (even partially) a target text.
+
+        Arguments:
+        list_elements -- the QListWidget
+        text -- the target text.
+        """
         for index in range(list_elements.count()):
             item = list_elements.item(index)
             if text.lower() in item.text().lower() or item.isSelected():
@@ -747,6 +800,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 item.setHidden(True)
 
     def set_mode_tree_widget(self):
+        """Construct the QTreeWidget for the 'Mode' screen."""
         for parent, children in Constants.MODES.items():
             iparent = QTreeWidgetItem([parent])
             self.mode_tree_widget.addTopLevelItem(iparent)
@@ -756,6 +810,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.mode_tree_widget.expandAll()
 
     def manage_mode_selections(self):
+        """Rules the selection of childs items of the 'Mode' QTreeWidget.
+
+        If a parent is selected all its children will be selected as well.
+        """
         selected_items = self.mode_tree_widget.selectedItems()
         parents = Constants.MODES.keys()
         for parent in parents:
@@ -765,10 +823,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
                         item.child(i).setSelected(True)
 
     def set_initial_size(self):
-        """Function to handle high resolution screens. The function sets bigger
-        sizes for all the relevant fixed-size widgets.
-        Also by default it sets the size to 3/4 of the available space
-        both vertically and horizontally."""
+        """Handle high resolution screens.
+
+        Set bigger sizes for all the relevant fixed-size widgets.
+        Also by default set the size to 3/4 of the available space both
+        vertically and horizontally.
+        """
         d = QDesktopWidget().availableGeometry()
         w = d.width()
         h = d.height()
@@ -796,6 +856,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.freq_gfd.setFixedWidth(200)
             self.unit_freq_gfd.setFixedWidth(120)
 
+            self.mode_tree_widget.setMinimumWidth(500)
+            self.modulation_list.setMinimumWidth(500)
+
             self.audio_progress.setFixedHeight(20)
             self.volume.setStyleSheet("""
                 QSlider::groove:horizontal {
@@ -815,12 +878,23 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def download_db(self):
+        """Start the database download.
+
+        Do nothing if already downloading.
+        """
         if not self.download_window.isVisible():
             self.download_window.start_download()
             self.download_window.show()
 
     @pyqtSlot()
     def ask_if_download(self):
+        """Check if the database is at its latest version.
+
+        If a new database is available automatically start the download.
+        If not ask if should download it anyway.
+        If already downloading do nothing.
+        Handle possible connection errors.
+        """
         if not self.download_window.isVisible():
             db_path = os.path.join(Constants.DATA_FOLDER, Database.NAME)
             try:
@@ -848,6 +922,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def check_db_ver(self):
+        """Check if the database is at its latest version.
+
+        If a new database version is available, ask if it should be downloaded.
+        If not display a message.
+        If already downloading do nothing.
+        Handle possible connection errors.
+        """
         if not self.download_window.isVisible():
             db_path = os.path.join(Constants.DATA_FOLDER, Database.NAME)
             answer = None
@@ -881,11 +962,17 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def show_downloaded_signals(self):
+        """Load and display the database signal list."""
         self.search_bar.setEnabled(True)
         self.load_db()
         self.display_signals()
 
     def load_db(self):
+        """Load the database from file.
+
+        Populate the signals list and set the total number of signals.
+        Handle possible missing file.
+        """
         names = Database.NAMES
         try:
             self.db = read_csv(os.path.join(Constants.DATA_FOLDER, Database.NAME),
@@ -908,9 +995,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.db.fillna(Constants.UNKNOWN, inplace=True)
             self.db[Signal.WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
-            self.result_list.clear()
-            self.result_list.addItems(self.signal_names)
-            self.result_list.setCurrentItem(None)
+            self.signals_list.clear()
+            self.signals_list.addItems(self.signal_names)
+            self.signals_list.setCurrentItem(None)
             self.modulation_list.addItems(
                 self.collect_list(
                     Signal.MODULATION
@@ -923,6 +1010,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
             )
 
     def collect_list(self, list_property, separator=';'):
+        """Collect all the entrys of a QListWidget.
+
+        Handle multiple entries in one item seprated by a separator.
+
+        Keyword argument:
+        seprator -- the separator character for multiple-entries items.
+        """
         values = self.db[list_property]
         values = list(
             set([
@@ -939,6 +1033,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
                                   lower_spin_box,
                                   upper_combo_box,
                                   upper_spin_box):
+        """Forbid to a lower limit to be greater than the corresponding upper one.
+
+        Used for frequency and bandwidth screens."""
         if lower_spin_box.isEnabled():
             unit_conversion = {'Hz' : ['kHz', 'MHz', 'GHz'],
                                'kHz': ['MHz', 'GHz'],
@@ -979,6 +1076,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
                               upper_unit,
                               upper_confidence,
                               range_lbl):
+        """Display the actual range applied for the signal's property search.
+
+        Used for frequency and bandwidth screens."""
         activate_low = False
         activate_high = False
         color = self.inactive_color
@@ -1020,6 +1120,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def set_acf_interval_label(self):
+        """Display the actual acf interval for the search."""
         tolerance = self.acf_spinbox.value() * self.acf_confidence.value() / 100
         if tolerance > 0:
             val = round(self.acf_spinbox.value() - tolerance, Constants.MAX_DIGITS)
@@ -1032,12 +1133,17 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def activate_if_toggled(self, radio_btn, *widgets):
+        """If radio_btn is toggled, activate all *widgets.
+
+        Do nothing otherwise.
+        """
         toggled = radio_btn.isChecked()
         for w in widgets[:-1]: # Neglect the bool coming from the emitted signal.
             w.setEnabled(toggled)
 
     @pyqtSlot()
     def display_signals(self):
+        """Display all the signal names which matches the applied filters."""
         text = self.search_bar.text()
         available_signals = 0
         for index, signal_name in enumerate(self.signal_names):
@@ -1049,15 +1155,16 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.modulation_filters_ok(signal_name) ,
                     self.location_filters_ok(signal_name)   ,
                     self.acf_filters_ok(signal_name)]):
-                self.result_list.item(index).setHidden(False)
+                self.signals_list.item(index).setHidden(False)
                 available_signals += 1
             else:
-                self.result_list.item(index).setHidden(True)
+                self.signals_list.item(index).setHidden(True)
         # Remove selected item.
-        self.result_list.setCurrentItem(None)
+        self.signals_list.setCurrentItem(None)
         self.update_status_tip(available_signals)
 
     def update_status_tip(self, available_signals):
+        """Display the number of displayed signals in the status tip."""
         if available_signals < self.total_signals:
             self.statusbar.setStyleSheet(f'color: {self.active_color}')
         else:
@@ -1068,6 +1175,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_fb_filters(self, ftype):
+        """Reset the Frequency or Bandwidth depending og 'ftype'.
+
+        ftype can be either Ftype.FREQ or Ftype.BAND.
+        """
         if ftype != Ftype.FREQ and ftype != Ftype.BAND:
             raise ValueError("Wrong ftype in function 'reset_fb_filters'")
 
@@ -1102,6 +1213,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_cat_filters(self):
+        """Reset the category filter screen."""
         uncheck_and_emit(self.apply_remove_cat_filter_btn)
         for f in self.cat_filter_btns:
             if f.isChecked():
@@ -1110,6 +1222,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_mode_filters(self):
+        """Reset the mode filter screen."""
         uncheck_and_emit(self.apply_remove_mode_filter_btn)
         parents = Constants.MODES.keys()
         selected_children = []
@@ -1125,6 +1238,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_modulation_filters(self):
+        """Reset the modulation filter screen."""
         uncheck_and_emit(self.apply_remove_modulation_filter_btn)
         self.search_bar_modulation.setText('')
         self.show_matching_strings(
@@ -1137,6 +1251,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_location_filters(self):
+        """Reset the location filter screen."""
         uncheck_and_emit(self.apply_remove_location_filter_btn)
         self.search_bar_location.setText('')
         self.show_matching_strings(
@@ -1149,6 +1264,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_acf_filters(self):
+        """Reset the acf filter screen."""
         uncheck_and_emit(self.apply_remove_acf_filter_btn)
         if self.include_undef_acf.isChecked():
             self.include_undef_acf.setChecked(False)
@@ -1156,6 +1272,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.acf_confidence.setValue(0)
 
     def frequency_filters_ok(self, signal_name):
+        """Evalaute if the a signal matches the frequency filters."""
         if not self.apply_remove_freq_filter_btn.isChecked():
             return True
         undef_freq = is_undef_freq(self.db.loc[signal_name])
@@ -1166,8 +1283,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 return False
 
         signal_freqs = (
-            int(self.db.at[signal_name, Signal.INF_FREQ]),
-            int(self.db.at[signal_name, Signal.SUP_FREQ])
+            safe_cast(self.db.at[signal_name, Signal.INF_FREQ], int),
+            safe_cast(self.db.at[signal_name, Signal.SUP_FREQ], int)
         )
 
         band_filter_ok = False
@@ -1195,6 +1312,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             return lower_limit_ok and upper_limit_ok
 
     def band_filters_ok(self, signal_name):
+        """Evalaute if the a signal matches the band filters."""
         if not self.apply_remove_band_filter_btn.isChecked():
             return True
         undef_band = is_undef_band(self.db.loc[signal_name])
@@ -1205,8 +1323,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 return False
 
         signal_bands = (
-            int(self.db.at[signal_name, Signal.INF_BAND]),
-            int(self.db.at[signal_name, Signal.SUP_BAND])
+            safe_cast(self.db.at[signal_name, Signal.INF_BAND], int),
+            safe_cast(self.db.at[signal_name, Signal.SUP_BAND], int)
         )
 
         lower_limit_ok = True
@@ -1224,6 +1342,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return lower_limit_ok and upper_limit_ok
 
     def category_filters_ok(self, signal_name):
+        """Evalaute if the a signal matches the category filters."""
         if not self.apply_remove_cat_filter_btn.isChecked():
             return True
         cat_code = self.db.at[signal_name, Signal.CATEGORY_CODE]
@@ -1240,6 +1359,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             return cat_checked == positive_cases and cat_checked > 0
 
     def mode_filters_ok(self, signal_name):
+        """Evalaute if the a signal matches the mode filters."""
         if not self.apply_remove_mode_filter_btn.isChecked():
             return True
         signal_mode = self.db.at[signal_name, Signal.MODE]
@@ -1263,6 +1383,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return any(ok)
 
     def modulation_filters_ok(self, signal_name):
+        """Evalaute if the a signal matches the modulation filters."""
         if not self.apply_remove_modulation_filter_btn.isChecked():
             return True
         signal_modulation = [
@@ -1274,6 +1395,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return False
 
     def location_filters_ok(self, signal_name):
+        """Evalaute if the a signal matches the location filters."""
         if not self.apply_remove_location_filter_btn.isChecked():
             return True
         signal_location = self.db.at[signal_name, Signal.LOCATION]
@@ -1283,6 +1405,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return False
 
     def acf_filters_ok(self, signal_name):
+        """Evalaute if the a signal matches the acf filters."""
         if not self.apply_remove_acf_filter_btn.isChecked():
             return True
         signal_acf = self.db.at[signal_name, Signal.ACF]
@@ -1292,7 +1415,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 return False
         else:
-            signal_acf = float(signal_acf.rstrip("ms"))
+            signal_acf = safe_cast(signal_acf.rstrip("ms"), float)
             tolerance = self.acf_spinbox.value() * self.acf_confidence.value() / 100
             upper_limit = self.acf_spinbox.value() + tolerance
             lower_limit = self.acf_spinbox.value() - tolerance
@@ -1303,6 +1426,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def display_specs(self, item, previous_item):
+        """Display the signal properties.
+
+        item is the item corresponding to the selected signal
+        previous_item is unused.
+        """
         self.display_spectrogram()
         if item is not None:
             self.current_signal_name = item.text()
@@ -1368,11 +1496,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.audio_widget.set_audio_player()
 
     def display_spectrogram(self):
-        default_pic = os.path.join(
-            Constants.DEFAULT_IMGS_FOLDER,
-            Constants.NOT_SELECTED
-        )
-        item = self.result_list.currentItem()
+        """Display the selected signal's waterfall."""
+        default_pic = Constants.DEFAULT_NOT_SELECTED
+        item = self.signals_list.currentItem()
         if item:
             spectrogram_name = item.text()
             path_spectr = os.path.join(
@@ -1381,23 +1507,32 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 spectrogram_name + Constants.SPECTRA_EXT
             )
             if not QFileInfo(path_spectr).exists():
-                path_spectr = os.path.join(
-                    Constants.DEFAULT_IMGS_FOLDER,
-                    Constants.NOT_AVAILABLE
-                )
+                path_spectr = Constants.DEFAULT_NOT_AVAILABLE
         else:
             path_spectr = default_pic
         self.spectrogram.setPixmap(QPixmap(path_spectr))
 
     def activate_band_category(self, band_label, activate=True):
+        """Highlight the given band_label.
+
+        If activate is False remove the highlight (default to True).
+        """
         color = self.active_color if activate else self.inactive_color
         for label in band_label:
             label.setStyleSheet(f"color: {color};")
 
     def set_band_range(self, current_signal=None):
+        """Highlight the signal's band labels.
+
+        If no signal is selected remove all highlights.
+        """
         if current_signal is not None and not is_undef_freq(current_signal):
-            lower_freq = int(current_signal.at[Signal.INF_FREQ])
-            upper_freq = int(current_signal.at[Signal.SUP_FREQ])
+            lower_freq = safe_cast(
+                current_signal.at[Signal.INF_FREQ], int
+            )
+            upper_freq = safe_cast(
+                current_signal.at[Signal.SUP_FREQ], int
+            )
             zipped = list(zip(Constants.BANDS, self.band_labels))
             for i, w in enumerate(zipped):
                 band, band_label = w
@@ -1417,6 +1552,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_all_filters(self):
+        """Reset all filter screens.
+
+        Show all available signals.
+        """
         self.reset_frequency_filters_btn.clicked.emit()
         self.reset_band_filters_btn.clicked.emit()
         self.reset_cat_filters_btn.clicked.emit()
@@ -1427,6 +1566,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def go_to_web_page_signal(self):
+        """Go the web page of the signal's wiki.
+
+        Do nothing is no signal is selected.
+        """
         if self.current_signal_name:
             self.url_button.setStyleSheet(
                 f"color: {self.url_button.colors.clicked}"
@@ -1435,6 +1578,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.db.at[self.current_signal_name, Signal.WIKI_CLICKED] = True
 
     def closeEvent(self, event):
+        """Extends closeEvent of QMainWindow.
+
+        Shutdown all active threads and close all open windows."""
         self.closing = True
         if self.download_window.isVisible():
             self.download_window.close()
@@ -1447,7 +1593,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    img = QPixmap(":/icon/default_pics/Artemis3.500px.png")
+    img = QPixmap(os.path.join(
+        ":", "icon", "default_pics", "Artemis3.500px.png")
+    )
     splash = QSplashScreen(img)
     splash.show()
     start= time()

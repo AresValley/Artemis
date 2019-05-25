@@ -7,14 +7,23 @@ from constants import Constants
 import qtawesome as qta
 
 
-class AudioPlayer(QObject): # Maybe useless inheriting from QObject
-    """This is the audio player widget. The only public methods are the __init__
+class AudioPlayer(QObject):
+    """Subclass QObject. Audio player widget for the audio samples.
+
+    The only public methods are the __init__
     method, set_audio_player, which loads the current file and refresh_btns_colors.
     Everything else is managed internally."""
 
     __time_step = 500 # Milliseconds.
 
-    def __init__(self, play, pause, stop, volume, audio_progress, active_color, inactive_color):
+    def __init__(self, play,
+                 pause,
+                 stop,
+                 volume,
+                 audio_progress,
+                 active_color,
+                 inactive_color):
+        """Initialize the player."""
         super().__init__()
         self.__paused = False
         self.__first_call = True
@@ -36,6 +45,7 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
         self.refresh_btns_colors(active_color, inactive_color)
 
     def refresh_btns_colors(self, active_color, inactive_color):
+        """Repaint the buttons of the widgetd after the theme has changed."""
         self.__play.setIcon(qta.icon('fa5.play-circle',
                                      color=active_color,
                                      color_disabled=inactive_color))
@@ -48,12 +58,14 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
 
     @pyqtSlot()
     def __set_volume(self):
+        """Set the volume of the audio samples."""
         if mixer.get_init():
             mixer.music.set_volume(
                 self.__volume.value() / self.__volume.maximum()
             )
 
     def __reset_audio_widget(self):
+        """Reset the widget. Stop all playing samples."""
         if mixer.get_init():
             if mixer.music.get_busy():
                 mixer.music.stop()
@@ -65,6 +77,7 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
 
     @pyqtSlot()
     def __update_bar(self):
+        """Upadte the progress bar."""
         pos = mixer.music.get_pos()
         if pos == -1:
             self.__timer.stop()
@@ -74,11 +87,13 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
             self.__audio_progress.setValue(pos)
 
     def __set_max_progress_bar(self):
+        """Set the maximum value of the progress bar."""
         self.__audio_progress.setMaximum(
             mixer.Sound(self.__audio_file).get_length() * 1000
         )
 
-    def set_audio_player(self, fname = ""):
+    def set_audio_player(self, fname=""):
+        """Set the current audio sample."""
         self.__first_call = True
         self.__reset_audio_widget()
         full_name = os.path.join(
@@ -92,6 +107,7 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
 
     @pyqtSlot()
     def __play_audio(self):
+        """Play the audio sample."""
         if not self.__paused:
             if self.__first_call:
                 self.__first_call = False
@@ -111,6 +127,7 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
 
     @pyqtSlot()
     def __stop_audio(self):
+        """Stop the audio sample."""
         mixer.music.stop()
         self.__audio_progress.reset()
         self.__timer.stop()
@@ -118,12 +135,14 @@ class AudioPlayer(QObject): # Maybe useless inheriting from QObject
 
     @pyqtSlot()
     def __pause_audio(self):
+        """Pause the audio sample."""
         mixer.music.pause()
         self.__timer.stop()
         self.__paused = True
         self.__enable_buttons(True, False, False)
 
     def __enable_buttons(self, play_en, pause_en, stop_en):
+        """Set the three buttons status."""
         self.__play.setEnabled(play_en)
         self.__pause.setEnabled(pause_en)
         self.__stop.setEnabled(stop_en)

@@ -14,6 +14,8 @@ from utilities import checksum_ok
 
 
 class ThreadStatus(Enum):
+    """Possible thread status."""
+
     OK                = auto()
     NO_CONNECTION_ERR = auto()
     UNKNOWN_ERR       = auto()
@@ -22,24 +24,31 @@ class ThreadStatus(Enum):
 
 
 class BaseDownloadThread(QThread):
+    """Subclass QThread. Base class for the download threads."""
+
     def __init__(self, parent=None):
+        """Set the status as 'UNDEFINED'."""
         super().__init__(parent)
         self.status = ThreadStatus.UNDEFINED
 
     def __del__(self):
+        """Force the termination of the thread."""
         self.terminate()
         self.wait()
 
 
 class DownloadThread(BaseDownloadThread):
+    """Subclass BaseDownloadThread. Download the database, images and audio samples."""
 
     progress = pyqtSignal(int, float)
     CHUNK = 1024**2
 
     def __init__(self):
+        """Just call super().__init__."""
         super().__init__()
 
     def __pretty_len(self, byte_obj):
+        """Return a well-formatted number of downloaded MB."""
         mega = len(byte_obj) / self.CHUNK
         if mega.is_integer():
             return int(mega)
@@ -47,12 +56,17 @@ class DownloadThread(BaseDownloadThread):
             return ceil(mega)
 
     def __get_download_speed(self, data, delta):
+        """Return the download speed in MB/s."""
         return round(
             (len(data) / self.CHUNK) / delta,
             2
         )
 
     def run(self):
+        """QThread.run. Download the database, images and audio samples.
+
+        Handle all possible exceptions. Also extract the files
+        in the local folder."""
         self.status = ThreadStatus.UNDEFINED
         raw_data = bytes(0)
         try:
@@ -102,29 +116,39 @@ class DownloadThread(BaseDownloadThread):
 
 
 class _AsyncDownloader:
+    """Mixin class for asynchronous threads."""
+
     async def _download_resource(self, session, link):
+        """Return the content of 'link' as bytes."""
         resp = await session.get(link)
         return await resp.read()
 
 
 class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
+    """Subclass BaseDownloadThread. Downlaod the space weather data."""
 
     __properties = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
 
     def __init__(self, space_weather_data):
+        """Initialize the a local space_weather_data."""
         super().__init__()
         self.__space_weather_data = space_weather_data
 
     async def __download_property(self, session, property_name):
+        """Download the data conteining the information of a specific property."""
         link = getattr(Constants, "SPACE_WEATHER_" + property_name.upper())
         data = await self._download_resource(session, link)
         setattr(self.__space_weather_data, property_name, str(data, 'utf-8'))
 
     async def __download_image(self, session, n):
-        im = await self._download_resource(session, Constants.SPACE_WEATHER_IMGS[n])
+        """Download the data corresponding the n-th image displayed in the screen."""
+        im = await self._download_resource(
+            session, Constants.SPACE_WEATHER_IMGS[n]
+        )
         self.__space_weather_data.images[n].loadFromData(im)
 
     async def _download_resources(self):
+        """Download all the data."""
         session = aiohttp.ClientSession()
         try:
             t = []
@@ -137,7 +161,9 @@ class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
             t1 = []
             for im_number in tot_images:
                 t1.append(
-                    asyncio.create_task(self.__download_image(session, im_number))
+                    asyncio.create_task(
+                        self.__download_image(session, im_number)
+                    )
                 )
             await asyncio.gather(*t, *t1)
         except Exception:
@@ -148,29 +174,35 @@ class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
             await session.close()
 
     def run(self):
+        """Override QThread.run. Start the download of the data."""
         self.status = ThreadStatus.UNDEFINED
         asyncio.run(self._download_resources())
 
 
 class UpdateForecastThread(BaseDownloadThread, _AsyncDownloader):
+    """Subclass BaseDownloadThread. Download the forecast data."""
 
     class _PropertyName(Enum):
+        """Enum used to differentiate between the two data needed."""
         FORECAST = auto()
         PROBABILITIES = auto()
 
-    def __init__(self, parent):
+    def __init__(self, owner):
+        """Set the owner object (a ForecastData instance)."""
         super().__init__()
-        self.parent = parent
+        self.owner = owner
 
     async def __download_property(self, session, link, prop_name):
+        """Download the data from 'link' and set the corresponding property of the owner."""
         resp = await self._download_resource(session, link)
         resp = str(resp, 'utf-8')
         if prop_name is self._PropertyName.FORECAST:
-            self.parent.forecast = resp
+            self.owner.forecast = resp
         if prop_name is self._PropertyName.PROBABILITIES:
-            self.parent.probabilities = resp
+            self.owner.probabilities = resp
 
     async def _download_resources(self):
+        """Download all the data needed."""
         session = aiohttp.ClientSession()
         try:
             await asyncio.gather(
@@ -197,5 +229,6 @@ class UpdateForecastThread(BaseDownloadThread, _AsyncDownloader):
             await session.close()
 
     def run(self):
+        """Override QThread.run. Start the data download."""
         self.status = ThreadStatus.UNDEFINED
         asyncio.run(self._download_resources())

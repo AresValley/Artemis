@@ -11,37 +11,42 @@ from utilities import pop_up
 
 
 class ThemeConstants:
-    FOLDER                 = "themes"
-    EXTENSION              = ".qss"
-    ICONS_FOLDER           = "icons"
-    DEFAULT                = "dark"
-    CURRENT                = ".current_theme"
-    COLORS                 = "colors.txt"
-    COLOR_SEPARATOR        = "="
-    DEFAULT_ACTIVE_COLOR   = "#000000"
-    DEFAULT_INACTIVE_COLOR = "#9f9f9f"
-    DEFAULT_OFF_COLORS     = "#000000", "#434343"
-    DEFAULT_ON_COLORS      = "#4b79a1", "#283e51"
-    DEFAULT_TEXT_COLOR     = "#ffffff"
-    THEME_NOT_FOUND        = "Theme not found"
-    MISSING_THEME          = "Missing theme in '" + FOLDER + "' folder."
-    MISSING_THEME_FOLDER   = "'" + FOLDER + "'" + " folder not found.\nOnly the basic theme is available."
-    THEME_FOLDER_NOT_FOUND = "'" + FOLDER + "'" + " folder not found"
+    """Container class for all the relevant theme-related constants."""
+
+    FOLDER                    = "themes"
+    EXTENSION                 = ".qss"
+    ICONS_FOLDER              = "icons"
+    DEFAULT                   = "dark"
+    CURRENT                   = ".current_theme"
+    COLORS                    = "colors.txt"
+    COLOR_SEPARATOR           = "="
+    DEFAULT_ACTIVE_COLOR      = "#000000"
+    DEFAULT_INACTIVE_COLOR    = "#9f9f9f"
+    DEFAULT_OFF_COLORS        = "#000000", "#434343"
+    DEFAULT_ON_COLORS         = "#4b79a1", "#283e51"
+    DEFAULT_TEXT_COLOR        = "#ffffff"
+    THEME_NOT_FOUND           = "Theme not found"
+    MISSING_THEME             = "Missing theme in '" + FOLDER + "' folder."
+    MISSING_THEME_FOLDER      = "'" + FOLDER + "'" + " folder not found.\nOnly the basic theme is available."
+    THEME_FOLDER_NOT_FOUND    = "'" + FOLDER + "'" + " folder not found"
+    DEFAULT_ICONS_PATH        = os.path.join(FOLDER, DEFAULT, ICONS_FOLDER)
+    DEFAULT_SEARCH_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.SEARCH_LABEL_IMG)
+    DEFAULT_VOLUME_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.VOLUME_LABEL_IMG)
+    CURRENT_THEME_FILE        = os.path.join(FOLDER, CURRENT)
+    DEFAULT_THEME_PATH        = os.path.join(FOLDER, DEFAULT)
+
 
 class ThemeManager:
+    """Manage all the operations releted the the themes."""
+
     def __init__(self, parent):
+        """Initialize the ThemeManager instance."""
         self.__parent = parent
         self.__parent.active_color = ThemeConstants.DEFAULT_ACTIVE_COLOR
         self.__parent.inactive_color = ThemeConstants.DEFAULT_INACTIVE_COLOR
 
         self.__theme_path = ""
         self.__current_theme = ""
-
-        self.__parent.default_images_folder = os.path.join(
-            ThemeConstants.FOLDER,
-            ThemeConstants.DEFAULT,
-            ThemeConstants.ICONS_FOLDER
-        )
 
         self.__space_weather_labels = SwitchableLabelsIterable(
             *list(
@@ -66,9 +71,9 @@ class ThemeManager:
         )
 
         self.__theme_names = {}
-        self.__detect_themes()
 
     def __refresh_range_labels(self):
+        """Refresh the range-labels."""
         self.__parent.set_acf_interval_label()
         self.__parent.set_band_filter_label(
             self.__parent.activate_low_band_filter_btn,
@@ -96,12 +101,16 @@ class ThemeManager:
 
     @pyqtSlot()
     def __apply(self, theme_path):
+        """Apply the selected theme.
+
+        Refresh all relevant widgets.
+        Display a QMessageBox if the theme is not found."""
         self.__theme_path = theme_path
         if os.path.exists(theme_path):
             if self.__theme_path != self.__current_theme:
                 self.__change()
                 self.__parent.display_specs(
-                    item=self.__parent.result_list.currentItem(),
+                    item=self.__parent.signals_list.currentItem(),
                     previous_item=None
                 )
                 self.__refresh_range_labels()
@@ -115,6 +124,7 @@ class ThemeManager:
                    text=ThemeConstants.MISSING_THEME).show()
 
     def __pretty_name(self, bad_name):
+        """Return a well-formatted theme name."""
         return ' '.join(
             map(lambda s: s.capitalize(),
                 bad_name.split('_')
@@ -122,6 +132,10 @@ class ThemeManager:
         )
 
     def __detect_themes(self):
+        """Detect all available themes.
+
+        Connect all the actions to change the theme.
+        Display a QMessageBox if the theme folder is not found."""
         themes = []
         ag = QActionGroup(self.__parent, exclusive=True)
         if os.path.exists(ThemeConstants.FOLDER):
@@ -146,6 +160,7 @@ class ThemeManager:
                    text=ThemeConstants.MISSING_THEME_FOLDER).show()
 
     def __is_valid_html_color(self, colors):
+        """Return if a string or a list of strings has a valid html format."""
         pattern = "#([a-zA-Z0-9]){6}"
         match_ok = lambda col: bool(re.match(pattern, col))
         if isinstance(colors, list):
@@ -157,6 +172,11 @@ class ThemeManager:
             return match_ok(colors)
 
     def __change(self):
+        """Change the current theme.
+
+         Apply the stylesheet and set active and inactive colors.
+         Set all the new images needed.
+         Save the new current theme on file."""
         theme_name = os.path.basename(self.__theme_path) + ThemeConstants.EXTENSION
         try:
             with open(
@@ -170,47 +190,26 @@ class ThemeManager:
                    text=ThemeConstants.MISSING_THEME).show()
         else:
             icons_path = os.path.join(self.__theme_path, ThemeConstants.ICONS_FOLDER)
-            default_icons_path = os.path.join(
-                ThemeConstants.FOLDER,
-                ThemeConstants.DEFAULT,
-                ThemeConstants.ICONS_FOLDER
-            )
-
-            if os.path.exists(os.path.join(icons_path, Constants.NOT_SELECTED)) and \
-               os.path.exists(os.path.join(icons_path, Constants.NOT_AVAILABLE)):
-                self.__parent.default_images_folder = icons_path
-            else:
-                self.__parent.default_images_folder = default_icons_path
 
             path_to_search_label = os.path.join(
                 icons_path,
                 Constants.SEARCH_LABEL_IMG
             )
-            default_search_label = os.path.join(
-                default_icons_path,
-                Constants.SEARCH_LABEL_IMG
-            )
 
             if os.path.exists(path_to_search_label):
-                self.__parent.search_label.setPixmap(
-                    QPixmap(path_to_search_label)
-                )
-                self.__parent.modulation_search_label.setPixmap(
-                    QPixmap(path_to_search_label)
-                )
-                self.__parent.location_search_label.setPixmap(
-                    QPixmap(path_to_search_label)
-                )
+                path = path_to_search_label
             else:
-                self.__parent.search_label.setPixmap(
-                    QPixmap(default_search_label)
-                )
-                self.__parent.modulation_search_label.setPixmap(
-                    QPixmap(default_search_label)
-                )
-                self.__parent.location_search_label.setPixmap(
-                    QPixmap(default_search_label)
-                )
+                path = ThemeConstants.DEFAULT_SEARCH_LABEL_PATH
+
+            self.__parent.search_label.setPixmap(
+                QPixmap(path)
+            )
+            self.__parent.modulation_search_label.setPixmap(
+                QPixmap(path)
+            )
+            self.__parent.location_search_label.setPixmap(
+                QPixmap(path)
+            )
 
             self.__parent.search_label.setScaledContents(True)
             self.__parent.modulation_search_label.setScaledContents(True)
@@ -220,19 +219,15 @@ class ThemeManager:
                 icons_path,
                 Constants.VOLUME_LABEL_IMG
             )
-            default_volume_label = os.path.join(
-                default_icons_path,
-                Constants.VOLUME_LABEL_IMG
-            )
 
             if os.path.exists(path_to_volume_label):
-                self.__parent.volume_label.setPixmap(
-                    QPixmap(path_to_volume_label)
-                )
+                path = path_to_volume_label
             else:
-                self.__parent.volume_label.setPixmap(
-                    QPixmap(default_volume_label)
-                )
+                path = ThemeConstants.DEFAULT_VOLUME_LABEL_PATH
+
+            self.__parent.volume_label.setPixmap(
+                QPixmap(path)
+            )
 
             self.__parent.volume_label.setScaledContents(True)
 
@@ -307,21 +302,16 @@ class ThemeManager:
             self.__current_theme = self.__theme_path
 
             try:
-                with open(os.path.join(
-                            ThemeConstants.FOLDER,
-                            ThemeConstants.CURRENT
-                          ), "w") as current_theme:
+                with open(ThemeConstants.CURRENT_THEME_FILE, "w") as current_theme:
                     current_theme.write(self.__theme_path)
             except Exception:
                 pass
 
     def start(self):
-        current_theme_file = os.path.join(
-            ThemeConstants.FOLDER,
-            ThemeConstants.CURRENT
-        )
-        if os.path.exists(current_theme_file):
-            with open(current_theme_file, "r") as current_theme_path:
+        """Start the theme manager."""
+        self.__detect_themes()
+        if os.path.exists(ThemeConstants.CURRENT_THEME_FILE):
+            with open(ThemeConstants.CURRENT_THEME_FILE, "r") as current_theme_path:
                 theme_path = current_theme_path.read()
                 theme_name = self.__pretty_name(os.path.basename(theme_path))
                 try:
@@ -340,9 +330,4 @@ class ThemeManager:
                 pop_up(self.__parent, title=ThemeConstants.THEME_NOT_FOUND,
                        text=ThemeConstants.MISSING_THEME).show()
             else:
-                self.__apply(
-                    os.path.join(
-                        ThemeConstants.FOLDER,
-                        ThemeConstants.DEFAULT
-                    )
-                )
+                self.__apply(ThemeConstants.DEFAULT_THEME_PATH)

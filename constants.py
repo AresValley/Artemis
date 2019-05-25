@@ -4,21 +4,32 @@ import os.path
 
 
 class Ftype:
+    """Container class to differentiate between frequency and band.
+
+    used in reset_fb_filters.
+    """
+
     FREQ = "freq"
     BAND = "band"
 
 
 class GfdType(Enum):
+    """Enum class to differentiate the possible GFD search criterias."""
+
     FREQ = auto()
     LOC  = auto()
 
 
 class ChecksumWhat(Enum):
+    """Enum class to distinguish the object you want to verify the checksum."""
+
     FOLDER = auto()
     DB = auto()
 
 
 class Messages:
+    """Container class for messages to be displayed."""
+
     DB_UP_TO_DATE            = "Already up to date"
     DB_UP_TO_DATE_MSG        = "No newer version to download."
     DB_NEW_VER               = "New version available"
@@ -34,6 +45,8 @@ class Messages:
 
 
 class Signal:
+    """Container class for the signal property names."""
+
     NAME          = "name"
     INF_FREQ      = "inf_freq"
     SUP_FREQ      = "sup_freq"
@@ -50,6 +63,8 @@ class Signal:
 
 
 class Database:
+    """Container class for the database-related constants."""
+
     LINK_LOC  = "https://aresvalley.com/Storage/Artemis/Database/data.zip"
     LINK_REF  = "https://aresvalley.com/Storage/Artemis/Database/data.zip.log"
     NAME      = "db.csv"
@@ -64,17 +79,18 @@ class Database:
                  Signal.DESCRIPTION,
                  Signal.MODULATION,
                  Signal.CATEGORY_CODE,
-                 Signal.ACF,)
+                 Signal.ACF)
     DELIMITER = "*"
     STRINGS   = (Signal.INF_FREQ,
                  Signal.SUP_FREQ,
                  Signal.MODE,
                  Signal.INF_BAND,
                  Signal.SUP_BAND,
-                 Signal.CATEGORY_CODE,)
+                 Signal.CATEGORY_CODE)
 
 
 class ForecastColors:
+    """Container class for the forecast labels colors."""
     WARNING_COLOR = "#F95423"
     KP9_COLOR     = "#FFCCCB"
     KP8_COLOR     = "#FFCC9A"
@@ -84,6 +100,8 @@ class ForecastColors:
 
 
 class Constants:
+    """Container class for several contants of the software."""
+
     CLICK_TO_UPDATE_STR     = "Click to update"
     SIGIDWIKI               = "https://www.sigidwiki.com/wiki/Signal_Identification_Guide"
     ADD_SIGNAL_LINK         = "https://www.sigidwiki.com/index.php/Special:FormEdit/Signal/?preload=Signal_Identification_Wiki:Signal_form_preload_text"
@@ -119,8 +137,6 @@ class Constants:
     LABEL_ON_COLOR          = "on"
     LABEL_OFF_COLOR         = "off"
     TEXT_COLOR              = "text"
-    NOT_AVAILABLE           = "spectrumnotavailable.png"
-    NOT_SELECTED            = "nosignalselected.png"
     __Band                  = namedtuple("Band", ["lower", "upper"])
     __ELF                   = __Band(0, 30) # Formally it is (3, 30) Hz.
     __SLF                   = __Band(30, 300)
@@ -149,10 +165,14 @@ class Constants:
                                "Chirp Spread Spectrum": (),
                                "FHSS-TDM": (),
                                "RAW": (),
-                               "SC-FDMA": (),}
+                               "SC-FDMA": ()}
     APPLY                   = "Apply"
     REMOVE                  = "Remove"
     UNKNOWN                 = "N/A"
     EXTRACTING_MSG          = "Extracting..."
     EXTRACTING_CODE         = -1
+    NOT_AVAILABLE           = "spectrumnotavailable.png"
+    NOT_SELECTED            = "nosignalselected.png"
     DEFAULT_IMGS_FOLDER     = os.path.join(":", "pics", "default_pics")
+    DEFAULT_NOT_SELECTED    = os.path.join(DEFAULT_IMGS_FOLDER, NOT_SELECTED)
+    DEFAULT_NOT_AVAILABLE   = os.path.join(DEFAULT_IMGS_FOLDER, NOT_AVAILABLE)
