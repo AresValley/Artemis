@@ -36,6 +36,75 @@ class ThemeConstants:
     DEFAULT_THEME_PATH        = os.path.join(FOLDER, DEFAULT)
 
 
+class _ColorsHandler:
+    """Manage the theme's secondary colors.
+
+    Contains a _Color inner class."""
+
+    class _Color:
+        """Characterize a color from a string.
+
+        Can handle strings representing multiple colors."""
+
+        MAX_COLORS = 2
+
+        def __init__(self, line):
+            """Define the color from the string 'line'.
+
+            All relevant features are defined:
+            - if the format is valid;
+            - if 'line' represent a single color or a list of colors.
+            - the quality of the color."""
+            quality, color_str = line.split(ThemeConstants.COLOR_SEPARATOR)
+            color_str = color_str.rstrip()
+            self.quality = quality.lower()
+            self.color_str = ''
+            self.color_list = []
+            if ',' in color_str:
+                self.is_simple_string = False
+                self.color_list = [c.strip() for c in color_str.split(',')]
+            else:
+                self.is_simple_string = True
+                self.color_str = color_str
+            self.is_valid = self.__color_is_valid()
+
+        def __color_is_valid(self):
+            """Return if the color (or the list of colors) has a valid html format."""
+            pattern = "#([a-zA-Z0-9]){6}"
+            match_ok = lambda col: bool(re.match(pattern, col))
+            if not self.is_simple_string:
+                if self.elements == self.MAX_COLORS:
+                    return all(match_ok(c) for c in self.color_list)
+                else:
+                    return False
+            else:
+                return match_ok(self.color_str)
+
+
+    def __init__(self, simple_color_list, double_color_list):
+        """Initialize the lists of valid _Color objects."""
+        self.simple_color_list = simple_color_list
+        self.double_color_list = double_color_list
+
+    @classmethod
+    def from_file(cls, colors_str):
+        """Return a _ColorsHandler object with two lists of valid _Color objects.
+
+        If the file is empty or there are no valid colors return None."""
+        if colors_str:
+            simple_color_list = []
+            double_color_list = []
+            for line in colors_str.splitlines():
+                color = cls._Color(line)
+                if color.is_valid:
+                    if color.is_simple_string:
+                        simple_color_list.append(color)
+                    else:
+                        double_color_list.append(color)
+            if simple_color_list and double_color_list:
+                return cls(simple_color_list, double_color_list)
+
+
 class ThemeManager:
     """Manage all the operations releted the the themes."""
 
@@ -159,18 +228,6 @@ class ThemeManager:
             pop_up(self.__parent, title=ThemeConstants.THEME_FOLDER_NOT_FOUND,
                    text=ThemeConstants.MISSING_THEME_FOLDER).show()
 
-    def __is_valid_html_color(self, colors):
-        """Return if a string or a list of strings has a valid html format."""
-        pattern = "#([a-zA-Z0-9]){6}"
-        match_ok = lambda col: bool(re.match(pattern, col))
-        if isinstance(colors, list):
-            if len(colors) > 1:
-                return all(match_ok(c) for c in colors)
-            else:
-                return match_ok(colors[0])
-        else:
-            return match_ok(colors)
-
     def __change(self):
         """Change the current theme.
 
@@ -179,9 +236,7 @@ class ThemeManager:
          Save the new current theme on file."""
         theme_name = os.path.basename(self.__theme_path) + ThemeConstants.EXTENSION
         try:
-            with open(
-                os.path.join(self.__theme_path, theme_name), "r"
-            ) as stylesheet:
+            with open(os.path.join(self.__theme_path, theme_name), "r") as stylesheet:
                 style = stylesheet.read()
                 self.__parent.setStyleSheet(style)
                 self.__parent.download_window.setStyleSheet(style)
@@ -191,50 +246,32 @@ class ThemeManager:
         else:
             icons_path = os.path.join(self.__theme_path, ThemeConstants.ICONS_FOLDER)
 
-            path_to_search_label = os.path.join(
-                icons_path,
-                Constants.SEARCH_LABEL_IMG
-            )
+            path_to_search_label = os.path.join(icons_path,Constants.SEARCH_LABEL_IMG)
 
             if os.path.exists(path_to_search_label):
                 path = path_to_search_label
             else:
                 path = ThemeConstants.DEFAULT_SEARCH_LABEL_PATH
 
-            self.__parent.search_label.setPixmap(
-                QPixmap(path)
-            )
-            self.__parent.modulation_search_label.setPixmap(
-                QPixmap(path)
-            )
-            self.__parent.location_search_label.setPixmap(
-                QPixmap(path)
-            )
+            self.__parent.search_label.setPixmap(QPixmap(path))
+            self.__parent.modulation_search_label.setPixmap(QPixmap(path))
+            self.__parent.location_search_label.setPixmap(QPixmap(path))
 
             self.__parent.search_label.setScaledContents(True)
             self.__parent.modulation_search_label.setScaledContents(True)
             self.__parent.location_search_label.setScaledContents(True)
 
-            path_to_volume_label = os.path.join(
-                icons_path,
-                Constants.VOLUME_LABEL_IMG
-            )
+            path_to_volume_label = os.path.join(icons_path,Constants.VOLUME_LABEL_IMG)
 
             if os.path.exists(path_to_volume_label):
                 path = path_to_volume_label
             else:
                 path = ThemeConstants.DEFAULT_VOLUME_LABEL_PATH
 
-            self.__parent.volume_label.setPixmap(
-                QPixmap(path)
-            )
-
+            self.__parent.volume_label.setPixmap(QPixmap(path))
             self.__parent.volume_label.setScaledContents(True)
 
-            path_to_colors = os.path.join(
-                self.__theme_path,
-                ThemeConstants.COLORS
-            )
+            path_to_colors = os.path.join(self.__theme_path,ThemeConstants.COLORS)
 
             active_color_ok     = False
             inactive_color_ok   = False
@@ -244,41 +281,35 @@ class ThemeManager:
 
             if os.path.exists(path_to_colors):
                 with open(path_to_colors, "r") as colors_file:
-                    for line in colors_file:
-                        if ThemeConstants.COLOR_SEPARATOR in line:
-                            quality, color = line.split(ThemeConstants.COLOR_SEPARATOR)
-                            color = color.rstrip()
-                            color_len = 1
-                            if ',' in color:
-                                color = [c.strip() for c in color.split(',')]
-                                color_len = len(color)
-                            if self.__is_valid_html_color(color):
-                                if color_len == 1:
-                                    if quality.lower() == Constants.ACTIVE:
-                                        self.__parent.active_color = color
-                                        active_color_ok = True
-                                    if quality.lower() == Constants.INACTIVE:
-                                        self.__parent.inactive_color = color
-                                        inactive_color_ok = True
-                                    if quality.lower() == Constants.TEXT_COLOR:
-                                        text_color_ok = True
-                                        self.__space_weather_labels.set(
-                                            "text_color",
-                                            color
-                                        )
-                                if color_len == 2:
-                                    if quality.lower() == Constants.LABEL_ON_COLOR:
-                                        switch_on_color_ok = True
-                                        self.__space_weather_labels.set(
-                                            "switch_on_colors",
-                                            color
-                                        )
-                                    if quality.lower() == Constants.LABEL_OFF_COLOR:
-                                        switch_off_color_ok = True
-                                        self.__space_weather_labels.set(
-                                            "switch_off_colors",
-                                            color
-                                        )
+                    color_handler = _ColorsHandler.from_file(colors_file.read())
+
+                if color_handler is not None:
+                    for color in color_handler.simple_color_list:
+                        if color.quality == Constants.ACTIVE:
+                            self.__parent.active_color = color.color_str
+                            active_color_ok = True
+                        if color.quality == Constants.INACTIVE:
+                            self.__parent.inactive_color = color.color_str
+                            inactive_color_ok = True
+                        if color.quality == Constants.TEXT_COLOR:
+                            text_color_ok = True
+                            self.__space_weather_labels.set(
+                                "text_color",
+                                color.color_str
+                            )
+                    for color in color_handler.double_color_list:
+                        if color.quality == Constants.LABEL_ON_COLOR:
+                            switch_on_color_ok = True
+                            self.__space_weather_labels.set(
+                                "switch_on_colors",
+                                color.color_list
+                            )
+                        if color.quality == Constants.LABEL_OFF_COLOR:
+                            switch_off_color_ok = True
+                            self.__space_weather_labels.set(
+                                "switch_off_colors",
+                                color.color_list
+                            )
 
             if not (active_color_ok and inactive_color_ok):
                 self.__parent.active_color = ThemeConstants.DEFAULT_ACTIVE_COLOR
