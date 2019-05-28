@@ -54,10 +54,10 @@ class _ColorsHandler:
             All relevant features are defined:
             - if the format is valid;
             - if 'line' represent a single color or a list of colors.
-            - the quality of the color."""
+            - the 'quality' of the color."""
             quality, color_str = line.split(ThemeConstants.COLOR_SEPARATOR)
-            color_str = color_str.rstrip()
-            self.quality = quality.lower()
+            color_str = color_str.strip()
+            self.quality = quality.lower().strip()
             self.color_str = ''
             self.color_list = []
             if ',' in color_str:
@@ -71,9 +71,9 @@ class _ColorsHandler:
         def __color_is_valid(self):
             """Return if the color (or the list of colors) has a valid html format."""
             pattern = "#([a-zA-Z0-9]){6}"
-            match_ok = lambda col: bool(re.match(pattern, col))
+            match_ok = lambda col: bool(re.match(pattern, col)) and len(col) == 7
             if not self.is_simple_string:
-                if self.elements == self.MAX_COLORS:
+                if len(self.color_list) <= self.MAX_COLORS:
                     return all(match_ok(c) for c in self.color_list)
                 else:
                     return False
@@ -101,7 +101,7 @@ class _ColorsHandler:
                         simple_color_list.append(color)
                     else:
                         double_color_list.append(color)
-            if simple_color_list and double_color_list:
+            if simple_color_list or double_color_list:
                 return cls(simple_color_list, double_color_list)
 
 
@@ -344,14 +344,14 @@ class ThemeManager:
         if os.path.exists(ThemeConstants.CURRENT_THEME_FILE):
             with open(ThemeConstants.CURRENT_THEME_FILE, "r") as current_theme_path:
                 theme_path = current_theme_path.read()
-                theme_name = self.__pretty_name(os.path.basename(theme_path))
-                try:
-                    self.__theme_names[theme_name].setChecked(True)
-                except Exception:
-                    pop_up(self.__parent, title=ThemeConstants.THEME_NOT_FOUND,
-                           text=ThemeConstants.MISSING_THEME).show()
-                else:
-                    self.__apply(theme_path)
+            theme_name = self.__pretty_name(os.path.basename(theme_path))
+            try:
+                self.__theme_names[theme_name].setChecked(True)
+            except Exception:
+                pop_up(self.__parent, title=ThemeConstants.THEME_NOT_FOUND,
+                       text=ThemeConstants.MISSING_THEME).show()
+            else:
+                self.__apply(theme_path)
         else:
             try:
                 self.__theme_names[
