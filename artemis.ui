@@ -21,7 +21,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="default_imgs.qrc">
-    <normaloff>:/icon/default_pics/Artemis3.ico</normaloff>:/icon/default_pics/Artemis3.ico</iconset>
+    <normaloff>:/icon/default_pics/Artemis3.500px.png</normaloff>:/icon/default_pics/Artemis3.500px.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>

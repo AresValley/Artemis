@@ -59,7 +59,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.set_initial_size()
-        self.setWindowIcon(QtGui.QIcon(":/icon/default_pics/Artemis3.500px.png"))  # TODO: Not clear if necessary.
         self.closing = False
         self.download_window = DownloadWindow()
         self.download_window.complete.connect(self.show_downloaded_signals)
@@ -1594,9 +1593,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
-    img = QPixmap(os.path.join(
-        ":", "icon", "default_pics", "Artemis3.500px.png")
-    )
+    ARTEMIS_ICON = os.path.join(":", "icon", "default_pics", "Artemis3.500px.png")
+    img = QPixmap(ARTEMIS_ICON)
     splash = QSplashScreen(img)
     splash.show()
     start= time()
