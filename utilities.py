@@ -128,14 +128,17 @@ def format_numbers(lower, upper):
     else:
         return f"{lower:,} {units[lower_factor]}"
 
-def safe_cast(value, cast_type):
+def safe_cast(value, cast_type, default=-1):
     """Calls 'cast_type(value)' and returns the result.
 
-    If the operation fails returns -1. Should be used to perform 'safe casts'.
+    If the operation fails returns 'default'.
+    Should be used to perform 'safe casts'.
+    Keyword argument:
+    default -- default value returned if the cast fails.
     """
     try:
         r = cast_type(value)
     except Exception:
-        r = -1
+        r = default
     finally:
         return r
