@@ -858,6 +858,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
             self.mode_tree_widget.setMinimumWidth(500)
             self.modulation_list.setMinimumWidth(500)
+            self.locations_list.setMinimumWidth(500)
 
             self.audio_progress.setFixedHeight(20)
             self.volume.setStyleSheet("""
