@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QSplashScreen,
                              QTreeWidgetItem,)
 from PyQt5.QtGui import QPixmap
-from PyQt5 import uic, QtGui
+from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo,
                           Qt,
                           pyqtSlot,)
@@ -47,7 +47,7 @@ from utilities import (checksum_ok,
 # import default_imgs_rc
 
 
-qt_creator_file = resource_path("artemis.ui")
+qt_creator_file = resource_path(os.path.join("ui", "artemis.ui"))
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 
@@ -1599,7 +1599,7 @@ if __name__ == '__main__':
     splash = QSplashScreen(img)
     splash.show()
     start= time()
-    while time() - start < 2:
+    while time() - start < 1.5:
         sleep(0.001)
         my_app.processEvents()
     splash.close()
