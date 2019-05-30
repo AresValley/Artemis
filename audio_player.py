@@ -77,7 +77,7 @@ class AudioPlayer(QObject):
 
     @pyqtSlot()
     def __update_bar(self):
-        """Upadte the progress bar."""
+        """Update the progress bar."""
         pos = mixer.music.get_pos()
         if pos == -1:
             self.__timer.stop()

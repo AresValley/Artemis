@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSize
 
 
 class FixedAspectRatioWidget(QWidget):
-    """Subclass QWidget. Keep all the internal labels to a fixed aaspect ratio."""
+    """Subclass QWidget. Keep all the internal labels to a fixed aspect ratio."""
 
     space = 10
     def __init__(self, parent=None):

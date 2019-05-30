@@ -6,7 +6,7 @@ import os.path
 class Ftype:
     """Container class to differentiate between frequency and band.
 
-    used in reset_fb_filters.
+    Used in reset_fb_filters.
     """
 
     FREQ = "freq"
@@ -91,6 +91,7 @@ class Database:
 
 class ForecastColors:
     """Container class for the forecast labels colors."""
+
     WARNING_COLOR = "#F95423"
     KP9_COLOR     = "#FFCCCB"
     KP8_COLOR     = "#FFCC9A"
@@ -100,7 +101,7 @@ class ForecastColors:
 
 
 class Constants:
-    """Container class for several contants of the software."""
+    """Container class for several constants of the software."""
 
     CLICK_TO_UPDATE_STR     = "Click to update"
     SIGIDWIKI               = "https://www.sigidwiki.com/wiki/Signal_Identification_Guide"

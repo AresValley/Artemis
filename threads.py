@@ -27,7 +27,7 @@ class BaseDownloadThread(QThread):
     """Subclass QThread. Base class for the download threads."""
 
     def __init__(self, parent=None):
-        """Set the status as 'UNDEFINED'."""
+        """Set the status to 'UNDEFINED'."""
         super().__init__(parent)
         self.status = ThreadStatus.UNDEFINED
 
@@ -63,7 +63,7 @@ class DownloadThread(BaseDownloadThread):
         )
 
     def run(self):
-        """QThread.run. Download the database, images and audio samples.
+        """Override QThread.run. Download the database, images and audio samples.
 
         Handle all possible exceptions. Also extract the files
         in the local folder."""

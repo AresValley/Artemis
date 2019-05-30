@@ -11,7 +11,7 @@ from utilities import pop_up
 
 
 class ThemeConstants:
-    """Container class for all the relevant theme-related constants."""
+    """Container class for all the theme-related constants."""
 
     FOLDER                    = "themes"
     EXTENSION                 = ".qss"
@@ -106,7 +106,7 @@ class _ColorsHandler:
 
 
 class ThemeManager:
-    """Manage all the operations releted the the themes."""
+    """Manage all the operations releted to the themes."""
 
     def __init__(self, parent):
         """Initialize the ThemeManager instance."""
@@ -231,9 +231,9 @@ class ThemeManager:
     def __change(self):
         """Change the current theme.
 
-         Apply the stylesheet and set active and inactive colors.
-         Set all the new images needed.
-         Save the new current theme on file."""
+        Apply the stylesheet and set active and inactive colors.
+        Set all the new images needed.
+        Save the new current theme on file."""
         theme_name = os.path.basename(self.__theme_path) + ThemeConstants.EXTENSION
         try:
             with open(os.path.join(self.__theme_path, theme_name), "r") as stylesheet:

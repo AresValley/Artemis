@@ -761,13 +761,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_modulation(self, item):
-        """If an item is unselected from the modulations list, remove the item."""
+        """If an item is unselected from the modulations list, hide the item."""
         if not item.isSelected():
             self.show_matching_modulations(self.search_bar_modulation.text())
 
     @pyqtSlot(QListWidgetItem)
     def remove_if_unselected_location(self, item):
-        """If an item is unselected from the locations list, remove the item."""
+        """If an item is unselected from the locations list, hide the item."""
         if not item.isSelected():
             self.show_matching_locations(self.search_bar_location.text())
 
@@ -786,7 +786,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.show_matching_strings(self.locations_list, text)
 
     def show_matching_strings(self, list_elements, text):
-        """Show all elements of QListWidget the matches (even partially) a target text.
+        """Show all elements of QListWidget that matches (even partially) a target text.
 
         Arguments:
         list_elements -- the QListWidget
@@ -926,7 +926,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """Check if the database is at its latest version.
 
         If a new database version is available, ask if it should be downloaded.
-        If not display a message.
+        If a new database version is not available display a message.
         If already downloading do nothing.
         Handle possible connection errors.
         """
@@ -972,7 +972,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """Load the database from file.
 
         Populate the signals list and set the total number of signals.
-        Handle possible missing file.
+        Handle possible missing file error.
         """
         names = Database.NAMES
         try:
@@ -1014,9 +1014,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """Collect all the entrys of a QListWidget.
 
         Handle multiple entries in one item seprated by a separator.
-
         Keyword argument:
-        seprator -- the separator character for multiple-entries items.
+        separator -- the separator character for multiple-entries items.
         """
         values = self.db[list_property]
         values = list(
@@ -1176,7 +1175,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def reset_fb_filters(self, ftype):
-        """Reset the Frequency or Bandwidth depending og 'ftype'.
+        """Reset the Frequency or Bandwidth depending on 'ftype'.
 
         ftype can be either Ftype.FREQ or Ftype.BAND.
         """
@@ -1273,7 +1272,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.acf_confidence.setValue(0)
 
     def frequency_filters_ok(self, signal_name):
-        """Evalaute if the a signal matches the frequency filters."""
+        """Evalaute if the signal matches the frequency filters."""
         if not self.apply_remove_freq_filter_btn.isChecked():
             return True
         undef_freq = is_undef_freq(self.db.loc[signal_name])
@@ -1313,7 +1312,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             return lower_limit_ok and upper_limit_ok
 
     def band_filters_ok(self, signal_name):
-        """Evalaute if the a signal matches the band filters."""
+        """Evalaute if the signal matches the band filters."""
         if not self.apply_remove_band_filter_btn.isChecked():
             return True
         undef_band = is_undef_band(self.db.loc[signal_name])
@@ -1343,7 +1342,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return lower_limit_ok and upper_limit_ok
 
     def category_filters_ok(self, signal_name):
-        """Evalaute if the a signal matches the category filters."""
+        """Evalaute if the signal matches the category filters."""
         if not self.apply_remove_cat_filter_btn.isChecked():
             return True
         cat_code = self.db.at[signal_name, Signal.CATEGORY_CODE]
@@ -1360,7 +1359,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             return cat_checked == positive_cases and cat_checked > 0
 
     def mode_filters_ok(self, signal_name):
-        """Evalaute if the a signal matches the mode filters."""
+        """Evalaute if the signal matches the mode filters."""
         if not self.apply_remove_mode_filter_btn.isChecked():
             return True
         signal_mode = self.db.at[signal_name, Signal.MODE]
@@ -1384,7 +1383,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return any(ok)
 
     def modulation_filters_ok(self, signal_name):
-        """Evalaute if the a signal matches the modulation filters."""
+        """Evalaute if the signal matches the modulation filters."""
         if not self.apply_remove_modulation_filter_btn.isChecked():
             return True
         signal_modulation = [
@@ -1396,7 +1395,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return False
 
     def location_filters_ok(self, signal_name):
-        """Evalaute if the a signal matches the location filters."""
+        """Evalaute if the signal matches the location filters."""
         if not self.apply_remove_location_filter_btn.isChecked():
             return True
         signal_location = self.db.at[signal_name, Signal.LOCATION]
@@ -1406,7 +1405,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return False
 
     def acf_filters_ok(self, signal_name):
-        """Evalaute if the a signal matches the acf filters."""
+        """Evalaute if the signal matches the acf filters."""
         if not self.apply_remove_acf_filter_btn.isChecked():
             return True
         signal_acf = self.db.at[signal_name, Signal.ACF]
@@ -1429,8 +1428,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def display_specs(self, item, previous_item):
         """Display the signal properties.
 
-        item is the item corresponding to the selected signal
-        previous_item is unused.
+        'item' is the item corresponding to the selected signal
+        'previous_item' is unused.
         """
         self.display_spectrogram()
         if item is not None:
@@ -1569,7 +1568,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
     def go_to_web_page_signal(self):
         """Go the web page of the signal's wiki.
 
-        Do nothing is no signal is selected.
+        Do nothing if no signal is selected.
         """
         if self.current_signal_name:
             self.url_button.setStyleSheet(

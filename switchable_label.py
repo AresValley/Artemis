@@ -6,17 +6,17 @@ class _BaseSwitchableLabel(QLabel):
     """Subclass QLabel. Base class for the switchable labels."""
 
     def __init__(self, parent=None):
-        """Set is_on = False and level = 0."""
+        """Set is_on to False and level to 0."""
         super().__init__(parent)
         self.is_on = False
         self.level = 0
 
     def switch_on(self):
-        """Set is_on = True."""
+        """Set is_on to True."""
         self.is_on = True
 
     def switch_off(self):
-        """Set is_on = False."""
+        """Set is_on to False."""
         self.is_on = False
 
 
@@ -130,7 +130,7 @@ class SwitchableLabelsIterable:
             yield lab
 
     def switch_on(self, label):
-        """Switch on the label 'label. Switch off all the other labels."""
+        """Switch on the label 'label'. Switch off all the other labels."""
         for lab in self.labels:
             if lab is label:
                 lab.switch_on()
@@ -150,7 +150,7 @@ class SwitchableLabelsIterable:
     def refresh(self):
         """Refresh the state of all the labels.
 
-        Used after theme has changed."""
+        Used after the applied theme has changed."""
         for lab in self.labels:
             if lab.is_on:
                 lab.switch_on()

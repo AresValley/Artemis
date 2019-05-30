@@ -95,7 +95,7 @@ def is_undef_band(current_signal):
     return lower_band == Constants.UNKNOWN or upper_band == Constants.UNKNOWN
 
 def _change_unit(str_num):
-    """Return a scale factor givent the number of digits of a numeric string."""
+    """Return a scale factor given the number of digits of a numeric string."""
     digits = len(str_num)
     if digits < 4:
         return 1
@@ -129,9 +129,9 @@ def format_numbers(lower, upper):
         return f"{lower:,} {units[lower_factor]}"
 
 def safe_cast(value, cast_type, default=-1):
-    """Calls 'cast_type(value)' and returns the result.
+    """Call 'cast_type(value)' and return the result.
 
-    If the operation fails returns 'default'.
+    If the operation fails return 'default'.
     Should be used to perform 'safe casts'.
     Keyword argument:
     default -- default value returned if the cast fails.
