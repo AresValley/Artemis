@@ -47,7 +47,7 @@ class DownloadThread(BaseDownloadThread):
         """Just call super().__init__."""
         super().__init__()
 
-    def __pretty_len(self, byte_obj):
+    def _pretty_len(self, byte_obj):
         """Return a well-formatted number of downloaded MB."""
         mega = len(byte_obj) / self.CHUNK
         if mega.is_integer():
@@ -55,11 +55,10 @@ class DownloadThread(BaseDownloadThread):
         else:
             return ceil(mega)
 
-    def __get_download_speed(self, data, delta):
+    def _get_download_speed(self, data, delta):
         """Return the download speed in MB/s."""
         return round(
-            (len(data) / self.CHUNK) / delta,
-            2
+            (len(data) / self.CHUNK) / delta, 2
         )
 
     def run(self):
@@ -83,8 +82,8 @@ class DownloadThread(BaseDownloadThread):
                     break
                 raw_data += data
                 self.progress.emit(
-                    self.__pretty_len(raw_data),
-                    self.__get_download_speed(data, delta)
+                    self._pretty_len(raw_data),
+                    self._get_download_speed(data, delta)
                 )
             db.release_conn()
         except Exception: # No internet connection.
@@ -127,34 +126,34 @@ class _AsyncDownloader:
 class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
     """Subclass BaseDownloadThread. Downlaod the space weather data."""
 
-    __properties = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
+    _properties = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
 
     def __init__(self, space_weather_data):
         """Initialize the a local space_weather_data."""
         super().__init__()
-        self.__space_weather_data = space_weather_data
+        self._space_weather_data = space_weather_data
 
-    async def __download_property(self, session, property_name):
+    async def _download_property(self, session, property_name):
         """Download the data conteining the information of a specific property."""
         link = getattr(Constants, "SPACE_WEATHER_" + property_name.upper())
         data = await self._download_resource(session, link)
-        setattr(self.__space_weather_data, property_name, str(data, 'utf-8'))
+        setattr(self._space_weather_data, property_name, str(data, 'utf-8'))
 
-    async def __download_image(self, session, n):
+    async def _download_image(self, session, n):
         """Download the data corresponding the n-th image displayed in the screen."""
         im = await self._download_resource(
             session, Constants.SPACE_WEATHER_IMGS[n]
         )
-        self.__space_weather_data.images[n].loadFromData(im)
+        self._space_weather_data.images[n].loadFromData(im)
 
     async def _download_resources(self):
         """Download all the data."""
         session = aiohttp.ClientSession()
         try:
             t = []
-            for p in self.__properties:
+            for p in self._properties:
                 t.append(
-                    asyncio.create_task(self.__download_property(session, p))
+                    asyncio.create_task(self._download_property(session, p))
                 )
 
             tot_images = range(len(Constants.SPACE_WEATHER_IMGS))
@@ -162,7 +161,7 @@ class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
             for im_number in tot_images:
                 t1.append(
                     asyncio.create_task(
-                        self.__download_image(session, im_number)
+                        self._download_image(session, im_number)
                     )
                 )
             await asyncio.gather(*t, *t1)
@@ -192,7 +191,7 @@ class UpdateForecastThread(BaseDownloadThread, _AsyncDownloader):
         super().__init__()
         self.owner = owner
 
-    async def __download_property(self, session, link, prop_name):
+    async def _download_property(self, session, link, prop_name):
         """Download the data from 'link' and set the corresponding property of the owner."""
         resp = await self._download_resource(session, link)
         resp = str(resp, 'utf-8')
@@ -207,14 +206,14 @@ class UpdateForecastThread(BaseDownloadThread, _AsyncDownloader):
         try:
             await asyncio.gather(
                 asyncio.create_task(
-                    self.__download_property(
+                    self._download_property(
                         session,
                         Constants.SPACE_WEATHER_GEO_STORM,
                         self._PropertyName.FORECAST
                     )
                 ),
                 asyncio.create_task(
-                    self.__download_property(
+                    self._download_property(
                         session,
                         Constants.FORECAST_PROBABILITIES,
                         self._PropertyName.PROBABILITIES

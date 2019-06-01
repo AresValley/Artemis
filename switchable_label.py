@@ -35,16 +35,16 @@ class SwitchableLabel(_BaseSwitchableLabel):
 
         Apply the active state colors."""
         super().switch_on()
-        self.__apply_colors(*self.switch_on_colors)
+        self._apply_colors(*self.switch_on_colors)
 
     def switch_off(self):
         """Extend _BaseSwitchableLabel.switch_off.
 
         Apply the inactive state colors."""
         super().switch_off()
-        self.__apply_colors(*self.switch_off_colors)
+        self._apply_colors(*self.switch_off_colors)
 
-    def __apply_colors(self, start, end):
+    def _apply_colors(self, start, end):
         """Set text and background color of the label."""
         self.setStyleSheet(
             f"""

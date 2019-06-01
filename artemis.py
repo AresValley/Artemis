@@ -582,7 +582,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.update_now_bar.set_idle()
         if status_ok:
             xray_long = safe_cast(self.space_weather_data.xray[-1][7], float)
-            format_text = lambda letter, power: letter + f"{xray_long * 10**power:.1f}"
+            def format_text(letter, power): return letter + f"{xray_long * 10**power:.1f}"
             if xray_long < 1e-8 and xray_long != -1.00e+05:
                 self.peak_flux_lbl.setText(format_text("<A", 8))
             elif xray_long >= 1e-8 and xray_long < 1e-7:

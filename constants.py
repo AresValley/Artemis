@@ -100,6 +100,9 @@ class ForecastColors:
     KP5_COLOR     = "#BEE3FE"
 
 
+_Band = namedtuple("Band", ["lower", "upper"])
+
+
 class Constants:
     """Container class for several constants of the software."""
 
@@ -138,23 +141,22 @@ class Constants:
     LABEL_ON_COLOR          = "on"
     LABEL_OFF_COLOR         = "off"
     TEXT_COLOR              = "text"
-    __Band                  = namedtuple("Band", ["lower", "upper"])
-    __ELF                   = __Band(0, 30) # Formally it is (3, 30) Hz.
-    __SLF                   = __Band(30, 300)
-    __ULF                   = __Band(300, 3000)
-    __VLF                   = __Band(3000, 30000)
-    __LF                    = __Band(30 * 10**3, 300 * 10**3)
-    __MF                    = __Band(300 * 10 ** 3, 3000 * 10**3)
-    __HF                    = __Band(3 * 10**6, 30 * 10**6)
-    __VHF                   = __Band(30 * 10**6, 300 * 10**6)
-    __UHF                   = __Band(300 * 10**6, 3000 * 10**6)
-    __SHF                   = __Band(3 * 10**9, 30 * 10**9)
-    __EHF                   = __Band(30 * 10**9, 300 * 10**9)
-    BANDS                   = (__ELF, __SLF, __ULF, __VLF, __LF, __MF, __HF, __VHF, __UHF, __SHF, __EHF)
+    _ELF                    = _Band(0, 30)  # Formally it is (3, 30) Hz.
+    _SLF                    = _Band(30, 300)
+    _ULF                    = _Band(300, 3000)
+    _VLF                    = _Band(3000, 30000)
+    _LF                     = _Band(30 * 10**3, 300 * 10**3)
+    _MF                     = _Band(300 * 10 ** 3, 3000 * 10**3)
+    _HF                     = _Band(3 * 10**6, 30 * 10**6)
+    _VHF                    = _Band(30 * 10**6, 300 * 10**6)
+    _UHF                    = _Band(300 * 10**6, 3000 * 10**6)
+    _SHF                    = _Band(3 * 10**9, 30 * 10**9)
+    _EHF                    = _Band(30 * 10**9, 300 * 10**9)
+    BANDS                   = (_ELF, _SLF, _ULF, _VLF, _LF, _MF, _HF, _VHF, _UHF, _SHF, _EHF)
     MAX_DIGITS              = 3
     RANGE_SEPARATOR         = ' ÷ '
     GFD_SITE                = "http://qrg.globaltuners.com/"
-    CONVERSION_FACTORS      = {"Hz" : 1,
+    CONVERSION_FACTORS      = {"Hz": 1,
                                "kHz": 1000,
                                "MHz": 1000000,
                                "GHz": 1000000000}

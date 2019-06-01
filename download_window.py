@@ -28,64 +28,64 @@ class DownloadWindow(QWidget, Ui_Download_window):
             # Qt.WindowStaysOnTopHint
         )
 
-        self.__no_internet_msg = pop_up(self, title=Messages.NO_CONNECTION,
+        self._no_internet_msg = pop_up(self, title=Messages.NO_CONNECTION,
                                         text=Messages.NO_CONNECTION_MSG,
                                         connection=self.close)
 
-        self.__bad_db_download_msg = pop_up(self, title=Messages.BAD_DOWNLOAD,
+        self._bad_db_download_msg = pop_up(self, title=Messages.BAD_DOWNLOAD,
                                             text=Messages.BAD_DOWNLOAD_MSG,
                                             connection=self.close)
 
-        self.__download_thread = DownloadThread()
-        self.__download_thread.finished.connect(self.__wait_close)
-        self.__download_thread.progress.connect(self.__display_progress)
-        self.cancel_btn.clicked.connect(self.__terminate_process)
+        self._download_thread = DownloadThread()
+        self._download_thread.finished.connect(self._wait_close)
+        self._download_thread.progress.connect(self._display_progress)
+        self.cancel_btn.clicked.connect(self._terminate_process)
 
     def start_download(self):
         """Start the download thread."""
-        self.__download_thread.start()
+        self._download_thread.start()
 
-    def __downlaod_format_str(self, n, speed):
+    def _downlaod_format_str(self, n, speed):
         """Return a well-formatted string with downloaded MB and speed."""
         return f"Downloaded MB: {n}\nSpeed: {speed} MB/s"
 
     def show(self):
         """Extends QWidget.show. Set downloaded MB and speed to zero."""
-        self.status_lbl.setText(self.__downlaod_format_str(0, 0))
+        self.status_lbl.setText(self._downlaod_format_str(0, 0))
         super().show()
 
     @pyqtSlot(int, float)
-    def __display_progress(self, progress, speed):
+    def _display_progress(self, progress, speed):
         """Display the downloaded MB and speed."""
         if progress != Constants.EXTRACTING_CODE:
-            self.status_lbl.setText(self.__downlaod_format_str(progress, speed))
+            self.status_lbl.setText(self._downlaod_format_str(progress, speed))
         elif progress == Constants.EXTRACTING_CODE:
             self.status_lbl.setText(Constants.EXTRACTING_MSG + '\n')
 
     @pyqtSlot()
-    def __terminate_process(self):
+    def _terminate_process(self):
         """Terminate the download thread and close."""
-        if self.__download_thread.isRunning():
-            self.__download_thread.terminate()
-            self.__download_thread.wait()
+        if self._download_thread.isRunning():
+            self._download_thread.terminate()
+            self._download_thread.wait()
         self.close()
 
     @pyqtSlot()
-    def __wait_close(self):
+    def _wait_close(self):
         """Decide the action based on the download thread status and close."""
-        if self.__download_thread.status is ThreadStatus.OK:
+        if self._download_thread.status is ThreadStatus.OK:
             self.complete.emit()
             self.close()
-        elif self.__download_thread.status is ThreadStatus.NO_CONNECTION_ERR:
-            self.__no_internet_msg.show()
-        elif self.__download_thread.status is ThreadStatus.BAD_DOWNLOAD_ERR:
-            self.__bad_db_download_msg.show()
+        elif self._download_thread.status is ThreadStatus.NO_CONNECTION_ERR:
+            self._no_internet_msg.show()
+        elif self._download_thread.status is ThreadStatus.BAD_DOWNLOAD_ERR:
+            self._bad_db_download_msg.show()
         else:
             self.close()
 
     def reject(self):
         """Extends QWidget.reject. Terminate the download thread."""
-        if self.__download_thread.isRunning():
-            self.__download_thread.terminate()
-            self.__download_thread.wait()
+        if self._download_thread.isRunning():
+            self._download_thread.terminate()
+            self._download_thread.wait()
         super().reject()
