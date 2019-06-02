@@ -21,20 +21,20 @@ class DownloadWindow(QWidget, Ui_Download_window):
         super().__init__()
         self.setupUi(self)
         self.setWindowFlags(
-            #Qt.Window                |
+            # Qt.Window                |
             Qt.CustomizeWindowHint   |
             Qt.WindowTitleHint       |
-            Qt.WindowCloseButtonHint #|
+            Qt.WindowCloseButtonHint  # |
             # Qt.WindowStaysOnTopHint
         )
 
         self._no_internet_msg = pop_up(self, title=Messages.NO_CONNECTION,
-                                        text=Messages.NO_CONNECTION_MSG,
-                                        connection=self.close)
+                                       text=Messages.NO_CONNECTION_MSG,
+                                       connection=self.close)
 
         self._bad_db_download_msg = pop_up(self, title=Messages.BAD_DOWNLOAD,
-                                            text=Messages.BAD_DOWNLOAD_MSG,
-                                            connection=self.close)
+                                           text=Messages.BAD_DOWNLOAD_MSG,
+                                           connection=self.close)
 
         self._download_thread = DownloadThread()
         self._download_thread.finished.connect(self._wait_close)

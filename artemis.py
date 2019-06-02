@@ -227,7 +227,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.lower_freq_spinbox,
                     self.lower_freq_filter_unit,
                     self.lower_freq_confidence)
-            )
+        )
 
         self.activate_up_freq_filter_btn.toggled.connect(
             partial(self.activate_if_toggled,
@@ -235,7 +235,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.upper_freq_spinbox,
                     self.upper_freq_filter_unit,
                     self.upper_freq_confidence)
-            )
+        )
 
         self.apply_remove_freq_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
         self.apply_remove_freq_filter_btn.set_slave_filters(
@@ -271,7 +271,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                                self.lower_band_filter_unit.currentTextChanged,
                                self.upper_band_filter_unit.currentTextChanged,
                                self.activate_low_band_filter_btn.toggled],
-            fun_to_connect = self.set_min_value_upper_limit,
+            fun_to_connect=self.set_min_value_upper_limit,
             fun_args=[self.lower_band_filter_unit,
                       self.lower_band_spinbox,
                       self.upper_band_filter_unit,
@@ -305,7 +305,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.lower_band_spinbox,
                     self.lower_band_filter_unit,
                     self.lower_band_confidence)
-            )
+        )
 
         self.activate_up_band_filter_btn.toggled.connect(
             partial(self.activate_if_toggled,
@@ -313,7 +313,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.upper_band_spinbox,
                     self.upper_band_filter_unit,
                     self.upper_band_confidence)
-            )
+        )
 
         self.apply_remove_band_filter_btn.set_texts(Constants.APPLY,
                                                     Constants.REMOVE)
@@ -485,9 +485,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
         # Left list widget and search bar.
         self.search_bar.textChanged.connect(self.display_signals)
         self.signals_list.currentItemChanged.connect(self.display_specs)
-        self.signals_list.itemDoubleClicked.connect(
-            lambda: self.main_tab.setCurrentWidget(self.signal_properties_tab)
-        )
+        self.signals_list.itemDoubleClicked.connect(self.set_visible_tab)
+
         self.audio_widget = AudioPlayer(
             self.play,
             self.pause,
@@ -504,9 +503,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             BandLabel(self.slf_left, self.slf, self.slf_right),
             BandLabel(self.ulf_left, self.ulf, self.ulf_right),
             BandLabel(self.vlf_left, self.vlf, self.vlf_right),
-            BandLabel(self.lf_left,  self.lf,  self.lf_right),
-            BandLabel(self.mf_left,  self.mf,  self.mf_right),
-            BandLabel(self.hf_left,  self.hf,  self.hf_right),
+            BandLabel(self.lf_left, self.lf, self.lf_right),
+            BandLabel(self.mf_left, self.mf, self.mf_right),
+            BandLabel(self.hf_left, self.hf, self.hf_right),
             BandLabel(self.vhf_left, self.vhf, self.vhf_right),
             BandLabel(self.uhf_left, self.uhf, self.uhf_right),
             BandLabel(self.shf_left, self.shf, self.shf_right),
@@ -536,6 +535,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.theme_manager.start()
         self.load_db()
         self.display_signals()
+
+    @pyqtSlot()
+    def set_visible_tab(self):
+        if self.main_tab.currentWidget() != self.signal_properties_tab:
+            self.main_tab.setCurrentWidget(self.signal_properties_tab)
+        else:
+            self.main_tab.setCurrentWidget(self.filter_tab)
 
     @pyqtSlot()
     def start_update_forecast(self):
@@ -582,7 +588,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.update_now_bar.set_idle()
         if status_ok:
             xray_long = safe_cast(self.space_weather_data.xray[-1][7], float)
-            def format_text(letter, power): return letter + f"{xray_long * 10**power:.1f}"
+
+            def format_text(letter, power):
+                return letter + f"{xray_long * 10**power:.1f}"
+
             if xray_long < 1e-8 and xray_long != -1.00e+05:
                 self.peak_flux_lbl.setText(format_text("<A", 8))
             elif xray_long >= 1e-8 and xray_long < 1e-7:
@@ -866,7 +875,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     height: 12px;
                     background: #7a7a7a;
                     margin: 0 10px;
-                	border-radius: 6px
+                    border-radius: 6px
                 }
                 QSlider::handle:horizontal {
                     background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 gray, stop:0.5 white, stop:1.0 gray);
@@ -875,7 +884,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     margin: -8px -8px;
                     border-radius: 14px;
                 }
-            """)
+                """)
 
     @pyqtSlot()
     def download_db(self):
@@ -1021,7 +1030,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         values = list(
             set([
                 x.strip() for value in values[values != Constants.UNKNOWN]
-                    for x in value.split(separator)
+                for x in value.split(separator)
             ])
         )
         values.sort()
@@ -1037,7 +1046,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         Used for frequency and bandwidth screens."""
         if lower_spin_box.isEnabled():
-            unit_conversion = {'Hz' : ['kHz', 'MHz', 'GHz'],
+            unit_conversion = {'Hz': ['kHz', 'MHz', 'GHz'],
                                'kHz': ['MHz', 'GHz'],
                                'MHz': ['GHz']}
             lower_units = lower_combo_box.currentText()
@@ -1138,7 +1147,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         Do nothing otherwise.
         """
         toggled = radio_btn.isChecked()
-        for w in widgets[:-1]: # Neglect the bool coming from the emitted signal.
+        for w in widgets[:-1]:  # Neglect the bool coming from the emitted signal.
             w.setEnabled(toggled)
 
     @pyqtSlot()
@@ -1147,13 +1156,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
         text = self.search_bar.text()
         available_signals = 0
         for index, signal_name in enumerate(self.signal_names):
-            if all([text.lower() in signal_name.lower()     ,
-                    self.frequency_filters_ok(signal_name)  ,
-                    self.band_filters_ok(signal_name)       ,
-                    self.category_filters_ok(signal_name)   ,
-                    self.mode_filters_ok(signal_name)       ,
-                    self.modulation_filters_ok(signal_name) ,
-                    self.location_filters_ok(signal_name)   ,
+            if all([text.lower() in signal_name.lower(),
+                    self.frequency_filters_ok(signal_name),
+                    self.band_filters_ok(signal_name),
+                    self.category_filters_ok(signal_name),
+                    self.mode_filters_ok(signal_name),
+                    self.modulation_filters_ok(signal_name),
+                    self.location_filters_ok(signal_name),
                     self.acf_filters_ok(signal_name)]):
                 self.signals_list.item(index).setHidden(False)
                 available_signals += 1
@@ -1372,7 +1381,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         selected_items_text = [i.text(0) for i in selected_items]
         parents = [
             item for item in selected_items_text
-                if item in Constants.MODES.keys()
+            if item in Constants.MODES.keys()
         ]
         ok = []
         for item in selected_items:
@@ -1597,7 +1606,7 @@ if __name__ == '__main__':
     img = QPixmap(ARTEMIS_ICON)
     splash = QSplashScreen(img)
     splash.show()
-    start= time()
+    start = time()
     while time() - start < 1.5:
         sleep(0.001)
         my_app.processEvents()

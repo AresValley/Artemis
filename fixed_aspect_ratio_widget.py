@@ -5,7 +5,8 @@ from PyQt5.QtCore import QSize
 class FixedAspectRatioWidget(QWidget):
     """Subclass QWidget. Keep all the internal labels to a fixed aspect ratio."""
 
-    space = 10
+    SPACE = 10
+
     def __init__(self, parent=None):
         """Initialize the instance."""
         super().__init__(parent)
@@ -14,7 +15,7 @@ class FixedAspectRatioWidget(QWidget):
     def resizeEvent(self, event):
         """Override QWidget.resizeEvent. Rescale all the internal widgets."""
         h, w = self.height(), self.width()
-        h_lbl = h / 9 - self.space
+        h_lbl = h / 9 - self.SPACE
         w_lbl = 5 * h_lbl
         w_pad = w - 10
         if w_lbl > w_pad:

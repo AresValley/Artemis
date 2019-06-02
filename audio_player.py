@@ -14,7 +14,7 @@ class AudioPlayer(QObject):
     method, set_audio_player, which loads the current file and refresh_btns_colors.
     Everything else is managed internally."""
 
-    _time_step = 500  # Milliseconds.
+    _TIME_STEP = 500  # Milliseconds.
 
     def __init__(self, play,
                  pause,
@@ -111,10 +111,10 @@ class AudioPlayer(QObject):
         if not self._paused:
             if self._first_call:
                 self._first_call = False
-                mixer.init(frequency=AudioSegment.from_ogg(
-                                self._audio_file
-                            ).frame_rate,
-                           buffer=2048)
+                mixer.init(
+                    frequency=AudioSegment.from_ogg(self._audio_file).frame_rate,
+                    buffer=2048
+                )
                 mixer.music.load(self._audio_file)
                 self._set_volume()
                 self._set_max_progress_bar()
@@ -122,7 +122,7 @@ class AudioPlayer(QObject):
         else:
             mixer.music.unpause()
             self._paused = False
-        self._timer.start(self._time_step)
+        self._timer.start(self._TIME_STEP)
         self._enable_buttons(False, True, True)
 
     @pyqtSlot()

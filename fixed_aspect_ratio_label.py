@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 class FixedAspectRatioLabel(QLabel):
     """Subclass QLabel. A resizable label class."""
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         """Initialize the instance. Set the pixmap to None."""
         super().__init__(parent)
         self.pixmap = None
@@ -14,8 +14,7 @@ class FixedAspectRatioLabel(QLabel):
         """Set the initial stylesheet of the label."""
         self.setStyleSheet("""border-width: 1px;
         border-style: solid;
-        border-color: black;"""
-        )
+        border-color: black;""")
 
     def make_transparent(self):
         """Make the label transparent.

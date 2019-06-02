@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import pyqtSlot
 
+
 class DoubleTextButton(QPushButton):
     """Subclass QPushButton.
 

@@ -115,9 +115,15 @@ class SpaceWeatherData(_BaseWeatherData):
 
 def _make_labels_table(forecast, probabilities, rows):
     """Organize all the arguments to feed _get_lbl_value."""
-    def get_first_split(x): return x.split("/")[0]
-    def get_second_split(x): return x.split("/")[1]
-    def get_third_split(x): return x.split("/")[2]
+    def get_first_split(x):
+        return x.split("/")[0]
+
+    def get_second_split(x):
+        return x.split("/")[1]
+
+    def get_third_split(x):
+        return x.split("/")[2]
+
     solar_row = rows["solar_row"]
     event_row = rows["event_row"]
     rb_now_row = rows["rb_now_row"]
@@ -192,6 +198,7 @@ def _make_labels_table(forecast, probabilities, rows):
         ]
     ]
 
+
 def _get_lbl_value(data, row, col, f=None):
     """Return the well-formatted string-value of the label."""
     val = data[row][col]
@@ -201,6 +208,7 @@ def _get_lbl_value(data, row, col, f=None):
     if len(val) > 1:
         val = val.lstrip('0')
     return val
+
 
 class ForecastData(_BaseWeatherData):
     """3-day forecast class. Extends _BaseWeatherData."""

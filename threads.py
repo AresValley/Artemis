@@ -86,7 +86,7 @@ class DownloadThread(BaseDownloadThread):
                     self._get_download_speed(data, delta)
                 )
             db.release_conn()
-        except Exception: # No internet connection.
+        except Exception:  # No internet connection.
             db.release_conn()
             self.status = ThreadStatus.NO_CONNECTION_ERR
             return
@@ -126,7 +126,7 @@ class _AsyncDownloader:
 class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
     """Subclass BaseDownloadThread. Downlaod the space weather data."""
 
-    _properties = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
+    _PROPERTIES = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
 
     def __init__(self, space_weather_data):
         """Initialize the a local space_weather_data."""
@@ -151,7 +151,7 @@ class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
         session = aiohttp.ClientSession()
         try:
             t = []
-            for p in self._properties:
+            for p in self._PROPERTIES:
                 t.append(
                     asyncio.create_task(self._download_property(session, p))
                 )

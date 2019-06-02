@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 from constants import Constants, Signal, Database, ChecksumWhat
 
+
 def resource_path(relative_path):
     """Get absolute path to resource, works for dev and for PyInstaller."""
     try:
@@ -16,11 +17,13 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
+
 def uncheck_and_emit(button):
     """Set the button to the unchecked state and emit the clicked signal."""
     if button.isChecked():
         button.setChecked(False)
         button.clicked.emit()
+
 
 def pop_up(cls, title, text,
            informative_text=None,
@@ -47,6 +50,7 @@ def pop_up(cls, title, text,
     msg.adjustSize()
     return msg
 
+
 def checksum_ok(data, what):
     """Check whether the checksum of the 'data' argument is correct."""
     code = hashlib.sha256()
@@ -66,6 +70,7 @@ def checksum_ok(data, what):
         raise
     return code.hexdigest() == reference
 
+
 def connect_events_to_func(events_to_connect, fun_to_connect, fun_args):
     """Connect all elements of events_to_connect to the callable fun_to_connect.
 
@@ -77,10 +82,12 @@ def connect_events_to_func(events_to_connect, fun_to_connect, fun_args):
         for event in events_to_connect:
             event.connect(fun_to_connect)
 
+
 def filters_limit(spinbox, filter_unit, confidence, sign=1):
     """Return the actual limit of a numerical filter."""
     band_filter = spinbox.value() * Constants.CONVERSION_FACTORS[filter_unit.currentText()]
     return band_filter + sign * (confidence.value() * band_filter) // 100
+
 
 def is_undef_freq(current_signal):
     """Return whether the lower or upper frequency of a signal is undefined."""
@@ -88,11 +95,13 @@ def is_undef_freq(current_signal):
     upper_freq = current_signal.at[Signal.SUP_FREQ]
     return lower_freq == Constants.UNKNOWN or upper_freq == Constants.UNKNOWN
 
+
 def is_undef_band(current_signal):
     """Return whether the lower or upper band of a signal is undefined."""
     lower_band = current_signal.at[Signal.INF_BAND]
     upper_band = current_signal.at[Signal.SUP_BAND]
     return lower_band == Constants.UNKNOWN or upper_band == Constants.UNKNOWN
+
 
 def _change_unit(str_num):
     """Return a scale factor given the number of digits of a numeric string."""
@@ -105,6 +114,7 @@ def _change_unit(str_num):
         return 10**6
     else:
         return 10**9
+
 
 def format_numbers(lower, upper):
     """Return the string which displays the numeric limits of a filter."""
@@ -127,6 +137,7 @@ def format_numbers(lower, upper):
         return f"{lower:,} {units[lower_factor]} - {upper:,} {units[upper_factor]}"
     else:
         return f"{lower:,} {units[lower_factor]}"
+
 
 def safe_cast(value, cast_type, default=-1):
     """Call 'cast_type(value)' and return the result.

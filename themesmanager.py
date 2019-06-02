@@ -71,7 +71,9 @@ class _ColorsHandler:
         def _color_is_valid(self):
             """Return if the color (or the list of colors) has a valid html format."""
             pattern = "#([a-zA-Z0-9]){6}"
-            def match_ok(col): return bool(re.match(pattern, col)) and len(col) == 7
+
+            def match_ok(col):
+                return bool(re.match(pattern, col)) and len(col) == 7
 
             if not self.is_simple_string:
                 if len(self.color_list) <= self.MAX_COLORS:
@@ -80,7 +82,6 @@ class _ColorsHandler:
                     return False
             else:
                 return match_ok(self.color_str)
-
 
     def __init__(self, simple_color_list, double_color_list):
         """Initialize the lists of valid _Color objects."""
@@ -197,7 +198,8 @@ class ThemeManager:
     def _pretty_name(self, bad_name):
         """Return a well-formatted theme name."""
         return ' '.join(
-            map(lambda s: s.capitalize(),
+            map(
+                lambda s: s.capitalize(),
                 bad_name.split('_')
             )
         )
@@ -248,7 +250,7 @@ class ThemeManager:
         else:
             icons_path = os.path.join(self._theme_path, ThemeConstants.ICONS_FOLDER)
 
-            path_to_search_label = os.path.join(icons_path,Constants.SEARCH_LABEL_IMG)
+            path_to_search_label = os.path.join(icons_path, Constants.SEARCH_LABEL_IMG)
 
             if os.path.exists(path_to_search_label):
                 path = path_to_search_label
@@ -263,7 +265,7 @@ class ThemeManager:
             self._owner.modulation_search_label.setScaledContents(True)
             self._owner.location_search_label.setScaledContents(True)
 
-            path_to_volume_label = os.path.join(icons_path,Constants.VOLUME_LABEL_IMG)
+            path_to_volume_label = os.path.join(icons_path, Constants.VOLUME_LABEL_IMG)
 
             if os.path.exists(path_to_volume_label):
                 path = path_to_volume_label
@@ -273,7 +275,7 @@ class ThemeManager:
             self._owner.volume_label.setPixmap(QPixmap(path))
             self._owner.volume_label.setScaledContents(True)
 
-            path_to_colors = os.path.join(self._theme_path,ThemeConstants.COLORS)
+            path_to_colors = os.path.join(self._theme_path, ThemeConstants.COLORS)
 
             active_color_ok     = False
             inactive_color_ok   = False
