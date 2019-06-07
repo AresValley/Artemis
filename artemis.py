@@ -999,7 +999,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             if answer == QMessageBox.Yes:
                 self.download_db()
         else:
-            self.db = self.db.groupby(level=0).first()  
+            self.db = self.db.groupby(level=0).first()
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
             self.db.fillna(Constants.UNKNOWN, inplace=True)
