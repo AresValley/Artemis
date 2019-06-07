@@ -983,14 +983,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
         Populate the signals list and set the total number of signals.
         Handle possible missing file error.
         """
-        names = Database.NAMES
         try:
             self.db = read_csv(os.path.join(Constants.DATA_FOLDER, Database.NAME),
                                sep=Database.DELIMITER,
                                header=None,
                                index_col=0,
                                dtype={name: str for name in Database.STRINGS},
-                               names=names)
+                               names=Database.NAMES)
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
             answer = pop_up(self, title=Messages.NO_DB,
@@ -1000,6 +999,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             if answer == QMessageBox.Yes:
                 self.download_db()
         else:
+            self.db = self.db.groupby(level=0).first()  
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
             self.db.fillna(Constants.UNKNOWN, inplace=True)
@@ -1019,7 +1019,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 )
             )
 
-    def collect_list(self, list_property, separator=';'):
+    def collect_list(self, list_property, separator=Constants.FIELD_SEPARATOR):
         """Collect all the entrys of a QListWidget.
 
         Handle multiple entries in one item seprated by a separator.
@@ -1396,7 +1396,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
         if not self.apply_remove_modulation_filter_btn.isChecked():
             return True
         signal_modulation = [
-            x.strip() for x in self.db.at[signal_name, Signal.MODULATION].split(',')
+            x.strip() for x in self.db.at[
+                signal_name, Signal.MODULATION
+            ].split(Constants.FIELD_SEPARATOR)
         ]
         for item in self.modulation_list.selectedItems():
             if item.text() in signal_modulation:
