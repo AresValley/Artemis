@@ -1391,15 +1391,20 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 ok.append(item.text(0) == signal_mode)
         return any(ok)
 
+    def get_field_entries(self, signal_name, field):
+        return [
+            x.strip() for x in self.db.at[
+                signal_name, field
+            ].split(Constants.FIELD_SEPARATOR)
+        ]
+
     def modulation_filters_ok(self, signal_name):
         """Evalaute if the signal matches the modulation filters."""
         if not self.apply_remove_modulation_filter_btn.isChecked():
             return True
-        signal_modulation = [
-            x.strip() for x in self.db.at[
-                signal_name, Signal.MODULATION
-            ].split(Constants.FIELD_SEPARATOR)
-        ]
+        signal_modulation = self.get_field_entries(
+            signal_name, Signal.MODULATION
+        )
         for item in self.modulation_list.selectedItems():
             if item.text() in signal_modulation:
                 return True
@@ -1409,9 +1414,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """Evalaute if the signal matches the location filters."""
         if not self.apply_remove_location_filter_btn.isChecked():
             return True
-        signal_location = self.db.at[signal_name, Signal.LOCATION]
+        signal_locations = self.get_field_entries(
+            signal_name, Signal.LOCATION
+        )
         for item in self.locations_list.selectedItems():
-            if item.text() == signal_location:
+            if item.text() in signal_locations:
                 return True
         return False
 
