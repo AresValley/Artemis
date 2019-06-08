@@ -1391,11 +1391,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 ok.append(item.text(0) == signal_mode)
         return any(ok)
 
-    def get_field_entries(self, signal_name, field):
+    def get_field_entries(self, signal_name, field, separator=Constants.FIELD_SEPARATOR):
+        """Take a signal name, a column label and optionally a separator string.
+
+        Return a list obtained by splitting the signal field with separator."""
         return [
-            x.strip() for x in self.db.at[
-                signal_name, field
-            ].split(Constants.FIELD_SEPARATOR)
+            x.strip() for x in self.db.at[signal_name, field].split(separator)
         ]
 
     def modulation_filters_ok(self, signal_name):
