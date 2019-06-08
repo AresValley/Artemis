@@ -45,6 +45,7 @@ class DownloadThread(BaseDownloadThread):
 
     def __init__(self):
         """Just call super().__init__."""
+        self.db = None
         super().__init__()
 
     def _pretty_len(self, byte_obj):
@@ -67,16 +68,17 @@ class DownloadThread(BaseDownloadThread):
         Handle all possible exceptions. Also extract the files
         in the local folder."""
         self.status = ThreadStatus.UNDEFINED
+        self.db = None
         raw_data = bytes(0)
         try:
-            db = urllib3.PoolManager().request(
+            self.db = urllib3.PoolManager().request(
                 'GET',
                 Database.LINK_LOC,
                 preload_content=False
             )
             while True:
                 start = time()
-                data = db.read(self.CHUNK)
+                data = self.db.read(self.CHUNK)
                 delta = time() - start
                 if not data:
                     break
@@ -85,12 +87,12 @@ class DownloadThread(BaseDownloadThread):
                     self._pretty_len(raw_data),
                     self._get_download_speed(data, delta)
                 )
-            db.release_conn()
+            self.db.release_conn()
         except Exception:  # No internet connection.
-            db.release_conn()
+            self.db.release_conn()
             self.status = ThreadStatus.NO_CONNECTION_ERR
             return
-        if db.status != 200:
+        if self.db.status != 200:
             self.status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
         try:
@@ -112,6 +114,14 @@ class DownloadThread(BaseDownloadThread):
             self.status = ThreadStatus.UNKNOWN_ERR
         else:
             self.status = ThreadStatus.OK
+
+    def terminate(self):
+        """Extend QThread.terminate.
+
+        Release the connection in case of termination."""
+        if self.db is not None:
+            self.db.release_conn()
+        super().terminate()
 
 
 class _AsyncDownloader:
