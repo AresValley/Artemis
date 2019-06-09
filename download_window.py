@@ -5,6 +5,7 @@ from threads import DownloadThread, ThreadStatus
 from utilities import pop_up, resource_path
 from constants import Constants, Messages
 
+
 Ui_Download_window, _ = uic.loadUiType(
     resource_path("download_db_window.ui")
 )
@@ -14,6 +15,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
     """Subclass QWidget and Ui_Download_window. It is the window displayed during the database download."""
 
     complete = pyqtSignal()
+    closed = pyqtSignal()
 
     def __init__(self):
         """Initialize the window."""
@@ -38,6 +40,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
         self._download_thread = DownloadThread()
         self._download_thread.finished.connect(self._wait_close)
         self._download_thread.progress.connect(self._display_progress)
+        self.closed.connect(self._download_thread.set_exit)
         self.cancel_btn.clicked.connect(self._terminate_process)
 
     def start_download(self):
@@ -61,12 +64,16 @@ class DownloadWindow(QWidget, Ui_Download_window):
         elif progress == Constants.EXTRACTING_CODE:
             self.status_lbl.setText(Constants.EXTRACTING_MSG + '\n')
 
+    def _stop_thread(self):
+        """Ask the download thread to stop."""
+        if self._download_thread.isRunning():
+            self.closed.emit()
+            self._download_thread.wait()
+
     @pyqtSlot()
     def _terminate_process(self):
         """Terminate the download thread and close."""
-        if self._download_thread.isRunning():
-            self._download_thread.terminate()
-            self._download_thread.wait()
+        self._stop_thread()
         self.close()
 
     @pyqtSlot()
@@ -84,7 +91,5 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     def reject(self):
         """Extends QWidget.reject. Terminate the download thread."""
-        if self._download_thread.isRunning():
-            self._download_thread.terminate()
-            self._download_thread.wait()
+        self._stop_thread()
         super().reject()

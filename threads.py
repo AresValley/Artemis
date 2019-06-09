@@ -41,16 +41,17 @@ class DownloadThread(BaseDownloadThread):
     """Subclass BaseDownloadThread. Download the database, images and audio samples."""
 
     progress = pyqtSignal(int, float)
-    CHUNK = 1024**2
+    _CHUNK = 1024**2
 
     def __init__(self):
         """Just call super().__init__."""
-        self.db = None
+        self._db = None
+        self._exit_call = False
         super().__init__()
 
     def _pretty_len(self, byte_obj):
         """Return a well-formatted number of downloaded MB."""
-        mega = len(byte_obj) / self.CHUNK
+        mega = len(byte_obj) / self._CHUNK
         if mega.is_integer():
             return int(mega)
         else:
@@ -59,8 +60,11 @@ class DownloadThread(BaseDownloadThread):
     def _get_download_speed(self, data, delta):
         """Return the download speed in MB/s."""
         return round(
-            (len(data) / self.CHUNK) / delta, 2
+            (len(data) / self._CHUNK) / delta, 2
         )
+
+    def set_exit(self):
+        self._exit_call = True
 
     def run(self):
         """Override QThread.run. Download the database, images and audio samples.
@@ -68,31 +72,39 @@ class DownloadThread(BaseDownloadThread):
         Handle all possible exceptions. Also extract the files
         in the local folder."""
         self.status = ThreadStatus.UNDEFINED
-        self.db = None
+        self._db = None
         raw_data = bytes(0)
         try:
-            self.db = urllib3.PoolManager().request(
+            self._db = urllib3.PoolManager().request(
                 'GET',
                 Database.LINK_LOC,
-                preload_content=False
+                preload_content=False,
+                timeout=4.0
             )
             while True:
                 start = time()
-                data = self.db.read(self.CHUNK)
-                delta = time() - start
-                if not data:
-                    break
-                raw_data += data
-                self.progress.emit(
-                    self._pretty_len(raw_data),
-                    self._get_download_speed(data, delta)
-                )
-            self.db.release_conn()
+                try:
+                    data = self._db.read(self._CHUNK)
+                except Exception:
+                    raise
+                else:
+                    delta = time() - start
+                    if not data:
+                        break
+                    raw_data += data
+                    self.progress.emit(
+                        self._pretty_len(raw_data),
+                        self._get_download_speed(data, delta)
+                    )
+                    if self._exit_call:
+                        self._exit_call = False
+                        self._db.release_conn()
+                        return
         except Exception:  # No internet connection.
-            self.db.release_conn()
+            self._db.release_conn()
             self.status = ThreadStatus.NO_CONNECTION_ERR
             return
-        if self.db.status != 200:
+        if self._db.status != 200:
             self.status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
         try:
@@ -114,14 +126,6 @@ class DownloadThread(BaseDownloadThread):
             self.status = ThreadStatus.UNKNOWN_ERR
         else:
             self.status = ThreadStatus.OK
-
-    def terminate(self):
-        """Extend QThread.terminate.
-
-        Release the connection in case of termination."""
-        if self.db is not None:
-            self.db.release_conn()
-        super().terminate()
 
 
 class _AsyncDownloader:
