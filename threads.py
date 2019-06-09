@@ -41,7 +41,8 @@ class DownloadThread(BaseDownloadThread):
     """Subclass BaseDownloadThread. Download the database, images and audio samples."""
 
     progress = pyqtSignal(int, float)
-    _CHUNK = 1024**2
+    _CHUNK = 512 * 1024
+    _MEGA = 1024**2
 
     def __init__(self):
         """Just call super().__init__."""
@@ -51,7 +52,7 @@ class DownloadThread(BaseDownloadThread):
 
     def _pretty_len(self, byte_obj):
         """Return a well-formatted number of downloaded MB."""
-        mega = len(byte_obj) / self._CHUNK
+        mega = len(byte_obj) / self._MEGA
         if mega.is_integer():
             return int(mega)
         else:
@@ -60,7 +61,7 @@ class DownloadThread(BaseDownloadThread):
     def _get_download_speed(self, data, delta):
         """Return the download speed in MB/s."""
         return round(
-            (len(data) / self._CHUNK) / delta, 2
+            (len(data) / self._MEGA) / delta, 2
         )
 
     def set_exit(self):
