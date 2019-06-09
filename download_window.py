@@ -1,4 +1,3 @@
-import os.path
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QWidget
@@ -7,7 +6,7 @@ from utilities import pop_up, resource_path
 from constants import Constants, Messages
 
 Ui_Download_window, _ = uic.loadUiType(
-    resource_path(os.path.join("ui", "download_db_window.ui"))
+    resource_path("download_db_window.ui")
 )
 
 

@@ -47,7 +47,7 @@ from utilities import (checksum_ok,
 # import default_imgs_rc
 
 
-qt_creator_file = resource_path(os.path.join("ui", "artemis.ui"))
+qt_creator_file = resource_path("artemis.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
 
