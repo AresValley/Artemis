@@ -1,5 +1,4 @@
 import os
-from pydub import AudioSegment
 from pygame import mixer
 from PyQt5.QtCore import QTimer, pyqtSlot, QObject
 
@@ -111,10 +110,7 @@ class AudioPlayer(QObject):
         if not self._paused:
             if self._first_call:
                 self._first_call = False
-                mixer.init(
-                    frequency=AudioSegment.from_ogg(self._audio_file).frame_rate,
-                    buffer=2048
-                )
+                mixer.init(48000, -16, 1, 1024)
                 mixer.music.load(self._audio_file)
                 self._set_volume()
                 self._set_max_progress_bar()
