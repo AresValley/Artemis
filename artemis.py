@@ -19,7 +19,8 @@ from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo,
                           Qt,
-                          pyqtSlot,)
+                          pyqtSlot,
+                          QRect,)
 
 from audio_player import AudioPlayer
 from weatherdata import SpaceWeatherData, ForecastData
@@ -59,10 +60,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.set_initial_size()
-        qtRectangle = self.frameGeometry()
-        centerPoint = QDesktopWidget().availableGeometry().center()
-        qtRectangle.moveCenter(centerPoint)
-        self.move(qtRectangle.topLeft())
         self.closing = False
         self.download_window = DownloadWindow()
         self.download_window.complete.connect(self.show_downloaded_signals)
@@ -843,9 +840,14 @@ class Artemis(QMainWindow, Ui_MainWindow):
         vertically and horizontally.
         """
         d = QDesktopWidget().availableGeometry()
+        center = d.center()
         w = d.width()
         h = d.height()
-        self.setGeometry(50, 50, (3  * w) // 4, (3 * h) // 4)
+        rect = QRect()
+        rect.setHeight((3 * h) // 4)
+        rect.setWidth((3 * w) // 4)
+        rect.moveCenter(center)
+        self.setGeometry(rect)
         if w > 3000 or h > 2000:
             self.fixed_audio_and_image.setFixedSize(540, 1150)
             self.fixed_audio_and_image.setMaximumSize(540, 1150)
