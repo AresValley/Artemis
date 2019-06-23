@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
-from PyQt5.QtWidgets import QWidget, QDesktopWidget
+from PyQt5.QtWidgets import QWidget
 from threads import DownloadThread, ThreadStatus
 from utilities import pop_up, resource_path
 from constants import Constants, Messages
