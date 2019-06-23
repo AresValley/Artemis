@@ -1,6 +1,6 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QDesktopWidget
 from threads import DownloadThread, ThreadStatus
 from utilities import pop_up, resource_path
 from constants import Constants, Messages
@@ -25,8 +25,8 @@ class DownloadWindow(QWidget, Ui_Download_window):
             # Qt.Window                |
             Qt.CustomizeWindowHint   |
             Qt.WindowTitleHint       |
-            Qt.WindowCloseButtonHint  # |
-            # Qt.WindowStaysOnTopHint
+            Qt.WindowCloseButtonHint |
+            Qt.WindowStaysOnTopHint
         )
 
         self._no_internet_msg = pop_up(self, title=Messages.NO_CONNECTION,
@@ -49,7 +49,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     def _downlaod_format_str(self, n, speed):
         """Return a well-formatted string with downloaded MB and speed."""
-        return f"Downloaded MB: {n}\nSpeed: {speed} MB/s"
+        return f"Downloaded: {n} MB\nSpeed: {speed} MB/s"
 
     def show(self):
         """Extends QWidget.show. Set downloaded MB and speed to zero."""

@@ -59,6 +59,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.set_initial_size()
+        qtRectangle = self.frameGeometry()
+        centerPoint = QDesktopWidget().availableGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.move(qtRectangle.topLeft())
         self.closing = False
         self.download_window = DownloadWindow()
         self.download_window.complete.connect(self.show_downloaded_signals)
