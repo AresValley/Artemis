@@ -14,7 +14,8 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QListWidgetItem,
                              QMessageBox,
                              QSplashScreen,
-                             QTreeWidgetItem,)
+                             QTreeWidgetItem,
+                             QTabWidget,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo,
@@ -266,6 +267,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.reset_frequency_filters_btn.clicked.connect(
             partial(self.reset_fb_filters, Ftype.FREQ)
         )
+        self.main_tab.currentChanged.connect(self.onChange)
 
         # Manage bandwidth filters.
 
@@ -1529,7 +1531,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 Constants.SPECTRA_FOLDER,
                 spectrogram_name + Constants.SPECTRA_EXT
             )
-            if not QFileInfo(path_spectr).exists():
+            if not QFileInfo(path_spectr).exists() or self.main_tab.currentIndex()==3:
                 path_spectr = Constants.DEFAULT_NOT_AVAILABLE
         else:
             path_spectr = default_pic
@@ -1612,7 +1614,13 @@ class Artemis(QMainWindow, Ui_MainWindow):
         if self.forecast_data.is_updating:
             self.forecast_data.shutdown_thread()
         super().closeEvent(event)
-
+    
+    @pyqtSlot()
+    def onChange(self):
+        if self.main_tab.currentIndex()==3:
+            self.spectrogram.setPixmap(QPixmap(Constants.DEFAULT_NOT_AVAILABLE))
+        else:
+            self.display_spectrogram()
 
 if __name__ == '__main__':
     my_app = QApplication(sys.argv)
