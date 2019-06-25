@@ -4,30 +4,31 @@ from constants import Constants
 
 
 class ClickableProgressBar(QProgressBar):
+    """Subclass QProgressBar. Clickable progress bar class."""
 
     clicked = pyqtSignal()
 
     def __init__(self, parent=None):
-        self.__text = ''
+        """Initialize the instance."""
+        self._text = ''
         super().__init__(parent)
 
-    # def __set_text(self, text):
-    #     self.__text = text
-
     def text(self):
-        return self.__text
+        """Return the text displayed on the bar."""
+        return self._text
 
     def set_idle(self):
-        # self.__set_text(Constants.CLICK_TO_UPDATE_STR)
-        self.__text = Constants.CLICK_TO_UPDATE_STR
+        """Set the bar to a non-downloading status."""
+        self._text = Constants.CLICK_TO_UPDATE_STR
         self.setMaximum(self.minimum() + 1)
 
     def set_updating(self):
-        # self.__set_text(Constants.UPDATING_STR)
-        self.__text = Constants.UPDATING_STR
+        """Set the bar to a downloading status."""
+        self._text = Constants.UPDATING_STR
         self.setMaximum(self.minimum())
 
     def mousePressEvent(self, event):
+        """Override QWidget.mousePressEvent. Detect a click on the bar."""
         if event.button() == Qt.LeftButton:
             self.clicked.emit()
         else:

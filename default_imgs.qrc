@@ -1,8 +1,6 @@
 <RCC>
   <qresource prefix="icon">
     <file>default_pics/Artemis3.500px.png</file>
-    <file>default_pics/Artemis3.ico</file>
-    <file>default_pics/Artemis3.png</file>
   </qresource>
   <qresource prefix="pics">
     <file>default_pics/nosignalselected.png</file>

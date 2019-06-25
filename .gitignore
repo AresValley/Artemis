@@ -9,5 +9,5 @@ themes/.current_theme
 launch.bat
 designer.bat
 *.sh
-.vscode/
 default_pics/
+.vscode/
