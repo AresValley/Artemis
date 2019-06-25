@@ -187,7 +187,7 @@
         <number>0</number>
        </property>
        <property name="movable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <widget class="QWidget" name="signal_properties_tab">
         <property name="minimumSize">
