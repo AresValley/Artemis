@@ -1,6 +1,16 @@
 from collections import namedtuple
 from enum import Enum, auto
 import os.path
+from enum import IntEnum
+
+
+class MainTabs(IntEnum):
+    """The main tabs indeces."""
+
+    SIGNAL = 0
+    FILTERS = 1
+    GFD = 2
+    FORECAST = 3
 
 
 class Ftype:

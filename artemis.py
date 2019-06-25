@@ -32,7 +32,8 @@ from constants import (Constants,
                        Database,
                        ChecksumWhat,
                        Messages,
-                       Signal,)
+                       Signal,
+                       MainTabs,)
 from themesmanager import ThemeManager
 from utilities import (checksum_ok,
                        uncheck_and_emit,
@@ -531,6 +532,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.update_forecast_bar.set_idle()
         self.forecast_data.update_complete.connect(self.update_forecast)
 
+        self.main_tab.currentChanged.connect(self.hide_show_right_widget)
 
 # Final operations.
         self.theme_manager.start()
@@ -538,7 +540,16 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.display_signals()
 
     @pyqtSlot()
+    def hide_show_right_widget(self):
+        """Hide or show the waterfall+audio widget based on the current tab."""
+        if self.main_tab.currentIndex() == MainTabs.FORECAST:
+            self.fixed_audio_and_image.setVisible(False)
+        elif not self.fixed_audio_and_image.isVisible():
+            self.fixed_audio_and_image.setVisible(True)
+
+    @pyqtSlot()
     def set_visible_tab(self):
+        """Set the current main tab when double-clicking a signal name."""
         if self.main_tab.currentWidget() != self.signal_properties_tab:
             self.main_tab.setCurrentWidget(self.signal_properties_tab)
         else:
