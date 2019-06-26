@@ -8,6 +8,5 @@ pyinstaller_cmd.txt
 themes/.current_theme
 launch.bat
 designer.bat
-*.sh
 default_pics/
 .vscode/

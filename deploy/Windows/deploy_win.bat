@@ -34,7 +34,7 @@ set /p choice=Download necessary Python libraries? [Y]/N
 if /I '%choice%'=='Y' pip3 install -r %~dp0requirements_win.txt
 echo:
 
-REM Create a shortcut
+REM Generation of shortcut
 set choice=Y
 set /p choice=Create a desktop shortcut? [Y]/N		
 if /I '%choice%'=='N' goto end
