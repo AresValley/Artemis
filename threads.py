@@ -4,7 +4,7 @@ from io import BytesIO
 from math import ceil
 import os.path
 from shutil import rmtree
-from time import time
+from time import perf_counter
 from zipfile import ZipFile
 import aiohttp
 import urllib3
@@ -21,6 +21,11 @@ class ThreadStatus(Enum):
     UNKNOWN_ERR       = auto()
     BAD_DOWNLOAD_ERR  = auto()
     UNDEFINED         = auto()
+    SLOW_CONN_ERR     = auto()
+
+
+class SlowConnError(Exception):
+    pass
 
 
 class BaseDownloadThread(QThread):
@@ -41,7 +46,7 @@ class DownloadThread(BaseDownloadThread):
     """Subclass BaseDownloadThread. Download the database, images and audio samples."""
 
     progress = pyqtSignal(int, float)
-    _CHUNK = 512 * 1024
+    _CHUNK = 128 * 1024
     _MEGA = 1024**2
 
     def __init__(self):
@@ -83,13 +88,13 @@ class DownloadThread(BaseDownloadThread):
                 timeout=4.0
             )
             while True:
-                start = time()
+                start = perf_counter()
                 try:
                     data = self._db.read(self._CHUNK)
                 except Exception:
-                    raise
+                    raise SlowConnError
                 else:
-                    delta = time() - start
+                    delta = perf_counter() - start
                     if not data:
                         break
                     raw_data += data
@@ -101,16 +106,19 @@ class DownloadThread(BaseDownloadThread):
                         self._exit_call = False
                         self._db.release_conn()
                         return
-        except Exception:  # No internet connection.
+        except Exception as e:  # No (or bad) internet connection.
             self._db.release_conn()
-            self.status = ThreadStatus.NO_CONNECTION_ERR
+            if isinstance(e, SlowConnError):
+                self.status = ThreadStatus.SLOW_CONN_ERR
+            else:
+                self.status = ThreadStatus.NO_CONNECTION_ERR
             return
         if self._db.status != 200:
             self.status = ThreadStatus.BAD_DOWNLOAD_ERR
             return
         try:
             is_checksum_ok = checksum_ok(raw_data, ChecksumWhat.FOLDER)
-        except Exception:
+        except Exception:  # checksum_ok unable to connect to the reference.
             self.status = ThreadStatus.NO_CONNECTION_ERR
             return
         else:

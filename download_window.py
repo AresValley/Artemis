@@ -37,6 +37,10 @@ class DownloadWindow(QWidget, Ui_Download_window):
                                            text=Messages.BAD_DOWNLOAD_MSG,
                                            connection=self.close)
 
+        self._slow_conn_msg = pop_up(self, title=Messages.SLOW_CONN,
+                                     text=Messages.SLOW_CONN_MSG,
+                                     connection=self.close)
+
         self._download_thread = DownloadThread()
         self._download_thread.finished.connect(self._wait_close)
         self._download_thread.progress.connect(self._display_progress)
@@ -49,7 +53,12 @@ class DownloadWindow(QWidget, Ui_Download_window):
 
     def _downlaod_format_str(self, n, speed):
         """Return a well-formatted string with downloaded MB and speed."""
-        return f"Downloaded: {n} MB\nSpeed: {speed} MB/s"
+        ret = f"Downloaded: {n} MB\nSpeed: "
+        if speed == 0.0:
+            ret += "VERY SLOW"
+        else:
+            ret += f"{speed} MB/s"
+        return ret
 
     def show(self):
         """Extends QWidget.show. Set downloaded MB and speed to zero."""
@@ -86,6 +95,8 @@ class DownloadWindow(QWidget, Ui_Download_window):
             self._no_internet_msg.show()
         elif self._download_thread.status is ThreadStatus.BAD_DOWNLOAD_ERR:
             self._bad_db_download_msg.show()
+        elif self._download_thread.status is ThreadStatus.SLOW_CONN_ERR:
+            self._slow_conn_msg.show()
         else:
             self.close()
 
