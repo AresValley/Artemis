@@ -24,7 +24,7 @@ class ThreadStatus(Enum):
     SLOW_CONN_ERR     = auto()
 
 
-class SlowConnError(Exception):
+class _SlowConnError(Exception):
     pass
 
 
@@ -92,7 +92,7 @@ class DownloadThread(BaseDownloadThread):
                 try:
                     data = self._db.read(self._CHUNK)
                 except Exception:
-                    raise SlowConnError
+                    raise _SlowConnError
                 else:
                     delta = perf_counter() - start
                     if not data:
@@ -108,7 +108,7 @@ class DownloadThread(BaseDownloadThread):
                         return
         except Exception as e:  # No (or bad) internet connection.
             self._db.release_conn()
-            if isinstance(e, SlowConnError):
+            if isinstance(e, _SlowConnError):
                 self.status = ThreadStatus.SLOW_CONN_ERR
             else:
                 self.status = ThreadStatus.NO_CONNECTION_ERR
