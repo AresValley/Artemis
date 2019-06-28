@@ -87,8 +87,8 @@ class DownloadThread(BaseDownloadThread):
                 preload_content=False,
                 timeout=4.0
             )
+            start = perf_counter()
             while True:
-                start = perf_counter()
                 try:
                     data = self._db.read(self._CHUNK)
                 except Exception:
@@ -100,7 +100,7 @@ class DownloadThread(BaseDownloadThread):
                     raw_data += data
                     self.progress.emit(
                         self._pretty_len(raw_data),
-                        self._get_download_speed(data, delta)
+                        self._get_download_speed(raw_data, delta)
                     )
                     if self._exit_call:
                         self._exit_call = False
