@@ -45,9 +45,11 @@ class BaseDownloadThread(QThread):
 class DownloadThread(BaseDownloadThread):
     """Subclass BaseDownloadThread. Download the database, images and audio samples."""
 
-    progress = pyqtSignal(int, float)
+    progress = pyqtSignal(int)
+    speed_progress = pyqtSignal(float)
     _CHUNK = 128 * 1024
     _MEGA = 1024**2
+    _DELTAT = 2
 
     def __init__(self):
         """Just call super().__init__."""
@@ -80,6 +82,7 @@ class DownloadThread(BaseDownloadThread):
         self.status = ThreadStatus.UNDEFINED
         self._db = None
         raw_data = bytes(0)
+        sub_data = bytes(0)
         try:
             self._db = urllib3.PoolManager().request(
                 'GET',
@@ -88,6 +91,7 @@ class DownloadThread(BaseDownloadThread):
                 timeout=4.0
             )
             start = perf_counter()
+            prev_downloaded = 0
             while True:
                 try:
                     data = self._db.read(self._CHUNK)
@@ -98,10 +102,17 @@ class DownloadThread(BaseDownloadThread):
                     if not data:
                         break
                     raw_data += data
-                    self.progress.emit(
-                        self._pretty_len(raw_data),
-                        self._get_download_speed(raw_data, delta)
-                    )
+                    sub_data += data
+                    # Emit a progress signal only if at least 1 MB has been downloaded.
+                    if len(raw_data) - prev_downloaded >= self._MEGA:
+                        prev_downloaded = len(raw_data)
+                        self.progress.emit(self._pretty_len(raw_data))
+                    if delta >= self._DELTAT:
+                        self.speed_progress.emit(
+                            self._get_download_speed(sub_data, delta)
+                        )
+                        sub_data = bytes(0)
+                        start = perf_counter()
                     if self._exit_call:
                         self._exit_call = False
                         self._db.release_conn()
@@ -128,7 +139,8 @@ class DownloadThread(BaseDownloadThread):
         if os.path.exists(Constants.DATA_FOLDER):
             rmtree(Constants.DATA_FOLDER)
         try:
-            self.progress.emit(Constants.EXTRACTING_CODE, 0.0)
+            self.progress.emit(Constants.EXTRACTING_CODE)
+            self.speed_progress.emit(Constants.ZERO_FINAL_SPEED)
             with ZipFile(BytesIO(raw_data)) as zipped:
                 zipped.extractall()
         except Exception:

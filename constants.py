@@ -186,6 +186,8 @@ class Constants:
     UNKNOWN                 = "N/A"
     EXTRACTING_MSG          = "Extracting..."
     EXTRACTING_CODE         = -1
+    ZERO_INITIAL_SPEED      = -1
+    ZERO_FINAL_SPEED        = -2
     NOT_AVAILABLE           = "spectrumnotavailable.png"
     NOT_SELECTED            = "nosignalselected.png"
     FIELD_SEPARATOR         = ";"

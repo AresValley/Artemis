@@ -21,9 +21,6 @@
    <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetDefaultConstraint</enum>
-   </property>
    <item>
     <widget class="QLabel" name="label">
      <property name="font">
@@ -50,6 +47,21 @@ Please wait...
      </property>
      <property name="text">
       <string>status</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="speed_lbl">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Speed</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
