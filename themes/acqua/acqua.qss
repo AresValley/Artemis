@@ -5,9 +5,9 @@ Company: GTRONICK
 Last updated: 22/01/2019, 07:55.
 Available at: https://github.com/GTRONICK/QSS/blob/master/Aqua.qss
 */
-QMainWindow {
+/* QMainWindow {
 	background-color:#ececec;
-}
+} */
 
 QWidget{
 	background-color:#ececec;
