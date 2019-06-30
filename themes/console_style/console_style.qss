@@ -18,6 +18,13 @@ QPlainTextEdit {
 	selection-color: rgb(0, 0, 0);
 }
 
+QSlider::sub-page:horizontal {
+    background-color: #ff9900;
+}
+QSlider::sub-page:vertical {
+    background-color: #ff9900;
+}
+
 QComboBox {
     border: 0px solid transparent;
     border-radius: 2px;

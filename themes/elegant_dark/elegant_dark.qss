@@ -17,6 +17,13 @@ QSplitter::handle {
     background-color: transparent;
 }
 
+QSlider::sub-page:horizontal {
+    background-color: #00ff00;
+}
+QSlider::sub-page:vertical {
+    background-color: #00ff00;
+}
+
 QTreeView {
 	background-color: transparent;
     selection-background-color: transparent;

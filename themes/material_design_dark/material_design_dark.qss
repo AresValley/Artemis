@@ -26,6 +26,13 @@ QSplitter::handle {
     background-color: transparent;
 }
 
+QSlider::sub-page:horizontal {
+    background-color: #88cc00;
+}
+QSlider::sub-page:vertical {
+    background-color: #88cc00;
+}
+
 /*************************************
 Main menu (Bar)
 **************************************/

@@ -109,6 +109,13 @@ QStackedWidget {
 	background: #232629;
 }
 
+QSlider::sub-page:horizontal {
+    background-color: #4545e5;
+}
+QSlider::sub-page:vertical {
+    background-color: #4545e5;
+}
+
 /*************************************
 Progressbar
 **************************************/
