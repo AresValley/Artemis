@@ -18,6 +18,14 @@ QPlainTextEdit {
 	selection-color: rgb(0, 0, 0);
 }
 
+QFrame[frameShape="4"],
+QFrame[frameShape="5"]
+{
+    border: none;
+    background: #FFFFFF;
+	max-width: 1px;
+}
+
 QSlider::sub-page:horizontal {
     background-color: #ff9900;
 }
