@@ -8,6 +8,11 @@ Available at: https://github.com/GTRONICK/QSS/blob/master/ElegantDark.qss
 QMainWindow {
 	background-color:rgb(82, 82, 82);
 }
+
+QWidget{
+	background-color: rgb(82, 82, 82)
+}
+
 QTextEdit {
 	background-color:rgb(42, 42, 42);
 	color: rgb(0, 255, 0);
