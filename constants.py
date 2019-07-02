@@ -1,7 +1,6 @@
 from collections import namedtuple
 from enum import Enum, auto
 import os.path
-from enum import IntEnum
 
 
 class Ftype:
