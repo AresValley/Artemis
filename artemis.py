@@ -32,8 +32,7 @@ from constants import (Constants,
                        Database,
                        ChecksumWhat,
                        Messages,
-                       Signal,
-                       MainTabs,)
+                       Signal,)
 from themesmanager import ThemeManager
 from utilities import (checksum_ok,
                        uncheck_and_emit,
@@ -541,8 +540,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def hide_show_right_widget(self):
-        """Hide or show the waterfall+audio widget based on the current tab."""
-        if self.main_tab.currentIndex() == MainTabs.FORECAST:
+        if self.main_tab.currentWidget() == self.forecast_tab:
             self.fixed_audio_and_image.setVisible(False)
         elif not self.fixed_audio_and_image.isVisible():
             self.fixed_audio_and_image.setVisible(True)
