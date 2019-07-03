@@ -12,6 +12,7 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from constants import Constants, Database, ChecksumWhat
 from utilities import checksum_ok
 
+import encodings.idna
 
 class ThreadStatus(Enum):
     """Possible thread status."""
@@ -159,7 +160,7 @@ class _AsyncDownloader:
 
 
 class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
-    """Subclass BaseDownloadThread. Downlaod the space weather data."""
+    """Subclass BaseDownloadThread. Download the space weather data."""
 
     _PROPERTIES = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
 

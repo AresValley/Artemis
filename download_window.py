@@ -52,7 +52,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
         """Start the download thread."""
         self._download_thread.start()
 
-    def _downlaod_format_str(self, n):
+    def _download_format_str(self, n):
         """Return a well-formatted string with the downloaded MB."""
         return f"Downloaded: {n} MB"
 
@@ -74,7 +74,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
     def _display_progress(self, progress):
         """Display the downloaded MB."""
         if progress != Constants.EXTRACTING_CODE:
-            self.status_lbl.setText(self._downlaod_format_str(progress))
+            self.status_lbl.setText(self._download_format_str(progress))
         elif progress == Constants.EXTRACTING_CODE:
             self.status_lbl.setText(Constants.EXTRACTING_MSG)
 
