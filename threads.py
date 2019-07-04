@@ -12,7 +12,9 @@ from PyQt5.QtCore import QThread, pyqtSignal
 from constants import Constants, Database, ChecksumWhat
 from utilities import checksum_ok
 
+# Needed for pyinstaller compilation.
 import encodings.idna
+
 
 class ThreadStatus(Enum):
     """Possible thread status."""
