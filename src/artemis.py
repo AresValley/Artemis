@@ -1626,6 +1626,10 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 
 if __name__ == '__main__':
+    # For executables running on Mac Os systems.
+    if hasattr(sys, "_MEIPASS") and sys.platform == 'darwin':
+        os.chdir(sys._MEIPASS)
+
     my_app = QApplication(sys.argv)
     ARTEMIS_ICON = os.path.join(":", "icon", "default_pics", "Artemis3.500px.png")
     img = QPixmap(ARTEMIS_ICON)
