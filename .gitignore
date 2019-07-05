@@ -5,7 +5,7 @@ wav_converter.py
 to_do.txt
 csv_info.txt
 pyinstaller_cmd.txt
-themes/.current_theme
+src/themes/.current_theme
 launch.bat
 designer.bat
 *.sh

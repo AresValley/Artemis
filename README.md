@@ -173,7 +173,9 @@ Description * Modulation 1 ; Modulation 2 ; ... * ID Code
 ```
 
 ## Themes
-The only folder with the pre-built package is the `themes` one. In this way the themes are fully customizable and you can add your own. New themes (in the `themes` folder) will appear automatically in the main menu and the last used theme will be saved as the favorite one (a restart of Artemis will use the last used theme). 
+The only folder with the pre-built package is the `themes` one. In this way the themes are fully customizable and you can add your own. New themes (in the `themes` folder) will appear automatically in the main menu and the last used theme will be saved as the favorite one (a restart of Artemis will use the last used theme).
+
+Some of the available themes were adapted from https://github.com/GTRONICK/QSS.
 
 ## License
 This program (ARTEMIS 3, 2014-2019) is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
