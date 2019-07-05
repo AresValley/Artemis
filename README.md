@@ -32,16 +32,10 @@ For more information, follow the main page of Artemis 3: https://aresvalley.com/
 
 ## Run from source code (OS independent)
 Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3. The main drawback: this is not the most convenient or fast way to launch the software. Requirements:
-- Python 3 (>3.7)
-- Pandas>=0.24.2
-- Certifi>=2019.6.16
-- Aiohttp>=3.5.4
-- Urllib3>=1.25.3
-- Pygame>=1.9.6
-- QtAwesome>=0.5.7
-- PyQt5==5.12.2
+- Python 3 (>3.7.0+)
+- Python libraries (in `requirements/requirements.txt`)
 
-1. Download and install Python 3 (> 3.7) from the official website (https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation.
+1. Download and install Python 3 (>3.7.0+) from the official website (https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation.
 
 2. Install the necessary Python libraries with PIP. Open a console in Artemis/requirements folder and type:
    
