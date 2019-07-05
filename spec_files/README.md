@@ -6,7 +6,7 @@
 
 ## ARTEMIS 3 .SPEC FILES
 
-Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyinstaller.org/) to build a single standalone executable. The extreme versatility of this package is the fact that every external dependency is already embedded into the bundle. The interpreter of Python 3 is also included. Python 
+Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyinstaller.org/) to build a single standalone executable. The extreme versatility of this package is the fact that every external dependency is already embedded into the bundle. The interpreter of Python 3 is also included.
 
 ## Requirements
 - Python 3.7.0+
