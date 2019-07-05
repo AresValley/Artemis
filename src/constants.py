@@ -1,16 +1,6 @@
 from collections import namedtuple
 from enum import Enum, auto
 import os.path
-from enum import IntEnum
-
-
-class MainTabs(IntEnum):
-    """The main tabs indeces."""
-
-    SIGNAL = 0
-    FILTERS = 1
-    GFD = 2
-    FORECAST = 3
 
 
 class Ftype:
@@ -186,6 +176,8 @@ class Constants:
     UNKNOWN                 = "N/A"
     EXTRACTING_MSG          = "Extracting..."
     EXTRACTING_CODE         = -1
+    ZERO_INITIAL_SPEED      = -1
+    ZERO_FINAL_SPEED        = -2
     NOT_AVAILABLE           = "spectrumnotavailable.png"
     NOT_SELECTED            = "nosignalselected.png"
     FIELD_SEPARATOR         = ";"

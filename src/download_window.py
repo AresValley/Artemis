@@ -44,6 +44,7 @@ class DownloadWindow(QWidget, Ui_Download_window):
         self._download_thread = DownloadThread()
         self._download_thread.finished.connect(self._wait_close)
         self._download_thread.progress.connect(self._display_progress)
+        self._download_thread.speed_progress.connect(self._display_speed)
         self.closed.connect(self._download_thread.set_exit)
         self.cancel_btn.clicked.connect(self._terminate_process)
 
@@ -51,27 +52,37 @@ class DownloadWindow(QWidget, Ui_Download_window):
         """Start the download thread."""
         self._download_thread.start()
 
-    def _downlaod_format_str(self, n, speed):
-        """Return a well-formatted string with downloaded MB and speed."""
-        ret = f"Downloaded: {n} MB\nSpeed: "
-        if speed == 0.0:
+    def _download_format_str(self, n):
+        """Return a well-formatted string with the downloaded MB."""
+        return f"Downloaded: {n} MB"
+
+    @pyqtSlot(float)
+    def _display_speed(self, speed):
+        """Display the download speed."""
+        ret = "Speed: "
+        if speed == Constants.ZERO_INITIAL_SPEED:
+            ret += "Calculating..."
+        elif speed == 0.0:
             ret += "VERY SLOW"
+        elif speed == Constants.ZERO_FINAL_SPEED:
+            ret = ""
         else:
             ret += f"{speed} MB/s"
-        return ret
+        self.speed_lbl.setText(ret)
+
+    @pyqtSlot(int)
+    def _display_progress(self, progress):
+        """Display the downloaded MB."""
+        if progress != Constants.EXTRACTING_CODE:
+            self.status_lbl.setText(self._download_format_str(progress))
+        elif progress == Constants.EXTRACTING_CODE:
+            self.status_lbl.setText(Constants.EXTRACTING_MSG)
 
     def show(self):
         """Extends QWidget.show. Set downloaded MB and speed to zero."""
-        self.status_lbl.setText(self._downlaod_format_str(0, 0))
+        self._display_progress(0)
+        self._display_speed(Constants.ZERO_INITIAL_SPEED)
         super().show()
-
-    @pyqtSlot(int, float)
-    def _display_progress(self, progress, speed):
-        """Display the downloaded MB and speed."""
-        if progress != Constants.EXTRACTING_CODE:
-            self.status_lbl.setText(self._downlaod_format_str(progress, speed))
-        elif progress == Constants.EXTRACTING_CODE:
-            self.status_lbl.setText(Constants.EXTRACTING_MSG + '\n')
 
     def _stop_thread(self):
         """Ask the download thread to stop."""

@@ -1,0 +1,7 @@
+pandas>=0.24.2
+certifi>=2019.6.16
+aiohttp>=3.5.4
+urllib3>=1.25.3
+pygame>=1.9.6
+QtAwesome>=0.5.7
+PyQt5==5.12.2

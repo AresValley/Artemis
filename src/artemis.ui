@@ -5410,7 +5410,7 @@ www.qrg.globaltuners.com</string>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="forecast_tab">
         <attribute name="title">
          <string>Rx/Tx Conditions</string>
         </attribute>
@@ -9194,7 +9194,8 @@ QWidget {
 QPushButton {
     border: 0px solid gray;
 	border-color: #1d5eff;
-    border-radius: 20px;
+    border-radius: 25px;
+	background-color: transparent;
 }</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">

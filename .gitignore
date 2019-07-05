@@ -1,12 +1,7 @@
 __pycache__
 Data
-*.ipynb*
-wav_converter.py
-to_do.txt
 csv_info.txt
-pyinstaller_cmd.txt
-themes/.current_theme
-launch.bat
+src/themes/.current_theme
 designer.bat
-default_pics/
+launch.bat
 .vscode/
