@@ -6,14 +6,13 @@
 
 ## ARTEMIS. In a nutshell.
 
-In short, ARTEMIS is a signals hunter software and a useful aid for radio listeners! The analysis of real-time spectra (from your SDR, for instance is made simple: you can take advantage using one of the largest RF signal database (with over 370 records). Compare several signals properties (such as frequency, bandwidth, modulation, etc.) and verify what you are searching for through a waterfall/audio sample. A collection of filters allows you to narrow your search, making the identification of unknown signals, odd buzzes or weird noises way easier.
+In short, ARTEMIS is a signals hunter software and a useful aid for radio listeners! The analysis of real-time spectra (from your SDR, for instance) is made simple: you can take advantage using one of the largest RF signal database (with over 370 records). Compare several signals properties (such as frequency, bandwidth, modulation, etc.) and verify what you are searching for through a waterfall/audio sample. A collection of filters allows you to narrow your search, making the identification of unknown signals, odd buzzes or weird noises way easier.
 
 ## Table of contents
 
-  - [Installation](#installation)
+  - [Run the software](#Run-the-software)
     - [Run from binary](#Run-from-binary)
     - [Run from source code](#Run-from-source-code-OS-independent)
-    - [Run using deploy script](#Run-using-deploy-script)
   - [Database](#database)
     - [Syntax](#syntax)
     - [Multiple Items fields (Location, Modulation)](#multiple-items-fields-location-modulation)
@@ -21,21 +20,22 @@ In short, ARTEMIS is a signals hunter software and a useful aid for radio listen
   - [License](#license)
   - [Thanks](#thanks)
 
-## Installation
-The power of the new Artemis is the native multi-environment capability. To achieve this point, the entire code has been written in python. The procedure of Artemis 3 deployment is very similar among the different main operative systems (Windows, Linux or MacOS) but, in principle, any OS capable of running python scripts has all the necessary features to run Artemis smoothly.
+## Run the software
 
-## Run from binary
+Artemis 3 is entirely written in Python, so if you already have Python 3.7.0+ installed in your system, you can directly run the main script. Otherwise you can download a binary executable (see below).
+
+### Run from binary
 **If you don't know what you want or you are not sure where to look, this is for you.** 
 
-Basically, this is the easiest, smooth, and clean way to run Artemis 3. Python 3.7 and the libraries are not required because they are already contained into the bundle.
-For more information, follow the main page of Artemis 3: https://aresvalley.com/artemis/ (detailed documentation at the end of the main page)
+Basically, this is the easiest, smooth, and clean way to run Artemis 3. A Python installation is not required.
+For more information, follow [the main page of Artemis 3](https://aresvalley.com/artemis/) (detailed documentation at the end of the main page)
 
-## Run from source code (OS independent)
-Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3. The main drawback: this is not the most convenient or fast way to launch the software. Requirements:
-- Python 3 (>3.7.0+)
+### Run from source code
+Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3. Requirements:
+- Python (ver. 3.7.0+)
 - Python libraries (in `requirements/requirements.txt`)
 
-1. Download and install Python 3 (>3.7.0+) from the official website (https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation.
+1. Download and install Python (ver. 3.7.0+) from the official [website](https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation.
 
 2. Install the necessary Python libraries with PIP. Open a console in Artemis/requirements folder and type:
    
@@ -48,12 +48,6 @@ pip install -r  requirements.txt --user
 ```
 python3 artemis.py
 ```
-
-## Run using deploy script
-
-This is a third option to run Artemis 3 on your pc. The method of installation is based on an automatic script that set privileges, install dependencies and create a working shortcut to your desktop/menu.
-
-**For the sake of completeness, the documentation is available in `unused_installation_scripts`, but we strongly discourage any attempt to use it.**
 
 ## Database
 
@@ -131,8 +125,8 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program. If not, see: www.gnu.org/licenses
 
 ## Thanks
-* **Marco D.T.** - *Artemis I-II programmer, DB parsing, Website*
-* **Alessandro C.** - *Artemis III lead programmer*
+* **Marco D.T.** - *Artemis I-II developer, DB parsing, Website*
+* [**Alessandro C.**](https://github.com/alessandro90 "GitHub profile") - *Artemis III lead developer*
 * **Paolo R. (IZ1MLL)** - *Lead β Tester, RF specialist*
 * **Carl C.** - *Sigidwiki admin, β Tester, Signals expert*
 * **Marco B.** - *macOS deployment, β Tester*
