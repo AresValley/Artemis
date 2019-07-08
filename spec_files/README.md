@@ -30,9 +30,10 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program. If not, see: www.gnu.org/licenses
 
 ## Thanks
-* **Marco D.T.** - *Artemis I-II programmer, DB parsing, Website*
-* **Alessandro C.** - *Artemis III lead programmer*
-* **Paolo R. (IZ1MLL)** - *Lead β Tester, RF specialist*
-* **Carl C.** - *Sigidwiki admin, β Tester, Signals expert*
-* **Marco B.** - *macOS deployment, β Tester*
-* **Francesco C., Pierpaolo P., Luca XYZ, Paolo XYZ, Daniele XYZ** - *β Tester*
+* **Marco Dalla Tiezza** - *Artemis I-II developer, DB parsing, Website*
+* [**Alessandro Ceccato**](https://github.com/alessandro90 "GitHub profile") - *Artemis III lead developer*
+* **Paolo Romani (IZ1MLL)** - *Lead β Tester, RF specialist*
+* **Carl Colena** - *Sigidwiki admin, β Tester, Signals expert*
+* **Marco Bortoli** - *macOS deployment, β Tester*
+* **Pierpaolo Pravatto** - *Wiki page, β Tester*
+* **Francesco Capostagno, Luca, Pietro** - *β Tester*
