@@ -14,9 +14,6 @@ In short, ARTEMIS is a signals hunter software and a useful aid for radio listen
     - [Run from binary](#Run-from-binary)
     - [Run from source code](#Run-from-source-code-OS-independent)
     - [Run using deploy script](#Run-using-deploy-script)
-      - [Windows](#Windows)
-      - [Linux](#Linux)
-      - [MacOS](#MacOS)
   - [Database](#database)
     - [Syntax](#syntax)
     - [Multiple Items fields (Location, Modulation)](#multiple-items-fields-location-modulation)
@@ -35,16 +32,10 @@ For more information, follow the main page of Artemis 3: https://aresvalley.com/
 
 ## Run from source code (OS independent)
 Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3. The main drawback: this is not the most convenient or fast way to launch the software. Requirements:
-- Python 3 (>3.7)
-- Pandas>=0.24.2
-- Certifi>=2019.6.16
-- Aiohttp>=3.5.4
-- Urllib3>=1.25.3
-- Pygame>=1.9.6
-- QtAwesome>=0.5.7
-- PyQt5==5.12.2
+- Python 3 (>3.7.0+)
+- Python libraries (in `requirements/requirements.txt`)
 
-1. Download and install Python 3 (> 3.7) from the official website (https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation.
+1. Download and install Python 3 (>3.7.0+) from the official website (https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation.
 
 2. Install the necessary Python libraries with PIP. Open a console in Artemis/requirements folder and type:
    
@@ -60,54 +51,9 @@ python3 artemis.py
 
 ## Run using deploy script
 
-<img src="documentation/win.png" align="right" />
+This is a third option to run Artemis 3 on your pc. The method of installation is based on an automatic script that set privileges, install dependencies and create a working shortcut to your desktop/menu.
 
-> ### Windows:
->
-> 1. Windows don't offer a native version of Python. Download and install Python 3 (> 3.7) from the official website (https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation. To verify the correct installation of Python open a CMD terminal (Open the **run** windows with **Win+R** and type **cmd**) and check the version of the just installed python 3 with:
-> ```
-> python --version
-> ```
-> 2. Use the `clone or download` button (https://github.com/AresValley/Artemis/archive/master.zip) to download the source code of Artemis 3.
-> 3. Extract the .zip and place Artemis folder where you prefer. The code must always be accompanied by a `themes` folder.
-> 4. To install the necessary libraries open the `Artemis/deploy/Windows` folder. Run (with a double click) the script `deploy_win.bat`. The script will:
-> 
->     * Set the correct read/write privileges for Artemis folder. The main folder **must have the reading/writing permission** to download the Signals Database.
->     * Install the required Python 3 libraries with pip3.
->     * Generate a .pyw file (script launcher without console), and it will create a shortcut on the desktop.
-
-
-<img src="documentation/linux.png" align="right" />
-
-> ### Linux:
->
-> 1. Linux already offers a native version of python on board. Please verify the presence of Python 3 and check the version (> 3.7) opening a terminal and typing:
-> ```
-> python --version
-> ```
-> If, for some reasons python, it is not present in your system follow the specific instructions to install it on your distro. For the common Linux OS:
-> * **Ubuntu**, **Mint**: `sudo apt-get install python3.7`  
-> * **Fedora**: `sudo dnf install python37` 
-> 2. Use the `clone or download` button (https://github.com/AresValley/Artemis/archive/master.zip) to download the source code of Artemis 3.
-> 3. Extract the .zip where you like (use `unzip Artemis-master.zip`). The code must always be accompanied by a `themes` folder.
-> 4. To install the necessary libraries open the `Artemis/deploy/Linux` folder. Run the script `deploy_linux.sh` typing in a terminal:
-> ```
-> cd PATH / TO / ARTEMIS / FOLDER /deploy/Linux
-> sh deploy_linux.sh
-> ```
-> 
-> 5. Follow the terminal instructions. At the end, you will find a shortcut to Artemis 3 in the main menu. The script `deploy_linux.sh` will:
-> 
->     * Set the correct read/write privileges for Artemis folder. The main folder **must have the reading/writing permission** to download the Signals Database.
->     * Install the required Python 3 libraries with pip3.
->     * Generate a .desktop file (script launcher without console) in `$HOME/.local/share/applications` and it will copy the .svg Artemis icon in `/usr/share/icons/`.
-
-
-<img src="documentation/apple.png" align="right" />
-
-> ### MacOS:
->
-> 1. To Be Completed...
+**For the sake of completeness, the documentation is available in `unused_installation_scripts`, but we strongly discourage any attempt to use it.**
 
 ## Database
 
