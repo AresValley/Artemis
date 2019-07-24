@@ -4,11 +4,9 @@ from io import BytesIO
 from math import ceil
 import os.path
 from shutil import rmtree
-import sys
 from time import perf_counter
 from zipfile import ZipFile
 import aiohttp
-import urllib3
 from PyQt5.QtCore import QThread, pyqtSignal
 from constants import Constants, Database, ChecksumWhat
 from utilities import checksum_ok, get_pool_manager
