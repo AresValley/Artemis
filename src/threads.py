@@ -87,7 +87,7 @@ class DownloadThread(BaseDownloadThread):
         raw_data = bytes(0)
         sub_data = bytes(0)
         try:
-            self._db = urllib3.PoolManager().request(
+            self._db = urllib3.PoolManager(ca_certs = sys._MEIPASS + '/cacert.pem').request(
                 'GET',
                 Database.LINK_LOC,
                 preload_content=False,
