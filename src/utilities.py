@@ -2,7 +2,6 @@ from functools import partial
 import hashlib
 import sys
 import os
-from pandas import read_csv
 from PyQt5.QtWidgets import QMessageBox
 import urllib3
 from constants import Constants, Signal, Database, ChecksumWhat
