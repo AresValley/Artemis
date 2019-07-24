@@ -59,9 +59,9 @@ def get_pool_manager():
     """Return a urllib3.PoolManager object."""
     if hasattr(sys, "_MEIPASS"):
         ca_certs = os.path.join(sys._MEIPASS, 'cacert.pem')
-        return urllib3.PoolManager(ca_certs=ca_certs)
     else:
-        return urllib3.PoolManager()
+        ca_certs = 'cacert.pem'
+    return urllib3.PoolManager(ca_certs=ca_certs)
 
 
 def checksum_ok(data, what):
