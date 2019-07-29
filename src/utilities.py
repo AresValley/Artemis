@@ -2,10 +2,8 @@ from functools import partial
 import hashlib
 import sys
 import os
-from pandas import read_csv
-
 from PyQt5.QtWidgets import QMessageBox
-
+import urllib3
 from constants import Constants, Signal, Database, ChecksumWhat
 
 
@@ -51,6 +49,20 @@ def pop_up(cls, title, text,
     return msg
 
 
+def is_mac_os():
+    """Return True if running OS is Mac."""
+    return sys.platform == 'darwin'
+
+
+def get_pool_manager():
+    """Return a urllib3.PoolManager object."""
+    if hasattr(sys, "_MEIPASS"):
+        ca_certs = os.path.join(sys._MEIPASS, 'cacert.pem')
+    else:
+        ca_certs = 'cacert.pem'
+    return urllib3.PoolManager(ca_certs=ca_certs)
+
+
 def checksum_ok(data, what):
     """Check whether the checksum of the 'data' argument is correct."""
     code = hashlib.sha256()
@@ -62,10 +74,13 @@ def checksum_ok(data, what):
     else:
         raise ValueError("Wrong entry name.")
     try:
-        reference = read_csv(
+        # The downloaded file is a csv file with columns (last version == last line):
+        # data.zip_SHA256 | db.csv_SHA256 | Version | Creation_date
+        reference = get_pool_manager().request(
+            'GET',
             Database.LINK_REF,
-            delimiter=Database.DELIMITER
-        ).iat[-1, n]
+            timeout=4.0
+        ).data.decode("utf-8").splitlines()[-1].split(Database.DELIMITER)[n]
     except Exception:
         raise
     return code.hexdigest() == reference

@@ -43,7 +43,8 @@ from utilities import (checksum_ok,
                        is_undef_band,
                        format_numbers,
                        resource_path,
-                       safe_cast)
+                       safe_cast,
+                       is_mac_os)
 
 # import default_imgs_rc
 
@@ -1627,7 +1628,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     # For executables running on Mac Os systems.
-    if hasattr(sys, "_MEIPASS") and sys.platform == 'darwin':
+    if hasattr(sys, "_MEIPASS") and is_mac_os():
         os.chdir(sys._MEIPASS)
 
     my_app = QApplication(sys.argv)

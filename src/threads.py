@@ -7,10 +7,9 @@ from shutil import rmtree
 from time import perf_counter
 from zipfile import ZipFile
 import aiohttp
-import urllib3
 from PyQt5.QtCore import QThread, pyqtSignal
 from constants import Constants, Database, ChecksumWhat
-from utilities import checksum_ok
+from utilities import checksum_ok, get_pool_manager
 
 # Needed for pyinstaller compilation.
 import encodings.idna
@@ -87,7 +86,7 @@ class DownloadThread(BaseDownloadThread):
         raw_data = bytes(0)
         sub_data = bytes(0)
         try:
-            self._db = urllib3.PoolManager().request(
+            self._db = get_pool_manager().request(
                 'GET',
                 Database.LINK_LOC,
                 preload_content=False,
