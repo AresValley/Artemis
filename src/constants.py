@@ -123,13 +123,13 @@ class Constants:
     SPACE_WEATHER_SGAS      = "https://services.swpc.noaa.gov/text/sgas.txt"
     SPACE_WEATHER_GEO_STORM = "https://services.swpc.noaa.gov/text/3-day-forecast.txt"
     SPACE_WEATHER_INFO      = "https://www.swpc.noaa.gov/sites/default/files/images/NOAAscales.pdf"
-    SPACE_WEATHER_IMGS      = ["http://www.mmmonvhf.de/eme/eme.png",
-                               "http://www.mmmonvhf.de/ms/ms.png",
-                               "http://www.mmmonvhf.de/es/es.png",
-                               "http://www.mmmonvhf.de/solar/solar.png",
-                               "http://amunters.home.xs4all.nl/eskip50status.gif",
-                               "http://amunters.home.xs4all.nl/eskip70status.gif",
-                               "http://amunters.home.xs4all.nl/eskipstatus.gif",
+    SPACE_WEATHER_IMGS      = ["https://www.mmmonvhf.de/eme/eme.png",
+                               "https://www.mmmonvhf.de/ms/ms.png",
+                               "https://www.mmmonvhf.de/es/es.png",
+                               "https://www.mmmonvhf.de/solar/solar.png",
+                               "https://amunters.home.xs4all.nl/eskip50status.gif",
+                               "https://amunters.home.xs4all.nl/eskip70status.gif",
+                               "https://amunters.home.xs4all.nl/eskipstatus.gif",
                                "https://amunters.home.xs4all.nl/eskipstatusNA.gif",
                                "https://amunters.home.xs4all.nl/aurorastatus.gif"]
     SEARCH_LABEL_IMG        = "search_icon.png"
