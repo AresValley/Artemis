@@ -846,18 +846,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """Handle high resolution screens.
 
         Set bigger sizes for all the relevant fixed-size widgets.
-        Also by default set the size to 3/4 of the available space both
-        vertically and horizontally.
         """
         d = QDesktopWidget().availableGeometry()
-        center = d.center()
         w = d.width()
         h = d.height()
-        rect = QRect()
-        rect.setHeight((3 * h) // 4)
-        rect.setWidth((3 * w) // 4)
-        rect.moveCenter(center)
-        self.setGeometry(rect)
+        self.showMaximized()
+
         if w > 3000 or h > 2000:
             self.fixed_audio_and_image.setFixedSize(540, 1150)
             self.fixed_audio_and_image.setMaximumSize(540, 1150)
