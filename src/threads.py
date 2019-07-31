@@ -9,7 +9,8 @@ from zipfile import ZipFile
 import aiohttp
 from PyQt5.QtCore import QThread, pyqtSignal
 from constants import Constants, Database, ChecksumWhat
-from utilities import checksum_ok, get_pool_manager
+from utilities import checksum_ok, get_pool_manager, get_cacert_file
+import ssl
 
 # Needed for pyinstaller compilation.
 import encodings.idna
@@ -156,7 +157,11 @@ class _AsyncDownloader:
 
     async def _download_resource(self, session, link):
         """Return the content of 'link' as bytes."""
-        resp = await session.get(link)
+        ssl_context = ssl.create_default_context(
+            purpose=ssl.Purpose.SERVER_AUTH,
+            cafile=get_cacert_file()
+        )
+        resp = await session.get(link, ssl=ssl_context)
         return await resp.read()
 
 

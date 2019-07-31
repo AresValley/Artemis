@@ -54,13 +54,18 @@ def is_mac_os():
     return sys.platform == 'darwin'
 
 
-def get_pool_manager():
-    """Return a urllib3.PoolManager object."""
+def get_cacert_file():
+    """Return the path to the cacert.pem file."""
     if hasattr(sys, "_MEIPASS"):
         ca_certs = os.path.join(sys._MEIPASS, 'cacert.pem')
     else:
         ca_certs = 'cacert.pem'
-    return urllib3.PoolManager(ca_certs=ca_certs)
+    return ca_certs
+
+
+def get_pool_manager():
+    """Return a urllib3.PoolManager object."""
+    return urllib3.PoolManager(ca_certs=get_cacert_file())
 
 
 def checksum_ok(data, what):
