@@ -23,12 +23,12 @@ if [ -e "$file" ]; then
     read -p "" doit 
     case $doit in  
         u|U)
-        echo "#!/usr/bin/env xdg-open" > /home/$USER/.local/share/applications/artemis.desktop
         echo "[Desktop Entry]" >> /home/$USER/.local/share/applications/artemis.desktop
         echo "Name=Artemis" >> /home/$USER/.local/share/applications/artemis.desktop
+        echo "Type=Application" >> /home/$USER/.local/share/applications/artemis.desktop
         echo "StartupWMClass=artemis3" >> /home/$USER/.local/share/applications/artemis.desktop
-        echo "Exec=sh -c 'cd $DIR && ./artemis' " >> /home/$USER/.local/share/applications/artemis.desktop
-        echo "Terminal=False" >> /home/$USER/.local/share/applications/artemis.desktop
+        echo "Exec=sh -c \"cd $DIR && ./Artemis\" " >> /home/$USER/.local/share/applications/artemis.desktop
+        echo "Terminal=false" >> /home/$USER/.local/share/applications/artemis.desktop
         echo "Icon=artemis3" >> /home/$USER/.local/share/applications/artemis.desktop
         sudo cp ./artemis3.svg /usr/share/icons/
         echo "Link Updated!"
@@ -41,12 +41,12 @@ if [ -e "$file" ]; then
         *) echo "Sorry! Invalid option $REPLY";;
     esac
 else 
-    echo "#!/usr/bin/env xdg-open" > /home/$USER/.local/share/applications/artemis.desktop
     echo "[Desktop Entry]" >> /home/$USER/.local/share/applications/artemis.desktop
     echo "Name=Artemis" >> /home/$USER/.local/share/applications/artemis.desktop
+    echo "Type=Application" >> /home/$USER/.local/share/applications/artemis.desktop
     echo "StartupWMClass=artemis3" >> /home/$USER/.local/share/applications/artemis.desktop
-    echo "Exec=sh -c 'cd $DIR && ./artemis' " >> /home/$USER/.local/share/applications/artemis.desktop
-    echo "Terminal=False" >> /home/$USER/.local/share/applications/artemis.desktop
+    echo "Exec=sh -c \"cd $DIR && ./Artemis\" " >> /home/$USER/.local/share/applications/artemis.desktop
+    echo "Terminal=false" >> /home/$USER/.local/share/applications/artemis.desktop
     echo "Icon=artemis3" >> /home/$USER/.local/share/applications/artemis.desktop
     sudo cp ./artemis3.svg /usr/share/icons/
     echo "
