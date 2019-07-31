@@ -19,17 +19,21 @@ class AudioPlayer(QObject):
                  pause,
                  stop,
                  volume,
+                 loop,
                  audio_progress,
                  active_color,
                  inactive_color):
         """Initialize the player."""
         super().__init__()
+        self._active_color = active_color
+        self._inactive_color = inactive_color
         self._paused = False
         self._first_call = True
         self._play = play
         self._pause = pause
         self._stop = stop
         self._volume = volume
+        self._loop = loop
         self._audio_progress = audio_progress
         self._audio_file = None
         self._timer = QTimer()
@@ -38,22 +42,45 @@ class AudioPlayer(QObject):
         self._pause.clicked.connect(self._pause_audio)
         self._stop.clicked.connect(self._stop_audio)
         self._volume.valueChanged.connect(self._set_volume)
+        self._loop.clicked.connect(self._set_loop_icon)
         self._play.setIconSize(self._play.size())
         self._pause.setIconSize(self._pause.size())
         self._stop.setIconSize(self._stop.size())
+        self._loop.setIconSize(self._loop.size())
         self.refresh_btns_colors(active_color, inactive_color)
+
+    @pyqtSlot()
+    def _set_loop_icon(self):
+        """Set the icon for the loop audio button."""
+        if self._loop.isChecked():
+            loop_icon = qta.icon(
+                'fa5s.redo-alt',
+                color=self._active_color,
+                color_disabled=self._inactive_color,
+                animation=qta.Spin(self._loop)
+            )
+        else:
+            loop_icon = qta.icon(
+                'fa5s.redo-alt',
+                color=self._active_color,
+                color_disabled=self._inactive_color
+            )
+        self._loop.setIcon(loop_icon)
 
     def refresh_btns_colors(self, active_color, inactive_color):
         """Repaint the buttons of the widgetd after the theme has changed."""
-        self._play.setIcon(qta.icon('fa5.play-circle',
+        self._active_color = active_color
+        self._inactive_color = inactive_color
+        self._play.setIcon(qta.icon('fa5s.play',
                                     color=active_color,
                                     color_disabled=inactive_color))
-        self._pause.setIcon(qta.icon('fa5.pause-circle',
+        self._pause.setIcon(qta.icon('fa5s.pause',
                                      color=active_color,
                                      color_disabled=inactive_color))
-        self._stop.setIcon(qta.icon('fa5.stop-circle',
+        self._stop.setIcon(qta.icon('fa5s.stop',
                                     color=active_color,
                                     color_disabled=inactive_color))
+        self._set_loop_icon()
 
     @pyqtSlot()
     def _set_volume(self):
@@ -71,8 +98,7 @@ class AudioPlayer(QObject):
                 self._timer.stop()
             mixer.quit()
         self._audio_progress.reset()
-        self._enable_buttons(False, False, False)
-        self._paused = False
+        self._enable_buttons(False, False, False, False)
 
     @pyqtSlot()
     def _update_bar(self):
@@ -81,7 +107,11 @@ class AudioPlayer(QObject):
         if pos == -1:
             self._timer.stop()
             self._audio_progress.reset()
-            self._enable_buttons(True, False, False)
+            if self._loop.isChecked():
+                self._play_audio()
+                self._enable_buttons(False, True, True)
+            else:
+                self._enable_buttons(True, False, False)
         else:
             self._audio_progress.setValue(pos)
 
@@ -102,6 +132,7 @@ class AudioPlayer(QObject):
         )
         if os.path.exists(full_name):
             self._play.setEnabled(True)
+            self._loop.setEnabled(True)
             self._audio_file = full_name
 
     @pyqtSlot()
@@ -137,8 +168,9 @@ class AudioPlayer(QObject):
         self._paused = True
         self._enable_buttons(True, False, False)
 
-    def _enable_buttons(self, play_en, pause_en, stop_en):
+    def _enable_buttons(self, play_en, pause_en, stop_en, loop_en=True):
         """Set the three buttons status."""
         self._play.setEnabled(play_en)
         self._pause.setEnabled(pause_en)
         self._stop.setEnabled(stop_en)
+        self._loop.setEnabled(loop_en)
