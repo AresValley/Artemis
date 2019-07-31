@@ -98,7 +98,7 @@ class AudioPlayer(QObject):
                 self._timer.stop()
             mixer.quit()
         self._audio_progress.reset()
-        self._enable_buttons(False, False, False, False)
+        self._enable_buttons(False, False, False)
 
     @pyqtSlot()
     def _update_bar(self):
@@ -132,7 +132,6 @@ class AudioPlayer(QObject):
         )
         if os.path.exists(full_name):
             self._play.setEnabled(True)
-            self._loop.setEnabled(True)
             self._audio_file = full_name
 
     @pyqtSlot()
@@ -168,9 +167,8 @@ class AudioPlayer(QObject):
         self._paused = True
         self._enable_buttons(True, False, False)
 
-    def _enable_buttons(self, play_en, pause_en, stop_en, loop_en=True):
+    def _enable_buttons(self, play_en, pause_en, stop_en):
         """Set the three buttons status."""
         self._play.setEnabled(play_en)
         self._pause.setEnabled(pause_en)
         self._stop.setEnabled(stop_en)
-        self._loop.setEnabled(loop_en)
