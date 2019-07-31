@@ -19,8 +19,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo,
                           Qt,
-                          pyqtSlot,
-                          QRect,)
+                          pyqtSlot,)
 
 from audio_player import AudioPlayer
 from weatherdata import SpaceWeatherData, ForecastData
@@ -494,6 +493,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.pause,
             self.stop,
             self.volume,
+            self.loop,
             self.audio_progress,
             self.active_color,
             self.inactive_color
