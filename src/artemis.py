@@ -48,7 +48,7 @@ from utilities import (checksum_ok,
 
 # import default_imgs_rc
 
-
+__VERSION__ = "3.0.1"
 qt_creator_file = resource_path("artemis.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
@@ -60,6 +60,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """Set all connections of the application."""
         super().__init__()
         self.setupUi(self)
+        self.setWindowTitle("ARTΣMIS " + __VERSION__)
         self.set_initial_size()
         self.closing = False
         self.download_window = DownloadWindow()

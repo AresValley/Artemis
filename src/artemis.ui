@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>ARTΣMIS 3.0</string>
+   <string>ARTΣMIS</string>
   </property>
   <property name="windowIcon">
    <iconset resource="default_imgs.qrc">
