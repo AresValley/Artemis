@@ -1,5 +1,5 @@
 # Changelog
-This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and the format is based on The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
