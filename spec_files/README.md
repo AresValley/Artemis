@@ -21,7 +21,7 @@ Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyins
 ```
 pyinstaller Artemis.spec
 ```
-4. Copy the `src/theme` folder into `src/dist`.
+4. Copy the `src/themes` folder into `src/dist`.
 5. The ready-to-use compiled software is now present into `src/dist` folder.
 
 ## Package Building (one-dir, shorter startup time, low portability)
@@ -31,7 +31,7 @@ pyinstaller Artemis.spec
 ```
 pyinstaller Artemis_onedir.spec
 ```
-4. Copy the `src/theme` folder into `src/dist/Artemis`.
+4. Copy the `src/themes` folder into `src/dist/Artemis`.
 5. The ready-to-use compiled software is now present into `src/dist` folder as a bundle. All the libraries are clearly present.
 
 ## License
