@@ -11,7 +11,7 @@ Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyins
 ## Requirements
 - Python 3.7.0+
 - Pyinstaller
-- 
+
 **IMPORTANT:** *To generate the standalone and the one-dir package, you must use an operating system that coincides with the target one (pyinstaller doesn't allow cross-compilation).* 
 
 ## Package Building (standalone aka one-file, high portability, **suggested**)
