@@ -146,6 +146,7 @@ class AudioPlayer(QObject):
                 self._set_max_progress_bar()
             mixer.music.play()
         else:
+            mixer.init()
             mixer.music.unpause()
             self._paused = False
         self._timer.start(self._TIME_STEP)
