@@ -92,6 +92,8 @@ class AudioPlayer(QObject):
 
     def _reset_audio_widget(self):
         """Reset the widget. Stop all playing samples."""
+        self._first_call = True
+        self._paused = False
         if mixer.get_init():
             if mixer.music.get_busy():
                 mixer.music.stop()
@@ -123,7 +125,6 @@ class AudioPlayer(QObject):
 
     def set_audio_player(self, fname=""):
         """Set the current audio sample."""
-        self._first_call = True
         self._reset_audio_widget()
         full_name = os.path.join(
             Constants.DATA_FOLDER,
