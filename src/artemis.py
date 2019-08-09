@@ -856,9 +856,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
         if w > 3000 or h > 2000:
             self.fixed_audio_and_image.setFixedSize(540, 1150)
             self.fixed_audio_and_image.setMaximumSize(540, 1150)
-            self.play.setFixedSize(140, 140)
-            self.pause.setFixedSize(140, 140)
-            self.stop.setFixedSize(140, 140)
+            audio_btn_h, audio_btn_w = 90, 90
+            self.play.setFixedSize(audio_btn_h, audio_btn_w)
+            self.pause.setFixedSize(audio_btn_h, audio_btn_w)
+            self.stop.setFixedSize(audio_btn_h, audio_btn_w)
+            self.loop.setFixedSize(audio_btn_h, audio_btn_w)
             self.lower_freq_spinbox.setFixedWidth(200)
             self.upper_freq_spinbox.setFixedWidth(200)
             self.lower_freq_filter_unit.setFixedWidth(120)
