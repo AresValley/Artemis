@@ -5,6 +5,7 @@ The first release is [3.0.0] because this is actually the third major version (c
 
 ## [Unreleased]
 ### Fixed
+- The audio buttons are of the same dimension also for high resolution screens ([#13](https://github.com/AresValley/Artemis/pull/13))
 - An audio sample can be paused and a different one can be played without a program crash ([#12](https://github.com/AresValley/Artemis/pull/12))
 
 ## [3.0.1] - 2019-8-1
