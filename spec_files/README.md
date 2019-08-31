@@ -46,6 +46,6 @@ You should have received a copy of the GNU General Public License along with thi
 * [**Alessandro Ceccato**](https://github.com/alessandro90 "GitHub profile") - *Artemis III lead developer*
 * **Paolo Romani (IZ1MLL)** - *Lead β Tester, RF specialist*
 * **Carl Colena** - *Sigidwiki admin, β Tester, Signals expert*
-* **Marco Bortoli** - *macOS deployment, β Tester*
-* **Pierpaolo Pravatto** - *Wiki page, β Tester*
-* **Francesco Capostagno, Luca, Pietro** - *β Tester*
+* [**Marco Bortoli**](https://github.com/marbort "GitHub profile") - *macOS deployment, β Tester*
+* [**Pierpaolo Pravatto**](https://github.com/ppravatto "GitHub profile") - *Wiki page, β Tester*
+* [**Francesco Capostagno**](https://github.com/fcapostagno "GitHub profile"), **Luca**, **Pietro** - *β Tester*
