@@ -10,7 +10,7 @@ class AudioPlayer(QObject):
     """Subclass QObject. Audio player widget for the audio samples.
 
     The only public methods are the __init__
-    method, set_audio_player, which loads the current file and refresh_btns_colors.
+    method, set_audio_player, which loads the current file and refresh.
     Everything else is managed internally."""
 
     _TIME_STEP = 500  # Milliseconds.
@@ -47,7 +47,7 @@ class AudioPlayer(QObject):
         self._pause.setIconSize(self._pause.size())
         self._stop.setIconSize(self._stop.size())
         self._loop.setIconSize(self._loop.size())
-        self.refresh_btns_colors(active_color, inactive_color)
+        self.refresh(active_color, inactive_color)
 
     @pyqtSlot()
     def _set_loop_icon(self):
@@ -67,7 +67,7 @@ class AudioPlayer(QObject):
             )
         self._loop.setIcon(loop_icon)
 
-    def refresh_btns_colors(self, active_color, inactive_color):
+    def refresh(self, active_color, inactive_color):
         """Repaint the buttons of the widgetd after the theme has changed."""
         self._active_color = active_color
         self._inactive_color = inactive_color

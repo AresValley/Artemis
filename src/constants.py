@@ -41,7 +41,7 @@ class Messages:
     NO_CONNECTION            = "No connection"
     NO_CONNECTION_MSG        = "Unable to establish an internet connection."
     BAD_DOWNLOAD             = "Something went wrong"
-    BAD_DOWNLOAD_MSG         = "Something went wrong with the downaload.\nCheck your internet connection and try again."
+    BAD_DOWNLOAD_MSG         = "Something went wrong with the download.\nCheck your internet connection and try again."
     SLOW_CONN                = "Slow internet connection"
     SLOW_CONN_MSG            = "Your internet connection is unstable or too slow."
 

@@ -1,12 +1,10 @@
 from functools import partial
-from itertools import chain
 import os
 import re
 from PyQt5.QtWidgets import QAction, QActionGroup
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
 from constants import Constants
-from switchable_label import SwitchableLabelsIterable
 from utilities import pop_up
 
 
@@ -46,7 +44,7 @@ class _ColorsHandler:
 
         Can handle strings representing multiple colors."""
 
-        MAX_COLORS = 2
+        _MAX_COLORS = 2
 
         def __init__(self, line):
             """Define the color from the string 'line'.
@@ -76,7 +74,7 @@ class _ColorsHandler:
                 return bool(re.match(pattern, col)) and len(col) == 7
 
             if not self.is_simple_string:
-                if len(self.color_list) <= self.MAX_COLORS:
+                if len(self.color_list) <= self._MAX_COLORS:
                     return all(match_ok(c) for c in self.color_list)
                 else:
                     return False
@@ -120,56 +118,15 @@ class ThemeManager:
         self._theme_path = ""
         self._current_theme = ""
 
-        self._space_weather_labels = SwitchableLabelsIterable(
-            *list(
-                chain(
-                    self._owner.switchable_r_labels,
-                    self._owner.switchable_s_labels,
-                    self._owner.switchable_g_now_labels,
-                    self._owner.switchable_g_today_labels,
-                    self._owner.k_storm_labels,
-                    self._owner.a_storm_labels,
-                    [self._owner.expected_noise_lbl]
-                )
-            )
-        )
-
-        self._space_weather_labels.set(
+        self._owner.spaceweather_screen.refreshable_labels.set(
             "switch_on_colors",
             ThemeConstants.DEFAULT_ON_COLORS
         )
-        self._space_weather_labels.set(
+        self._owner.spaceweather_screen.refreshable_labels.set(
             "switch_off_colors", ThemeConstants.DEFAULT_OFF_COLORS
         )
 
         self._theme_names = {}
-
-    def _refresh_range_labels(self):
-        """Refresh the range-labels."""
-        self._owner.set_acf_interval_label()
-        self._owner.set_band_filter_label(
-            self._owner.activate_low_band_filter_btn,
-            self._owner.lower_band_spinbox,
-            self._owner.lower_band_filter_unit,
-            self._owner.lower_band_confidence,
-            self._owner.activate_up_band_filter_btn,
-            self._owner.upper_band_spinbox,
-            self._owner.upper_band_filter_unit,
-            self._owner.upper_band_confidence,
-            self._owner.band_range_lbl
-        )
-
-        self._owner.set_band_filter_label(
-            self._owner.activate_low_freq_filter_btn,
-            self._owner.lower_freq_spinbox,
-            self._owner.lower_freq_filter_unit,
-            self._owner.lower_freq_confidence,
-            self._owner.activate_up_freq_filter_btn,
-            self._owner.upper_freq_spinbox,
-            self._owner.upper_freq_filter_unit,
-            self._owner.upper_freq_confidence,
-            self._owner.freq_range_lbl
-        )
 
     @pyqtSlot()
     def _apply(self, theme_path):
@@ -185,12 +142,12 @@ class ThemeManager:
                     item=self._owner.signals_list.currentItem(),
                     previous_item=None
                 )
-                self._refresh_range_labels()
-                self._owner.audio_widget.refresh_btns_colors(
+                self._owner.filters.refresh()
+                self._owner.audio_widget.refresh(
                     self._owner.active_color,
                     self._owner.inactive_color
                 )
-                self._space_weather_labels.refresh()
+                self._owner.spaceweather_screen.refreshable_labels.refresh()
         else:
             pop_up(self._owner, title=ThemeConstants.THEME_NOT_FOUND,
                    text=ThemeConstants.MISSING_THEME).show()
@@ -297,20 +254,20 @@ class ThemeManager:
                             inactive_color_ok = True
                         if color.quality == Constants.TEXT_COLOR:
                             text_color_ok = True
-                            self._space_weather_labels.set(
+                            self._owner.spaceweather_screen.refreshable_labels.set(
                                 "text_color",
                                 color.color_str
                             )
                     for color in color_handler.double_color_list:
                         if color.quality == Constants.LABEL_ON_COLOR:
                             switch_on_color_ok = True
-                            self._space_weather_labels.set(
+                            self._owner.spaceweather_screen.refreshable_labels.set(
                                 "switch_on_colors",
                                 color.color_list
                             )
                         if color.quality == Constants.LABEL_OFF_COLOR:
                             switch_off_color_ok = True
-                            self._space_weather_labels.set(
+                            self._owner.spaceweather_screen.refreshable_labels.set(
                                 "switch_off_colors",
                                 color.color_list
                             )
@@ -320,17 +277,17 @@ class ThemeManager:
                 self._owner.inactive_color = ThemeConstants.DEFAULT_INACTIVE_COLOR
 
             if not (switch_on_color_ok and switch_off_color_ok):
-                self._space_weather_labels.set(
+                self._owner.spaceweather_screen.refreshable_labels.set(
                     "switch_on_colors",
                     ThemeConstants.DEFAULT_ON_COLORS
                 )
-                self._space_weather_labels.set(
+                self._owner.spaceweather_screen.refreshable_labels.set(
                     "switch_off_colors",
                     ThemeConstants.DEFAULT_OFF_COLORS
                 )
 
             if not text_color_ok:
-                self._space_weather_labels.set(
+                self._owner.spaceweather_screen.refreshable_labels.set(
                     "text_color",
                     ThemeConstants.DEFAULT_TEXT_COLOR
                 )

@@ -5,3 +5,4 @@ src/themes/.current_theme
 designer.bat
 launch.bat
 .vscode/
+.code-workspace

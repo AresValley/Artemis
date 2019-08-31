@@ -23,6 +23,29 @@ def uncheck_and_emit(button):
         button.clicked.emit()
 
 
+def show_matching_strings(list_elements, text):
+    """Show all elements of QListWidget that matches (even partially) a target text.
+
+    Arguments:
+    list_elements -- the QListWidget
+    text -- the target text."""
+    for index in range(list_elements.count()):
+        item = list_elements.item(index)
+        if text.lower() in item.text().lower() or item.isSelected():
+            item.setHidden(False)
+        else:
+            item.setHidden(True)
+
+
+def get_field_entries(db_entry, separator=Constants.FIELD_SEPARATOR):
+    """Take a database entry and optionally a separator string.
+
+    Return a list obtained by splitting the signal field with separator."""
+    return [
+        x.strip() for x in db_entry.split(separator)
+    ]
+
+
 def pop_up(cls, title, text,
            informative_text=None,
            connection=None,

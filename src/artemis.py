@@ -13,8 +13,7 @@ from PyQt5.QtWidgets import (QMainWindow,
                              QDesktopWidget,
                              QListWidgetItem,
                              QMessageBox,
-                             QSplashScreen,
-                             QTreeWidgetItem,)
+                             QSplashScreen,)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo,
@@ -22,22 +21,19 @@ from PyQt5.QtCore import (QFileInfo,
                           pyqtSlot,)
 
 from audio_player import AudioPlayer
-from weatherdata import SpaceWeatherData, ForecastData
+from weatherdata import ForecastData
 from download_window import DownloadWindow
-from switchable_label import SwitchableLabelsIterable
+from spaceweathermanager import SpaceWeatherManager
 from constants import (Constants,
-                       Ftype,
                        GfdType,
                        Database,
                        ChecksumWhat,
                        Messages,
                        Signal,)
 from themesmanager import ThemeManager
+from filters import Filters
 from utilities import (checksum_ok,
-                       uncheck_and_emit,
                        pop_up,
-                       connect_events_to_func,
-                       filters_limit,
                        is_undef_freq,
                        is_undef_band,
                        format_numbers,
@@ -87,299 +83,23 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.signal_names = []
         self.total_signals = 0
 
-        self.switchable_r_labels = SwitchableLabelsIterable(
-            self.r0_now_lbl,
-            self.r1_now_lbl,
-            self.r2_now_lbl,
-            self.r3_now_lbl,
-            self.r4_now_lbl,
-            self.r5_now_lbl
+        # Forecast
+        self.forecast_info_btn.clicked.connect(
+            lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
         )
+        self.forecast_data = ForecastData(self)
+        self.update_forecast_bar.clicked.connect(self.start_update_forecast)
+        self.update_forecast_bar.set_idle()
+        self.forecast_data.update_complete.connect(self.update_forecast)
 
-        self.switchable_s_labels = SwitchableLabelsIterable(
-            self.s0_now_lbl,
-            self.s1_now_lbl,
-            self.s2_now_lbl,
-            self.s3_now_lbl,
-            self.s4_now_lbl,
-            self.s5_now_lbl
-        )
+        # Spaceweather manager
+        self.spaceweather_screen = SpaceWeatherManager(self)
 
-        self.switchable_g_now_labels = SwitchableLabelsIterable(
-            self.g0_now_lbl,
-            self.g1_now_lbl,
-            self.g2_now_lbl,
-            self.g3_now_lbl,
-            self.g4_now_lbl,
-            self.g5_now_lbl
-        )
-
-        self.switchable_g_today_labels = SwitchableLabelsIterable(
-            self.g0_today_lbl,
-            self.g1_today_lbl,
-            self.g2_today_lbl,
-            self.g3_today_lbl,
-            self.g4_today_lbl,
-            self.g5_today_lbl
-        )
-
-        self.k_storm_labels = SwitchableLabelsIterable(
-            self.k_ex_sev_storm_lbl,
-            self.k_very_sev_storm_lbl,
-            self.k_sev_storm_lbl,
-            self.k_maj_storm_lbl,
-            self.k_min_storm_lbl,
-            self.k_active_lbl,
-            self.k_unsettled_lbl,
-            self.k_quiet_lbl,
-            self.k_very_quiet_lbl,
-            self.k_inactive_lbl
-        )
-
-        self.a_storm_labels = SwitchableLabelsIterable(
-            self.a_sev_storm_lbl,
-            self.a_maj_storm_lbl,
-            self.a_min_storm_lbl,
-            self.a_active_lbl,
-            self.a_unsettled_lbl,
-            self.a_quiet_lbl
-        )
-
-        self.space_weather_labels = (
-            self.space_weather_lbl_0,
-            self.space_weather_lbl_1,
-            self.space_weather_lbl_2,
-            self.space_weather_lbl_3,
-            self.space_weather_lbl_4,
-            self.space_weather_lbl_5,
-            self.space_weather_lbl_6,
-            self.space_weather_lbl_7,
-            self.space_weather_lbl_8
-        )
-
-        for lab in self.space_weather_labels:
-            lab.set_default_stylesheet()
-
-        self.space_weather_label_container.labels = self.space_weather_labels
-        self.space_weather_label_name_container.labels = [
-            self.eme_lbl,
-            self.ms_lbl,
-            self.muf_lbl,
-            self.hi_lbl,
-            self.eu50_lbl,
-            self.eu70_lbl,
-            self.eu144_lbl,
-            self.na_lbl,
-            self.aurora_lbl
-        ]
         self.theme_manager = ThemeManager(self)
 
-        # Manage frequency filters.
-        self.frequency_filters_btns = (
-            self.elf_filter_btn,
-            self.slf_filter_btn,
-            self.ulf_filter_btn,
-            self.vlf_filter_btn,
-            self.lf_filter_btn,
-            self.mf_filter_btn,
-            self.hf_filter_btn,
-            self.vhf_filter_btn,
-            self.uhf_filter_btn,
-            self.shf_filter_btn,
-            self.ehf_filter_btn,
-        )
-
-        connect_events_to_func(
-            events_to_connect=[self.lower_freq_spinbox.valueChanged,
-                               self.upper_freq_spinbox.valueChanged,
-                               self.lower_freq_filter_unit.currentTextChanged,
-                               self.upper_freq_filter_unit.currentTextChanged,
-                               self.activate_low_freq_filter_btn.toggled],
-            fun_to_connect=self.set_min_value_upper_limit,
-            fun_args=[self.lower_freq_filter_unit,
-                      self.lower_freq_spinbox,
-                      self.upper_freq_filter_unit,
-                      self.upper_freq_spinbox]
-        )
-
-        connect_events_to_func(
-            events_to_connect=[self.lower_freq_spinbox.valueChanged,
-                               self.upper_freq_spinbox.valueChanged,
-                               self.lower_freq_filter_unit.currentTextChanged,
-                               self.upper_freq_filter_unit.currentTextChanged,
-                               self.activate_low_freq_filter_btn.clicked,
-                               self.activate_up_freq_filter_btn.clicked,
-                               self.lower_freq_confidence.valueChanged,
-                               self.upper_freq_confidence.valueChanged],
-            fun_to_connect=self.set_band_filter_label,
-            fun_args=[self.activate_low_freq_filter_btn,
-                      self.lower_freq_spinbox,
-                      self.lower_freq_filter_unit,
-                      self.lower_freq_confidence,
-                      self.activate_up_freq_filter_btn,
-                      self.upper_freq_spinbox,
-                      self.upper_freq_filter_unit,
-                      self.upper_freq_confidence,
-                      self.freq_range_lbl]
-        )
-
-        self.activate_low_freq_filter_btn.toggled.connect(
-            partial(self.activate_if_toggled,
-                    self.activate_low_freq_filter_btn,
-                    self.lower_freq_spinbox,
-                    self.lower_freq_filter_unit,
-                    self.lower_freq_confidence)
-        )
-
-        self.activate_up_freq_filter_btn.toggled.connect(
-            partial(self.activate_if_toggled,
-                    self.activate_up_freq_filter_btn,
-                    self.upper_freq_spinbox,
-                    self.upper_freq_filter_unit,
-                    self.upper_freq_confidence)
-        )
-
-        self.apply_remove_freq_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
-        self.apply_remove_freq_filter_btn.set_slave_filters(
-            simple_ones=[
-                *self.frequency_filters_btns,
-                self.include_undef_freqs,
-                self.activate_low_freq_filter_btn,
-                self.activate_up_freq_filter_btn
-            ],
-            radio_1=self.activate_low_freq_filter_btn,
-            ruled_by_radio_1=[
-                self.lower_freq_spinbox,
-                self.lower_freq_filter_unit,
-                self.lower_freq_confidence
-            ],
-            radio_2=self.activate_up_freq_filter_btn,
-            ruled_by_radio_2=[
-                self.upper_freq_spinbox,
-                self.upper_freq_filter_unit,
-                self.upper_freq_confidence
-            ]
-        )
-        self.apply_remove_freq_filter_btn.clicked.connect(self.display_signals)
-        self.reset_frequency_filters_btn.clicked.connect(
-            partial(self.reset_fb_filters, Ftype.FREQ)
-        )
-
-        # Manage bandwidth filters.
-
-        connect_events_to_func(
-            events_to_connect=[self.lower_band_spinbox.valueChanged,
-                               self.upper_band_spinbox.valueChanged,
-                               self.lower_band_filter_unit.currentTextChanged,
-                               self.upper_band_filter_unit.currentTextChanged,
-                               self.activate_low_band_filter_btn.toggled],
-            fun_to_connect=self.set_min_value_upper_limit,
-            fun_args=[self.lower_band_filter_unit,
-                      self.lower_band_spinbox,
-                      self.upper_band_filter_unit,
-                      self.upper_band_spinbox]
-        )
-
-        connect_events_to_func(
-            events_to_connect=[self.lower_band_spinbox.valueChanged,
-                               self.upper_band_spinbox.valueChanged,
-                               self.lower_band_filter_unit.currentTextChanged,
-                               self.upper_band_filter_unit.currentTextChanged,
-                               self.activate_low_band_filter_btn.clicked,
-                               self.activate_up_band_filter_btn.clicked,
-                               self.lower_band_confidence.valueChanged,
-                               self.upper_band_confidence.valueChanged],
-            fun_to_connect=self.set_band_filter_label,
-            fun_args=[self.activate_low_band_filter_btn,
-                      self.lower_band_spinbox,
-                      self.lower_band_filter_unit,
-                      self.lower_band_confidence,
-                      self.activate_up_band_filter_btn,
-                      self.upper_band_spinbox,
-                      self.upper_band_filter_unit,
-                      self.upper_band_confidence,
-                      self.band_range_lbl]
-        )
-
-        self.activate_low_band_filter_btn.toggled.connect(
-            partial(self.activate_if_toggled,
-                    self.activate_low_band_filter_btn,
-                    self.lower_band_spinbox,
-                    self.lower_band_filter_unit,
-                    self.lower_band_confidence)
-        )
-
-        self.activate_up_band_filter_btn.toggled.connect(
-            partial(self.activate_if_toggled,
-                    self.activate_up_band_filter_btn,
-                    self.upper_band_spinbox,
-                    self.upper_band_filter_unit,
-                    self.upper_band_confidence)
-        )
-
-        self.apply_remove_band_filter_btn.set_texts(Constants.APPLY,
-                                                    Constants.REMOVE)
-        self.apply_remove_band_filter_btn.set_slave_filters(
-            simple_ones=[
-                self.include_undef_bands,
-                self.activate_low_band_filter_btn,
-                self.activate_up_band_filter_btn
-            ],
-            radio_1=self.activate_low_band_filter_btn,
-            ruled_by_radio_1=[
-                self.lower_band_spinbox,
-                self.lower_band_filter_unit,
-                self.lower_band_confidence
-            ],
-            radio_2=self.activate_up_band_filter_btn,
-            ruled_by_radio_2=[
-                self.upper_band_spinbox,
-                self.upper_band_filter_unit,
-                self.upper_band_confidence
-            ]
-        )
-        self.apply_remove_band_filter_btn.clicked.connect(self.display_signals)
-        self.reset_band_filters_btn.clicked.connect(
-            partial(self.reset_fb_filters, Ftype.BAND)
-        )
-
-#       Manage category filters
-
-        # Order matters!
-        self.cat_filter_btns = [
-            self.military_btn,
-            self.radar_btn,
-            self.active_btn,
-            self.inactive_btn,
-            self.ham_btn,
-            self.commercial_btn,
-            self.aviation_btn,
-            self.marine_btn,
-            self.analogue_btn,
-            self.digital_btn,
-            self.trunked_btn,
-            self.utility_btn,
-            self.sat_btn,
-            self.navigation_btn,
-            self.interfering_btn,
-            self.number_stations_btn,
-            self.time_signal_btn
-        ]
-
-        self.apply_remove_cat_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
-        self.apply_remove_cat_filter_btn.set_slave_filters(
-            simple_ones=[
-                *self.cat_filter_btns,
-                self.cat_at_least_one,
-                self.cat_all
-            ]
-        )
-        self.apply_remove_cat_filter_btn.clicked.connect(self.display_signals)
-        self.reset_cat_filters_btn.clicked.connect(self.reset_cat_filters)
+        self.filters = Filters(self)
 
 # #######################################################################################
-
-        self.reset_filters_btn.clicked.connect(self.reset_all_filters)
 
         UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
         self.url_button.colors = UrlColors("#9f9f9f", "#4c75ff", "#942ccc")
@@ -414,68 +134,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         ]
 
         self.url_button.clicked.connect(self.go_to_web_page_signal)
-
-        # Set mode TreeView
-
-        self.set_mode_tree_widget()
-        self.mode_tree_widget.itemSelectionChanged.connect(self.manage_mode_selections)
-        self.reset_mode_filters_btn.clicked.connect(self.reset_mode_filters)
-        self.apply_remove_mode_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
-        self.apply_remove_mode_filter_btn.set_slave_filters(
-            simple_ones=[
-                self.mode_tree_widget,
-                self.include_unknown_modes_btn
-            ]
-        )
-        self.apply_remove_mode_filter_btn.clicked.connect(self.display_signals)
-
-        # Set modulation filter screen.
-
-        self.search_bar_modulation.textEdited.connect(self.show_matching_modulations)
-        self.apply_remove_modulation_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
-        self.apply_remove_modulation_filter_btn.set_slave_filters(
-            simple_ones=[
-                self.search_bar_modulation,
-                self.modulation_list
-            ]
-        )
-        self.apply_remove_modulation_filter_btn.clicked.connect(self.display_signals)
-        self.reset_modulation_filters_btn.clicked.connect(self.reset_modulation_filters)
-        self.modulation_list.itemClicked.connect(self.remove_if_unselected_modulation)
-
-        # Set location filter screen.
-
-        self.search_bar_location.textEdited.connect(self.show_matching_locations)
-        self.apply_remove_location_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
-        self.apply_remove_location_filter_btn.set_slave_filters(
-            simple_ones=[
-                self.search_bar_location,
-                self.locations_list
-            ]
-        )
-        self.apply_remove_location_filter_btn.clicked.connect(self.display_signals)
-        self.reset_location_filters_btn.clicked.connect(self.reset_location_filters)
-        self.locations_list.itemClicked.connect(self.remove_if_unselected_location)
-
-        # Set ACF filter screen.
-        self.apply_remove_acf_filter_btn.set_texts(Constants.APPLY, Constants.REMOVE)
-        self.apply_remove_acf_filter_btn.set_slave_filters(
-            simple_ones=[
-                self.include_undef_acf,
-                self.acf_spinbox,
-                self.acf_confidence
-            ]
-        )
-        self.apply_remove_acf_filter_btn.clicked.connect(self.display_signals)
-        self.reset_acf_filters_btn.clicked.connect(self.reset_acf_filters)
-        self.acf_info_btn.clicked.connect(lambda: webbrowser.open(Constants.ACF_DOCS))
-
-        connect_events_to_func(
-            events_to_connect=[self.acf_spinbox.valueChanged,
-                               self.acf_confidence.valueChanged],
-            fun_to_connect=self.set_acf_interval_label,
-            fun_args=None
-        )
 
         # GFD
         self.freq_search_gfd_btn.clicked.connect(partial(self.go_to_gfd, GfdType.FREQ))
@@ -515,24 +173,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
             BandLabel(self.ehf_left, self.ehf, self.ehf_right),
         ]
 
-        # Space weather
-        self.info_now_btn.clicked.connect(
-            lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
-        )
-        self.update_now_bar.clicked.connect(self.start_update_space_weather)
-        self.update_now_bar.set_idle()
-        self.space_weather_data = SpaceWeatherData()
-        self.space_weather_data.update_complete.connect(self.update_space_weather)
-
-        # Forecast
-        self.forecast_info_btn.clicked.connect(
-            lambda: webbrowser.open(Constants.SPACE_WEATHER_INFO)
-        )
-        self.forecast_data = ForecastData(self)
-        self.update_forecast_bar.clicked.connect(self.start_update_forecast)
-        self.update_forecast_bar.set_idle()
-        self.forecast_data.update_complete.connect(self.update_forecast)
-
         self.main_tab.currentChanged.connect(self.hide_show_right_widget)
 
 # Final operations.
@@ -565,16 +205,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.update_forecast_bar.set_updating()
             self.forecast_data.update()
 
-    @pyqtSlot()
-    def start_update_space_weather(self):
-        """Start the update of the space weather screen.
-
-        Start the corresponding thread.
-        """
-        if not self.space_weather_data.is_updating:
-            self.update_now_bar.set_updating()
-            self.space_weather_data.update()
-
     @pyqtSlot(bool)
     def update_forecast(self, status_ok):
         """Update the 3-day forecast screen after a successful download.
@@ -589,175 +219,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
             pop_up(self, title=Messages.BAD_DOWNLOAD,
                    text=Messages.BAD_DOWNLOAD_MSG).show()
         self.forecast_data.remove_data()
-
-    @pyqtSlot(bool)
-    def update_space_weather(self, status_ok):
-        """Update the space weather screen after a successful download.
-
-        If the download was not successful throw a warning. In any case remove
-        the downloaded data.
-        """
-        self.update_now_bar.set_idle()
-        if status_ok:
-            xray_long = safe_cast(self.space_weather_data.xray[-1][7], float)
-
-            def format_text(letter, power):
-                return letter + f"{xray_long * 10**power:.1f}"
-
-            if xray_long < 1e-8 and xray_long != -1.00e+05:
-                self.peak_flux_lbl.setText(format_text("<A", 8))
-            elif xray_long >= 1e-8 and xray_long < 1e-7:
-                self.peak_flux_lbl.setText(format_text("A", 8))
-            elif xray_long >= 1e-7 and xray_long < 1e-6:
-                self.peak_flux_lbl.setText(format_text("B", 7))
-            elif xray_long >= 1e-6 and xray_long < 1e-5:
-                self.peak_flux_lbl.setText(format_text("C", 6))
-            elif xray_long >= 1e-5 and xray_long < 1e-4:
-                self.peak_flux_lbl.setText(format_text("M", 5))
-            elif xray_long >= 1e-4:
-                self.peak_flux_lbl.setText(format_text("X", 4))
-            elif xray_long == -1.00e+05:
-                self.peak_flux_lbl.setText("No Data")
-
-            if xray_long < 1e-5 and xray_long != -1.00e+05:
-                self.switchable_r_labels.switch_on(self.r0_now_lbl)
-            elif xray_long >= 1e-5 and xray_long < 5e-5:
-                self.switchable_r_labels.switch_on(self.r1_now_lbl)
-            elif xray_long >= 5e-5 and xray_long < 1e-4:
-                self.switchable_r_labels.switch_on(self.r2_now_lbl)
-            elif xray_long >= 1e-4 and xray_long < 1e-3:
-                self.switchable_r_labels.switch_on(self.r3_now_lbl)
-            elif xray_long >= 1e-3 and xray_long < 2e-3:
-                self.switchable_r_labels.switch_on(self.r4_now_lbl)
-            elif xray_long >= 2e-3:
-                self.switchable_r_labels.switch_on(self.r5_now_lbl)
-            elif xray_long == -1.00e+05:
-                self.switchable_r_labels.switch_off_all()
-
-            pro10 = safe_cast(self.space_weather_data.prot_el[-1][8], float)
-            if pro10 < 10 and pro10 != -1.00e+05:
-                self.switchable_s_labels.switch_on(self.s0_now_lbl)
-            elif pro10 >= 10 and pro10 < 100:
-                self.switchable_s_labels.switch_on(self.s1_now_lbl)
-            elif pro10 >= 100 and pro10 < 1000:
-                self.switchable_s_labels.switch_on(self.s2_now_lbl)
-            elif pro10 >= 1000 and pro10 < 10000:
-                self.switchable_s_labels.switch_on(self.s3_now_lbl)
-            elif pro10 >= 10000 and pro10 < 100000:
-                self.switchable_s_labels.switch_on(self.s4_now_lbl)
-            elif pro10 >= 100000:
-                self.switchable_s_labels.switch_on(self.s5_now_lbl)
-            elif pro10 == -1.00e+05:
-                self.switchable_s_labels.switch_off_all()
-
-            k_index = safe_cast(
-                self.space_weather_data.ak_index[8][11].replace('.', ''), int
-            )
-            self.k_index_lbl.setText(str(k_index))
-            a_index = safe_cast(
-                self.space_weather_data.ak_index[7][7].replace('.', ''), int
-            )
-            self.a_index_lbl.setText(str(a_index))
-
-            if k_index == 0:
-                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
-                self.k_storm_labels.switch_on(self.k_inactive_lbl)
-                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
-            elif k_index == 1:
-                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
-                self.k_storm_labels.switch_on(self.k_very_quiet_lbl)
-                self.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
-            elif k_index == 2:
-                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
-                self.k_storm_labels.switch_on(self.k_quiet_lbl)
-                self.expected_noise_lbl.setText("  S1 - S2 (-115 dBm)  ")
-            elif k_index == 3:
-                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
-                self.k_storm_labels.switch_on(self.k_unsettled_lbl)
-                self.expected_noise_lbl.setText("  S2 - S3 (-110 dBm)  ")
-            elif k_index == 4:
-                self.switchable_g_now_labels.switch_on(self.g0_now_lbl)
-                self.k_storm_labels.switch_on(self.k_active_lbl)
-                self.expected_noise_lbl.setText("  S3 - S4 (-100 dBm)  ")
-            elif k_index == 5:
-                self.switchable_g_now_labels.switch_on(self.g1_now_lbl)
-                self.k_storm_labels.switch_on(self.k_min_storm_lbl)
-                self.expected_noise_lbl.setText("  S4 - S6 (-90 dBm)  ")
-            elif k_index == 6:
-                self.switchable_g_now_labels.switch_on(self.g2_now_lbl)
-                self.k_storm_labels.switch_on(self.k_maj_storm_lbl)
-                self.expected_noise_lbl.setText("  S6 - S9 (-80 dBm)  ")
-            elif k_index == 7:
-                self.switchable_g_now_labels.switch_on(self.g3_now_lbl)
-                self.k_storm_labels.switch_on(self.k_sev_storm_lbl)
-                self.expected_noise_lbl.setText("  S9 - S20 (>-60 dBm)  ")
-            elif k_index == 8:
-                self.switchable_g_now_labels.switch_on(self.g4_now_lbl)
-                self.k_storm_labels.switch_on(self.k_very_sev_storm_lbl)
-                self.expected_noise_lbl.setText("  S20 - S30 (>-60 dBm)  ")
-            elif k_index == 9:
-                self.switchable_g_now_labels.switch_on(self.g5_now_lbl)
-                self.k_storm_labels.switch_on(self.k_ex_sev_storm_lbl)
-                self.expected_noise_lbl.setText("  S30+ (>>-60 dBm)  ")
-            self.expected_noise_lbl.switch_on()
-
-            if a_index >= 0 and a_index < 8:
-                self.a_storm_labels.switch_on(self.a_quiet_lbl)
-            elif a_index >= 8 and a_index < 16:
-                self.a_storm_labels.switch_on(self.a_unsettled_lbl)
-            elif a_index >= 16 and a_index < 30:
-                self.a_storm_labels.switch_on(self.a_active_lbl)
-            elif a_index >= 30 and a_index < 50:
-                self.a_storm_labels.switch_on(self.a_min_storm_lbl)
-            elif a_index >= 50 and a_index < 100:
-                self.a_storm_labels.switch_on(self.a_maj_storm_lbl)
-            elif a_index >= 100 and a_index < 400:
-                self.a_storm_labels.switch_on(self.a_sev_storm_lbl)
-
-            index = self.space_weather_data.geo_storm[6].index("was") + 1
-            k_index_24_hmax = safe_cast(
-                self.space_weather_data.geo_storm[6][index], int
-            )
-            if k_index_24_hmax == 0:
-                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-            elif k_index_24_hmax == 1:
-                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-            elif k_index_24_hmax == 2:
-                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-            elif k_index_24_hmax == 3:
-                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-            elif k_index_24_hmax == 4:
-                self.switchable_g_today_labels.switch_on(self.g0_today_lbl)
-            elif k_index_24_hmax == 5:
-                self.switchable_g_today_labels.switch_on(self.g1_today_lbl)
-            elif k_index_24_hmax == 6:
-                self.switchable_g_today_labels.switch_on(self.g2_today_lbl)
-            elif k_index_24_hmax == 7:
-                self.switchable_g_today_labels.switch_on(self.g3_today_lbl)
-            elif k_index_24_hmax == 8:
-                self.switchable_g_today_labels.switch_on(self.g4_today_lbl)
-            elif k_index_24_hmax == 9:
-                self.switchable_g_today_labels.switch_on(self.g5_today_lbl)
-
-            val = safe_cast(
-                self.space_weather_data.ak_index[7][2].replace('.', ''), int
-            )
-            self.sfi_lbl.setText(f"{val}")
-            val = safe_cast(
-                [x[4] for x in self.space_weather_data.sgas
-                    if "SSN" in x][0], int
-            )
-            self.sn_lbl.setText(f"{val:d}")
-
-            for label, pixmap in zip(self.space_weather_labels,
-                                     self.space_weather_data.images):
-                label.pixmap = pixmap
-                label.make_transparent()
-                label.apply_pixmap()
-        elif not self.closing:
-            pop_up(self, title=Messages.BAD_DOWNLOAD,
-                   text=Messages.BAD_DOWNLOAD_MSG).show()
-        self.space_weather_data.remove_data()
 
     @pyqtSlot()
     def go_to_gfd(self, by):
@@ -779,69 +240,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
             webbrowser.open(Constants.GFD_SITE + query.lower())
         except Exception:
             pass
-
-    @pyqtSlot(QListWidgetItem)
-    def remove_if_unselected_modulation(self, item):
-        """If an item is unselected from the modulations list, hide the item."""
-        if not item.isSelected():
-            self.show_matching_modulations(self.search_bar_modulation.text())
-
-    @pyqtSlot(QListWidgetItem)
-    def remove_if_unselected_location(self, item):
-        """If an item is unselected from the locations list, hide the item."""
-        if not item.isSelected():
-            self.show_matching_locations(self.search_bar_location.text())
-
-    @pyqtSlot(str)
-    def show_matching_modulations(self, text):
-        """Show the modulations which matches 'text'.
-
-        The match criterion is defined in 'show_matching_strings'."""
-        self.show_matching_strings(self.modulation_list, text)
-
-    @pyqtSlot(str)
-    def show_matching_locations(self, text):
-        """Show the locations which matches 'text'.
-
-        The match criterion is defined in 'show_matching_strings'."""
-        self.show_matching_strings(self.locations_list, text)
-
-    def show_matching_strings(self, list_elements, text):
-        """Show all elements of QListWidget that matches (even partially) a target text.
-
-        Arguments:
-        list_elements -- the QListWidget
-        text -- the target text.
-        """
-        for index in range(list_elements.count()):
-            item = list_elements.item(index)
-            if text.lower() in item.text().lower() or item.isSelected():
-                item.setHidden(False)
-            else:
-                item.setHidden(True)
-
-    def set_mode_tree_widget(self):
-        """Construct the QTreeWidget for the 'Mode' screen."""
-        for parent, children in Constants.MODES.items():
-            iparent = QTreeWidgetItem([parent])
-            self.mode_tree_widget.addTopLevelItem(iparent)
-            for child in children:
-                ichild = QTreeWidgetItem([child])
-                iparent.addChild(ichild)
-        self.mode_tree_widget.expandAll()
-
-    def manage_mode_selections(self):
-        """Rules the selection of childs items of the 'Mode' QTreeWidget.
-
-        If a parent is selected all its children will be selected as well.
-        """
-        selected_items = self.mode_tree_widget.selectedItems()
-        parents = Constants.MODES.keys()
-        for parent in parents:
-            for item in selected_items:
-                if parent == item.text(0):
-                    for i in range(len(Constants.MODES[parent])):
-                        item.child(i).setSelected(True)
 
     def set_initial_size(self):
         """Handle high resolution screens.
@@ -1051,109 +449,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         return values
 
     @pyqtSlot()
-    def set_min_value_upper_limit(self, lower_combo_box,
-                                  lower_spin_box,
-                                  upper_combo_box,
-                                  upper_spin_box):
-        """Forbid to a lower limit to be greater than the corresponding upper one.
-
-        Used for frequency and bandwidth screens."""
-        if lower_spin_box.isEnabled():
-            unit_conversion = {'Hz': ['kHz', 'MHz', 'GHz'],
-                               'kHz': ['MHz', 'GHz'],
-                               'MHz': ['GHz']}
-            lower_units = lower_combo_box.currentText()
-            upper_units = upper_combo_box.currentText()
-            lower_value = lower_spin_box.value()
-            inf_limit = (lower_value * Constants.CONVERSION_FACTORS[lower_units]) \
-                // Constants.CONVERSION_FACTORS[upper_units]
-            counter = 0
-            while inf_limit > upper_spin_box.maximum():
-                counter += 1
-                inf_limit //= 1000
-            if upper_spin_box.minimum() != inf_limit:
-                upper_spin_box.setMinimum(inf_limit)
-            if counter > 0:
-                new_unit = unit_conversion[upper_units][counter - 1]
-                upper_combo_box.disconnect()
-                upper_combo_box.setCurrentText(new_unit)
-                upper_combo_box.currentTextChanged.connect(
-                    partial(
-                        self.set_min_value_upper_limit,
-                        lower_combo_box,
-                        lower_spin_box,
-                        upper_combo_box,
-                        upper_spin_box
-                    )
-                )
-
-    @pyqtSlot()
-    def set_band_filter_label(self,
-                              activate_low_btn,
-                              lower_spinbox,
-                              lower_unit,
-                              lower_confidence,
-                              activate_up_btn,
-                              upper_spinbox,
-                              upper_unit,
-                              upper_confidence,
-                              range_lbl):
-        """Display the actual range applied for the signal's property search.
-
-        Used for frequency and bandwidth screens."""
-        activate_low = False
-        activate_high = False
-        color = self.inactive_color
-        title = ''
-        to_display = ''
-        if activate_low_btn.isChecked():
-            activate_low = True
-            color = self.active_color
-            min_value = lower_spinbox.value()
-            if lower_confidence.value() != 0:
-                min_value -= lower_spinbox.value() * lower_confidence.value() / 100
-            to_display += str(round(min_value, Constants.MAX_DIGITS)) \
-                + ' ' + lower_unit.currentText()
-        else:
-            to_display += 'DC'
-        to_display += Constants.RANGE_SEPARATOR
-        if activate_up_btn.isChecked():
-            max_value = upper_spinbox.value()
-            activate_high = True
-            color = self.active_color
-            if upper_confidence.value() != 0:
-                max_value += upper_spinbox.value() * upper_confidence.value() / 100
-            to_display += str(round(max_value, Constants.MAX_DIGITS)) + ' ' \
-                + upper_unit.currentText()
-        else:
-            to_display += 'INF'
-        if activate_low and activate_high:
-            title = 'Band-pass\n\n'
-        elif activate_low and not activate_high:
-            title = 'Low-pass\n\n'
-        elif not activate_low and activate_high:
-            title = 'High-pass\n\n'
-        else:
-            title = "Selected range:\n\n"
-            to_display = "Inactive"
-        to_display = title + to_display
-        range_lbl.setText(to_display)
-        range_lbl.setStyleSheet(f'color: {color};')
-
-    @pyqtSlot()
-    def set_acf_interval_label(self):
-        """Display the actual acf interval for the search."""
-        tolerance = self.acf_spinbox.value() * self.acf_confidence.value() / 100
-        if tolerance > 0:
-            val = round(self.acf_spinbox.value() - tolerance, Constants.MAX_DIGITS)
-            to_display = f"Selected range:\n\n{val}" + Constants.RANGE_SEPARATOR \
-                + f"{round(self.acf_spinbox.value() + tolerance, Constants.MAX_DIGITS)} ms"
-        else:
-            to_display = f"Selected value:\n\n{self.acf_spinbox.value()} ms"
-        self.acf_range_lbl.setText(to_display)
-        self.acf_range_lbl.setStyleSheet(f"color: {self.active_color}")
-
-    @pyqtSlot()
     def activate_if_toggled(self, radio_btn, *widgets):
         """If radio_btn is toggled, activate all *widgets.
 
@@ -1169,14 +464,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         text = self.search_bar.text()
         available_signals = 0
         for index, signal_name in enumerate(self.signal_names):
-            if all([text.lower() in signal_name.lower(),
-                    self.frequency_filters_ok(signal_name),
-                    self.band_filters_ok(signal_name),
-                    self.category_filters_ok(signal_name),
-                    self.mode_filters_ok(signal_name),
-                    self.modulation_filters_ok(signal_name),
-                    self.location_filters_ok(signal_name),
-                    self.acf_filters_ok(signal_name)]):
+            if text.lower() in signal_name.lower() and self.filters.ok(signal_name):
                 self.signals_list.item(index).setHidden(False)
                 available_signals += 1
             else:
@@ -1194,267 +482,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.statusbar.showMessage(
             f"{available_signals} out of {self.total_signals} signals displayed."
         )
-
-    @pyqtSlot()
-    def reset_fb_filters(self, ftype):
-        """Reset the Frequency or Bandwidth depending on 'ftype'.
-
-        ftype can be either Ftype.FREQ or Ftype.BAND.
-        """
-        if ftype != Ftype.FREQ and ftype != Ftype.BAND:
-            raise ValueError("Wrong ftype in function 'reset_fb_filters'")
-
-        apply_remove_btn  = getattr(self, 'apply_remove_'  + ftype + '_filter_btn')
-        include_undef_btn = getattr(self, 'include_undef_' + ftype + 's')
-        activate_low      = getattr(self, 'activate_low_'  + ftype + '_filter_btn')
-        activate_up       = getattr(self, 'activate_up_'   + ftype + '_filter_btn')
-        lower_unit        = getattr(self, 'lower_'         + ftype + '_filter_unit')
-        upper_unit        = getattr(self, 'upper_'         + ftype + '_filter_unit')
-        lower_spinbox     = getattr(self, 'lower_'         + ftype + '_spinbox')
-        upper_spinbox     = getattr(self, 'upper_'         + ftype + '_spinbox')
-        lower_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
-        upper_confidence  = getattr(self, 'lower_'         + ftype + '_confidence')
-
-        default_val = 1 if ftype == Ftype.FREQ else 5000
-        if ftype == Ftype.FREQ:
-            for f in self.frequency_filters_btns:
-                if f.isChecked():
-                    f.setChecked(False)
-        uncheck_and_emit(apply_remove_btn)
-        if include_undef_btn.isChecked():
-            include_undef_btn.setChecked(False)
-        uncheck_and_emit(activate_low)
-        uncheck_and_emit(activate_up)
-        lower_unit.setCurrentText("MHz")
-        upper_unit.setCurrentText("MHz")
-        lower_spinbox.setValue(default_val)
-        upper_spinbox.setMinimum(1)
-        upper_spinbox.setValue(default_val)
-        lower_confidence.setValue(0)
-        upper_confidence.setValue(0)
-
-    @pyqtSlot()
-    def reset_cat_filters(self):
-        """Reset the category filter screen."""
-        uncheck_and_emit(self.apply_remove_cat_filter_btn)
-        for f in self.cat_filter_btns:
-            if f.isChecked():
-                f.setChecked(False)
-        self.cat_at_least_one.setChecked(True)
-
-    @pyqtSlot()
-    def reset_mode_filters(self):
-        """Reset the mode filter screen."""
-        uncheck_and_emit(self.apply_remove_mode_filter_btn)
-        parents = Constants.MODES.keys()
-        selected_children = []
-        for item in self.mode_tree_widget.selectedItems():
-            if item.text(0) in parents:
-                item.setSelected(False)
-            else:
-                selected_children.append(item)
-        for children in selected_children:
-            children.setSelected(False)
-        if self.include_unknown_modes_btn.isChecked():
-            self.include_unknown_modes_btn.setChecked(False)
-
-    @pyqtSlot()
-    def reset_modulation_filters(self):
-        """Reset the modulation filter screen."""
-        uncheck_and_emit(self.apply_remove_modulation_filter_btn)
-        self.search_bar_modulation.setText('')
-        self.show_matching_strings(
-            self.modulation_list,
-            self.search_bar_modulation.text()
-        )
-        for i in range(self.modulation_list.count()):
-            if self.modulation_list.item(i).isSelected():
-                self.modulation_list.item(i).setSelected(False)
-
-    @pyqtSlot()
-    def reset_location_filters(self):
-        """Reset the location filter screen."""
-        uncheck_and_emit(self.apply_remove_location_filter_btn)
-        self.search_bar_location.setText('')
-        self.show_matching_strings(
-            self.locations_list,
-            self.search_bar_location.text()
-        )
-        for i in range(self.locations_list.count()):
-            if self.locations_list.item(i).isSelected():
-                self.locations_list.item(i).setSelected(False)
-
-    @pyqtSlot()
-    def reset_acf_filters(self):
-        """Reset the acf filter screen."""
-        uncheck_and_emit(self.apply_remove_acf_filter_btn)
-        if self.include_undef_acf.isChecked():
-            self.include_undef_acf.setChecked(False)
-        self.acf_spinbox.setValue(50)
-        self.acf_confidence.setValue(0)
-
-    def frequency_filters_ok(self, signal_name):
-        """Evalaute if the signal matches the frequency filters."""
-        if not self.apply_remove_freq_filter_btn.isChecked():
-            return True
-        undef_freq = is_undef_freq(self.db.loc[signal_name])
-        if undef_freq:
-            if self.include_undef_freqs.isChecked():
-                return True
-            else:
-                return False
-
-        signal_freqs = (
-            safe_cast(self.db.at[signal_name, Signal.INF_FREQ], int),
-            safe_cast(self.db.at[signal_name, Signal.SUP_FREQ], int)
-        )
-
-        band_filter_ok = False
-        any_checked = False
-        for btn, band_limits in zip(self.frequency_filters_btns, Constants.BANDS):
-            if btn.isChecked():
-                any_checked = True
-                if signal_freqs[0] < band_limits.upper and signal_freqs[1] >= band_limits.lower:
-                    band_filter_ok = True
-        lower_limit_ok = True
-        upper_limit_ok = True
-        if self.activate_low_freq_filter_btn.isChecked():
-            if not signal_freqs[1] >= filters_limit(self.lower_freq_spinbox,
-                                                    self.lower_freq_filter_unit,
-                                                    self.lower_freq_confidence, -1):
-                lower_limit_ok = False
-        if self.activate_up_freq_filter_btn.isChecked():
-            if not signal_freqs[0] < filters_limit(self.upper_freq_spinbox,
-                                                   self.upper_freq_filter_unit,
-                                                   self.upper_freq_confidence):
-                upper_limit_ok = False
-        if any_checked:
-            return band_filter_ok and lower_limit_ok and upper_limit_ok
-        else:
-            return lower_limit_ok and upper_limit_ok
-
-    def band_filters_ok(self, signal_name):
-        """Evalaute if the signal matches the band filters."""
-        if not self.apply_remove_band_filter_btn.isChecked():
-            return True
-        undef_band = is_undef_band(self.db.loc[signal_name])
-        if undef_band:
-            if self.include_undef_bands.isChecked():
-                return True
-            else:
-                return False
-
-        signal_bands = (
-            safe_cast(self.db.at[signal_name, Signal.INF_BAND], int),
-            safe_cast(self.db.at[signal_name, Signal.SUP_BAND], int)
-        )
-
-        lower_limit_ok = True
-        upper_limit_ok = True
-        if self.activate_low_band_filter_btn.isChecked():
-            if not signal_bands[1] >= filters_limit(self.lower_band_spinbox,
-                                                    self.lower_band_filter_unit,
-                                                    self.lower_band_confidence, -1):
-                lower_limit_ok = False
-        if self.activate_up_band_filter_btn.isChecked():
-            if not signal_bands[0] < filters_limit(self.upper_band_spinbox,
-                                                   self.upper_band_filter_unit,
-                                                   self.upper_band_confidence):
-                upper_limit_ok = False
-        return lower_limit_ok and upper_limit_ok
-
-    def category_filters_ok(self, signal_name):
-        """Evalaute if the signal matches the category filters."""
-        if not self.apply_remove_cat_filter_btn.isChecked():
-            return True
-        cat_code = self.db.at[signal_name, Signal.CATEGORY_CODE]
-        cat_checked = 0
-        positive_cases = 0
-        for index, cat in enumerate(self.cat_filter_btns):
-            if cat.isChecked():
-                cat_checked += 1
-                if cat_code[index] == '1':
-                    positive_cases += 1
-        if self.cat_at_least_one.isChecked():
-            return positive_cases > 0
-        else:
-            return cat_checked == positive_cases and cat_checked > 0
-
-    def mode_filters_ok(self, signal_name):
-        """Evalaute if the signal matches the mode filters."""
-        if not self.apply_remove_mode_filter_btn.isChecked():
-            return True
-        signal_mode = self.db.at[signal_name, Signal.MODE]
-        if signal_mode == Constants.UNKNOWN:
-            if self.include_unknown_modes_btn.isChecked():
-                return True
-            else:
-                return False
-        selected_items = [item for item in self.mode_tree_widget.selectedItems()]
-        selected_items_text = [i.text(0) for i in selected_items]
-        parents = [
-            item for item in selected_items_text
-            if item in Constants.MODES.keys()
-        ]
-        ok = []
-        for item in selected_items:
-            if item.text(0) in parents:
-                ok.append(item.text(0) in signal_mode)
-            elif not item.parent().isSelected():
-                ok.append(item.text(0) == signal_mode)
-        return any(ok)
-
-    def get_field_entries(self, signal_name, field, separator=Constants.FIELD_SEPARATOR):
-        """Take a signal name, a column label and optionally a separator string.
-
-        Return a list obtained by splitting the signal field with separator."""
-        return [
-            x.strip() for x in self.db.at[signal_name, field].split(separator)
-        ]
-
-    def modulation_filters_ok(self, signal_name):
-        """Evalaute if the signal matches the modulation filters."""
-        if not self.apply_remove_modulation_filter_btn.isChecked():
-            return True
-        signal_modulation = self.get_field_entries(
-            signal_name, Signal.MODULATION
-        )
-        for item in self.modulation_list.selectedItems():
-            if item.text() in signal_modulation:
-                return True
-        return False
-
-    def location_filters_ok(self, signal_name):
-        """Evalaute if the signal matches the location filters."""
-        if not self.apply_remove_location_filter_btn.isChecked():
-            return True
-        signal_locations = self.get_field_entries(
-            signal_name, Signal.LOCATION
-        )
-        for item in self.locations_list.selectedItems():
-            if item.text() in signal_locations:
-                return True
-        return False
-
-    def acf_filters_ok(self, signal_name):
-        """Evalaute if the signal matches the acf filters."""
-        if not self.apply_remove_acf_filter_btn.isChecked():
-            return True
-        signal_acf = self.db.at[signal_name, Signal.ACF]
-        if signal_acf == Constants.UNKNOWN:
-            if self.include_undef_acf.isChecked():
-                return True
-            else:
-                return False
-        else:
-            signal_acf = safe_cast(signal_acf.rstrip("ms"), float)
-            tolerance = self.acf_spinbox.value() * self.acf_confidence.value() / 100
-            upper_limit = self.acf_spinbox.value() + tolerance
-            lower_limit = self.acf_spinbox.value() - tolerance
-            if signal_acf <= upper_limit and signal_acf >= lower_limit:
-                return True
-            else:
-                return False
 
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def display_specs(self, item, previous_item):
@@ -1581,20 +608,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         else:
             for band_label in self.band_labels:
                 self.activate_band_category(band_label, False)
-
-    @pyqtSlot()
-    def reset_all_filters(self):
-        """Reset all filter screens.
-
-        Show all available signals.
-        """
-        self.reset_frequency_filters_btn.clicked.emit()
-        self.reset_band_filters_btn.clicked.emit()
-        self.reset_cat_filters_btn.clicked.emit()
-        self.reset_mode_filters_btn.clicked.emit()
-        self.reset_modulation_filters_btn.clicked.emit()
-        self.reset_location_filters_btn.clicked.emit()
-        self.reset_acf_filters_btn.clicked.emit()
 
     @pyqtSlot()
     def go_to_web_page_signal(self):
