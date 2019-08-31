@@ -66,7 +66,7 @@ The database (db.csv) is directly extracted from sigidwiki.com with a DB parser 
 | 9 | Description | - | - | string |
 | 10 | Modulation | - | ✔ | string |
 | 11 | ID Code | - | - | integer |
-| 12 | Auto-correlation function | ms | - | string |
+| 12 | Auto-correlation function | ms | ✔ | string |
 
 ### Syntax
 
@@ -99,17 +99,33 @@ The database (db.csv) is directly extracted from sigidwiki.com with a DB parser 
     |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
     | Trunked | Utility | Sat | Navigation | Interfering | Number Stations | Time Signal |
 
-12. **Auto-correlation funtion (ACF)**: The ACF is an awesome discriminator when the signal is composed of redundant pattern that continouosly repeats. It is reported in **ms**. An extended description with an example signal analysis is available here: https://aresvalley.com/documentation/
+12. **Auto-correlation funtion (ACF)**: The ACF is an awesome discriminator when the signal is composed of redundant pattern that continouosly repeats. Unfortunately, for this reason, ACF is not always available. The time value is reported in **ms** and, in some cases, could have multiple values for a single signal. An extended description with an example signal analysis is available here: https://aresvalley.com/documentation/
+
+
+```
+... ID Code * ACF1 Value (in ms) - ACF1 Description ; ACF2 Value (in ms) - ACF2 Description ; ...
+```
+
+**Example 1 (D-STAR):**
+
+```
+... ID Code * 420 - Superframe ; 20 - Frame
+```
+**Example 2 (EDACS):**
+
+```
+... ID Code * 60 - edacs48 ; 30 - edacs96
+```
 
 ### Multiple Items fields (Location, Modulation)
 The necessity to manage a multiple Location/Modulation search pushed us to implement a fictitious 'secondary delimiter' chosen to be the `;` character. For instance:
 
 ```
-Band. Upper Limit * Location 1 ; Location 2 ; ... * sigidwiki URL
+... Band. Upper Limit * Location 1 ; Location 2 ; ... * sigidwiki URL ...
 ```
 or
 ```
-Description * Modulation 1 ; Modulation 2 ; ... * ID Code
+... Description * Modulation 1 ; Modulation 2 ; ... * ID Code ...
 ```
 
 ## Themes
