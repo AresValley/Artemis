@@ -28,10 +28,17 @@ Artemis 3 is entirely written in Python, so if you already have Python 3.7.0+ in
 **If you don't know what you want or you are not sure where to look, this is for you.** 
 
 Basically, this is the easiest, smooth, and clean way to run Artemis 3. A Python installation is not required.
-For more information, follow [the main page of Artemis 3](https://aresvalley.com/artemis/) (detailed documentation at the end of the main page)
+For more information, follow [the main page of Artemis 3](https://aresvalley.com/artemis/) (detailed documentation at the end of the main page).
+
+**Requirements:**
+- Windows 7/8/8.1/10
+- Linux: Ubuntu 16.04+, Mint 18+, Fedora 24+ and many other. **You need at least version 2.23 of the GLIBC system library** ([details](https://github.com/AresValley/Artemis/tree/master/spec_files))
+- macOS
 
 ### Run from source code
-Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3. Requirements:
+Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3.
+
+**Requirements:**
 - Python (ver. 3.7.0+)
 - Python libraries (in `requirements/requirements.txt`)
 
@@ -116,6 +123,8 @@ The database (db.csv) is directly extracted from sigidwiki.com with a DB parser 
 ```
 ... ID Code * 60 - edacs48 ; 30 - edacs96
 ```
+
+**Special case:** variable ACFs are allowed and a brief explanation can be reported instead of ACF Value. A nice example is the * [SSTV](https://www.sigidwiki.com/wiki/Slow-Scan_Television_(SSTV) "SSTV") transmission where the ACF is directly related to the number of lines per minute.
 
 ### Multiple Items fields (Location, Modulation)
 The necessity to manage a multiple Location/Modulation search pushed us to implement a fictitious 'secondary delimiter' chosen to be the `;` character. For instance:
