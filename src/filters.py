@@ -5,7 +5,6 @@ The only class exposed is Filters which provides the following methods:
 - reset(): to reset all the applied filters;
 - refresh(): used when the theme is changed."""
 
-from collections import namedtuple
 from functools import partial
 import webbrowser
 
@@ -729,6 +728,7 @@ class ACFFilter(_BaseFilter):
         self.apply_remove_btn.set_slave_filters(
             simple_ones=[
                 self._owner.include_undef_acf,
+                self._owner.include_variable_acf,
                 self._owner.acf_spinbox,
                 self._owner.acf_confidence
             ]
@@ -761,6 +761,8 @@ class ACFFilter(_BaseFilter):
         uncheck_and_emit(self.apply_remove_btn)
         if self._owner.include_undef_acf.isChecked():
             self._owner.include_undef_acf.setChecked(False)
+        if self._owner.include_variable_acf.isChecked():
+            self._owner.include_variable_acf.setChecked(False)
         self._owner.acf_spinbox.setValue(50)
         self._owner.acf_confidence.setValue(0)
 
@@ -768,21 +770,23 @@ class ACFFilter(_BaseFilter):
         """Evalaute if the signal matches the acf filters."""
         if not self.apply_remove_btn.isChecked():
             return True
-        signal_acf = self._owner.db.at[signal_name, Signal.ACF]
-        if signal_acf == Constants.UNKNOWN:
+        signal_acf_list = self._owner.db.at[signal_name, Signal.ACF]
+        if signal_acf_list[0].unknown:  # Unknown acf are the only acf of the signal.
             if self._owner.include_undef_acf.isChecked():
                 return True
             else:
                 return False
         else:
-            signal_acf = safe_cast(signal_acf.rstrip("ms"), float)
             tolerance = self._owner.acf_spinbox.value() * self._owner.acf_confidence.value() / 100
             upper_limit = self._owner.acf_spinbox.value() + tolerance
             lower_limit = self._owner.acf_spinbox.value() - tolerance
-            if signal_acf <= upper_limit and signal_acf >= lower_limit:
-                return True
-            else:
-                return False
+            for v in signal_acf_list:
+                if v.is_numeric:
+                    if lower_limit <= v.numeric_value <= upper_limit:
+                        return True
+                elif self._owner.include_variable_acf.isChecked():
+                    return True
+            return False
 
     def refresh(self):
         """Extend _BaseFilter.refresh."""
@@ -794,57 +798,48 @@ class Filters(QObject):
     """Global filter class.
 
     Provides the information about all the filters. Its only public attribute
-    is filters, which is a namedtuple containing instances of all the filters.
+    is filters, which is a dictionary containing instances of all the filters.
     The only exposed methods are reset(), ok(signal_name) and refresh().
     The class also connects the apply and reset buttons to the relevant functions."""
 
-    _FiltersTuple = namedtuple(
-        "_FiltersTuple",
-        [
-            "freq_filter",
-            "band_filter",
-            "cat_filter",
-            "mode_filter",
-            "modulation_filter",
-            "location_filter",
-            "acf_filter",
-        ]
-    )
-
     def __init__(self, owner):
         super().__init__()
-        self.filters = self._FiltersTuple(
-            FreqFilter(owner),
-            BandFilter(owner),
-            CatFilter(owner),
-            ModeFilter(owner),
-            ModulationFilter(owner),
-            LocFilter(owner),
-            ACFFilter(owner),
-        )
+        self.filters = {
+            "freq_filter": FreqFilter(owner),
+            "band_filter": BandFilter(owner),
+            "cat_filter": CatFilter(owner),
+            "mode_filter": ModeFilter(owner),
+            "modulation_filter": ModulationFilter(owner),
+            "location_filter": LocFilter(owner),
+            "acf_filter": ACFFilter(owner),
+        }
         self._owner = owner
-        self._owner.reset_filters_btn.clicked.connect(self.reset)
+        self._owner.reset_filters_btn.clicked.connect(self._reset)
 
         # Connect Apply and Reset buttons clicks to functions.
-        for f in self.filters:
+        for f in self._values:
             f.apply_remove_btn.clicked.connect(self._display_signals)
             f.reset_btn.clicked.connect(f.reset)
+
+    @property
+    def _values(self):
+        return self.filters.values()
 
     @pyqtSlot()
     def _display_signals(self):
         self._owner.display_signals()
 
     @pyqtSlot()
-    def reset(self):
+    def _reset(self):
         """Reset all the filters."""
-        for f in self.filters:
+        for f in self._values:
             f.reset()
 
     def ok(self, signal_name):
         """Check whether all the filters are passed."""
-        return all(f._ok(signal_name) for f in self.filters)
+        return all(f._ok(signal_name) for f in self._values)
 
     def refresh(self):
         """Refresh the relevant widgets when changing theme."""
-        for f in self.filters:
+        for f in self._values:
             f.refresh()

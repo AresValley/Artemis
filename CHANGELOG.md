@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
 ## [Unreleased]
+### Added
+- Add support for signals with multiple-value acf ([#9](https://github.com/AresValley/Artemis/pull/9)). This breaks the backward compatibility because the database changed structure.
+
 ### Fixed
 - The audio buttons are of the same dimension also for high resolution screens ([#13](https://github.com/AresValley/Artemis/pull/13))
 - An audio sample can be paused and a different one can be played without a program crash ([#12](https://github.com/AresValley/Artemis/pull/12))

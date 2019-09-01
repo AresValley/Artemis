@@ -4537,9 +4537,9 @@ Inactive</string>
             <attribute name="title">
              <string>ACF</string>
             </attribute>
-            <layout class="QVBoxLayout" name="verticalLayout_22">
+            <layout class="QVBoxLayout" name="verticalLayout_21">
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout_21" stretch="0,0,1,0,0">
+              <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,1,0,0">
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_65">
                  <item>
@@ -4624,6 +4624,53 @@ Inactive</string>
                    <property name="sizeHint" stdset="0">
                     <size>
                      <width>288</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_70">
+                 <item>
+                  <spacer name="horizontalSpacer_67">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="include_variable_acf">
+                   <property name="font">
+                    <font>
+                     <pointsize>12</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Include variable ACF</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_68">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
                      <height>20</height>
                     </size>
                    </property>

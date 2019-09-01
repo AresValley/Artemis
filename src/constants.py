@@ -88,7 +88,8 @@ class Database:
                  Signal.MODE,
                  Signal.INF_BAND,
                  Signal.SUP_BAND,
-                 Signal.CATEGORY_CODE)
+                 Signal.CATEGORY_CODE,
+                 Signal.ACF,)
 
 
 class ForecastColors:
@@ -181,6 +182,7 @@ class Constants:
     NOT_AVAILABLE           = "spectrumnotavailable.png"
     NOT_SELECTED            = "nosignalselected.png"
     FIELD_SEPARATOR         = ";"
+    ACF_SEPARATOR           = " - "
     DEFAULT_IMGS_FOLDER     = os.path.join(":", "pics", "default_pics")
     DEFAULT_NOT_SELECTED    = os.path.join(DEFAULT_IMGS_FOLDER, NOT_SELECTED)
     DEFAULT_NOT_AVAILABLE   = os.path.join(DEFAULT_IMGS_FOLDER, NOT_AVAILABLE)

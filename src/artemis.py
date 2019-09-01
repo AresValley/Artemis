@@ -19,7 +19,7 @@ from PyQt5 import uic
 from PyQt5.QtCore import (QFileInfo,
                           Qt,
                           pyqtSlot,)
-
+from acfvalue import ACFValue
 from audio_player import AudioPlayer
 from weatherdata import ForecastData
 from download_window import DownloadWindow
@@ -410,10 +410,12 @@ class Artemis(QMainWindow, Ui_MainWindow):
             if answer == QMessageBox.Yes:
                 self.download_db()
         else:
+            # Avoid a crash if there are duplicated signals
             self.db = self.db.groupby(level=0).first()
             self.signal_names = self.db.index
             self.total_signals = len(self.signal_names)
             self.db.fillna(Constants.UNKNOWN, inplace=True)
+            self.db[Signal.ACF] = ACFValue.list_from_series(self.db[Signal.ACF])
             self.db[Signal.WIKI_CLICKED] = False
             self.update_status_tip(self.total_signals)
             self.signals_list.clear()
@@ -530,7 +532,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.mode_lab.setText(current_signal.at[Signal.MODE])
             self.modul_lab.setText(current_signal.at[Signal.MODULATION])
             self.loc_lab.setText(current_signal.at[Signal.LOCATION])
-            self.acf_lab.setText(current_signal.at[Signal.ACF])
+            self.acf_lab.setText(
+                ACFValue.concat_strings(current_signal.at[Signal.ACF])
+            )
             self.description_text.setText(current_signal.at[Signal.DESCRIPTION])
             for cat, cat_lab in zip(category_code, self.category_labels):
                 if cat == '0':
