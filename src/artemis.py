@@ -189,11 +189,17 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def set_visible_tab(self):
-        """Set the current main tab when double-clicking a signal name."""
+        """Set the current main tab when double-clicking a signal name.
+
+        Switch between main and filter tab when double-clicking multiple times."""
+        set_main = False
         if self.main_tab.currentWidget() != self.signal_properties_tab:
             self.main_tab.setCurrentWidget(self.signal_properties_tab)
+            set_main = True
+        if self.signal_tab.currentWidget() != self.signal_main_tab or set_main:
+            self.signal_tab.setCurrentWidget(self.signal_main_tab)
         else:
-            self.main_tab.setCurrentWidget(self.filter_tab)
+            self.signal_tab.setCurrentWidget(self.filter_tab)
 
     @pyqtSlot()
     def start_update_forecast(self):
