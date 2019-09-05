@@ -28,10 +28,17 @@ Artemis 3 is entirely written in Python, so if you already have Python 3.7.0+ in
 **If you don't know what you want or you are not sure where to look, this is for you.** 
 
 Basically, this is the easiest, smooth, and clean way to run Artemis 3. A Python installation is not required.
-For more information, follow [the main page of Artemis 3](https://aresvalley.com/artemis/) (detailed documentation at the end of the main page)
+For more information, follow [the main page of Artemis 3](https://aresvalley.com/artemis/) (detailed documentation at the end of the main page).
+
+**Requirements:**
+- Windows 7/8/8.1/10
+- Linux: Ubuntu 16.04+, Mint 18+, Fedora 24+ and many other. **You need at least version 2.23 of the GLIBC system library** ([details](https://github.com/AresValley/Artemis/tree/master/spec_files))
+- macOS
 
 ### Run from source code
-Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3. Requirements:
+Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3.
+
+**Requirements:**
 - Python (ver. 3.7.0+)
 - Python libraries (in `requirements/requirements.txt`)
 
@@ -66,7 +73,7 @@ The database (db.csv) is directly extracted from sigidwiki.com with a DB parser 
 | 9 | Description | - | - | string |
 | 10 | Modulation | - | ✔ | string |
 | 11 | ID Code | - | - | integer |
-| 12 | Auto-correlation function | ms | - | string |
+| 12 | Auto-correlation function | ms | ✔ | string |
 
 ### Syntax
 
@@ -99,17 +106,35 @@ The database (db.csv) is directly extracted from sigidwiki.com with a DB parser 
     |:-:|:-:|:-:|:-:|:-:|:-:|:-:|
     | Trunked | Utility | Sat | Navigation | Interfering | Number Stations | Time Signal |
 
-12. **Auto-correlation funtion (ACF)**: The ACF is an awesome discriminator when the signal is composed of redundant pattern that continouosly repeats. It is reported in **ms**. An extended description with an example signal analysis is available here: https://aresvalley.com/documentation/
+12. **Auto-correlation funtion (ACF)**: The ACF is an awesome discriminator when the signal is composed of redundant pattern that continouosly repeats. Unfortunately, for this reason, ACF is not always available. The time value is reported in **ms** and, in some cases, could have multiple values for a single signal. An extended description with an example signal analysis is available here: https://aresvalley.com/documentation/
+
+
+```
+... ID Code * ACF1 Value (in ms) - ACF1 Description ; ACF2 Value (in ms) - ACF2 Description ; ...
+```
+
+**Example 1 (D-STAR):**
+
+```
+... ID Code * 420 - Superframe ; 20 - Frame
+```
+**Example 2 (EDACS):**
+
+```
+... ID Code * 60 - edacs48 ; 30 - edacs96
+```
+
+**Special case:** variable ACFs are allowed and a brief explanation can be reported instead of ACF Value. A nice example is the * [SSTV](https://www.sigidwiki.com/wiki/Slow-Scan_Television_(SSTV) "SSTV") transmission where the ACF is directly related to the number of lines per minute.
 
 ### Multiple Items fields (Location, Modulation)
 The necessity to manage a multiple Location/Modulation search pushed us to implement a fictitious 'secondary delimiter' chosen to be the `;` character. For instance:
 
 ```
-Band. Upper Limit * Location 1 ; Location 2 ; ... * sigidwiki URL
+... Band. Upper Limit * Location 1 ; Location 2 ; ... * sigidwiki URL ...
 ```
 or
 ```
-Description * Modulation 1 ; Modulation 2 ; ... * ID Code
+... Description * Modulation 1 ; Modulation 2 ; ... * ID Code ...
 ```
 
 ## Themes
@@ -129,6 +154,6 @@ You should have received a copy of the GNU General Public License along with thi
 * [**Alessandro Ceccato**](https://github.com/alessandro90 "GitHub profile") - *Artemis III lead developer*
 * **Paolo Romani (IZ1MLL)** - *Lead β Tester, RF specialist*
 * **Carl Colena** - *Sigidwiki admin, β Tester, Signals expert*
-* **Marco Bortoli** - *macOS deployment, β Tester*
-* **Pierpaolo Pravatto** - *Wiki page, β Tester*
-* **Francesco Capostagno, Luca, Pietro** - *β Tester*
+* [**Marco Bortoli**](https://github.com/marbort "GitHub profile") - *macOS deployment, β Tester*
+* [**Pierpaolo Pravatto**](https://github.com/ppravatto "GitHub profile") - *Wiki page, β Tester*
+* [**Francesco Capostagno**](https://github.com/fcapostagno "GitHub profile"), **Luca**, **Pietro** - *β Tester*

@@ -14,6 +14,8 @@ Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyins
 
 **IMPORTANT:** *To generate the standalone and the one-dir package, you must use an operating system that coincides with the target one (pyinstaller doesn't allow cross-compilation).* 
 
+**IMPORTANT (LINUX COMPILING):** *The executable that PyInstaller builds is not fully static, in that it still depends on the system libc. **Under Linux, the ABI of GLIBC is backward compatible, but not forward compatible. So if you link against a newer GLIBC, you can't run the resulting executable on an older system**. The supplied binary bootloader should work with older GLIBC. However, the libpython.so and other dynamic libraries still depend on the newer GLIBC. The solution is to compile the Python interpreter with its modules (and also probably bootloader) on the oldest system you have around so that it gets linked with the oldest version of GLIBC.* (Source: PyInstaller)
+
 ## Package Building (standalone aka one-file, high portability, **suggested**)
 1. Download a fresh copy of the git repository.
 2. Choose the target OS in `spec_files` folder and copy the whole content (except the Artemis_onedir.spec file) into `src`
@@ -46,6 +48,6 @@ You should have received a copy of the GNU General Public License along with thi
 * [**Alessandro Ceccato**](https://github.com/alessandro90 "GitHub profile") - *Artemis III lead developer*
 * **Paolo Romani (IZ1MLL)** - *Lead β Tester, RF specialist*
 * **Carl Colena** - *Sigidwiki admin, β Tester, Signals expert*
-* **Marco Bortoli** - *macOS deployment, β Tester*
-* **Pierpaolo Pravatto** - *Wiki page, β Tester*
-* **Francesco Capostagno, Luca, Pietro** - *β Tester*
+* [**Marco Bortoli**](https://github.com/marbort "GitHub profile") - *macOS deployment, β Tester*
+* [**Pierpaolo Pravatto**](https://github.com/ppravatto "GitHub profile") - *Wiki page, β Tester*
+* [**Francesco Capostagno**](https://github.com/fcapostagno "GitHub profile"), **Luca**, **Pietro** - *β Tester*
