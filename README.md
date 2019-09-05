@@ -110,18 +110,18 @@ The database (db.csv) is directly extracted from sigidwiki.com with a DB parser 
 
 
 ```
-... ID Code * ACF1 Value (in ms) - ACF1 Description ; ACF2 Value (in ms) - ACF2 Description ; ...
+... ID Code * ACF1 Description - ACF1 Value (in ms) ; ACF2 Description - ACF2 Value (in ms) ; ...
 ```
 
 **Example 1 (D-STAR):**
 
 ```
-... ID Code * 420 - Superframe ; 20 - Frame
+... ID Code * Superframe - 420 ; Frame - 20
 ```
 **Example 2 (EDACS):**
 
 ```
-... ID Code * 60 - edacs48 ; 30 - edacs96
+... ID Code * edacs48 - 60 ; edacs96 - 30
 ```
 
 **Special case:** variable ACFs are allowed and a brief explanation can be reported instead of ACF Value. A nice example is the * [SSTV](https://www.sigidwiki.com/wiki/Slow-Scan_Television_(SSTV) "SSTV") transmission where the ACF is directly related to the number of lines per minute.
