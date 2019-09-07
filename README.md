@@ -12,7 +12,8 @@ In short, ARTEMIS is a signals hunter software and a useful aid for radio listen
 
   - [Run the software](#Run-the-software)
     - [Run from binary](#Run-from-binary)
-    - [Run from source code](#Run-from-source-code-OS-independent)
+    - [Run from source code](#Run-from-source-code)
+    - [Compile from source code](#Compile-from-source-code)
   - [Database](#database)
     - [Syntax](#syntax)
     - [Multiple Items fields (Location, Modulation)](#multiple-items-fields-location-modulation)
@@ -48,6 +49,9 @@ pip install -r  requirements.txt --user
 ```
 python3 artemis.py
 ```
+
+### Compile from source code
+If you want to compile Artemis yourself from the source code follow the instructions in the [spec_files/README](spec_files/README.md) file.
 
 ## Database
 

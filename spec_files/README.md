@@ -6,7 +6,7 @@
 
 ## ARTEMIS 3 .SPEC FILES
 
-Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyinstaller.org/) to build a single standalone executable (or a one-dir package). The extreme versatility of this package is the fact that every external dependency is already embedded into the bundle. The interpreter of Python 3 is also included.
+Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyinstaller.org/) to build a single standalone executable (or a one-dir package). Every external dependency is already embedded into the bundle. The interpreter of Python 3 is also included.
 
 ## Requirements
 - Python 3.7.0+
@@ -15,37 +15,24 @@ Artemis 3 .spec files are used by the package **pyinstaller** (https://www.pyins
 **IMPORTANT:** *To generate the standalone and the one-dir package, you must use an operating system that coincides with the target one (pyinstaller doesn't allow cross-compilation).* 
 
 ## Package Building (standalone aka one-file, high portability, **suggested**)
-1. Download a fresh copy of the git repository.
-2. Choose the target OS in `spec_files` folder and copy the whole content (except the Artemis_onedir.spec file) into `src`
-3. Open a terminal into `src` and run:
+1. Download/clone the git repository.
+2. In the `spec_files/<your OS>` folder open a terminal and type
 ```
 pyinstaller Artemis.spec
 ```
-4. Copy the `src/themes` folder into `src/dist`.
-5. The ready-to-use compiled software is now present into `src/dist` folder.
+3. An Artemis executable should be produced in the `dist/` folder. The `build/` folder
+   can be deleted.
 
 ## Package Building (one-dir, shorter startup time, low portability)
-1. Download a fresh copy of the git repository.
-2. Choose the target OS in `spec_files` folder and copy the whole content (except the Artemis.spec file) into `src`
-3. Open a terminal into `src` and run:
+1. Download/clone the git repository.
+2. In the `spec_files/<your OS>` folder open a terminal and type
 ```
 pyinstaller Artemis_onedir.spec
 ```
-4. Copy the `src/themes` folder into `src/dist/Artemis`.
-5. The ready-to-use compiled software is now present into `src/dist` folder as a bundle. All the libraries are clearly present.
+3. An Artemis executable should be produced in  `dist/Artemis/`. The `build/` can
+   be deleted.
 
-## License
-This program (ARTEMIS 3, 2014-2019) is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program. If not, see: www.gnu.org/licenses
-
-## Thanks
-* **Marco Dalla Tiezza** - *Artemis I-II developer, DB parsing, Website*
-* [**Alessandro Ceccato**](https://github.com/alessandro90 "GitHub profile") - *Artemis III lead developer*
-* **Paolo Romani (IZ1MLL)** - *Lead β Tester, RF specialist*
-* **Carl Colena** - *Sigidwiki admin, β Tester, Signals expert*
-* **Marco Bortoli** - *macOS deployment, β Tester*
-* **Pierpaolo Pravatto** - *Wiki page, β Tester*
-* **Francesco Capostagno, Luca, Pietro** - *β Tester*
+You can save a copy of the executable in a folder of you choice. At startup it will ask you to download
+the database and also warn you that the `themes` folder is missing. To avoid this,
+copy `src/Data` and `src/themes` in the folder containing the executable.

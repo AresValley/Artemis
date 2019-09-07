@@ -5,6 +5,11 @@ The first release is [3.0.0] because this is actually the third major version (c
 
 ## [Unreleased]
 ### Added
+- The software version displayed has now a `.Dev` appended when running from script (_e.g._ 3.1.0.Dev) to differentiate from an actual binary executable. The `.Dev` thus implies that the
+  running version of the software could not correspond to a particular release.
+- The `*.spec` files files can be executed without copying the source code in
+  their folder.
+- Add a link to the GitHub repository in the action bar.
 - Add support for signals with multiple-value acf ([#9](https://github.com/AresValley/Artemis/pull/9)). This breaks the backward compatibility because the database changed structure.
 
 ### Fixed
