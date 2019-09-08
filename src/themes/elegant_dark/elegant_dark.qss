@@ -303,11 +303,11 @@ QTabWidget {
 	background-color:rgb(247,246,246);
 }
 QTabWidget::pane {
-		border-color: rgb(77,77,77);
+		/* border-color: rgb(77,77,77); */
 		background-color:rgb(101,101,101);
-		border-style: solid;
+		/* border-style: solid;
 		border-width: 1px;
-    	border-radius: 6px;
+    	border-radius: 6px; */
 }
 QTabBar::tab {
 	padding:2px;
