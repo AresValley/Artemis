@@ -1,13 +1,20 @@
 # -*- mode: python -*-
 
+import glob
+import os
+
+
 block_cipher = None
 
-import glob,os
 
-data_file = [(f, '.') for f in glob.glob('*.[pu][yi]') if f != "artemis.py"]
-data_file.append(('cacert.pem', '.'))
+SRC_PATH = "../../src/"
 
-a = Analysis(['artemis.py'],
+data_file = [
+    (f, '.') for f in glob.glob(SRC_PATH + '*.[pu][yi]')
+    if f.split('/')[-1] != "artemis.py"
+].append((SRC_PATH + 'cacert.pem', '.'))
+
+a = Analysis(SRC_PATH + ['artemis.py'],  # noqa: 821
              pathex=[os.getcwd()],
              binaries=[],
              datas=data_file,
@@ -19,9 +26,10 @@ a = Analysis(['artemis.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
-pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
-exe = EXE(pyz,
+pyz = PYZ(a.pure,  # noqa: 821
+          a.zipped_data,
+          cipher=block_cipher)
+exe = EXE(pyz,  # noqa: 821
           a.scripts,
           [],
           exclude_binaries=True,
@@ -30,8 +38,9 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          console=False , icon='Artemis3.ico')
-coll = COLLECT(exe,
+          console=False,
+          icon='Artemis3.ico')
+coll = COLLECT(exe,  # noqa: 821
                a.binaries,
                a.zipfiles,
                a.datas,

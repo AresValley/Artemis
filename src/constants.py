@@ -114,6 +114,7 @@ class Constants:
     ADD_SIGNAL_LINK         = "https://www.sigidwiki.com/index.php/Special:FormEdit/Signal/?preload=Signal_Identification_Wiki:Signal_form_preload_text"
     FORUM_LINK              = "https://aresvalley.com/community/"
     ARESVALLEY_LINK         = "https://aresvalley.com/"
+    GITHUB_REPO             = "https://github.com/AresValley/Artemis"
     RTL_SDL_LINK            = "https://www.rtl-sdr.com/"
     UPDATING_STR            = "Updating..."
     ACF_DOCS                = "https://aresvalley.com/documentation/"

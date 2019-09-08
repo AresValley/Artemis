@@ -43,7 +43,14 @@ from utilities import (checksum_ok,
 
 # import default_imgs_rc
 
-__VERSION__ = "3.0.1"
+__LATEST_VERSION__ = "3.0.1"
+
+if hasattr(sys, '_MEIPASS'):
+    __VERSION__ = __LATEST_VERSION__
+else:
+    __VERSION__ = __LATEST_VERSION__ + ".Dev"
+
+
 qt_creator_file = resource_path("artemis.ui")
 Ui_MainWindow, _ = uic.loadUiType(qt_creator_file)
 
@@ -77,6 +84,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
         )
         self.action_rtl_sdr_com.triggered.connect(
             lambda: webbrowser.open(Constants.RTL_SDL_LINK)
+        )
+        self.action_github.triggered.connect(
+            lambda: webbrowser.open(Constants.GITHUB_REPO)
         )
         self.db = None
         self.current_signal_name = ''
