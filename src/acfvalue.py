@@ -46,7 +46,7 @@ class ACFValue:
         entries = []
         for entry in series:
             entries.append([
-                cls(value.strip()) for value in entry.split(Constants.FIELD_SEPARATOR)
+                cls(value.rstrip('ms').strip()) for value in entry.split(Constants.FIELD_SEPARATOR)
             ])
         return entries
 
