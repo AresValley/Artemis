@@ -9514,6 +9514,7 @@ QSlider::handle:horizontal {
     </property>
     <addaction name="action_check_db_ver"/>
     <addaction name="action_update_database"/>
+    <addaction name="action_check_software_version"/>
    </widget>
    <widget class="QMenu" name="menu_themes">
     <property name="title">
@@ -9590,6 +9591,11 @@ QSlider::handle:horizontal {
   <action name="action_github">
    <property name="text">
     <string>GitHub</string>
+   </property>
+  </action>
+  <action name="action_check_software_version">
+   <property name="text">
+    <string>Check software version</string>
    </property>
   </action>
  </widget>

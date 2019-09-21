@@ -1,8 +1,10 @@
 __pycache__
 Data
 csv_info.txt
-src/themes/.current_theme
+src/themes/__current_theme
 designer.bat
 launch.bat
 .vscode/
 .code-workspace
+spec_files/**/output
+server_credentials.txt

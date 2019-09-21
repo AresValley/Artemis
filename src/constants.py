@@ -1,6 +1,17 @@
 from collections import namedtuple
 from enum import Enum, auto
 import os.path
+from executable_utilities import get_executable_path
+
+
+__BASE_FOLDER__ = get_executable_path()
+
+
+class SupportedOs:
+    """Supported operating systems."""
+    WINDOWS = "windows"
+    LINUX = "linux"
+    MAC = "mac"
 
 
 class Ftype:
@@ -20,30 +31,13 @@ class GfdType(Enum):
     LOC  = auto()
 
 
-class ChecksumWhat(Enum):
-    """Enum class to distinguish the object you want to verify the checksum."""
+class DownloadObj(Enum):
+    """Enum class to distinguish the object being downloaded."""
 
     FOLDER = auto()
     DB = auto()
-
-
-class Messages:
-    """Container class for messages to be displayed."""
-
-    DB_UP_TO_DATE            = "Already up to date"
-    DB_UP_TO_DATE_MSG        = "No newer version to download."
-    DB_NEW_VER               = "New version available"
-    DB_NEW_VER_MSG           = "A new version of the database is available for download."
-    NO_DB_AVAIL              = "No database detected."
-    NO_DB                    = "No database"
-    DOWNLOAD_NOW_QUESTION    = "Do you want to download it now?"
-    DOWNLOAD_ANYWAY_QUESTION = "Do you want to download it anyway?"
-    NO_CONNECTION            = "No connection"
-    NO_CONNECTION_MSG        = "Unable to establish an internet connection."
-    BAD_DOWNLOAD             = "Something went wrong"
-    BAD_DOWNLOAD_MSG         = "Something went wrong with the download.\nCheck your internet connection and try again."
-    SLOW_CONN                = "Slow internet connection"
-    SLOW_CONN_MSG            = "Your internet connection is unstable or too slow."
+    SOFTWARE = auto()
+    UPDATER = auto()
 
 
 class Signal:
@@ -109,7 +103,10 @@ _Band = namedtuple("Band", ["lower", "upper"])
 class Constants:
     """Container class for several constants of the software."""
 
+    EXECUTABLE_NAME         = os.path.join(__BASE_FOLDER__, "Artemis")
+    UPDATER_SOFTWARE        = os.path.join(__BASE_FOLDER__, "_ArtemisUpdater")
     CLICK_TO_UPDATE_STR     = "Click to update"
+    VERSION_LINK            = "https://aresvalley.com/Storage/Artemis/Package/latest_versions.json"
     SIGIDWIKI               = "https://www.sigidwiki.com/wiki/Signal_Identification_Guide"
     ADD_SIGNAL_LINK         = "https://www.sigidwiki.com/index.php/Special:FormEdit/Signal/?preload=Signal_Identification_Wiki:Signal_form_preload_text"
     FORUM_LINK              = "https://aresvalley.com/community/"
@@ -136,10 +133,7 @@ class Constants:
                                "https://amunters.home.xs4all.nl/aurorastatus.gif"]
     SEARCH_LABEL_IMG        = "search_icon.png"
     VOLUME_LABEL_IMG        = "volume.png"
-    DATA_FOLDER             = "Data"
-    SPECTRA_FOLDER          = "Spectra"
     SPECTRA_EXT             = ".png"
-    AUDIO_FOLDER            = "Audio"
     ACTIVE                  = "active"
     INACTIVE                = "inactive"
     LABEL_ON_COLOR          = "on"
@@ -184,6 +178,61 @@ class Constants:
     NOT_SELECTED            = "nosignalselected.png"
     FIELD_SEPARATOR         = ";"
     ACF_SEPARATOR           = " - "
+    DATA_FOLDER             = os.path.join(__BASE_FOLDER__, "Data")
+    SPECTRA_FOLDER          = os.path.join(DATA_FOLDER, "Spectra")
+    AUDIO_FOLDER            = os.path.join(DATA_FOLDER, "Audio")
     DEFAULT_IMGS_FOLDER     = os.path.join(":", "pics", "default_pics")
     DEFAULT_NOT_SELECTED    = os.path.join(DEFAULT_IMGS_FOLDER, NOT_SELECTED)
     DEFAULT_NOT_AVAILABLE   = os.path.join(DEFAULT_IMGS_FOLDER, NOT_AVAILABLE)
+
+
+class Messages:
+    """Container class for messages to be displayed."""
+
+    FEATURE_NOT_AVAILABLE    = "Feature not available"
+    SCRIPT_NOT_UPDATE        = "When running from source, software updates\ncannot be checked."
+    UPDATES_AVAILABALE       = "Updates available"
+    UPDATES_MSG              = "Do you want to install the updates now?"
+    UP_TO_DATE               = "Already up to date"
+    UP_TO_DATE_MSG           = "No newer version to download."
+    DB_NEW_VER               = "New version available"
+    DB_NEW_VER_MSG           = "A new version of the database is available for download."
+    NO_DB_AVAIL              = "No database detected."
+    NO_DB                    = "No database"
+    DOWNLOAD_NOW_QUESTION    = "Do you want to download it now?"
+    DOWNLOAD_ANYWAY_QUESTION = "Do you want to download it anyway?"
+    NO_CONNECTION            = "No connection"
+    NO_CONNECTION_MSG        = "Unable to establish an internet connection."
+    BAD_DOWNLOAD             = "Something went wrong"
+    BAD_DOWNLOAD_MSG         = "Something went wrong with the download.\nCheck your internet connection and try again."
+    SLOW_CONN                = "Slow internet connection"
+    SLOW_CONN_MSG            = "Your internet connection is unstable or too slow."
+    NEW_VERSION_AVAILABLE    = "New software version"
+    NEW_VERSION_MSG          = lambda v: f"The software version {v} is available."  # noqa: E731
+    DOWNLOAD_SUGG_MSG        = "Download new version now?"
+
+
+class ThemeConstants:
+    """Container class for all the theme-related constants."""
+
+    EXTENSION                 = ".qss"
+    ICONS_FOLDER              = "icons"
+    DEFAULT                   = "dark"
+    CURRENT                   = "__current_theme"
+    COLORS                    = "colors.txt"
+    COLOR_SEPARATOR           = "="
+    DEFAULT_ACTIVE_COLOR      = "#000000"
+    DEFAULT_INACTIVE_COLOR    = "#9f9f9f"
+    DEFAULT_OFF_COLORS        = "#000000", "#434343"
+    DEFAULT_ON_COLORS         = "#4b79a1", "#283e51"
+    DEFAULT_TEXT_COLOR        = "#ffffff"
+    THEME_NOT_FOUND           = "Theme not found"
+    MISSING_THEME             = "Missing theme folder."
+    MISSING_THEME_FOLDER      = "Themes folder not found.\nOnly the basic theme is available."
+    THEME_FOLDER_NOT_FOUND    = "Themes folder not found"
+    FOLDER                    = os.path.join(__BASE_FOLDER__, "themes")
+    DEFAULT_ICONS_PATH        = os.path.join(FOLDER, DEFAULT, ICONS_FOLDER)
+    DEFAULT_SEARCH_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.SEARCH_LABEL_IMG)
+    DEFAULT_VOLUME_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.VOLUME_LABEL_IMG)
+    CURRENT_THEME_FILE        = os.path.join(FOLDER, CURRENT)
+    DEFAULT_THEME_PATH        = os.path.join(FOLDER, DEFAULT)

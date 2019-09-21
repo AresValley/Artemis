@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>160</height>
+    <height>185</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Download database</string>
+   <string>Downloading</string>
   </property>
   <property name="windowIcon">
    <iconset resource="default_imgs.qrc">
@@ -29,7 +29,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Downloading database
+      <string>Downloading updates
 Please wait...
 </string>
      </property>
@@ -69,7 +69,7 @@ Please wait...
     </widget>
    </item>
    <item>
-    <widget class="QProgressBar" name="progressBar">
+    <widget class="QProgressBar" name="_progress_bar">
      <property name="minimum">
       <number>0</number>
      </property>

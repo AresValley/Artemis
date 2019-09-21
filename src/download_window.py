@@ -2,7 +2,8 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt, pyqtSlot, pyqtSignal
 from PyQt5.QtWidgets import QWidget
 from threads import DownloadThread, ThreadStatus
-from utilities import pop_up, resource_path
+from utilities import pop_up
+from executable_utilities import resource_path
 from constants import Constants, Messages
 
 
@@ -12,10 +13,12 @@ Ui_Download_window, _ = uic.loadUiType(
 
 
 class DownloadWindow(QWidget, Ui_Download_window):
-    """Subclass QWidget and Ui_Download_window. It is the window displayed during the database download."""
+    """Subclass QWidget and Ui_Download_window. It is the window displayed during
+    downloads and software updates."""
 
     complete = pyqtSignal()
     closed = pyqtSignal()
+    _PROGRESS_CONEVERSION_FACTOR = 1024
 
     def __init__(self):
         """Initialize the window."""
@@ -47,10 +50,22 @@ class DownloadWindow(QWidget, Ui_Download_window):
         self._download_thread.speed_progress.connect(self._display_speed)
         self.closed.connect(self._download_thread.set_exit)
         self.cancel_btn.clicked.connect(self._terminate_process)
+        self._size = 0
+        self.target = None
 
-    def start_download(self):
+    def _prepare_progress_bar(self, size):
+        """Prepare the progress bar for the upcoming download."""
+        self._progress_bar.setMinimum(0)
+        self._progress_bar.setMaximum(size)
+        self._progress_bar.setValue(0)
+
+    def activate(self, target):
         """Start the download thread."""
-        self._download_thread.start()
+        self._size = target.size
+        self.target = target.target
+        self._prepare_progress_bar(target.size)
+        self._download_thread.start(target)
+        self.show()
 
     def _download_format_str(self, n):
         """Return a well-formatted string with the downloaded MB."""
@@ -77,6 +92,8 @@ class DownloadWindow(QWidget, Ui_Download_window):
             self.status_lbl.setText(self._download_format_str(progress))
         elif progress == Constants.EXTRACTING_CODE:
             self.status_lbl.setText(Constants.EXTRACTING_MSG)
+        if self._size > 0:
+            self._progress_bar.setValue(progress * self._PROGRESS_CONEVERSION_FACTOR)
 
     def show(self):
         """Extends QWidget.show. Set downloaded MB and speed to zero."""

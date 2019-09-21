@@ -2,8 +2,8 @@ import os
 from pygame import mixer
 from PyQt5.QtCore import QTimer, pyqtSlot, QObject
 
-from constants import Constants
 import qtawesome as qta
+from constants import Constants
 
 
 class AudioPlayer(QObject):
@@ -127,7 +127,6 @@ class AudioPlayer(QObject):
         """Set the current audio sample."""
         self._reset_audio_widget()
         full_name = os.path.join(
-            Constants.DATA_FOLDER,
             Constants.AUDIO_FOLDER,
             fname + '.ogg'
         )
