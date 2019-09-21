@@ -4,34 +4,8 @@ import re
 from PyQt5.QtWidgets import QAction, QActionGroup
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QPixmap
-from constants import Constants
+from constants import Constants, ThemeConstants
 from utilities import pop_up
-
-
-class ThemeConstants:
-    """Container class for all the theme-related constants."""
-
-    FOLDER                    = "themes"
-    EXTENSION                 = ".qss"
-    ICONS_FOLDER              = "icons"
-    DEFAULT                   = "dark"
-    CURRENT                   = ".current_theme"
-    COLORS                    = "colors.txt"
-    COLOR_SEPARATOR           = "="
-    DEFAULT_ACTIVE_COLOR      = "#000000"
-    DEFAULT_INACTIVE_COLOR    = "#9f9f9f"
-    DEFAULT_OFF_COLORS        = "#000000", "#434343"
-    DEFAULT_ON_COLORS         = "#4b79a1", "#283e51"
-    DEFAULT_TEXT_COLOR        = "#ffffff"
-    THEME_NOT_FOUND           = "Theme not found"
-    MISSING_THEME             = "Missing theme in '" + FOLDER + "' folder."
-    MISSING_THEME_FOLDER      = "'" + FOLDER + "'" + " folder not found.\nOnly the basic theme is available."
-    THEME_FOLDER_NOT_FOUND    = "'" + FOLDER + "'" + " folder not found"
-    DEFAULT_ICONS_PATH        = os.path.join(FOLDER, DEFAULT, ICONS_FOLDER)
-    DEFAULT_SEARCH_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.SEARCH_LABEL_IMG)
-    DEFAULT_VOLUME_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.VOLUME_LABEL_IMG)
-    CURRENT_THEME_FILE        = os.path.join(FOLDER, CURRENT)
-    DEFAULT_THEME_PATH        = os.path.join(FOLDER, DEFAULT)
 
 
 class _ColorsHandler:
@@ -125,7 +99,6 @@ class ThemeManager:
         self._owner.spaceweather_screen.refreshable_labels.set(
             "switch_off_colors", ThemeConstants.DEFAULT_OFF_COLORS
         )
-
         self._theme_names = {}
 
     @pyqtSlot()
@@ -179,7 +152,8 @@ class ThemeManager:
                 new_theme = ag.addAction(
                     QAction(
                         theme_name,
-                        self._owner, checkable=True
+                        self._owner,
+                        checkable=True
                     )
                 )
                 self._owner.menu_themes.addAction(new_theme)
@@ -295,31 +269,37 @@ class ThemeManager:
 
             try:
                 with open(ThemeConstants.CURRENT_THEME_FILE, "w") as current_theme:
-                    current_theme.write(self._theme_path)
+                    current_theme.write(os.path.basename(self._theme_path))
             except Exception:
                 pass
+
+    def apply_default_theme(self):
+        """Apply the default theme if no theme is set or the theme name is invalid."""
+        try:
+            self._theme_names[
+                self._pretty_name(ThemeConstants.DEFAULT)
+            ].setChecked(True)
+        except Exception:
+            pop_up(
+                self._owner,
+                title=ThemeConstants.THEME_NOT_FOUND,
+                text=ThemeConstants.MISSING_THEME
+            ).show()
+        else:
+            self._apply(ThemeConstants.DEFAULT_THEME_PATH)
 
     def start(self):
         """Start the theme manager."""
         self._detect_themes()
         if os.path.exists(ThemeConstants.CURRENT_THEME_FILE):
-            with open(ThemeConstants.CURRENT_THEME_FILE, "r") as current_theme_path:
-                theme_path = current_theme_path.read()
+            with open(ThemeConstants.CURRENT_THEME_FILE, "r") as current_theme_name:
+                theme_path = os.path.join(ThemeConstants.FOLDER, current_theme_name.read())
             theme_name = self._pretty_name(os.path.basename(theme_path))
             try:
                 self._theme_names[theme_name].setChecked(True)
             except Exception:
-                pop_up(self._owner, title=ThemeConstants.THEME_NOT_FOUND,
-                       text=ThemeConstants.MISSING_THEME).show()
+                self.apply_default_theme()
             else:
                 self._apply(theme_path)
         else:
-            try:
-                self._theme_names[
-                    self._pretty_name(ThemeConstants.DEFAULT)
-                ].setChecked(True)
-            except Exception:
-                pop_up(self._owner, title=ThemeConstants.THEME_NOT_FOUND,
-                       text=ThemeConstants.MISSING_THEME).show()
-            else:
-                self._apply(ThemeConstants.DEFAULT_THEME_PATH)
+            self.apply_default_theme()

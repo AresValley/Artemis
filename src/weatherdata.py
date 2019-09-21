@@ -1,10 +1,12 @@
 import re
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
-from threads import (BaseDownloadThread,
-                     UpdateSpaceWeatherThread,
-                     ThreadStatus,
-                     UpdateForecastThread)
+from threads import (
+    BaseDownloadThread,
+    UpdateSpaceWeatherThread,
+    ThreadStatus,
+    UpdateForecastThread
+)
 from constants import Constants
 from switchable_label import MultiColorSwitchableLabel
 from utilities import safe_cast

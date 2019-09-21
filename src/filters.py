@@ -7,21 +7,23 @@ The only class exposed is Filters which provides the following methods:
 
 from functools import partial
 import webbrowser
-
 from PyQt5.QtWidgets import QListWidgetItem, QTreeWidgetItem
 from PyQt5.QtCore import pyqtSlot, QObject
-
-from constants import (Constants,
-                       Ftype,
-                       Signal,)
-from utilities import (uncheck_and_emit,
-                       connect_events_to_func,
-                       filters_limit,
-                       is_undef_freq,
-                       is_undef_band,
-                       safe_cast,
-                       show_matching_strings,
-                       get_field_entries,)
+from constants import (
+    Constants,
+    Ftype,
+    Signal,
+)
+from utilities import (
+    uncheck_and_emit,
+    connect_events_to_func,
+    filters_limit,
+    is_undef_freq,
+    is_undef_band,
+    safe_cast,
+    show_matching_strings,
+    get_field_entries,
+)
 
 
 class _BaseFilter(QObject):

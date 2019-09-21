@@ -7,45 +7,58 @@ from time import sleep, time
 
 from pandas import read_csv
 
-from PyQt5.QtWidgets import (QMainWindow,
-                             QApplication,
-                             qApp,
-                             QDesktopWidget,
-                             QListWidgetItem,
-                             QMessageBox,
-                             QSplashScreen,)
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QApplication,
+    qApp,
+    QDesktopWidget,
+    QListWidgetItem,
+    QMessageBox,
+    QSplashScreen,
+)
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic
-from PyQt5.QtCore import (QFileInfo,
-                          Qt,
-                          pyqtSlot,)
+from PyQt5.QtCore import (
+    QFileInfo,
+    Qt,
+    pyqtSlot,
+)
 from acfvalue import ACFValue
 from audio_player import AudioPlayer
 from weatherdata import ForecastData
 from download_window import DownloadWindow
 from spaceweathermanager import SpaceWeatherManager
-from constants import (Constants,
-                       GfdType,
-                       Database,
-                       ChecksumWhat,
-                       Messages,
-                       Signal,)
+from constants import (
+    Constants,
+    GfdType,
+    Database,
+    DownloadTarget,
+    Messages,
+    Signal,
+    __BASE_FOLDER__,
+)
 from themesmanager import ThemeManager
 from filters import Filters
-from utilities import (checksum_ok,
-                       pop_up,
-                       is_undef_freq,
-                       is_undef_band,
-                       format_numbers,
-                       resource_path,
-                       safe_cast,
-                       is_mac_os)
+from utilities import (
+    checksum_ok,
+    pop_up,
+    is_undef_freq,
+    is_undef_band,
+    format_numbers,
+    safe_cast,
+)
+from executable_utilities import IS_BINARY, resource_path
+from os_utilities import IS_MAC
+from web_utilities import get_db_hash_code
+from downloadtargetfactory import get_download_target
+from updatescontroller import UpdatesController
 
 # import default_imgs_rc
 
-__LATEST_VERSION__ = "3.0.1"
 
-if hasattr(sys, '_MEIPASS'):
+__LATEST_VERSION__ = "3.1.0"
+
+if IS_BINARY:
     __VERSION__ = __LATEST_VERSION__
 else:
     __VERSION__ = __LATEST_VERSION__ + ".Dev"
@@ -66,7 +79,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.set_initial_size()
         self.closing = False
         self.download_window = DownloadWindow()
-        self.download_window.complete.connect(self.show_downloaded_signals)
+        self.download_window.complete.connect(self.action_after_download)
         self.actionExit.triggered.connect(qApp.quit)
         self.action_update_database.triggered.connect(self.ask_if_download)
         self.action_check_db_ver.triggered.connect(self.check_db_ver)
@@ -185,13 +198,27 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
         self.main_tab.currentChanged.connect(self.hide_show_right_widget)
 
-# Final operations.
+        self.updates_controller = UpdatesController(__LATEST_VERSION__, self)
+        self.updates_controller.start()
+        self.action_check_software_version.triggered.connect(
+            self.updates_controller.start_verify_software_version
+        )
+
+        # Final operations.
         self.theme_manager.start()
         self.load_db()
         self.display_signals()
 
+    def action_after_download(self):
+        """Decide what to do after a successful download.
+
+        If a new database was downloaded, show the signals."""
+        if self.download_window.target is DownloadTarget.DATA_FOLDER:
+            self.show_downloaded_signals()
+
     @pyqtSlot()
     def hide_show_right_widget(self):
+        """Hide the audio player when forecast tabs are displayed."""
         if self.main_tab.currentWidget() == self.forecast_tab:
             self.fixed_audio_and_image.setVisible(False)
         elif not self.fixed_audio_and_image.isVisible():
@@ -320,8 +347,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
         Do nothing if already downloading.
         """
         if not self.download_window.isVisible():
-            self.download_window.start_download()
-            self.download_window.show()
+            self.download_window.activate(
+                get_download_target(DownloadTarget.DATA_FOLDER)
+            )
 
     @pyqtSlot()
     def ask_if_download(self):
@@ -341,7 +369,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
                 self.download_db()
             else:
                 try:
-                    is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
+                    is_checksum_ok = checksum_ok(db, get_db_hash_code())
                 except Exception:
                     pop_up(self, title=Messages.NO_CONNECTION,
                            text=Messages.NO_CONNECTION_MSG).show()
@@ -349,8 +377,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     if not is_checksum_ok:
                         self.download_db()
                     else:
-                        answer = pop_up(self, title=Messages.DB_UP_TO_DATE,
-                                        text=Messages.DB_UP_TO_DATE_MSG,
+                        answer = pop_up(self, title=Messages.UP_TO_DATE,
+                                        text=Messages.UP_TO_DATE_MSG,
                                         informative_text=Messages.DOWNLOAD_ANYWAY_QUESTION,
                                         is_question=True,
                                         default_btn=QMessageBox.No).exec()
@@ -381,14 +409,14 @@ class Artemis(QMainWindow, Ui_MainWindow):
                     self.download_db()
             else:
                 try:
-                    is_checksum_ok = checksum_ok(db, ChecksumWhat.DB)
+                    is_checksum_ok = checksum_ok(db, get_db_hash_code())
                 except Exception:
                     pop_up(self, title=Messages.NO_CONNECTION,
                            text=Messages.NO_CONNECTION_MSG).show()
                 else:
                     if is_checksum_ok:
-                        pop_up(self, title=Messages.DB_UP_TO_DATE,
-                               text=Messages.DB_UP_TO_DATE_MSG).show()
+                        pop_up(self, title=Messages.UP_TO_DATE,
+                               text=Messages.UP_TO_DATE_MSG).show()
                     else:
                         answer = pop_up(self, title=Messages.DB_NEW_VER,
                                         text=Messages.DB_NEW_VER_MSG,
@@ -411,12 +439,14 @@ class Artemis(QMainWindow, Ui_MainWindow):
         Handle possible missing file error.
         """
         try:
-            self.db = read_csv(os.path.join(Constants.DATA_FOLDER, Database.NAME),
-                               sep=Database.DELIMITER,
-                               header=None,
-                               index_col=0,
-                               dtype={name: str for name in Database.STRINGS},
-                               names=Database.NAMES)
+            self.db = read_csv(
+                os.path.join(Constants.DATA_FOLDER, Database.NAME),
+                sep=Database.DELIMITER,
+                header=None,
+                index_col=0,
+                dtype={name: str for name in Database.STRINGS},
+                names=Database.NAMES
+            )
         except FileNotFoundError:
             self.search_bar.setDisabled(True)
             answer = pop_up(self, title=Messages.NO_DB,
@@ -449,9 +479,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             )
 
     def collect_list(self, list_property, separator=Constants.FIELD_SEPARATOR):
-        """Collect all the entrys of a QListWidget.
+        """Collect all the entries of a QListWidget.
 
-        Handle multiple entries in one item seprated by a separator.
+        Handle multiple entries in one item separated by a separator.
         Keyword argument:
         separator -- the separator character for multiple-entries items.
         """
@@ -581,7 +611,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
         if item:
             spectrogram_name = item.text()
             path_spectr = os.path.join(
-                Constants.DATA_FOLDER,
                 Constants.SPECTRA_FOLDER,
                 spectrogram_name + Constants.SPECTRA_EXT
             )
@@ -658,7 +687,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     # For executables running on Mac Os systems.
-    if hasattr(sys, "_MEIPASS") and is_mac_os():
+    if IS_BINARY and IS_MAC and __BASE_FOLDER__ == os.curdir:
         os.chdir(sys._MEIPASS)
 
     my_app = QApplication(sys.argv)

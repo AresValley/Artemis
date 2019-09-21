@@ -1,19 +1,29 @@
 from functools import partial
 import hashlib
-import sys
-import os
 from PyQt5.QtWidgets import QMessageBox
-import urllib3
-from constants import Constants, Signal, Database, ChecksumWhat
+from constants import Constants, Signal
 
 
-def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and for PyInstaller."""
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
+class UniqueMessageBox(QMessageBox):
+    """Subclass of QMessageBox. Overrides only the exec method.
+
+    Only one instance of this class can execute super().exec() exec at a given time.
+    If another instance is the the exec loop, calling exec simply return None."""
+
+    _open_message = False
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def exec(self):
+        """Overrides QMessageBox.exec. Call the parent method if there are no
+        other instances executing exec. Otherwise return None,"""
+        if UniqueMessageBox._open_message:
+            return None
+        UniqueMessageBox._open_message = True
+        answer = super().exec()
+        UniqueMessageBox._open_message = False
+        return answer
 
 
 def uncheck_and_emit(button):
@@ -46,7 +56,7 @@ def get_field_entries(db_entry, separator=Constants.FIELD_SEPARATOR):
     ]
 
 
-def pop_up(cls, title, text,
+def pop_up(instance, title, text,
            informative_text=None,
            connection=None,
            is_question=False,
@@ -58,7 +68,7 @@ def pop_up(cls, title, text,
     connection -- a callable to connect the message when emitting the finished signal.
     is_question -- whether the message contains a question.
     default_btn -- the default button for the possible answer to the question."""
-    msg = QMessageBox(cls)
+    msg = UniqueMessageBox(instance)
     msg.setWindowTitle(title)
     msg.setText(text)
     if informative_text:
@@ -72,46 +82,15 @@ def pop_up(cls, title, text,
     return msg
 
 
-def is_mac_os():
-    """Return True if running OS is Mac."""
-    return sys.platform == 'darwin'
+def checksum_ok(data, reference_hash_code):
+    """Check whether the checksum of the 'data' argument is correct.
 
-
-def get_cacert_file():
-    """Return the path to the cacert.pem file."""
-    if hasattr(sys, "_MEIPASS"):
-        ca_certs = os.path.join(sys._MEIPASS, 'cacert.pem')
-    else:
-        ca_certs = 'cacert.pem'
-    return ca_certs
-
-
-def get_pool_manager():
-    """Return a urllib3.PoolManager object."""
-    return urllib3.PoolManager(ca_certs=get_cacert_file())
-
-
-def checksum_ok(data, what):
-    """Check whether the checksum of the 'data' argument is correct."""
+    Expects a sha256 code as argument."""
+    if reference_hash_code is None:
+        raise Exception("ERROR: Invalid hash code.")
     code = hashlib.sha256()
     code.update(data)
-    if what is ChecksumWhat.FOLDER:
-        n = 0
-    elif what is ChecksumWhat.DB:
-        n = 1
-    else:
-        raise ValueError("Wrong entry name.")
-    try:
-        # The downloaded file is a csv file with columns (last version == last line):
-        # data.zip_SHA256 | db.csv_SHA256 | Version | Creation_date
-        reference = get_pool_manager().request(
-            'GET',
-            Database.LINK_REF,
-            timeout=4.0
-        ).data.decode("utf-8").splitlines()[-1].split(Database.DELIMITER)[n]
-    except Exception:
-        raise
-    return code.hexdigest() == reference
+    return code.hexdigest() == reference_hash_code
 
 
 def connect_events_to_func(events_to_connect, fun_to_connect, fun_args):
