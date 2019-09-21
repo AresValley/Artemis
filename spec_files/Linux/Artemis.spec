@@ -12,7 +12,8 @@ SRC_PATH = "../../src/"
 data_file = [
     (f, '.') for f in glob.glob(SRC_PATH + '*.[pu][yi]')
     if f.split('/')[-1] != "artemis.py"
-].append((SRC_PATH + 'cacert.pem', '.'))
+]
+data_file.append((SRC_PATH + 'cacert.pem', '.'))
 
 a = Analysis([SRC_PATH + 'artemis.py'],  # noqa: 821
              pathex=[os.getcwd()],
