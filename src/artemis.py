@@ -687,7 +687,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     # For executables running on Mac Os systems.
-    if is_executable_version() and is_mac_os() and not __BASE_FOLDER__:
+    if is_executable_version() and is_mac_os() and __BASE_FOLDER__ == os.curdir:
         os.chdir(sys._MEIPASS)
 
     my_app = QApplication(sys.argv)
