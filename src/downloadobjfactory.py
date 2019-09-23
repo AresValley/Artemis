@@ -24,7 +24,7 @@ if current_os == SupportedOs.MAC:
     raise Exception("How to extract .dmg files?")
 
 
-class ZipExtractor:
+class _ZipExtractor:
     """Extractor class for zip files.
 
     Exposes a static method which can be used as a context manager."""
@@ -38,7 +38,7 @@ class ZipExtractor:
             zipped.close()
 
 
-class TarExtractor:
+class _TarExtractor:
     """Extractor class for tar files.
 
     Exposes a static method which can be used as a context manager."""
@@ -53,8 +53,8 @@ class TarExtractor:
 
 
 EXTRACTORS = {
-    SupportedOs.WINDOWS: ZipExtractor,
-    SupportedOs.LINUX: TarExtractor,
+    SupportedOs.WINDOWS: _ZipExtractor,
+    SupportedOs.LINUX: _TarExtractor,
     SupportedOs.MAC: ...  # FIXME: Need an extractor here!
 }
 
@@ -72,7 +72,7 @@ class _DownloadFolderObj:
         self.size = 0
         self.dest_path = __BASE_FOLDER__
         self.target = DownloadObj.FOLDER
-        self.Extractor = ZipExtractor
+        self.Extractor = _ZipExtractor
 
     def delete_files(self):
         if os.path.exists(Constants.DATA_FOLDER):
