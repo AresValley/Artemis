@@ -160,6 +160,9 @@ class DownloadObjCustom:
         self.dest_path = __BASE_FOLDER__
         self.target = DownloadObj.UPDATER
 
+    def init_ok(self):
+        return self.url and self.hash_code and self.size > 0
+
     def delete_files(self):
         if os.path.exists(Constants.UPDATER_SOFTWARE):
             os.remove(Constants.UPDATER_SOFTWARE)
@@ -180,6 +183,9 @@ class _ArtemisUpdater(QObject):
         """Close the main program and start the download."""
         self.download_window.activate(self.target)
 
+    def init_ok(self):
+        return self.target.init_ok()
+
     def start_main_program(self):
         """Restart the (updated) main program and close the updater."""
         self.download_window.setVisible(False)
@@ -193,7 +199,7 @@ class _ArtemisUpdater(QObject):
 
 if __name__ == '__main__':
     # For executables running on Mac Os systems.
-    if is_executable_version() and is_mac_os() and not __BASE_FOLDER__:
+    if is_executable_version() and is_mac_os() and __BASE_FOLDER__ == os.curdir:
         os.chdir(sys._MEIPASS)
 
     parser = argparse.ArgumentParser(prog='Artemis Updater')
@@ -208,7 +214,7 @@ if __name__ == '__main__':
     img = QPixmap(ARTEMIS_ICON)
     updater = _ArtemisUpdater(DownloadObjCustom(args.url, args.hash_code, args.size))
 
-    if not args.url or not args.hash_code or not args.size:
+    if not updater.init_ok():
         updater.start_main_program()
     else:
         updater.start()
