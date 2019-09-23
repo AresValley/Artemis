@@ -1,14 +1,16 @@
 import argparse
 import os
 import os.path
+from shutil import rmtree
 import sys
 from PyQt5.QtCore import QObject, QProcess
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, qApp
 from download_window import DownloadWindow
-from os_utilities import is_mac_os
+from os_utilities import is_mac_os, get_os
 from executable_utilities import is_executable_version
-from constants import Constants, __BASE_FOLDER__, DownloadObj
+from constants import Constants, __BASE_FOLDER__, ThemeConstants, DownloadObj
+from downloadobjfactory import on_rmtree_error, EXTRACTORS
 
 
 __VERSION__ = "0.0.1"
@@ -153,19 +155,24 @@ QPushButton:checked {
 
 
 class DownloadObjCustom:
+    """This object exposes the same interface as the ones in downloadobjfactory
+    in order to be injected in a DownloadWindow object."""
     def __init__(self, url, hash_code, size):
         self.url = url
         self.hash_code = hash_code
         self.size = size
         self.dest_path = __BASE_FOLDER__
-        self.target = DownloadObj.UPDATER
+        self.target = DownloadObj.SOFTWARE
+        self.Extractor = EXTRACTORS[get_os()]
 
     def init_ok(self):
         return self.url and self.hash_code and self.size > 0
 
     def delete_files(self):
-        if os.path.exists(Constants.UPDATER_SOFTWARE):
-            os.remove(Constants.UPDATER_SOFTWARE)
+        if os.path.exists(Constants.EXECUTABLE_NAME):
+            os.remove(Constants.EXECUTABLE_NAME)  # Remove Artemis executable.
+        if os.path.exists(ThemeConstants.FOLDER):  # One could not have the theme folder for some reason.
+            rmtree(ThemeConstants.FOLDER, onerror=on_rmtree_error)
 
 
 class _ArtemisUpdater(QObject):

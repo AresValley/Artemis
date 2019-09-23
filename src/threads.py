@@ -4,7 +4,6 @@ from io import BytesIO
 from math import ceil
 import ssl
 from time import perf_counter
-from zipfile import ZipFile
 import aiohttp
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
 from constants import Constants
@@ -42,10 +41,10 @@ class BaseDownloadThread(QThread):
         super().__init__(parent)
         self.status = ThreadStatus.UNDEFINED
 
-    def __del__(self):
-        """Force the termination of the thread."""
-        self.terminate()
-        self.wait()
+    # def __del__(self):
+    #     """Force the termination of the thread."""
+    #     self.terminate()
+    #     self.wait()
 
 
 class DownloadThread(BaseDownloadThread):
@@ -173,7 +172,7 @@ class DownloadThread(BaseDownloadThread):
         try:
             self.progress.emit(Constants.EXTRACTING_CODE)
             self.speed_progress.emit(Constants.ZERO_FINAL_SPEED)
-            with ZipFile(BytesIO(raw_data)) as zipped:
+            with self._target.Extractor.open(fileobj=BytesIO(raw_data)) as zipped:
                 zipped.extractall(path=self._target.dest_path)
         except Exception:
             self.status = ThreadStatus.UNKNOWN_ERR

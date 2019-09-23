@@ -1,19 +1,65 @@
+from contextlib import contextmanager
 from shutil import rmtree
 from os import remove
 import os.path
 import stat
+
 from constants import (
     Constants,
     Database,
     __BASE_FOLDER__,
     ThemeConstants,
-    DownloadObj
+    DownloadObj,
+    SupportedOs,
 )
+from os_utilities import get_os
 from web_utilities import get_folder_hash_code
 from versioncontroller import version_controller
 
+from zipfile import ZipFile
+from tarfile import TarFile
 
-def _on_rmtree_error(func, path, excinfo):
+current_os = get_os()
+if current_os == SupportedOs.MAC:
+    raise Exception("How to extract .dmg files?")
+
+
+class ZipExtractor:
+    """Extractor class for zip files.
+
+    Exposes a static method which can be used as a context manager."""
+    @staticmethod
+    @contextmanager
+    def open(fileobj):
+        zipped = ZipFile(fileobj)
+        try:
+            yield zipped
+        finally:
+            zipped.close()
+
+
+class TarExtractor:
+    """Extractor class for tar files.
+
+    Exposes a static method which can be used as a context manager."""
+    @staticmethod
+    @contextmanager
+    def open(fileobj):
+        tarfile = TarFile.open(fileobj=fileobj)
+        try:
+            yield tarfile
+        finally:
+            tarfile.close()
+
+
+EXTRACTORS = {
+    SupportedOs.WINDOWS: ZipExtractor,
+    SupportedOs.LINUX: TarExtractor,
+    SupportedOs.MAC: ...  # FIXME: Need an extractor here!
+}
+
+
+def on_rmtree_error(func, path, excinfo):
     """Function called whenever rmtree fails."""
     os.chmod(path, stat.S_IWRITE)
     func(path)
@@ -26,10 +72,11 @@ class _DownloadFolderObj:
         self.size = 0
         self.dest_path = __BASE_FOLDER__
         self.target = DownloadObj.FOLDER
+        self.Extractor = ZipExtractor
 
     def delete_files(self):
         if os.path.exists(Constants.DATA_FOLDER):
-            rmtree(Constants.DATA_FOLDER, onerror=_on_rmtree_error)
+            rmtree(Constants.DATA_FOLDER, onerror=on_rmtree_error)
 
 
 class _DownloadSoftwareObj:
@@ -39,12 +86,13 @@ class _DownloadSoftwareObj:
         self.size = version_controller.software.size
         self.dest_path = __BASE_FOLDER__
         self.target = DownloadObj.SOFTWARE
+        self.Extractor = EXTRACTORS[get_os()]
 
     def delete_files(self):
         if os.path.exists(Constants.EXECUTABLE_NAME):
             remove(Constants.EXECUTABLE_NAME)  # Remove Artemis executable.
         if os.path.exists(ThemeConstants.FOLDER):  # One could not have the theme folder for some reason.
-            rmtree(ThemeConstants.FOLDER, onerror=_on_rmtree_error)
+            rmtree(ThemeConstants.FOLDER, onerror=on_rmtree_error)
 
 
 class _DownloadUpdaterObj:
@@ -54,6 +102,7 @@ class _DownloadUpdaterObj:
         self.size = version_controller.updater.size
         self.dest_path = __BASE_FOLDER__
         self.target = DownloadObj.UPDATER
+        self.Extractor = EXTRACTORS[get_os()]
 
     def delete_files(self):
         if os.path.exists(Constants.UPDATER_SOFTWARE):
@@ -68,7 +117,9 @@ def get_download_target(obj_type):
     - url;
     - hash_code;
     - dest_path;
-    - target: an element of the enum DownloadObj.
+    - target: an element of the enum DownloadObj;
+    - Extractor: an object which exposes an 'open(fileobj) method
+      to extract compressed files.
     Methods:
     - delete_files()"""
     if obj_type is DownloadObj.FOLDER:

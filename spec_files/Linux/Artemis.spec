@@ -11,7 +11,7 @@ SRC_PATH = "../../src/"
 
 data_file = [
     (f, '.') for f in glob.glob(SRC_PATH + '*.[pu][yi]')
-    if f.split('/')[-1] != "artemis.py"
+    if f.split('/')[-1] != "artemis.py" and f.split('/')[-1] != "updater.py"
 ]
 data_file.append((SRC_PATH + 'cacert.pem', '.'))
 
