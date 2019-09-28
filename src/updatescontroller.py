@@ -114,7 +114,7 @@ class UpdatesController(QObject):
                 stderr=sp.STDOUT,
                 stdin=sp.DEVNULL  # Needed to avoid OsError: [WinError 6] The handle is invalid.
             ) as proc:
-                updater_version = proc.stdout.read()
+                updater_version = proc.stdout.read().rstrip("\r\n")  # Strip any possible newline, to be sure.
         except Exception:
             updater_version = latest_updater_version
         if latest_updater_version is None:
