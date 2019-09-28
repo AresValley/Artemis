@@ -32,7 +32,7 @@ from constants import (
     Constants,
     GfdType,
     Database,
-    DownloadObj,
+    DownloadTarget,
     Messages,
     Signal,
     __BASE_FOLDER__,
@@ -50,7 +50,7 @@ from utilities import (
 from executable_utilities import is_executable_version, resource_path
 from os_utilities import is_mac_os
 from web_utilities import get_db_hash_code
-from downloadobjfactory import get_download_target
+from downloadtargetfactory import get_download_target
 from updatescontroller import UpdatesController
 
 # import default_imgs_rc
@@ -213,7 +213,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """Decide what to do after a successful download.
 
         If a new database was downloaded, show the signals."""
-        if self.download_window.target is DownloadObj.FOLDER:
+        if self.download_window.target is DownloadTarget.DATA_FOLDER:
             self.show_downloaded_signals()
 
     @pyqtSlot()
@@ -348,7 +348,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         """
         if not self.download_window.isVisible():
             self.download_window.activate(
-                get_download_target(DownloadObj.FOLDER)
+                get_download_target(DownloadTarget.DATA_FOLDER)
             )
 
     @pyqtSlot()

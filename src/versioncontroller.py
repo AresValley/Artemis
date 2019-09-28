@@ -5,9 +5,9 @@ from os_utilities import get_os
 from web_utilities import download_file
 
 
-"""This module exposes just one instance of an object: version_controller.
+"""This module exposes just one class: VersionController.
 
-All the relevant information can be accessed with the dot notation, e.g.:
+All the relevant information can be accessed with the dot notation on an instance of such class, e.g.:
                version_controller.software.hash_code
 is the hash_code of the latest release of the software running on the current OS."""
 
@@ -73,7 +73,7 @@ def _download_versions_file():
         return version_dict
 
 
-class _VersionController:
+class VersionController:
     """Dynamically create attributes corresponding to elements of a dictionary.
 
     Used to get updates information."""
@@ -109,6 +109,3 @@ class _VersionController:
             return True
         else:
             return False
-
-
-version_controller = _VersionController()

@@ -1,12 +1,12 @@
 import subprocess as sp
 from PyQt5.QtCore import QObject, pyqtSlot, QProcess
 from PyQt5.QtWidgets import QMessageBox, qApp
-from constants import Constants, Messages, DownloadObj
-from downloadobjfactory import get_download_target
+from constants import Constants, Messages, DownloadTarget
+from downloadtargetfactory import get_download_target
 from utilities import pop_up
 from executable_utilities import is_executable_version
 from threads import UpdatesControllerThread
-from versioncontroller import version_controller
+from versioncontroller import VersionController
 
 
 class UpdatesController(QObject):
@@ -15,12 +15,14 @@ class UpdatesController(QObject):
         self._owner = owner
         self._download_window = self._owner.download_window
         self._current_version = current_version
-        self._updates_thread = UpdatesControllerThread()
+        self.version_controller = VersionController()
+        self._updates_thread = UpdatesControllerThread(self.version_controller)
         self._updates_thread.on_success.connect(self._startup_updates_check)
 
     def start(self):
         """Start the thread."""
-        self._updates_thread.start()
+        if is_executable_version():
+            self._updates_thread.start()
 
     @pyqtSlot()
     def start_verify_software_version(self):
@@ -70,7 +72,7 @@ class UpdatesController(QObject):
         Does something only if the running program is a compiled version."""
         if not is_executable_version():
             return None
-        latest_version = version_controller.software.version
+        latest_version = self.version_controller.software.version
         if latest_version is None:
             return False
         if latest_version == self._current_version:
@@ -85,9 +87,9 @@ class UpdatesController(QObject):
         if answer == QMessageBox.Yes:
             updater = QProcess()
             command = Constants.UPDATER_SOFTWARE + " " + \
-                version_controller.software.url + \
-                " " + version_controller.software.hash_code + \
-                " " + str(version_controller.software.size)
+                self.version_controller.software.url + \
+                " " + self.version_controller.software.hash_code + \
+                " " + str(self.version_controller.software.size)
             try:
                 updater.startDetached(command)
             except BaseException:
@@ -103,12 +105,14 @@ class UpdatesController(QObject):
         If the software is not a compiled version, the function is a NOP."""
         if not is_executable_version():
             return
-        latest_updater_version = version_controller.updater.version
+        latest_updater_version = self.version_controller.updater.version
         try:
             with sp.Popen(
                 [Constants.UPDATER_SOFTWARE, "--version"],
+                encoding="UTF-8",
                 stdout=sp.PIPE,
-                encoding="UTF-8"
+                stderr=sp.STDOUT,
+                stdin=sp.DEVNULL  # Needed to avoid OsError: [WinError 6] The handle is invalid.
             ) as proc:
                 updater_version = proc.stdout.read()
         except Exception:
@@ -124,5 +128,8 @@ class UpdatesController(QObject):
             ).exec()
             if answer == QMessageBox.Yes:
                 self._download_window.activate(
-                    get_download_target(DownloadObj.UPDATER)
+                    get_download_target(
+                        DownloadTarget.UPDATER,
+                        self.version_controller.updater
+                    )
                 )

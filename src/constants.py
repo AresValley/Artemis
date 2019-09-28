@@ -15,10 +15,7 @@ class SupportedOs:
 
 
 class Ftype:
-    """Container class to differentiate between frequency and band.
-
-    Used in reset_fb_filters.
-    """
+    """Container class to differentiate between frequency and band."""
 
     FREQ = "freq"
     BAND = "band"
@@ -31,10 +28,10 @@ class GfdType(Enum):
     LOC  = auto()
 
 
-class DownloadObj(Enum):
+class DownloadTarget(Enum):
     """Enum class to distinguish the object being downloaded."""
 
-    FOLDER = auto()
+    DATA_FOLDER = auto()
     DB = auto()
     SOFTWARE = auto()
     UPDATER = auto()

@@ -11,7 +11,7 @@ data_file = [
     (os.path.join(BASE_FOLDER, "download_window.py"), "."),
     (os.path.join(BASE_FOLDER, "utilities.py"), "."),
     (os.path.join(BASE_FOLDER, "versioncontroller.py"), "."),
-    (os.path.join(BASE_FOLDER, "downloadobjfactory.py"), "."),
+    (os.path.join(BASE_FOLDER, "downloadtargetfactory.py"), "."),
     (os.path.join(BASE_FOLDER, "executable_utilities.py"), "."),
     (os.path.join(BASE_FOLDER, "os_utilities.py"), "."),
     (os.path.join(BASE_FOLDER, "web_utilities.py"), "."),

@@ -12,8 +12,6 @@ from web_utilities import (
     get_cacert_file,
     get_pool_manager,
 )
-from versioncontroller import version_controller
-
 # Needed for pyinstaller compilation.
 import encodings.idna  # noqa: 401
 
@@ -152,7 +150,7 @@ class DownloadThread(BaseDownloadThread):
         if self._wrong_checksum(raw_data):
             return
         self._target.delete_files()
-        self._unzip(raw_data)
+        self._extract(raw_data)
 
     def _wrong_checksum(self, raw_data):
         """Verify the checksum of the downloaded data and set the status accordingly."""
@@ -167,7 +165,7 @@ class DownloadThread(BaseDownloadThread):
                 return True
             return False
 
-    def _unzip(self, raw_data):
+    def _extract(self, raw_data):
         """Unzip and save the downloaded data into the destination folder."""
         try:
             self.progress.emit(Constants.EXTRACTING_CODE)
@@ -184,11 +182,12 @@ class UpdatesControllerThread(BaseDownloadThread):
 
     on_success = pyqtSignal(bool)
 
-    def __init__(self):
+    def __init__(self, version_controller):
         super().__init__()
+        self.version_controller = version_controller
 
     def run(self):
-        if version_controller.update():
+        if self.version_controller.update():
             self.on_success.emit(True)
         else:
             self.on_success.emit(False)
