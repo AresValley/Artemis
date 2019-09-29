@@ -5,16 +5,15 @@ The first release is [3.0.0] because this is actually the third major version (c
 
 ## [Unreleased]
 ### Added
-- Automatic updates. From this version Artemis can update itself if a new version is available. Works only when running the executable version (disabled when running from source).
-- The software version displayed has now a `.Dev` appended when running from script (_e.g._ 3.1.0.Dev) to differentiate from an actual binary executable. The `.Dev` thus implies that the
-  running version of the software could not correspond to a particular release.
-- The `*.spec` files files can be executed without copying the source code in
+- Automatic updates. From this version Artemis can update itself if a new version is available. Works only when running the executable version (disabled when running from source). The feature is partially unavailable for Mac, you can only download the new version.
+- The software version displayed has now a `.Dev` appended when running from script (_e.g._ 3.1.0.Dev) to differentiate from an actual binary executable. The `.Dev` thus implies that the running version of the software could not correspond to a particular release.
+- The `*.spec` files can be executed without copying the source code into
   their folder.
 - Add a link to the GitHub repository in the action bar.
-- Add support for signals with multiple-value acf ([#9](https://github.com/AresValley/Artemis/pull/9)). This breaks the backward compatibility because the database changed structure.
+- Add support for signals with multiple-value acf ([#9](https://github.com/AresValley/Artemis/pull/9)). This partially breaks the backward compatibility because the database changed structure.
 
 ### Fixed
-- Adding the `Artemis` folder to `PATH` as the expected behaviour. Before this fix, Artemis could not find the `Data` and themes `folders` is started from outside the `Artemis` folder.
+- Adding the `Artemis` folder to `PATH` as the expected behaviour. Prior to this fix, Artemis could not find the `Data` and `themes` folders if started from outside the `Artemis` folder.
 - The audio buttons are of the same dimension also for high resolution screens ([#13](https://github.com/AresValley/Artemis/pull/13))
 - An audio sample can be paused and a different one can be played without a program crash ([#12](https://github.com/AresValley/Artemis/pull/12))
 
