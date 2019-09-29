@@ -90,8 +90,8 @@ class _DataFolderInfo:
     - hash_code;
     - size."""
     def __init__(self):
-        self.url = Database.LINK_LOC,
-        self.hash_code = get_folder_hash_code(),
+        self.url = Database.LINK_LOC
+        self.hash_code = get_folder_hash_code()
         self.size = 0
 
 
