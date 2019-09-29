@@ -10,7 +10,7 @@ class UniqueMessageBox(QMessageBox):
     Only one instance of this class can execute super().exec() exec at a given time.
     If another instance is the the exec loop, calling exec simply return None."""
 
-    open_message = False
+    _open_message = False
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,11 +18,11 @@ class UniqueMessageBox(QMessageBox):
     def exec(self):
         """Overrides QMessageBox.exec. Call the parent method if there are no
         other instances executing exec. Otherwise return None,"""
-        if UniqueMessageBox.open_message:
+        if UniqueMessageBox._open_message:
             return None
-        UniqueMessageBox.open_message = True
+        UniqueMessageBox._open_message = True
         answer = super().exec()
-        UniqueMessageBox.open_message = False
+        UniqueMessageBox._open_message = False
         return answer
 
 
