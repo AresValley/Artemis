@@ -479,9 +479,9 @@ class Artemis(QMainWindow, Ui_MainWindow):
             )
 
     def collect_list(self, list_property, separator=Constants.FIELD_SEPARATOR):
-        """Collect all the entrys of a QListWidget.
+        """Collect all the entries of a QListWidget.
 
-        Handle multiple entries in one item seprated by a separator.
+        Handle multiple entries in one item separated by a separator.
         Keyword argument:
         separator -- the separator character for multiple-entries items.
         """
