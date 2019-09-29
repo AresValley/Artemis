@@ -4,6 +4,28 @@ from PyQt5.QtWidgets import QMessageBox
 from constants import Constants, Signal
 
 
+class UniqueMessageBox(QMessageBox):
+    """Subclass of QMessageBox. Overrides only the exec method.
+
+    Only one instance of this class can execute super().exec() exec at a given time.
+    If another instance is the the exec loop, calling exec simply return None."""
+
+    open_message = False
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def exec(self):
+        """Overrides QMessageBox.exec. Call the parent method if there are no
+        other instances executing exec. Otherwise return None,"""
+        if UniqueMessageBox.open_message:
+            return None
+        UniqueMessageBox.open_message = True
+        answer = super().exec()
+        UniqueMessageBox.open_message = False
+        return answer
+
+
 def uncheck_and_emit(button):
     """Set the button to the unchecked state and emit the clicked signal."""
     if button.isChecked():
@@ -34,7 +56,7 @@ def get_field_entries(db_entry, separator=Constants.FIELD_SEPARATOR):
     ]
 
 
-def pop_up(cls, title, text,
+def pop_up(instance, title, text,
            informative_text=None,
            connection=None,
            is_question=False,
@@ -46,7 +68,7 @@ def pop_up(cls, title, text,
     connection -- a callable to connect the message when emitting the finished signal.
     is_question -- whether the message contains a question.
     default_btn -- the default button for the possible answer to the question."""
-    msg = QMessageBox(cls)
+    msg = UniqueMessageBox(instance)
     msg.setWindowTitle(title)
     msg.setText(text)
     if informative_text:
