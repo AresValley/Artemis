@@ -43,4 +43,5 @@ exe = EXE(pyz,  # noqa: 821
           upx=True,
           runtime_tmpdir=None,
           console=False,
-          icon='Artemis3.ico')
+          icon='Artemis3.ico',
+          uac_admin=True)
