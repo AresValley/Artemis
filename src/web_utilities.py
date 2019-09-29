@@ -2,12 +2,12 @@ import os
 import sys
 import urllib3
 from constants import Database
-from executable_utilities import is_executable_version
+from executable_utilities import IS_BINARY
 
 
 def get_cacert_file():
     """Return the path to the cacert.pem file."""
-    if is_executable_version():
+    if IS_BINARY:
         ca_certs = os.path.join(sys._MEIPASS, 'cacert.pem')
     else:
         ca_certs = 'cacert.pem'

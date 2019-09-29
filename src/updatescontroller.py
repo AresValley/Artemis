@@ -1,15 +1,18 @@
 import subprocess as sp
+import webbrowser
 from PyQt5.QtCore import QObject, pyqtSlot, QProcess
 from PyQt5.QtWidgets import QMessageBox, qApp
 from constants import Constants, Messages, DownloadTarget
 from downloadtargetfactory import get_download_target
 from utilities import pop_up
-from executable_utilities import is_executable_version
+from os_utilities import IS_MAC
+from executable_utilities import IS_BINARY
 from threads import UpdatesControllerThread
 from versioncontroller import VersionController
 
 
 class UpdatesController(QObject):
+
     def __init__(self, current_version, owner):
         super().__init__()
         self._owner = owner
@@ -21,12 +24,12 @@ class UpdatesController(QObject):
 
     def start(self):
         """Start the thread."""
-        if is_executable_version():
+        if IS_BINARY:
             self._updates_thread.start()
 
     @pyqtSlot()
     def start_verify_software_version(self):
-        if not is_executable_version():
+        if not IS_BINARY:
             pop_up(
                 self._owner,
                 title=Messages.FEATURE_NOT_AVAILABLE,
@@ -70,7 +73,7 @@ class UpdatesController(QObject):
         """Check whether there is a new software version available.
 
         Does something only if the running program is a compiled version."""
-        if not is_executable_version():
+        if not IS_BINARY:
             return None
         latest_version = self.version_controller.software.version
         if latest_version is None:
@@ -85,17 +88,20 @@ class UpdatesController(QObject):
             is_question=True,
         ).exec()
         if answer == QMessageBox.Yes:
-            updater = QProcess()
-            command = Constants.UPDATER_SOFTWARE + " " + \
-                self.version_controller.software.url + \
-                " " + self.version_controller.software.hash_code + \
-                " " + str(self.version_controller.software.size)
-            try:
-                updater.startDetached(command)
-            except BaseException:
-                pass
+            if IS_MAC:
+                webbrowser.open(self.version_controller.software.url)
             else:
-                qApp.quit()
+                updater = QProcess()
+                command = Constants.UPDATER_SOFTWARE + " " + \
+                    self.version_controller.software.url + \
+                    " " + self.version_controller.software.hash_code + \
+                    " " + str(self.version_controller.software.size)
+                try:
+                    updater.startDetached(command)
+                except BaseException:
+                    pass
+                else:
+                    qApp.quit()
         return True
 
     def _check_updater_version(self):
@@ -103,7 +109,7 @@ class UpdatesController(QObject):
 
         If so, ask to download the new version.
         If the software is not a compiled version, the function is a NOP."""
-        if not is_executable_version():
+        if not IS_BINARY or IS_MAC:
             return
         latest_updater_version = self.version_controller.updater.version
         try:

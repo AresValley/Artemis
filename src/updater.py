@@ -6,9 +6,7 @@ from PyQt5.QtCore import QObject, QProcess
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, qApp
 from download_window import DownloadWindow
-from os_utilities import is_mac_os
-from executable_utilities import is_executable_version
-from constants import Constants, __BASE_FOLDER__, DownloadTarget
+from constants import Constants, DownloadTarget
 from downloadtargetfactory import get_download_target
 
 
@@ -183,10 +181,6 @@ class _ArtemisUpdater(QObject):
 
 
 if __name__ == '__main__':
-    # For executables running on Mac Os systems.
-    if is_executable_version() and is_mac_os() and __BASE_FOLDER__ == os.curdir:
-        os.chdir(sys._MEIPASS)
-
     parser = argparse.ArgumentParser(prog='Artemis Updater')
     parser.add_argument("url", nargs="?", default="", type=str, help="Download url")
     parser.add_argument("hash_code", nargs="?", default="", type=str, help="sha256 of the file")

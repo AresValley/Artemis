@@ -10,8 +10,8 @@ __BASE_FOLDER__ = get_executable_path()
 class SupportedOs:
     """Supported operating systems."""
     WINDOWS = "windows"
-    LINUX = "linux"
-    MAC = "mac"
+    LINUX   = "linux"
+    MAC     = "mac"
 
 
 class Ftype:
@@ -32,9 +32,9 @@ class DownloadTarget(Enum):
     """Enum class to distinguish the object being downloaded."""
 
     DATA_FOLDER = auto()
-    DB = auto()
-    SOFTWARE = auto()
-    UPDATER = auto()
+    DB          = auto()
+    SOFTWARE    = auto()
+    UPDATER     = auto()
 
 
 class Signal:

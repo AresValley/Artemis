@@ -4,9 +4,12 @@ import os
 import os.path
 
 
-def is_executable_version():
+def _is_executable_version():
     """Return whether the binary version is running."""
     return hasattr(sys, "_MEIPASS")
+
+
+IS_BINARY = _is_executable_version()
 
 
 def get_executable_path():

@@ -17,10 +17,6 @@ from web_utilities import get_folder_hash_code
 from zipfile import ZipFile
 from tarfile import TarFile
 
-current_os = get_os()
-if current_os == SupportedOs.MAC:
-    raise Exception("How to extract .dmg files?")
-
 
 class _ZipExtractor:
     """Extractor class for zip files.
@@ -53,7 +49,7 @@ class _TarExtractor:
 EXTRACTORS = {
     SupportedOs.WINDOWS: _ZipExtractor,
     SupportedOs.LINUX: _TarExtractor,
-    SupportedOs.MAC: ...  # FIXME: Need an extractor here!
+    # No extractor for MacOs, just download the file through the browser.
 }
 
 

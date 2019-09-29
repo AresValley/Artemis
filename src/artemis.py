@@ -47,8 +47,8 @@ from utilities import (
     format_numbers,
     safe_cast,
 )
-from executable_utilities import is_executable_version, resource_path
-from os_utilities import is_mac_os
+from executable_utilities import IS_BINARY, resource_path
+from os_utilities import IS_MAC
 from web_utilities import get_db_hash_code
 from downloadtargetfactory import get_download_target
 from updatescontroller import UpdatesController
@@ -58,7 +58,7 @@ from updatescontroller import UpdatesController
 
 __LATEST_VERSION__ = "3.1.0"
 
-if is_executable_version():
+if IS_BINARY:
     __VERSION__ = __LATEST_VERSION__
 else:
     __VERSION__ = __LATEST_VERSION__ + ".Dev"
@@ -687,7 +687,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 if __name__ == '__main__':
     # For executables running on Mac Os systems.
-    if is_executable_version() and is_mac_os() and __BASE_FOLDER__ == os.curdir:
+    if IS_BINARY and IS_MAC and __BASE_FOLDER__ == os.curdir:
         os.chdir(sys._MEIPASS)
 
     my_app = QApplication(sys.argv)
