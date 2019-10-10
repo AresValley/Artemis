@@ -25,10 +25,13 @@ rm -f artemis/themes/__current_theme
 cp Artemis artemis/Artemis
 cp _ArtemisUpdater artemis/_ArtemisUpdater
 
-tar -czvf Artemis_linux.tar.gz Artemis artemis/themes
+tar -czvf Artemis_linux.tar.gz Artemis -C artemis themes
 tar -czvf _ArtemisUpdater_linux.tar.gz ./_ArtemisUpdater
 
 echo "Create full archive for website"
+
+cp ../artemis3.svg artemis
+cp ../create_shortcut.sh artemis
 
 tar -czvf ArtemisWebDownlaod_linux.tar.gz artemis
 
