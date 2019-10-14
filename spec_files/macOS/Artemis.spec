@@ -13,7 +13,7 @@ data_file = [
     (f, '.') for f in glob.glob(SRC_PATH + '*.[pu][yi]')
     if f.split('/')[-1] != "artemis.py"
 ]
-data_file.extend(((SRC_PATH + 'cacert.pem', '.'), ('themes', './themes')))
+data_file.extend(((SRC_PATH + 'cacert.pem', '.'), ((SRC_PATH + 'themes', './themes')))
 
 a = Analysis([SRC_PATH + 'artemis.py'],  # noqa: 821
              pathex=[os.getcwd()],
