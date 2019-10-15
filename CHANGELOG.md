@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
 ## [Unreleased]
+...
+
+
+## [3.1.0] - 2019-10-15
 ### Added
 - Automatic updates. From this version Artemis can update itself if a new version is available. Works only when running the executable version (disabled when running from source). The feature is partially unavailable for Mac, you can only download the new version.
 - The software version displayed has now a `.Dev` appended when running from script (_e.g._ 3.1.0.Dev) to differentiate from an actual binary executable. The `.Dev` thus implies that the running version of the software could not correspond to a particular release.
@@ -33,5 +37,6 @@ First release.
 
 <!-- Links definitions -->
 [Unreleased]: https://github.com/AresValley/Artemis/compare/v3.0.1...HEAD
+[3.1.0]: https://github.com/AresValley/Artemis/compare/v3.0.1...v3.1.0
 [3.0.1]: https://github.com/AresValley/Artemis/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/AresValley/Artemis/releases/tag/v3.0.0
