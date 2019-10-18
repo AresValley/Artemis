@@ -21,7 +21,7 @@ XCOPY /y Artemis.exe Artemis\
 XCOPY /e /k /y ..\..\..\src\themes Artemis\themes\ /EXCLUDE:..\excluded_files.txt
 XCOPY /y _ArtemisUpdater.exe Artemis\
 ECHO "Compress files themes+Artemis.exe -> Artemis.zip"
-"C:\Program Files\7-Zip\7z.exe" a -r Artemis_win.zip Artemis.exe Artemis\themes
+"C:\Program Files\7-Zip\7z.exe" a Artemis_win.zip Artemis.exe ..\..\..\src\themes
 "C:\Program Files\7-Zip\7z.exe" a _ArtemisUpdater_win.zip _ArtemisUpdater.exe
 ECHO "Compress all files for website download"
 "C:\Program Files\7-Zip\7z.exe" a ArtemisWebsite_win.zip Artemis\
