@@ -7,7 +7,7 @@ The first release is [3.0.0] because this is actually the third major version (c
 ...
 
 
-## [3.1.0] - 2019-10-15
+## [3.1.0] - 2019-10-21
 ### Added
 - Automatic updates. From this version Artemis can update itself if a new version is available. Works only when running the executable version (disabled when running from source). The feature is partially unavailable for Mac, you can only download the new version.
 - The software version displayed has now a `.Dev` appended when running from script (_e.g._ 3.1.0.Dev) to differentiate from an actual binary executable. The `.Dev` thus implies that the running version of the software could not correspond to a particular release.
