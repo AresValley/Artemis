@@ -210,20 +210,17 @@ class UpdatesControllerThread(BaseDownloadThread):
 #             self.status = ThreadStatus.OK
 
 
-class _AsyncDownloader:
-    """Mixin class for asynchronous threads."""
-
-    async def _download_resource(self, session, link):
-        """Return the content of 'link' as bytes."""
-        ssl_context = ssl.create_default_context(
-            purpose=ssl.Purpose.SERVER_AUTH,
-            cafile=get_cacert_file()
-        )
-        resp = await session.get(link, ssl=ssl_context)
-        return await resp.read()
+async def _download_resource(session, link):
+    """Return the content of 'link' as bytes."""
+    ssl_context = ssl.create_default_context(
+        purpose=ssl.Purpose.SERVER_AUTH,
+        cafile=get_cacert_file()
+    )
+    resp = await session.get(link, ssl=ssl_context)
+    return await resp.read()
 
 
-class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
+class UpdateSpaceWeatherThread(BaseDownloadThread):
     """Subclass BaseDownloadThread. Download the space weather data."""
 
     _PROPERTIES = ("xray", "prot_el", "ak_index", "sgas", "geo_storm")
@@ -236,14 +233,12 @@ class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
     async def _download_property(self, session, property_name):
         """Download the data conteining the information of a specific property."""
         link = getattr(Constants, "SPACE_WEATHER_" + property_name.upper())
-        data = await self._download_resource(session, link)
+        data = await _download_resource(session, link)
         setattr(self._space_weather_data, property_name, str(data, 'utf-8'))
 
     async def _download_image(self, session, n):
         """Download the data corresponding the n-th image displayed in the screen."""
-        im = await self._download_resource(
-            session, Constants.SPACE_WEATHER_IMGS[n]
-        )
+        im = await _download_resource(session, Constants.SPACE_WEATHER_IMGS[n])
         self._space_weather_data.images[n].loadFromData(im)
 
     async def _download_resources(self):
@@ -278,7 +273,7 @@ class UpdateSpaceWeatherThread(BaseDownloadThread, _AsyncDownloader):
         asyncio.run(self._download_resources())
 
 
-class UpdateForecastThread(BaseDownloadThread, _AsyncDownloader):
+class UpdateForecastThread(BaseDownloadThread):
     """Subclass BaseDownloadThread. Download the forecast data."""
 
     class _PropertyName(Enum):
@@ -293,7 +288,7 @@ class UpdateForecastThread(BaseDownloadThread, _AsyncDownloader):
 
     async def _download_property(self, session, link, prop_name):
         """Download the data from 'link' and set the corresponding property of the owner."""
-        resp = await self._download_resource(session, link)
+        resp = await _download_resource(session, link)
         resp = str(resp, 'utf-8')
         if prop_name is self._PropertyName.FORECAST:
             self.owner.forecast = resp
