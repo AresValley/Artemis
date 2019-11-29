@@ -260,8 +260,6 @@ QPushButton {
 }
 
 QPushButton:hover {
-	border: 2px dashed #4545e5;
-    border-radius: 13px;
 	color: #FFFFFF;
 }
 

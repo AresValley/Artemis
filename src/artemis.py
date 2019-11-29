@@ -1,4 +1,5 @@
 from collections import namedtuple
+from itertools import chain
 from functools import partial
 import webbrowser
 import os
@@ -15,8 +16,10 @@ from PyQt5.QtWidgets import (
     QListWidgetItem,
     QMessageBox,
     QSplashScreen,
+    QFontDialog,
+    QWidget,
 )
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QFont
 from PyQt5 import uic
 from PyQt5.QtCore import (
     QFileInfo,
@@ -46,17 +49,20 @@ from utilities import (
     is_undef_band,
     format_numbers,
     safe_cast,
+    UniqueMessageBox,
 )
 from executable_utilities import IS_BINARY, resource_path
 from os_utilities import IS_MAC
 from web_utilities import get_db_hash_code
 from downloadtargetfactory import get_download_target
+from settings import Settings
 from updatescontroller import UpdatesController
+from urlbutton import UrlButton
 
 # import default_imgs_rc
 
 
-__LATEST_VERSION__ = "3.1.0"
+__LATEST_VERSION__ = "3.2.0"
 
 if IS_BINARY:
     __VERSION__ = __LATEST_VERSION__
@@ -101,6 +107,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         self.action_github.triggered.connect(
             lambda: webbrowser.open(Constants.GITHUB_REPO)
         )
+        self.action_font.triggered.connect(self.start_font_selection)
         self.db = None
         self.current_signal_name = ''
         self.signal_names = []
@@ -124,8 +131,6 @@ class Artemis(QMainWindow, Ui_MainWindow):
 
 # #######################################################################################
 
-        UrlColors = namedtuple("UrlColors", ["inactive", "active", "clicked"])
-        self.url_button.colors = UrlColors("#9f9f9f", "#4c75ff", "#942ccc")
         self.category_labels = [
             self.cat_mil,
             self.cat_rad,
@@ -205,9 +210,79 @@ class Artemis(QMainWindow, Ui_MainWindow):
         )
 
         # Final operations.
+        self.settings = Settings()
+        self.settings.load()
         self.theme_manager.start()
+        self.load_font()
         self.load_db()
         self.display_signals()
+
+    def apply_font(self, font):
+        """Apply a given QFont object to all the widgets."""
+        UniqueMessageBox.set_font(font)
+        # This is the smaller-text label. Not the most general strategy, but whatever..
+        smaller_point_size = self.forecast_today_0_lbl.font().pointSize()
+        min_reference_font = 4
+        for w in set(chain(
+            self.findChildren(QWidget),
+            self.download_window.findChildren(QWidget)
+        )):
+            old_font = w.font()
+            point_size = old_font.pointSize()
+            new_font = QFont(font)
+            new_font.setUnderline(old_font.underline())
+            new_font.setBold(old_font.bold())
+            new_font.setItalic(old_font.italic())
+            new_size = font.pointSize() + (point_size - smaller_point_size)
+            if new_size < min_reference_font:
+                new_size = min_reference_font
+            new_font.setPointSize(new_size)
+            w.setFont(new_font)
+
+    def load_font(self):
+        """Apply a QFont object if present."""
+        if self.settings.font is None:
+            return
+        try:
+            font = QFont(
+                self.settings.font['family'],
+                self.settings.font['point_size'],
+                self.settings.font['weight'],
+                self.settings.font['italic']
+            )
+            font.setStyle(self.settings.font['style'])
+            font.setPointSize(self.settings.font['point_size'])
+            font.setStrikeOut(self.settings.font['strikeout'])
+            font.setUnderline(self.settings.font['underline'])
+            self.apply_font(font)
+        except Exception:  # Invalid font
+            pass
+
+    @pyqtSlot()
+    def start_font_selection(self):
+        """Open a font selection widget and apply the selected font."""
+        initial_font = self.description_text.font()
+        dialog = QFontDialog()
+        dialog.setCurrentFont(initial_font)
+        font, ok = dialog.getFont(
+            initial_font,
+            self,
+            "Choose a font",
+            options=QFontDialog.DontUseNativeDialog
+        )
+        if ok:
+            self.apply_font(font)
+            self.settings.save(
+                font={
+                    'family': font.family(),
+                    'style': font.style(),
+                    'point_size': font.pointSize(),
+                    'weight': font.weight(),
+                    'italic': font.italic(),
+                    'strikeout': font.strikeOut(),
+                    'underline': font.underline(),
+                }
+            )
 
     def action_after_download(self):
         """Decide what to do after a successful download.
@@ -544,15 +619,11 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.name_lab.setText(self.current_signal_name)
             self.name_lab.setAlignment(Qt.AlignHCenter)
             current_signal = self.db.loc[self.current_signal_name]
-            self.url_button.setEnabled(True)
             if not current_signal.at[Signal.WIKI_CLICKED]:
-                self.url_button.setStyleSheet(
-                    f"color: {self.url_button.colors.active};"
-                )
+                state = UrlButton.State.ACTIVE
             else:
-                self.url_button.setStyleSheet(
-                    f"color: {self.url_button.colors.clicked};"
-                )
+                state = UrlButton.State.CLICKED
+            self.url_button.set_enabled(state)
             category_code = current_signal.at[Signal.CATEGORY_CODE]
             undef_freq = is_undef_freq(current_signal)
             undef_band = is_undef_band(current_signal)
@@ -590,10 +661,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             self.set_band_range(current_signal)
             self.audio_widget.set_audio_player(self.current_signal_name)
         else:
-            self.url_button.setEnabled(False)
-            self.url_button.setStyleSheet(
-                f"color: {self.url_button.colors.inactive};"
-            )
+            self.url_button.set_disabled()
             self.current_signal_name = ''
             self.name_lab.setText("No Signal")
             self.name_lab.setAlignment(Qt.AlignHCenter)
@@ -665,9 +733,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         Do nothing if no signal is selected.
         """
         if self.current_signal_name:
-            self.url_button.setStyleSheet(
-                f"color: {self.url_button.colors.clicked}"
-            )
+            self.url_button.set_clicked()
             webbrowser.open(self.db.at[self.current_signal_name, Signal.URL])
             self.db.at[self.current_signal_name, Signal.WIKI_CLICKED] = True
 

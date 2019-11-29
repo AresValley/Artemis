@@ -11,19 +11,39 @@ class UniqueMessageBox(QMessageBox):
     If another instance is the the exec loop, calling exec simply return None."""
 
     _open_message = False
+    _font = None
+
+    @classmethod
+    def set_font(cls, font):
+        """Store the font for all UniqueMessageBox(es)."""
+        cls._font = font
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def setFont(self, font):
+        """Extends QMessageBox.setFont. Apply the font only if it is not None."""
+        if font is not None:
+            super().setFont(font)
+
     def exec(self):
         """Overrides QMessageBox.exec. Call the parent method if there are no
-        other instances executing exec. Otherwise return None,"""
+        other instances executing exec; also set the current font.
+        Otherwise return None,"""
         if UniqueMessageBox._open_message:
             return None
+        self.setFont(self._font)
         UniqueMessageBox._open_message = True
         answer = super().exec()
         UniqueMessageBox._open_message = False
         return answer
+
+    def show(self):
+        """Extends QMessageBox.show().
+
+        Set the font before showing the message."""
+        self.setFont(self._font)
+        super().show()
 
 
 def uncheck_and_emit(button):

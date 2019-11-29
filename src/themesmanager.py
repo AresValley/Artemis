@@ -102,7 +102,7 @@ class ThemeManager:
         self._theme_names = {}
 
     @pyqtSlot()
-    def _apply(self, theme_path):
+    def _apply(self, theme_path, save=True):
         """Apply the selected theme.
 
         Refresh all relevant widgets.
@@ -110,7 +110,7 @@ class ThemeManager:
         self._theme_path = theme_path
         if os.path.exists(theme_path):
             if self._theme_path != self._current_theme:
-                self._change()
+                self._change(save)
                 self._owner.display_specs(
                     item=self._owner.signals_list.currentItem(),
                     previous_item=None
@@ -141,29 +141,30 @@ class ThemeManager:
         Display a QMessageBox if the theme folder is not found."""
         themes = []
         ag = QActionGroup(self._owner, exclusive=True)
-        if os.path.exists(ThemeConstants.FOLDER):
-            for theme_folder in sorted(os.listdir(ThemeConstants.FOLDER)):
-                relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
-                if os.path.isdir(os.path.abspath(relative_folder)):
-                    relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
-                    themes.append(relative_folder)
-            for theme_path in themes:
-                theme_name = '&' + self._pretty_name(os.path.basename(theme_path))
-                new_theme = ag.addAction(
-                    QAction(
-                        theme_name,
-                        self._owner,
-                        checkable=True
-                    )
-                )
-                self._owner.menu_themes.addAction(new_theme)
-                self._theme_names[theme_name.lstrip('&')] = new_theme
-                new_theme.triggered.connect(partial(self._apply, theme_path))
-        else:
+        themes_menu = self._owner.settings_menu.addMenu("Themes")
+        if not os.path.exists(ThemeConstants.FOLDER):
             pop_up(self._owner, title=ThemeConstants.THEME_FOLDER_NOT_FOUND,
                    text=ThemeConstants.MISSING_THEME_FOLDER).show()
+            return
+        for theme_folder in sorted(os.listdir(ThemeConstants.FOLDER)):
+            relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
+            if os.path.isdir(os.path.abspath(relative_folder)):
+                relative_folder = os.path.join(ThemeConstants.FOLDER, theme_folder)
+                themes.append(relative_folder)
+        for theme_path in themes:
+            theme_name = '&' + self._pretty_name(os.path.basename(theme_path))
+            new_theme = ag.addAction(
+                QAction(
+                    theme_name,
+                    self._owner,
+                    checkable=True
+                )
+            )
+            themes_menu.addAction(new_theme)
+            self._theme_names[theme_name.lstrip('&')] = new_theme
+            new_theme.triggered.connect(partial(self._apply, theme_path))
 
-    def _change(self):
+    def _change(self, save=True):
         """Change the current theme.
 
         Apply the stylesheet and set active and inactive colors.
@@ -173,8 +174,8 @@ class ThemeManager:
         try:
             with open(os.path.join(self._theme_path, theme_name), "r") as stylesheet:
                 style = stylesheet.read()
-                self._owner.setStyleSheet(style)
-                self._owner.download_window.setStyleSheet(style)
+            self._owner.setStyleSheet(style)
+            self._owner.download_window.setStyleSheet(style)
         except FileNotFoundError:
             pop_up(self._owner, title=ThemeConstants.THEME_NOT_FOUND,
                    text=ThemeConstants.MISSING_THEME).show()
@@ -266,12 +267,8 @@ class ThemeManager:
                     ThemeConstants.DEFAULT_TEXT_COLOR
                 )
             self._current_theme = self._theme_path
-
-            try:
-                with open(ThemeConstants.CURRENT_THEME_FILE, "w") as current_theme:
-                    current_theme.write(os.path.basename(self._theme_path))
-            except Exception:
-                pass
+            if save:
+                self._owner.settings.save(theme=os.path.basename(self._theme_path))
 
     def apply_default_theme(self):
         """Apply the default theme if no theme is set or the theme name is invalid."""
@@ -291,15 +288,14 @@ class ThemeManager:
     def start(self):
         """Start the theme manager."""
         self._detect_themes()
-        if os.path.exists(ThemeConstants.CURRENT_THEME_FILE):
-            with open(ThemeConstants.CURRENT_THEME_FILE, "r") as current_theme_name:
-                theme_path = os.path.join(ThemeConstants.FOLDER, current_theme_name.read())
+        if self._owner.settings.theme is not None:
+            theme_path = os.path.join(ThemeConstants.FOLDER, self._owner.settings.theme)
             theme_name = self._pretty_name(os.path.basename(theme_path))
             try:
                 self._theme_names[theme_name].setChecked(True)
             except Exception:
                 self.apply_default_theme()
             else:
-                self._apply(theme_path)
+                self._apply(theme_path, save=False)
         else:
             self.apply_default_theme()

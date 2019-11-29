@@ -4,8 +4,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
 ## [Unreleased]
-...
 
+## [3.2.0] - 2019-12-14
+
+### Added
+- The default font can be changed ([#14](https://github.com/AresValley/Artemis/pull/14))
+- Move `Themes` into `Settings`.
+- Better settings management in `settings.json`.
+
+### Fixed
+- Fix a bug in the space weather. An inactive k-index caused a crash.
 
 ## [3.1.0] - 2019-10-21
 ### Added
@@ -36,7 +44,8 @@ First release.
 
 
 <!-- Links definitions -->
-[Unreleased]: https://github.com/AresValley/Artemis/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/AresValley/Artemis/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/AresValley/Artemis/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/AresValley/Artemis/compare/v3.0.1...v3.1.0
 [3.0.1]: https://github.com/AresValley/Artemis/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/AresValley/Artemis/releases/tag/v3.0.0

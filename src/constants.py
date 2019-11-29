@@ -181,6 +181,8 @@ class Constants:
     DEFAULT_IMGS_FOLDER     = os.path.join(":", "pics", "default_pics")
     DEFAULT_NOT_SELECTED    = os.path.join(DEFAULT_IMGS_FOLDER, NOT_SELECTED)
     DEFAULT_NOT_AVAILABLE   = os.path.join(DEFAULT_IMGS_FOLDER, NOT_AVAILABLE)
+    FONT_FILE               = os.path.join(__BASE_FOLDER__, 'font.json')
+    SETTINGS_FILE           = os.path.join(__BASE_FOLDER__, "settings.json")
 
 
 class Messages:
@@ -215,7 +217,6 @@ class ThemeConstants:
     EXTENSION                 = ".qss"
     ICONS_FOLDER              = "icons"
     DEFAULT                   = "dark"
-    CURRENT                   = "__current_theme"
     COLORS                    = "colors.txt"
     COLOR_SEPARATOR           = "="
     DEFAULT_ACTIVE_COLOR      = "#000000"
@@ -231,5 +232,4 @@ class ThemeConstants:
     DEFAULT_ICONS_PATH        = os.path.join(FOLDER, DEFAULT, ICONS_FOLDER)
     DEFAULT_SEARCH_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.SEARCH_LABEL_IMG)
     DEFAULT_VOLUME_LABEL_PATH = os.path.join(DEFAULT_ICONS_PATH, Constants.VOLUME_LABEL_IMG)
-    CURRENT_THEME_FILE        = os.path.join(FOLDER, CURRENT)
     DEFAULT_THEME_PATH        = os.path.join(FOLDER, DEFAULT)

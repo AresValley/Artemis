@@ -198,7 +198,7 @@ class SpaceWeatherManager(QObject):
 
             if k_index == 0:
                 self._switchable_g_now_labels.switch_on(self._owner.g0_now_lbl)
-                self._k_storm_labels.switch_on(self.k_inactive_lbl)
+                self._k_storm_labels.switch_on(self._owner.k_inactive_lbl)
                 self._owner.expected_noise_lbl.setText("  S0 - S1 (<-120 dBm)  ")
             elif k_index == 1:
                 self._switchable_g_now_labels.switch_on(self._owner.g0_now_lbl)
