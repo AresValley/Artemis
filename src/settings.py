@@ -38,7 +38,4 @@ class Settings:
         """Return the corresponding setting.
 
         Return None if there is no such setting yet."""
-        try:
-            return self._dct[attr]
-        except Exception:
-            return None
+        return self._dct.get(attr, None)

@@ -30,12 +30,12 @@ class UniqueMessageBox(QMessageBox):
         """Overrides QMessageBox.exec. Call the parent method if there are no
         other instances executing exec; also set the current font.
         Otherwise return None,"""
-        if UniqueMessageBox._open_message:
+        if self.__class__._open_message:
             return None
         self.setFont(self._font)
-        UniqueMessageBox._open_message = True
+        self.__class__._open_message = True
         answer = super().exec()
-        UniqueMessageBox._open_message = False
+        self.__class__._open_message = False
         return answer
 
     def show(self):

@@ -37,10 +37,9 @@ def _download_multiline_file_as_list(url=Database.LINK_REF):
     The downloaded file is a csv file with columns (last version == last line):
     data.zip_SHA256 | db.csv_SHA256 | Version | Creation_date"""
     try:
-        f = download_file(url, encoding="UTF-8").splitlines()[-1].split(Database.DELIMITER)
+        return download_file(url, encoding="UTF-8").splitlines()[-1].split(Database.DELIMITER)
     except Exception:
         return None
-    return f
 
 
 def get_folder_hash_code():

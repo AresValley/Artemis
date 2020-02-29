@@ -63,14 +63,9 @@ def _download_versions_file():
         }
     }
     """
-    try:
-        version_dict = json.load(
-            BytesIO(download_file(Constants.VERSION_LINK))
-        )[get_os()]
-    except Exception:
-        return None
-    else:
-        return version_dict
+    return json.load(
+        BytesIO(download_file(Constants.VERSION_LINK))
+    ).get(get_os(), None)
 
 
 class VersionController:
@@ -80,7 +75,6 @@ class VersionController:
 
     def __init__(self, dct=None):
         """Initialize the dictionary"""
-        super().__init__()
         self._dct = dct
 
     def __getattr__(self, attr):
@@ -89,16 +83,14 @@ class VersionController:
         if self._dct is None:
             if not self.update():
                 return None
-        try:
-            dct_element = self._dct[attr]
-        except Exception("ERROR: Invalid attribute!"):
+        dct_element = self._dct.get(attr, None)
+        if dct_element is None:
             return None
+        if isinstance(dct_element, dict):
+            setattr(self, attr, type(self)(dct_element))
         else:
-            if isinstance(dct_element, dict):
-                setattr(self, attr, type(self)(dct_element))
-            else:
-                setattr(self, attr, dct_element)
-            return getattr(self, attr)
+            setattr(self, attr, dct_element)
+        return getattr(self, attr)
 
     def update(self):
         """Reset the dictionary to the correspondig json file containing
