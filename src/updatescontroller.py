@@ -110,7 +110,7 @@ class UpdatesController(QObject):
         If so, ask to download the new version.
         If the software is not a compiled version, the function is a NOP."""
         if not IS_BINARY or IS_MAC:
-            return
+            return None
         latest_updater_version = self.version_controller.updater.version
         try:
             with sp.Popen(
@@ -124,7 +124,7 @@ class UpdatesController(QObject):
         except Exception:
             updater_version = latest_updater_version
         if latest_updater_version is None:
-            return
+            return None
         if updater_version != latest_updater_version:
             answer = pop_up(
                 self._owner,

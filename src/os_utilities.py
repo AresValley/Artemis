@@ -1,4 +1,5 @@
 import sys
+import platform
 from constants import SupportedOs
 
 
@@ -20,6 +21,7 @@ def _is_linux_os():
 IS_MAC = _is_mac_os()
 IS_LINUX = _is_linux_os()
 IS_WINDOWS = _is_win_os()
+IS_RASPBIAN = IS_LINUX and 'arm' in platform.machine().lowercase()
 
 
 def get_os():
@@ -27,8 +29,10 @@ def get_os():
     if IS_WINDOWS:
         return SupportedOs.WINDOWS
     elif IS_LINUX:
+        if IS_RASPBIAN:
+            return SupportedOs.RASPBIAN
         return SupportedOs.LINUX
     elif IS_MAC:
         return SupportedOs.MAC
     else:
-        raise Exception("ERROR: OS not recognized.")
+        return None

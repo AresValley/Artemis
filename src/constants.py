@@ -12,6 +12,7 @@ class SupportedOs:
     WINDOWS = "windows"
     LINUX   = "linux"
     MAC     = "mac"
+    RASPBIAN = "raspberry"
 
 
 class Ftype:
