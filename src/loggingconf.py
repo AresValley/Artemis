@@ -3,15 +3,18 @@ import logging.config
 from constants import __BASE_FOLDER__
 import os.path
 
-"""Import the module to initialize the logging configuration"""
+"""Import the module to initialize the logging configuration.
+
+It is imported only for its side effects."""
+
 
 _LOGGING_CONFIG = {
     'version': 1,
     'formatters': {
         'general': {
             'format': '%(asctime)s::%(levelname)s::%(module)s::%(funcName)s::%(message)s',
-            'datefmt': '%d/%m/%Y %I:%M:%S %p'
-        }
+            'datefmt': '%d/%m/%Y %I:%M:%S %p',
+        },
     },
     'handlers': {
         'console': {
@@ -26,20 +29,15 @@ _LOGGING_CONFIG = {
             'filename': os.path.join(__BASE_FOLDER__, 'info.log'),
             'mode': 'w',
             'encoding': 'utf8',
-            'formatter': 'general'
-        }
+            'formatter': 'general',
+        },
     },
     'root': {
         'level': 'DEBUG',
-        'handlers': ['console', 'file']
+        'handlers': ['console', 'file'],
     },
-    'loggers': {
-        'root.sublogger': {
-            'propagate': False,
-            'level': 'DEBUG',
-            'handlers': ['console', 'file']
-        }
-    }
+    # Add loggers if required
+    # 'loggers': {}
 }
 
 logging.config.dictConfig(_LOGGING_CONFIG)
