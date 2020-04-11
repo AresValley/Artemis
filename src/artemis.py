@@ -5,6 +5,7 @@ import webbrowser
 import os
 import sys
 from time import sleep, time
+import logging
 
 from pandas import read_csv
 
@@ -58,6 +59,7 @@ from downloadtargetfactory import get_download_target
 from settings import Settings
 from updatescontroller import UpdatesController
 from urlbutton import UrlButton
+import loggingconf  # noqa 401
 
 # import default_imgs_rc
 
@@ -256,6 +258,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
             font.setUnderline(self.settings.font['underline'])
             self.apply_font(font)
         except Exception:  # Invalid font
+            logging.warning("Invalid Font in settings.json")
             pass
 
     @pyqtSlot()
@@ -357,6 +360,7 @@ class Artemis(QMainWindow, Ui_MainWindow):
         try:
             webbrowser.open(Constants.GFD_SITE + query.lower())
         except Exception:
+            logging.error("Cannot open browser")
             pass
 
     def set_initial_size(self):
@@ -445,7 +449,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 try:
                     is_checksum_ok = checksum_ok(db, get_db_hash_code())
-                except Exception:
+                except ValueError as e:
+                    logging.info(e)
                     pop_up(self, title=Messages.NO_CONNECTION,
                            text=Messages.NO_CONNECTION_MSG).show()
                 else:
@@ -485,7 +490,8 @@ class Artemis(QMainWindow, Ui_MainWindow):
             else:
                 try:
                     is_checksum_ok = checksum_ok(db, get_db_hash_code())
-                except Exception:
+                except ValueError as e:
+                    logging.info(e)
                     pop_up(self, title=Messages.NO_CONNECTION,
                            text=Messages.NO_CONNECTION_MSG).show()
                 else:

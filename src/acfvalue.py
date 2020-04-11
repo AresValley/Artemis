@@ -28,14 +28,13 @@ class ACFValue:
                 self._description = ""
                 self._value = value
                 self._string = self._value
-            try:
+            if self._value.isdigit():
                 self.numeric_value = float(self._value)
-            except Exception:
-                self.is_numeric = False
-                self.numeric_value = 0.0
-            else:
                 self.is_numeric = True
                 self._string += " ms"
+            else:
+                self.is_numeric = False
+                self.numeric_value = 0.0
 
     @classmethod
     def list_from_series(cls, series):

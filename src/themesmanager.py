@@ -272,17 +272,15 @@ class ThemeManager:
 
     def apply_default_theme(self):
         """Apply the default theme if no theme is set or the theme name is invalid."""
-        try:
-            self._theme_names[
-                self._pretty_name(ThemeConstants.DEFAULT)
-            ].setChecked(True)
-        except Exception:
+        pretty_name = self._theme_names.get(self._pretty_name(ThemeConstants.DEFAULT), None)
+        if pretty_name is None:
             pop_up(
                 self._owner,
                 title=ThemeConstants.THEME_NOT_FOUND,
                 text=ThemeConstants.MISSING_THEME
             ).show()
         else:
+            pretty_name.setChecked(True)
             self._apply(ThemeConstants.DEFAULT_THEME_PATH)
 
     def start(self):
@@ -291,11 +289,11 @@ class ThemeManager:
         if self._owner.settings.theme is not None:
             theme_path = os.path.join(ThemeConstants.FOLDER, self._owner.settings.theme)
             theme_name = self._pretty_name(os.path.basename(theme_path))
-            try:
-                self._theme_names[theme_name].setChecked(True)
-            except Exception:
+            theme = self._theme_names.get(theme_name, None)
+            if theme is None:
                 self.apply_default_theme()
             else:
+                theme.setChecked(True)
                 self._apply(theme_path, save=False)
         else:
             self.apply_default_theme()

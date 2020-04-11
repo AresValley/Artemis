@@ -1,3 +1,4 @@
+import logging
 import subprocess as sp
 import webbrowser
 from PyQt5.QtCore import QObject, pyqtSlot, QProcess
@@ -99,6 +100,7 @@ class UpdatesController(QObject):
                 try:
                     updater.startDetached(command)
                 except BaseException:
+                    logging.error("Unable to start updater")
                     pass
                 else:
                     qApp.quit()
@@ -122,6 +124,7 @@ class UpdatesController(QObject):
             ) as proc:
                 updater_version = proc.stdout.read().rstrip("\r\n")  # Strip any possible newline, to be sure.
         except Exception:
+            logging.error("Unable to query the updater")
             updater_version = latest_updater_version
         if latest_updater_version is None:
             return

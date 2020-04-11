@@ -1,3 +1,4 @@
+import logging
 from functools import partial
 import hashlib
 from PyQt5.QtWidgets import QMessageBox
@@ -107,7 +108,7 @@ def checksum_ok(data, reference_hash_code):
 
     Expects a sha256 code as argument."""
     if reference_hash_code is None:
-        raise Exception("ERROR: Invalid hash code.")
+        raise ValueError("ERROR: Invalid hash code.")
     code = hashlib.sha256()
     code.update(data)
     return code.hexdigest() == reference_hash_code
@@ -192,6 +193,7 @@ def safe_cast(value, cast_type, default=-1):
     try:
         r = cast_type(value)
     except Exception:
+        logging.error("Cast type failure")
         r = default
     finally:
         return r

@@ -1,3 +1,4 @@
+import logging
 import re
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
@@ -347,6 +348,7 @@ class ForecastData(_BaseWeatherData):
             self._set_dates(forecast, rows["solar_row"])
             self._set_labels_values(labels_table)
         except Exception:
+            logging.error("Update ForecastData failure")
             pass
 
     def remove_data(self):

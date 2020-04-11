@@ -1,4 +1,4 @@
-__pycache__
+__PYCache__
 Data
 src/themes/__current_theme
 designer.bat
@@ -8,3 +8,4 @@ launch.bat
 spec_files/**/output
 *.txt
 *.json
+info.log

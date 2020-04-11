@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 import urllib3
@@ -39,12 +40,19 @@ def _download_multiline_file_as_list(url=Database.LINK_REF):
     try:
         return download_file(url, encoding="UTF-8").splitlines()[-1].split(Database.DELIMITER)
     except Exception:
+        logging.error("Database metadata download failure")
         return None
 
 
 def get_folder_hash_code():
-    return _download_multiline_file_as_list()[0]
+    f = _download_multiline_file_as_list()
+    if f is not None:
+        return f[0]
+    return None
 
 
 def get_db_hash_code():
-    return _download_multiline_file_as_list()[1]
+    f = _download_multiline_file_as_list()
+    if f is not None:
+        return f[1]
+    return None

@@ -1,6 +1,7 @@
 import os.path
 from constants import Constants
 import json
+import logging
 
 
 class Settings:
@@ -16,7 +17,8 @@ class Settings:
         try:
             with open(Constants.SETTINGS_FILE, 'r') as settings_file:
                 self._dct = json.load(settings_file)
-        except Exception:
+        except FileNotFoundError:
+            logging.info("No settings.json file")
             pass  # Invalid file.
 
     def save(self, **kwargs):
