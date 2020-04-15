@@ -113,8 +113,8 @@ class Constants:
     UPDATING_STR            = "Updating..."
     ACF_DOCS                = "https://aresvalley.com/documentation/"
     FORECAST_PROBABILITIES  = "https://services.swpc.noaa.gov/text/sgarf.txt"
-    SPACE_WEATHER_XRAY      = "https://services.swpc.noaa.gov/text/goes-xray-flux-primary.txt"
-    SPACE_WEATHER_PROT_EL   = "https://services.swpc.noaa.gov/text/goes-particle-flux-primary.txt"
+    SPACE_WEATHER_XRAY      = "https://services.swpc.noaa.gov/json/goes/primary/xrays-1-day.json"
+    SPACE_WEATHER_PROT_EL   = "https://services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json"
     SPACE_WEATHER_AK_INDEX  = "https://services.swpc.noaa.gov/text/wwv.txt"
     SPACE_WEATHER_SGAS      = "https://services.swpc.noaa.gov/text/sgas.txt"
     SPACE_WEATHER_GEO_STORM = "https://services.swpc.noaa.gov/text/3-day-forecast.txt"
@@ -209,6 +209,8 @@ class Messages:
     NEW_VERSION_AVAILABLE    = "New software version"
     NEW_VERSION_MSG          = lambda v: f"The software version {v} is available."  # noqa: E731
     DOWNLOAD_SUGG_MSG        = "Download new version now?"
+    SCREEN_UPDATE_FAIL       = "Unable to update the data"
+    SCREEN_UPDATE_FAIL_MSG   = "Downloaded data currupted or invalid"
 
 
 class ThemeConstants:

@@ -1,4 +1,5 @@
 import logging
+import json
 import re
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
@@ -10,7 +11,7 @@ from threads import (
 )
 from constants import Constants
 from switchable_label import MultiColorSwitchableLabel
-from utilities import safe_cast
+from utilities import safe_cast, get_value_from_list_of_dicts
 
 
 class _BaseWeatherData(QObject):
@@ -90,11 +91,34 @@ class SpaceWeatherData(_BaseWeatherData):
         """Override _BaseWeatherData._parse_data.
 
         Set all the data."""
-        self.xray      = self._double_split(self.xray)
-        self.prot_el   = self._double_split(self.prot_el)
-        self.ak_index  = self._double_split(self.ak_index)
-        self.sgas      = self._double_split(self.sgas)
-        self.geo_storm = self._double_split(self.geo_storm)
+        if self.xray is not None:
+            self.xray = get_value_from_list_of_dicts(
+                self.xray,
+                lambda d: d["energy"] == "0.1-0.8nm",
+                "flux"
+            )
+        if self.prot_el is not None:
+            self.prot_el = get_value_from_list_of_dicts(
+                self.prot_el,
+                lambda d: d["energy"] == ">=10 MeV",
+                "flux"
+            )
+        if self.ak_index is not None:
+            self.ak_index = self._double_split(self.ak_index)
+        if self.sgas is not None:
+            self.sgas = self._double_split(self.sgas)
+        if self.geo_storm is not None:
+            self.geo_storm = self._double_split(self.geo_storm)
+
+    def set_property(self, property_name, data, extension):
+        """Set a property to the object. Format the data based on the extension."""
+        if extension == 'txt':
+            setattr(self, property_name, str(data, 'utf-8'))
+        elif extension == 'json':
+            setattr(self, property_name, json.loads(data))
+        else:
+            logging.error("Invalid file extension")
+            setattr(self, property_name, None)
 
     def remove_data(self):
         """Remove the reference to all the data."""

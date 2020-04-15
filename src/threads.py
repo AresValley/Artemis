@@ -7,7 +7,7 @@ from time import perf_counter
 import aiohttp
 from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
 from constants import Constants
-from utilities import checksum_ok
+from utilities import checksum_ok, get_file_extension
 from web_utilities import (
     get_cacert_file,
     get_pool_manager,
@@ -234,7 +234,7 @@ class UpdateSpaceWeatherThread(BaseDownloadThread):
         """Download the data conteining the information of a specific property."""
         link = getattr(Constants, "SPACE_WEATHER_" + property_name.upper())
         data = await _download_resource(session, link)
-        setattr(self._space_weather_data, property_name, str(data, 'utf-8'))
+        self._space_weather_data.set_property(property_name, data, get_file_extension(link))
 
     async def _download_image(self, session, n):
         """Download the data corresponding the n-th image displayed in the screen."""

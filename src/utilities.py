@@ -197,3 +197,21 @@ def safe_cast(value, cast_type, default=-1):
         r = default
     finally:
         return r
+
+
+def get_file_extension(file):
+    """Return the extension of a file. Return None if there is not such property."""
+    components = file.split('.')
+    if len(components) > 1:
+        return components[-1]
+    return None
+
+
+def get_value_from_list_of_dicts(iterable, callable_ok, key_value):
+    """Return a value from a dict inside a list of dicts.
+
+    The iterable is reversed first, then the value corresponding to the key key_value
+    is returned from the first dict for which callable_ok(dict) returns True"""
+    for d in reversed(iterable):
+        if callable_ok(d):
+            return d[key_value]
