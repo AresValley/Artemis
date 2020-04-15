@@ -144,7 +144,7 @@ class SpaceWeatherManager(QObject):
                     return letter + f"{xray_long * 10**power:.1f}"
 
                 if xray_long < 1e-8 and xray_long != -1.00e+05:
-                    self._owner.peak_flux_lbl.setText(format_text("<A", 8))
+                    self._owner.peak_flux_lbl.setText("<A0.0")
                 elif xray_long >= 1e-8 and xray_long < 1e-7:
                     self._owner.peak_flux_lbl.setText(format_text("A", 8))
                 elif xray_long >= 1e-7 and xray_long < 1e-6:
