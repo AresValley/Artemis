@@ -156,7 +156,7 @@ class DownloadThread(BaseDownloadThread):
         """Verify the checksum of the downloaded data and set the status accordingly."""
         try:
             is_checksum_ok = checksum_ok(raw_data, self._target.hash_code)
-        except Exception:  # Invalid hash code.
+        except ValueError:  # Invalid hash code.
             self.status = ThreadStatus.NO_CONNECTION_ERR
             return True
         else:

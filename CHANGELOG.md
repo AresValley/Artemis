@@ -5,10 +5,15 @@ The first release is [3.0.0] because this is actually the third major version (c
 
 ## [Unreleased]
 
+### Fixed
+- Support new `JSON` format for some forecast data ([#21](https://github.com/AresValley/Artemis/pull/14)).
+- Fixed categorization for very low x-ray flux according to NOAA format.
+- Add some basic logging to the application. Also for severe errors, track them in info.log file in local folder.
+
 ## [3.2.0] - 2019-12-14
 
 ### Added
-- The default font can be changed ([#14](https://github.com/AresValley/Artemis/pull/14))
+- The default font can be changed ([#14](https://github.com/AresValley/Artemis/pull/14)).
 - Move `Themes` into `Settings`.
 - Better settings management in `settings.json`.
 
