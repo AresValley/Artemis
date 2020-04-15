@@ -147,7 +147,7 @@ The only folder with the pre-built package is the `themes` one. In this way the 
 Some of the available themes were adapted from https://github.com/GTRONICK/QSS.
 
 ## License
-This program (ARTEMIS 3, 2014-2019) is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+This program (ARTEMIS 3, 2014-2020) is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
@@ -159,5 +159,6 @@ You should have received a copy of the GNU General Public License along with thi
 * **Paolo Romani (IZ1MLL)** - *Lead β Tester, RF specialist*
 * **Carl Colena** - *Sigidwiki admin, β Tester, Signals expert*
 * [**Marco Bortoli**](https://github.com/marbort "GitHub profile") - *macOS deployment, β Tester*
+* [**Eric Wiessner (KI7POL)**](https://github.com/WheezyE "GitHub profile") - *ARM port (Raspberry Pi3B+ and Pi4B)*
 * [**Pierpaolo Pravatto**](https://github.com/ppravatto "GitHub profile") - *Wiki page, β Tester*
 * [**Francesco Capostagno**](https://github.com/fcapostagno "GitHub profile"), **Luca**, **Pietro** - *β Tester*
