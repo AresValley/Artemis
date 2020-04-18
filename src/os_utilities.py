@@ -21,7 +21,7 @@ def _is_linux_os():
 IS_MAC = _is_mac_os()
 IS_LINUX = _is_linux_os()
 IS_WINDOWS = _is_win_os()
-IS_RASPBIAN = IS_LINUX and 'arm' in platform.machine().lowercase()
+IS_RASPBIAN = IS_LINUX and 'arm' in platform.machine().lower()
 
 
 def get_os():
