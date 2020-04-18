@@ -61,6 +61,20 @@ def _download_versions_file():
                 "size": ...
             }
         }
+        "raspberry": {
+            "software": {
+                "version": "...",
+                "url": "...",
+                "hash_code": "...",
+                "size": ...
+            },
+            "updater": {
+                "version": "...",
+                "url": "...",
+                "hash_code": "...",
+                "size": ...
+            }
+        }
     }
     """
     return json.load(

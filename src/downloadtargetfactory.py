@@ -49,6 +49,7 @@ class _TarExtractor:
 EXTRACTORS = {
     SupportedOs.WINDOWS: _ZipExtractor,
     SupportedOs.LINUX: _TarExtractor,
+    SupportedOs.RASPBIAN: _TarExtractor,
     # No extractor for MacOs, just download the file through the browser.
 }
 
