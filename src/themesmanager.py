@@ -140,7 +140,7 @@ class ThemeManager:
         Connect all the actions to change the theme.
         Display a QMessageBox if the theme folder is not found."""
         themes = []
-        ag = QActionGroup(self._owner, exclusive=True)
+        ag = QActionGroup(self._owner)
         themes_menu = self._owner.settings_menu.addMenu("Themes")
         if not os.path.exists(ThemeConstants.FOLDER):
             pop_up(self._owner, title=ThemeConstants.THEME_FOLDER_NOT_FOUND,

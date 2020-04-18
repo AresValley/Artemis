@@ -4,11 +4,15 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
 ## [Unreleased]
+### Added
+- Add some basic logging to the application. Also for severe errors, track them in info.log file in local folder.
+- Add Raspberry PI support ([#18](https://github.com/AresValley/Artemis/pull/18), [#20](https://github.com/AresValley/Artemis/pull/20))
 
 ### Fixed
 - Support new `JSON` format for some forecast data ([#21](https://github.com/AresValley/Artemis/pull/14)).
 - Fixed categorization for very low x-ray flux according to NOAA format.
-- Add some basic logging to the application. Also for severe errors, track them in info.log file in local folder.
+- Remove the `exclusive` parameter in a PyQt function ([#16](https://github.com/AresValley/Artemis/pull/16)).
+  
 
 ## [3.2.0] - 2019-12-14
 
