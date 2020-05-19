@@ -77,9 +77,14 @@ def _download_versions_file():
         }
     }
     """
-    return json.load(
-        BytesIO(download_file(Constants.VERSION_LINK))
-    ).get(get_os(), None)
+    try:
+        version_dict = json.load(
+            BytesIO(download_file(Constants.VERSION_LINK))
+        )[get_os()]
+    except Exception:
+        return None
+    else:
+        return version_dict
 
 
 class VersionController:
