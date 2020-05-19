@@ -39,7 +39,7 @@ pyinstaller Artemis_onedir.spec
 
 You can save a copy of the executable in a folder of you choice. At startup it will ask you to download the database and also warn you that the `themes` folder is missing. To avoid this, copy `src/Data` and `src/themes` in the folder containing the executable.
 
-## Build scripts
+## Build scripts (Windows, Linux, macOS)
 Provided you satisfy the requirements (see [requirements.txt](../requirements/requirements.txt)) and have pyinstaller installed, running a `build.*` script in `<your os>` folder will produce an `output` folder with:
 
 - Executable versions of Artemis and the updater;
@@ -50,3 +50,15 @@ Provided you satisfy the requirements (see [requirements.txt](../requirements/re
 At the end of the process the script writes on standard output the size and sha256 code for the compressed files.
 
 **NOTE.** For Windows you will need a 7z installation. Also check the path hardcoded in `/Windows/build.bat`.
+
+## Build script (Raspberry Pi)
+Thanks to [**Eric Wiessner (KI7POL)**](https://github.com/WheezyE "GitHub profile"), an automatic script to compile Artemis (and meet all the Artemis' build requirements) is available in the Linux folder `Linux/raspbian_build.sh`. The script will proceed as follows:
+
+- Detect which Raspbian operating system is being used (Buster or Stretch), installing PyEnv on the system (if PyEnv isn't already installed).
+- Installation of a Python v3.7.0 virtual environment inside of PyEnv (so that Artemis' pip modules do not conflict with Raspbian's System Python).
+- Installation of pip modules (Artemis requirements) within the previously built virtual Python 3.7.0 (modules are specific to Buster or Stretch).
+- Canonical Artemis building for Linux OS (using build.sh).
+
+**The complete instructions, a troubleshooting guide and many other usefull details are available in the script itself.**
+
+If the script is re-run, it will skip over parts it has already installed. Options are included to clean up after the script is run. In the worst case scenario, this script takes 14 hours on a Pi 0W, but much less time on multi-core Pi's.
