@@ -1,8 +1,8 @@
-numpy==1.17.2
-pandas>=0.24.2
-certifi>=2019.6.16
-aiohttp>=3.5.4
-urllib3==1.24.3
-pygame>=1.9.6
-QtAwesome>=0.6.0
-PyQt5==5.12.2
+numpy>=1.23.1
+pandas>=1.4.3
+certifi>=2022.6.15
+aiohttp>=3.8.1
+urllib3>=1.26.9
+pygame>=2.1.2
+QtAwesome>=1.1.1
+PyQt5>=5.15.7

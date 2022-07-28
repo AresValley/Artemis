@@ -3,8 +3,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
-## [Unreleased]
+## [3.2.2] - 2022-07-29
+### Fixed
 - Fixed crash on startup or if checking for updates without an internet connection ([#23](https://github.com/AresValley/Artemis/pull/23))
+- Updated dependencies for security reasons (urllib3) and to address the main application failure to launch under certain conditions.
 
 ## [3.2.1] - 2020-04-25
 ### Added
