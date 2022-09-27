@@ -1,3 +1,4 @@
+import math
 import os
 from pygame import mixer
 from PyQt5.QtCore import QTimer, pyqtSlot, QObject
@@ -120,7 +121,7 @@ class AudioPlayer(QObject):
     def _set_max_progress_bar(self):
         """Set the maximum value of the progress bar."""
         self._audio_progress.setMaximum(
-            mixer.Sound(self._audio_file).get_length() * 1000
+            math.ceil(mixer.Sound(self._audio_file).get_length() * 1000)
         )
 
     def set_audio_player(self, fname=""):
