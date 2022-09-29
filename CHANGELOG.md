@@ -3,6 +3,12 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
+## [3.2.3] - 2022-09-29
+### Added
+- Add auto-packaging feature using GitHub actions for Windows OS (experimental)
+### Fixed
+- Fix crash for playing audio ([#34](https://github.com/AresValley/Artemis/pull/34))
+
 ## [3.2.2] - 2022-07-29
 ### Fixed
 - Fixed crash on startup or if checking for updates without an internet connection ([#23](https://github.com/AresValley/Artemis/pull/23))

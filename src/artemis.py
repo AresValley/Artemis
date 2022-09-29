@@ -64,7 +64,7 @@ import loggingconf  # noqa 401
 # import default_imgs_rc
 
 
-__LATEST_VERSION__ = "3.2.2"
+__LATEST_VERSION__ = "3.2.3"
 
 if IS_BINARY:
     __VERSION__ = __LATEST_VERSION__
