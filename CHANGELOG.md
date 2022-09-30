@@ -3,6 +3,10 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
 
+## [3.2.4] - 2022-09-30
+### Fixed
+- Fixed crash on opening the Rx/Tx Condition tab
+
 ## [3.2.3] - 2022-09-29
 ### Added
 - Add auto-packaging feature using GitHub actions for Windows OS (experimental)
