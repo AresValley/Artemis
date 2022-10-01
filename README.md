@@ -33,8 +33,8 @@ For more information, follow [the main page of Artemis 3](https://aresvalley.com
 
 **Requirements:**
 - Windows 7/8/8.1/10
-- Linux: Ubuntu 18.04+, Mint 19+, Fedora 28+ and many other. **You need at least version 2.27 of the GLIBC system library** ([details](https://github.com/AresValley/Artemis/tree/master/spec_files))
-- macOS
+- Linux: Ubuntu 20.04+, Mint 20+, Fedora 32+ and many other. **You need at least version 2.31 of the GLIBC system library** ([details](https://github.com/AresValley/Artemis/tree/master/spec_files))
+- macOS 11+ (Big Sur or later)
 
 ### Run from source code
 Run the software from the source code with the Python interpreter is the simplest and natural way to run Artemis 3.
