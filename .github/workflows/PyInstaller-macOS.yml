@@ -1,10 +1,10 @@
-name: Auto Packaging - MacOS
+name: PyInstaller - MacOS
 
 on:
   workflow_dispatch:
 
 jobs:
-  macos-packaging:
+  macos-pyinstaller:
     runs-on: macos-11
     steps:
     - uses: actions/checkout@v3

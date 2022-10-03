@@ -1,10 +1,10 @@
-name: Auto Packaging - Linux
+name: PyInstaller - Linux
 
 on:
   workflow_dispatch:
 
 jobs:
-  linux-packaging:
+  linux-pyinstaller:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3

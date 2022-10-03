@@ -1,0 +1,48 @@
+name: Nuitka - Windows 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows-nuitka:
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: pip install -r ./requirements/requirements.txt
+
+    - name: Install Nuitka
+      run: |
+        pip install Nuitka ordered-set zstandard
+
+    - name: Building Artemis
+      run: |
+        $MOD_PATH = python -c 'import site; print(site.getsitepackages()[1])'
+        CD src
+        MKDIR onefile
+
+        python -m nuitka --standalone --onefile --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --enable-plugin=numpy --include-data-dir=themes=themes --include-data-dir=default_pics=default_pics --include-data-dir=$MOD_PATH\qtawesome=qtawesome --include-data-files=artemis.ui=artemis.ui  --include-data-files=cacert.pem=cacert.pem --include-data-files=clickable_progress_bar.py=clickable_progress_bar.py --include-data-files=default_imgs.qrc=default_imgs.qrc --include-data-files=default_imgs_rc.py=default_imgs_rc.py --include-data-files=double_text_button.py=double_text_button.py --include-data-files=download_db_window.ui=download_db_window.ui --include-data-files=fixed_aspect_ratio_label.py=fixed_aspect_ratio_label.py --include-data-files=fixed_aspect_ratio_widget.py=fixed_aspect_ratio_widget.py --include-data-files=$MOD_PATH\pygame\libogg-0.dll=libogg-0.dll --include-data-files=$MOD_PATH\pygame\libopus-0.dll=libopus-0.dll --include-data-files=$MOD_PATH\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-files=$MOD_PATH\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll  --include-data-files=$MOD_PATH\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-icon-from-ico=default_pics\Artemis3.ico --show-modules artemis.py
+
+        MOVE artemis.dist standalone
+
+        MOVE artemis.exe onefile\artemis.exe
+        MOVE themes onefile\themes
+        MOVE artemis.ui onefile\artemis.ui
+        MOVE cacert.pem onefile\cacert.pem
+        MOVE download_db_window.ui onefile\download_db_window.ui
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Artemis_Windows_STANDALONE
+        path: .\src\standalone
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Artemis_Windows_ONEFILE
+        path: .\src\onefile

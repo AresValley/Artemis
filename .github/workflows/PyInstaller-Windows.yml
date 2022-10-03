@@ -1,10 +1,10 @@
-name: Auto Packaging - Windows
+name: PyInstaller - Windows
 
 on:
   workflow_dispatch:
 
 jobs:
-  windows-packaging:
+  windows-pyinstaller:
     runs-on: windows-2022
     steps:
     - uses: actions/checkout@v3
