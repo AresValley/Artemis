@@ -1,0 +1,33 @@
+name: Nuitka - MacOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  macos-nuitka:
+    runs-on: macos-11
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: pip install -r ./requirements/requirements.txt
+
+    - name: Install PyInstaller
+      run: |
+        pip install Nuitka ordered-set zstandard
+
+    - name: Build Artemis
+      run: |
+        cd src
+        python -m nuitka --standalone --macos-create-app-bundle --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --enable-plugin=numpy --include-data-dir=themes=themes --include-data-dir=default_pics=default_pics --include-data-dir=$MOD_PATH/qtawesome=qtawesome --include-data-files=artemis.ui=artemis.ui  --include-data-files=cacert.pem=cacert.pem --include-data-files=clickable_progress_bar.py=clickable_progress_bar.py --include-data-files=default_imgs.qrc=default_imgs.qrc --include-data-files=default_imgs_rc.py=default_imgs_rc.py --include-data-files=double_text_button.py=double_text_button.py --include-data-files=download_db_window.ui=download_db_window.ui --include-data-files=fixed_aspect_ratio_label.py=fixed_aspect_ratio_label.py --include-data-files=fixed_aspect_ratio_widget.py=fixed_aspect_ratio_widget.py --show-modules --macos-signed-app-name=eu.aresvalley.artemis --macos-app-name=Artemis --macos-app-version=3.2.4 artemis.py
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Artemis_MacOS
+        path: |
+          ./src/artemis.app

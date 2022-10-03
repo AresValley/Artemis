@@ -40,6 +40,7 @@ jobs:
         mv download_db_window.ui Artemis/download_db_window.ui
         mv updater.bin Artemis/_ArtemisUpdater
         cp ../spec_files/Linux/create_shortcut.sh Artemis/create_shortcut.sh
+        cp ../spec_files/Linux/artemis3.svg Artemis/artemis3.svg
 
         echo "Create complete archive"
         tar -czvf ArtemisWebDownlaod_linux.tar.gz Artemis
