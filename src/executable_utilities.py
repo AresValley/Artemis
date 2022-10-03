@@ -6,7 +6,7 @@ import os.path
 
 def _is_executable_version():
     """Return whether the binary version is running."""
-    return hasattr(sys, "_MEIPASS")
+    return hasattr(sys, "_MEIPASS") or "__compiled__" in globals()
 
 
 IS_BINARY = _is_executable_version()
