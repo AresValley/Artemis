@@ -1,0 +1,62 @@
+name: Nuitka - Linux
+
+on:
+  workflow_dispatch:
+
+jobs:
+  linux-nuitka:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: pip install -r ./requirements/requirements.txt
+
+    - name: Install Nuitka
+      run: |
+        pip install Nuitka ordered-set zstandard
+
+    - name: Building Artemis
+      run: |
+        MOD_PATH=$(python -c 'import site; print(site.getsitepackages()[0])')
+        cd src
+
+        python -m nuitka --standalone --onefile --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --enable-plugin=numpy --include-data-dir=themes=themes --include-data-dir=default_pics=default_pics --include-data-dir=$MOD_PATH/qtawesome=qtawesome --include-data-files=artemis.ui=artemis.ui  --include-data-files=cacert.pem=cacert.pem --include-data-files=clickable_progress_bar.py=clickable_progress_bar.py --include-data-files=default_imgs.qrc=default_imgs.qrc --include-data-files=default_imgs_rc.py=default_imgs_rc.py --include-data-files=double_text_button.py=double_text_button.py --include-data-files=download_db_window.ui=download_db_window.ui --include-data-files=fixed_aspect_ratio_label.py=fixed_aspect_ratio_label.py --include-data-files=fixed_aspect_ratio_widget.py=fixed_aspect_ratio_widget.py --linux-onefile-icon=../spec_files/Linux/artemis3.svg --show-modules --disable-console artemis.py
+        python -m nuitka --standalone --onefile --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --include-data-dir=$MOD_PATH/qtawesome=qtawesome --include-data-files=default_imgs_rc.py=default_imgs_rc.py --linux-onefile-icon=../spec_files/Linux/artemis3.svg --show-modules --disable-console updater.py
+
+        chmod 755 artemis.bin
+        chmod 755 updater.bin
+
+        mkdir Artemis
+        mv artemis.bin Artemis/Artemis
+        mv themes Artemis/themes
+        mv artemis.ui Artemis/artemis.ui
+        mv cacert.pem Artemis/cacert.pem
+        mv download_db_window.ui Artemis/download_db_window.ui
+        mv updater.bin Artemis/_ArtemisUpdater
+        cp ../spec_files/Linux/create_shortcut.sh Artemis/create_shortcut.sh
+
+        echo "Create complete archive"
+        tar -czvf ArtemisWebDownlaod_linux.tar.gz Artemis
+
+        echo "Create single archives"
+        cd Artemis
+        tar -czvf Artemis_linux.tar.gz Artemis
+        tar -czvf _ArtemisUpdater_linux.tar.gz _ArtemisUpdater
+
+        echo "Get size and sha256"
+        python ../../spec_files/__get_hash_code.py Artemis_linux.tar.gz _ArtemisUpdater_linux.tar.gz ../ArtemisWebDownlaod_linux.tar.gz > checksum.txt
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: Artemis_Linux
+        path: |
+          ./src/Artemis/Artemis_linux.tar.gz
+          ./src/Artemis/_ArtemisUpdater_linux.tar.gz
+          ./src/ArtemisWebDownlaod_linux.tar.gz
+          ./src/Artemis/checksum.txt
