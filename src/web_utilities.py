@@ -7,8 +7,9 @@ from executable_utilities import IS_BINARY
 
 
 def get_cacert_file():
-    """Return the path to the cacert.pem file."""
-    if IS_BINARY:
+    """Return the path to the cacert.pem file.
+    PyInstaller requires _MEIPASS, Nuitka does not."""
+    if IS_BINARY and not "__compiled__" in globals():
         ca_certs = os.path.join(sys._MEIPASS, 'cacert.pem')
     else:
         ca_certs = 'cacert.pem'
