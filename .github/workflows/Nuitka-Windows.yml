@@ -2,6 +2,12 @@ name: Nuitka - Windows
 
 on:
   workflow_dispatch:
+    inputs:
+      artemis_version:
+        description: 'Version'
+        required: true
+        default: '3.0.0'
+        type: string
 
 jobs:
   windows-nuitka:
@@ -27,10 +33,9 @@ jobs:
         CD src
         MKDIR onefile
 
-        python -m nuitka --standalone --onefile --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --enable-plugin=numpy --include-data-dir=themes=themes --include-data-dir=default_pics=default_pics --include-data-dir=$MOD_PATH\qtawesome=qtawesome --include-data-files=artemis.ui=artemis.ui  --include-data-files=cacert.pem=cacert.pem --include-data-files=clickable_progress_bar.py=clickable_progress_bar.py --include-data-files=default_imgs.qrc=default_imgs.qrc --include-data-files=default_imgs_rc.py=default_imgs_rc.py --include-data-files=double_text_button.py=double_text_button.py --include-data-files=download_db_window.ui=download_db_window.ui --include-data-files=fixed_aspect_ratio_label.py=fixed_aspect_ratio_label.py --include-data-files=fixed_aspect_ratio_widget.py=fixed_aspect_ratio_widget.py --include-data-files=$MOD_PATH\pygame\libogg-0.dll=libogg-0.dll --include-data-files=$MOD_PATH\pygame\libopus-0.dll=libopus-0.dll --include-data-files=$MOD_PATH\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-files=$MOD_PATH\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll  --include-data-files=$MOD_PATH\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-icon-from-ico=default_pics\Artemis3.ico --show-modules artemis.py
-        python -m nuitka --standalone --onefile --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --include-data-dir=$MOD_PATH\qtawesome=qtawesome --include-data-files=default_imgs_rc.py=default_imgs_rc.py --windows-icon-from-ico=default_pics\Artemis3.ico --show-modules updater.py
+        python -m nuitka --standalone --onefile --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --enable-plugin=numpy --include-data-dir=themes=themes --include-data-dir=default_pics=default_pics --include-data-dir=$MOD_PATH\qtawesome=qtawesome --include-data-files=artemis.ui=artemis.ui  --include-data-files=cacert.pem=cacert.pem --include-data-files=clickable_progress_bar.py=clickable_progress_bar.py --include-data-files=default_imgs.qrc=default_imgs.qrc --include-data-files=default_imgs_rc.py=default_imgs_rc.py --include-data-files=double_text_button.py=double_text_button.py --include-data-files=download_db_window.ui=download_db_window.ui --include-data-files=fixed_aspect_ratio_label.py=fixed_aspect_ratio_label.py --include-data-files=fixed_aspect_ratio_widget.py=fixed_aspect_ratio_widget.py --include-data-files=$MOD_PATH\pygame\libogg-0.dll=libogg-0.dll --include-data-files=$MOD_PATH\pygame\libopus-0.dll=libopus-0.dll --include-data-files=$MOD_PATH\pygame\libopusfile-0.dll=libopusfile-0.dll --include-data-files=$MOD_PATH\pygame\libvorbisfile-3.dll=libvorbisfile-3.dll  --include-data-files=$MOD_PATH\pygame\libvorbis-0.dll=libvorbis-0.dll --windows-icon-from-ico=default_pics\Artemis3.ico --show-modules --windows-company-name=Aresvalley.com --windows-product-name=Artemis --windows-file-version=${{github.event.inputs.artemis_version}} --windows-product-version=${{github.event.inputs.artemis_version}} --windows-file-description=Artemis artemis.py
 
-        MOVE artemis.dist standalone
+        python -m nuitka --standalone --onefile --assume-yes-for-downloads --follow-imports --enable-plugin=pyqt5 --include-data-dir=$MOD_PATH\qtawesome=qtawesome --include-data-files=default_imgs_rc.py=default_imgs_rc.py --windows-icon-from-ico=default_pics\Artemis3.ico --show-modules --windows-company-name=Aresvalley.com --windows-product-name=Artemis --windows-file-version=${{github.event.inputs.artemis_version}} --windows-product-version=${{github.event.inputs.artemis_version}} --windows-file-description=Artemis  updater.py
 
         MOVE artemis.exe onefile\Artemis.exe
         MOVE themes onefile\themes
@@ -39,12 +44,6 @@ jobs:
         MOVE download_db_window.ui onefile\download_db_window.ui
 
         COPY updater.exe onefile\_ArtemisUpdater.exe
-        COPY updater.dist\updater.exe standalone\_ArtemisUpdater.exe
-
-    - uses: actions/upload-artifact@v3
-      with:
-        name: Artemis_Windows_STANDALONE
-        path: .\src\standalone
 
     - uses: actions/upload-artifact@v3
       with:
