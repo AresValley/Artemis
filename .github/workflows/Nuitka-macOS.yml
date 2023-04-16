@@ -19,7 +19,7 @@ jobs:
 
     - name: Install PyInstaller
       run: |
-        pip install Nuitka ordered-set zstandard
+        pip install Nuitka ordered-set zstandard imageio
 
     - name: Build Artemis
       run: |
