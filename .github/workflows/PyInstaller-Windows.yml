@@ -2,6 +2,12 @@ name: PyInstaller - Windows
 
 on:
   workflow_dispatch:
+    inputs:
+      artemis_version:
+        description: 'Version'
+        required: true
+        default: '3.0.0'
+        type: string
 
 jobs:
   windows-pyinstaller:
@@ -41,21 +47,21 @@ jobs:
         CD output
         MKDIR Artemis
         XCOPY /y Artemis.exe Artemis\
-        XCOPY /e /k /y ..\..\..\src\themes Artemis\themes\ /EXCLUDE:..\excluded_files.txt
+        XCOPY /e /k /y ..\..\..\src\themes Artemis\themes\
         XCOPY /y _ArtemisUpdater.exe Artemis\
 
         ECHO "Compress files themes+Artemis.exe -> Artemis.zip"
         $compress = @{
           Path = ".\Artemis.exe", "..\..\..\src\themes"
           CompressionLevel = "Optimal"
-          DestinationPath = ".\Artemis_win.zip"
+          DestinationPath = ".\Artemis.zip"
         }
         Compress-Archive @compress
 
         $compress = @{
           Path = ".\_ArtemisUpdater.exe"
           CompressionLevel = "Optimal"
-          DestinationPath = ".\_ArtemisUpdater_win.zip"
+          DestinationPath = ".\ArtemisUpdater.zip"
         }
         Compress-Archive @compress
 
@@ -63,17 +69,17 @@ jobs:
         $compress = @{
           Path = "Artemis"
           CompressionLevel = "Optimal"
-          DestinationPath = ".\ArtemisWebsite_win.zip"
+          DestinationPath = ".\Artemis_v${{github.event.inputs.artemis_version}}_x64.zip"
         }
         Compress-Archive @compress
 
-        python ..\..\__get_hash_code.py Artemis_win.zip _ArtemisUpdater_win.zip ArtemisWebsite_win.zip > checksum.txt
+        python ..\..\__get_hash_code.py Artemis.zip ArtemisUpdater.zip Artemis_v${{github.event.inputs.artemis_version}}_x64.zip > checksum_SHA256.txt
 
     - uses: actions/upload-artifact@v3
       with:
-        name: Artemis_Windows
+        name: Artemis_v${{github.event.inputs.artemis_version}}_win_x64_PyInstaller
         path: |
-          .\spec_files\Windows\output\Artemis_win.zip
-          .\spec_files\Windows\output\_ArtemisUpdater_win.zip
-          .\spec_files\Windows\output\ArtemisWebsite_win.zip
-          .\spec_files\Windows\output\checksum.txt
+          .\spec_files\Windows\output\Artemis.zip
+          .\spec_files\Windows\output\ArtemisUpdater.zip
+          .\spec_files\Windows\output\Artemis_v${{github.event.inputs.artemis_version}}_x64.zip
+          .\spec_files\Windows\output\checksum_SHA256.txt
