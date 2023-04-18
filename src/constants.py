@@ -219,7 +219,7 @@ class ThemeConstants:
 
     EXTENSION                 = ".qss"
     ICONS_FOLDER              = "icons"
-    DEFAULT                   = "dark"
+    DEFAULT                   = "material_design_dark"
     COLORS                    = "colors.txt"
     COLOR_SEPARATOR           = "="
     DEFAULT_ACTIVE_COLOR      = "#000000"
