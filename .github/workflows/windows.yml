@@ -1,0 +1,35 @@
+name: Nuitka - Windows 
+
+on:
+  workflow_dispatch:
+    inputs:
+      artemis_version:
+        description: 'Version'
+        required: true
+        default: '4.0.0'
+        type: string
+
+jobs:
+  build-windows-x86_64:
+    runs-on: windows-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Build and package
+        run: ./building/Windows/build_windows.ps1
+        shell: powershell
+
+      - name: Building installer (ISCC)
+        run: iscc ./building/Windows/windows_installer.iss
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Artemis-Windows-x86_64-${{github.event.inputs.artemis_version}}
+          path: ./building/artemis.exe

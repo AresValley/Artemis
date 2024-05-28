@@ -1,5 +1,0 @@
-active=#228eff
-inactive=#808086
-off=#3a7bd5, #3a6073
-on=#00d2ff, #928dab
-text=#ffffff

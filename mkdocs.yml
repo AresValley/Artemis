@@ -1,0 +1,74 @@
+site_name: ARTEMIS
+repo_url: https://github.com/AresValley/Artemis
+
+theme:
+  name: material
+  favicon: assets/artemis_icon.ico
+  logo: assets/logo_small_white.svg
+  font:
+    text: Roboto
+
+  palette:
+    - scheme: default
+      primary: black
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    - scheme: slate
+      primary: black
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to light mode
+
+  features:
+    content.code.copy
+    content.tooltips
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - tables
+  - abbr
+  - attr_list
+  - pymdownx.snippets
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra_javascript:
+  - javascripts/katex.js
+  - https://unpkg.com/katex@0/dist/katex.min.js
+  - https://unpkg.com/katex@0/dist/contrib/auto-render.min.js
+
+extra_css:
+  - https://unpkg.com/katex@0/dist/katex.min.css
+
+nav:
+  - Welcome: 'index.md'
+  - Getting Started:
+    - Installation: 'installation.md'
+    - Run from source: 'run_from_source.md'
+    - Build Package: 'build_package.md'
+  - Database:
+    - 'Overview': 'db_overview.md'
+    - Structure:
+      - 'Info': 'db_info.md'
+      - 'Signals': 'db_signals.md'
+      - 'Frequency': 'db_frequency.md'
+      - 'Bandwidth': 'db_bandwidth.md'
+      - 'Modulation': 'db_modulation.md'
+      - 'Mode': 'db_mode.md'
+      - 'Location': 'db_location.md'
+      - 'Category': 'db_category.md'
+      - 'Category Label': 'db_cat_label.md'
+      - 'ACF': 'db_acf.md'
+    - SigID: 'sigid.md'
+  - Example:
+    - ACF Analysis: 'acf_analysis.md'
+  - Contribute: 'contribute.md'
+  - Changelog: https://github.com/AresValley/Artemis/blob/master/CHANGELOG.md
+  - License & Credits: 'credits.md'

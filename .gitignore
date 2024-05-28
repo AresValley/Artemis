@@ -1,11 +1,7 @@
-__PYCache__
-Data
-src/themes/__current_theme
-designer.bat
-launch.bat
+**/__pycache__/
 .vscode/
-.code-workspace
-spec_files/**/output
-*.txt
-*.json
-info.log
+*.pyproject.user
+data/
+.flake8
+*.qtds
+artemis_rc.py

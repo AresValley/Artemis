@@ -1,7 +1,24 @@
 # Changelog
-This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-The first release is [3.0.0] because this is actually the third major version (completely rewritten) of the software.
+> [!NOTE]  
+> This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [Unreleased] - 2024-05-28
+### Added
+- Database format has been changed from .csv to a proper relational DB (sqlite) which is much easier handled thanks to the native library shipped with python
+- Possibility to create an arbitrary number of new databases for storing new custom signals
+- Every signal allows an arbitrary number of parameters
+- All signal parameters (such as frequency, modulation, location, etc.) are now followed by a description
+- Databases can be exported/imported for easy sharing
+- Possibility to store and view all type of documents related to a signal entry
+- Filtration process is now much more efficient due to usage of SQL queries 
+
+### Changed
+- Updated GUI libray from PyQt5 to PySide6. Artemis 4 now relies on the QtQuick framework.
+- Undefined value for frequency and bandwidth is now deprecated.
+- Drastically reduced the number of third party libraries
+- The signals filtering page has been simplified to be more immediate and user friendly
+- Space weather page now relies on Poseidon daemon (hosted on aresvalley.com)
 
 ## [3.2.4] - 2022-09-30
 ### Fixed
@@ -30,7 +47,6 @@ The first release is [3.0.0] because this is actually the third major version (c
   
 
 ## [3.2.0] - 2019-12-14
-
 ### Added
 - The default font can be changed ([#14](https://github.com/AresValley/Artemis/pull/14)).
 - Move `Themes` into `Settings`.
@@ -68,7 +84,10 @@ First release.
 
 
 <!-- Links definitions -->
-[Unreleased]: https://github.com/AresValley/Artemis/compare/v3.2.1...HEAD
+[Unreleased]: https://github.com/AresValley/Artemis/compare/v3.2.4...HEAD
+[3.2.4]: https://github.com/AresValley/Artemis/compare/v3.2.1...v3.2.4
+[3.2.3]: https://github.com/AresValley/Artemis/compare/v3.2.2...v3.2.3
+[3.2.2]: https://github.com/AresValley/Artemis/compare/v3.2.1...v3.2.2
 [3.2.1]: https://github.com/AresValley/Artemis/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/AresValley/Artemis/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/AresValley/Artemis/compare/v3.0.1...v3.1.0

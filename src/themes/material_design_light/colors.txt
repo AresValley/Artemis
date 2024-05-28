@@ -1,4 +1,0 @@
-active=#6ECE12
-inactive=#b3b3cc
-off=#948e99,#2e1437
-on=#b993d6,#8ca6db

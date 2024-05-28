@@ -1,0 +1,50 @@
+import QmlProject
+
+Project {
+
+    QmlFiles {
+        directory: "ui"
+    }
+
+    QmlFiles {
+        directory: "ui/components"
+    }
+
+    ImageFiles {
+        directory: "images"
+    }
+
+    Files {
+        directory: "config"
+        filter: "*.conf"
+        files: ["qtquickcontrols2.conf"]
+    }
+
+    Environment {
+        QT_QUICK_CONTROLS_CONF: "qtquickcontrols2.conf"
+        QT_AUTO_SCREEN_SCALE_FACTOR: "1"
+        QML_COMPAT_RESOLVE_URLS_ON_ASSIGNMENT: "1"
+        QT_LOGGING_RULES: "qt.qml.connections=false"
+        QT_ENABLE_HIGHDPI_SCALING: "0"
+        /* Useful for debugging
+       QSG_VISUALIZE=batches
+       QSG_VISUALIZE=clip
+       QSG_VISUALIZE=changes
+       QSG_VISUALIZE=overdraw
+       */
+    }
+
+    qt6Project: true
+
+    qdsVersion: "4.5"
+
+    quickVersion: "6.7"
+
+    /* If any modules the project imports require widgets (e.g. QtCharts), widgetApp must be true */
+    widgetApp: true
+
+    multilanguageSupport: true
+    supportedLanguages: ["en"]
+    primaryLanguage: "en"
+
+}
