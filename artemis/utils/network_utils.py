@@ -37,7 +37,7 @@ class NetworkManager:
                 popup (bool, optional): Suppress the "already up-to-date" message on startup.
                                         Defaults to False.
         """
-        latest_json = self.fetch_remote_json(Constants.DB_LATEST_VERSION)
+        latest_json = self.fetch_remote_json(Constants.LATEST_VERSION_URL)
         if latest_json:
             local_db = self.load_local_db()
             remote_db = latest_json['sigID_DB']

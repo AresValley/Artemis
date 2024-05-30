@@ -23,8 +23,8 @@ class Constants():
 
     SQL_NAME                    = 'data.sqlite'
 
-    DB_LATEST_VERSION           = 'https://www.aresvalley.com/artemis/v4/latest.json'
-    POSEIDON_REPORT             = 'https://www.aresvalley.com/poseidon_engine/data.json'
+    LATEST_VERSION_URL          = 'https://raw.githubusercontent.com/AresValley/Artemis/master/config/release-info.json'
+    POSEIDON_REPORT_URL         = 'https://www.aresvalley.com/poseidon_engine/data.json'
 
     DEFAULT_ENCODING            = 'utf-8'
     SYSTEM_LANGUAGE             = 'en_US' # locale.getdefaultlocale()[0]
