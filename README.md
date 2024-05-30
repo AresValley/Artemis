@@ -4,10 +4,11 @@
 
 <div align="center">
 
-<a href="">![GitHub Release](https://img.shields.io/github/v/release/aresvalley/artemis)</a>
-<a href="">![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aresvalley/artemis/windows.yml?logo=windows&logoColor=white)</a>
-<a href="">![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aresvalley/artemis/linux.yml?logo=linux&logoColor=white)</a>
-<a href="">![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/aresvalley/artemis)</a>
+![GitHub Release](https://img.shields.io/github/v/release/aresvalley/artemis)
+![GitHub Release](https://img.shields.io/github/v/release/AresValley/Artemis-DB?label=DB%20version)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aresvalley/artemis/windows.yml?logo=windows&logoColor=white)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aresvalley/artemis/linux.yml?logo=linux&logoColor=white)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/aresvalley/artemis)
 
 </div>
 

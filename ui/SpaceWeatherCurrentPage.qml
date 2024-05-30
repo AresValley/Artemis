@@ -261,7 +261,6 @@ Page {
 
                             Label {
                                 text: qsTr("Current Flux Class:")
-                                font.capitalization: Font.SmallCaps
                             }
 
                             Label {
@@ -274,7 +273,6 @@ Page {
 
                             Label {
                                 text: qsTr("Peak 3h Flux Class:")
-                                font.capitalization: Font.SmallCaps
                             }
 
                             Label {
@@ -287,7 +285,6 @@ Page {
 
                             Label {
                                 text: qsTr("Peak 24h Flux Class:")
-                                font.capitalization: Font.SmallCaps
                             }
 
                             Label {
@@ -321,7 +318,7 @@ Page {
                             columns: 2
 
                             Label {
-                                text: qsTr("MUX (MHz):")
+                                text: qsTr("Maximum Usable Frequency (MHz):")
                             }
 
                             Label {
@@ -334,7 +331,6 @@ Page {
 
                             Label {
                                 text: qsTr("Earth-Moon-Earth:")
-                                font.capitalization: Font.SmallCaps
                             }
 
                             Label {
@@ -347,7 +343,6 @@ Page {
 
                             Label {
                                 text: qsTr("Meteor Scatter:")
-                                font.capitalization: Font.SmallCaps
                             }
 
                             Label {
@@ -360,7 +355,6 @@ Page {
 
                             Label {
                                 text: qsTr("Expected HF Noise:")
-                                font.capitalization: Font.SmallCaps
                             }
 
                             Label {

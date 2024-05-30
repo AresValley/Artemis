@@ -1,7 +1,7 @@
 ---
 title: Documentation
 ---
-#
+# 
 
 <p align="center" markdown>
     ![Logo](assets/logo_large_black.svg#only-light){width="400"}

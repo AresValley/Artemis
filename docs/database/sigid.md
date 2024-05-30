@@ -1,8 +1,17 @@
 # SigID Wiki Database
+
+<div align="center" markdown>
+
+  ![GitHub Release](https://img.shields.io/github/v/release/AresValley/Artemis-DB?label=Latest%20release)
+  ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/AresValley/Artemis-DB/total?label=DB%20requests)
+  ![GitHub Release Date](https://img.shields.io/github/release-date/AresValley/Artemis-DB)
+
+</div>
+
 Artemis serves as a valuable resource for both personal signal collection and leveraging a vast repository of pre-identified signals. This software application allows users to curate their own collections, but its true strength lies in its integration with a comprehensive database of known signals. This database is directly sourced from the [Signal Identification Wiki](https://www.sigidwiki.com/wiki/Signal_Identification_Guide), an open-source resource collaboratively maintained by a global community of radio enthusiasts.
 
 !!! tip "Database Revision"
-    For quality control purposes, the database undergoes a rigorous review process before integration into Artemis. This review adheres to established guidelines (**DIANA** crawler, not yet released), ensuring the accuracy and completeness of the information presented to users. The specifics of this review process are outlined in the following section.
+    For quality control purposes, the database undergoes a rigorous review process before integration into Artemis. This review adheres to established [guidelines](https://github.com/AresValley/Artemis-DB), ensuring the accuracy and completeness of the information presented to users. The specifics of this review process are outlined in the following section.
 
 ## Modulation
 A good practise (reported also on ) is to write the primary type of modulation (if known) and not all the possible variants. A practical example is reported on [Signal Identification Wiki](https://www.sigidwiki.com/wiki/Signal_Identification_Guide): there is no need to write **8-PSK** or **QPSK**, **PSK** is enough. The Artemis SigID database is provided without any modulation variants included. The recognized modulations are listed below:

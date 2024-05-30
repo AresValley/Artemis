@@ -2,7 +2,7 @@
 The table contains 4 columns explained below.
 
 !!! example
-    A technical explanation on how autocorrelation function works along with a practical example is reported [HERE](acf_analysis.md)
+    A technical explanation on how autocorrelation function works along with a practical example is reported [HERE](../acf_analysis.md)
 
 ## ACF_ID
 `INTEGER` :material-key-outline:{ title="Primary key" } :material-upload-outline:{ title="Auto-increment" }
