@@ -39,6 +39,10 @@ Page {
         labelMux.text = poseidon_data['PROPAGATION']['MUX']
         labelEME.text = poseidon_data['PROPAGATION']['EME']
         labelMS.text = poseidon_data['PROPAGATION']['MS']
+        labelESEU50.text = poseidon_data['PROPAGATION']['ES_EU_50']
+        labelESEU70.text = poseidon_data['PROPAGATION']['ES_EU_70']
+        labelESEU144.text = poseidon_data['PROPAGATION']['ES_EU_144']
+        labelESAURORA.text = poseidon_data['PROPAGATION']['ES_AURORA']
         labelHfNoise.text = poseidon_data['AK']['exp_noise']
 
         labelPeakFluxClass.text = poseidon_data['XRAY']['peak_flux_class']
@@ -347,6 +351,54 @@ Page {
 
                             Label {
                                 id: labelMS
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                font.pointSize: 12
+                                font.capitalization: Font.SmallCaps
+                                font.bold: true
+                            }
+
+                            Label {
+                                text: qsTr("Sporadic-E EU 50 MHz:")
+                            }
+
+                            Label {
+                                id: labelESEU50
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                font.pointSize: 12
+                                font.capitalization: Font.SmallCaps
+                                font.bold: true
+                            }
+
+                            Label {
+                                text: qsTr("Sporadic-E EU 70 MHz:")
+                            }
+
+                            Label {
+                                id: labelESEU70
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                font.pointSize: 12
+                                font.capitalization: Font.SmallCaps
+                                font.bold: true
+                            }
+
+                            Label {
+                                text: qsTr("Sporadic-E EU 144 MHz:")
+                            }
+
+                            Label {
+                                id: labelESEU144
+                                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                                font.pointSize: 12
+                                font.capitalization: Font.SmallCaps
+                                font.bold: true
+                            }
+
+                            Label {
+                                text: qsTr("Aurora Spots:")
+                            }
+
+                            Label {
+                                id: labelESAURORA
                                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                                 font.pointSize: 12
                                 font.capitalization: Font.SmallCaps
