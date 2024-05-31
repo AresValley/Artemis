@@ -50,6 +50,9 @@ Window {
                 TabButton {
                     text: qsTr("Forecasts")
                 }
+                TabButton {
+                    text: qsTr("DRAP")
+                }
             }
 
             StackLayout {
@@ -66,6 +69,12 @@ Window {
                 Item {
                     SpaceWeatherForecastPage {
                         id: spaceWeatherForecastPage
+                    }
+                }
+
+                Item {
+                    SpaceWeatherDRAPPage {
+                        id: spaceWeatherDRAPPage
                     }
                 }
             }

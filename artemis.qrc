@@ -22,6 +22,7 @@
         <file>images/icons/documents.svg</file>
         <file>images/icons/abort.svg</file>
         <file>images/spectrum_not_available.svg</file>
+        <file>images/artemis_not_available.svg</file>
 
         <file>ui/Artemis.qml</file>
         <file>ui/DbManager.qml</file>
@@ -37,6 +38,7 @@
         <file>ui/SignalPage.qml</file>
         <file>ui/SpaceWeatherCurrentPage.qml</file>
         <file>ui/SpaceWeatherForecastPage.qml</file>
+        <file>ui/SpaceWeatherDRAPPage.qml</file>
 
         <file>ui/About.qml</file>
 
