@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Window
 import QtQuick.Controls.Material
 
+
 Dialog {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2

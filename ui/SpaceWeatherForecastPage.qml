@@ -53,7 +53,6 @@ Page {
             }
         }    
 
-
         labelDay1Event.text = poseidon_data['FORCST']['PRE_DATES'][0]
         labelDay2Event.text = poseidon_data['FORCST']['PRE_DATES'][1]
         labelDay3Event.text = poseidon_data['FORCST']['PRE_DATES'][2]
@@ -118,7 +117,6 @@ Page {
         labelEventMajor1.text = geoMajorM1 + ' / ' + geoMajorH1
         labelEventMajor2.text = geoMajorM2 + ' / ' + geoMajorH2
     }
-
 
     ColumnLayout {
         anchors.fill: parent

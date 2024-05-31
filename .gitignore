@@ -5,3 +5,4 @@ data/
 .flake8
 *.qtds
 artemis_rc.py
+site

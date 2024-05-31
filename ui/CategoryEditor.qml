@@ -13,8 +13,8 @@ Window {
     height: 400
 
     Component.onCompleted: {
-        x = Screen.width/2 - width/2
-        y = Screen.height/2 - height/2
+        x = Screen.width / 2 - width / 2
+        y = Screen.height / 2 - height / 2
     }
 
     modality: Qt.ApplicationModal
@@ -39,14 +39,6 @@ Window {
             renameButton.enabled = false
             deleteButton.enabled = false
         }
-    }
-
-    function getModel() {
-        var modelList = []
-        for (var i = 0; i < myModel.count; i++) {
-            modelList.push(myModel.get(i).value)
-        }
-        return modelList
     }
 
     function clearAll() {
@@ -79,11 +71,15 @@ Window {
 
         ColumnLayout {
             anchors.fill: parent
-
+            Label {
+                text: qsTr("Enter the name of the new tag:")
+                Layout.bottomMargin: 15
+                font.pointSize: 12
+            }
             TextField {
                 id: newCatName
                 Layout.fillWidth: true
-                placeholderText: qsTr("Tag")
+                placeholderText: qsTr("Tag Name")
             }
         }
 
@@ -105,11 +101,15 @@ Window {
 
         ColumnLayout {
             anchors.fill: parent
-
+            Label {
+                text: qsTr("Enter the new name for the tag:")
+                Layout.bottomMargin: 15
+                font.pointSize: 12
+            }
             TextField {
                 id: renameCatName
                 Layout.fillWidth: true
-                placeholderText: qsTr("Tag")
+                placeholderText: qsTr("Tag Name")
             }
         }
 

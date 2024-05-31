@@ -12,8 +12,8 @@ Window {
     height: 800
 
     Component.onCompleted: {
-        x = Screen.width/2 - width/2
-        y = Screen.height/2 - height/2
+        x = Screen.width / 2 - width / 2
+        y = Screen.height / 2 - height / 2
     }
 
     title: qsTr("Artemis")
@@ -169,13 +169,16 @@ Window {
 
         ColumnLayout {
             anchors.fill: parent
-
+            Label {
+                text: qsTr("Enter the name of the new database:")
+                Layout.bottomMargin: 15
+                font.pointSize: 12
+            }
             TextField {
                 id: newDbName
                 Layout.fillWidth: true
-                placeholderText: qsTr("New DB Name")
+                placeholderText: qsTr("Name")
             }
-
         }
 
         onAccepted: {

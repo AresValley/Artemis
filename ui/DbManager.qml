@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
+
 Window {
     id: windowDBmanager
 
@@ -41,14 +42,6 @@ Window {
         }
     }
 
-    function getModel() {
-        var modelList = []
-        for (var i = 0; i < myModel.count; i++) {
-            modelList.push(myModel.get(i).name)
-        }
-        return modelList
-    }
-
     function clearAll() {
         titleLabel.text = 'N/A'
         totDocsLabel.text = ''
@@ -61,7 +54,6 @@ Window {
     function loadDBButton() {
         loadDB(myModel.get(listView.currentIndex).db_dir_name)
     }
-
 
     function renameDb() {
         if (textDBName.readOnly) {
@@ -120,7 +112,11 @@ Window {
 
         ColumnLayout {
             anchors.fill: parent
-
+            Label {
+                text: qsTr("Enter the new for the database:")
+                Layout.bottomMargin: 15
+                font.pointSize: 12
+            }
             TextField {
                 id: newDbName
                 Layout.fillWidth: true
