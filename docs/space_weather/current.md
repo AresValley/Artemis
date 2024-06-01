@@ -195,6 +195,16 @@ Earth–Moon–Earth communication (EME), commonly referred to as Moon bounce, i
 ### Meteor Scatter
 Meteor burst communications (MBC), also known as meteor scatter (MS) communications, is a radio propagation technique that uses the ionized trails created by meteors entering the atmosphere to establish brief communication links between radio stations up to 2,250 kilometers (1,400 miles) apart. This can involve either forward-scatter or back-scatter of the radio waves. Like EME, the value gives the probability of a succesfull connection.
 
+### Sporadic-E
+**Report of the latest E-skip spots on 50, 70 & 144 MHz by [DXrobot](https://dxrobot.gooddx.net/)**
+
+Sporadic E (Es or SpE) is a rare type of radio propagation that uses a lower part of the Earth's ionosphere, which typically doesn't refract radio waves. It reflects signals off small "clouds" in the E region at altitudes of 95-150 km (50-100 miles). Unlike the regular F region skywave propagation, which depends on daily cycles of ionized layers from UV light, Sporadic E uses transient ionized patches. This allows for occasional long-distance VHF communication, usually during the six weeks around the summer solstice, beyond the normal line-of-sight range.
+
+### Aurora Spots
+**Report of the latest aurora spots on 50, 70 & 144 MHz by [DXrobot](https://dxrobot.gooddx.net/)**
+
+Auroral propagation, or auroral backscatter, is a form of radio propagation that occurs during an auroral event, affecting VHF and UHF communications. Increased ionization in the E layer of the ionosphere reflects signals at much higher frequencies than usual, enabling communication up to 1000 MHz, though 500 MHz is more common. Signals are directed towards the auroral region and reflected back, but they are often distorted due to particle movement (the signal is roughly Doppler shifted of 1 kHz at around 150 MHz as the electrons stream down).
+
 ### Expected HF Noise
 This is just the expected noise in HF based on the current Space Weather conditions.
 

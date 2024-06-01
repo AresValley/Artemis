@@ -70,6 +70,8 @@ nav:
   - Space Weather:
     - 'Current': 'space_weather/current.md'
     - 'Forecasts': 'space_weather/forecasts.md'
+    - 'DRAP': 'space_weather/drap.md'
+    - 'Aurora': 'space_weather/aurora.md'
   - Example:
     - ACF Analysis: 'acf_analysis.md'
   - Contribute: 'contribute.md'
