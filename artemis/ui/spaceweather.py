@@ -13,6 +13,7 @@ class UIspaceweather(QObject):
     load_poseidon_report = Signal(dict)
     load_poseidon_forecast_report = Signal(dict)
     load_poseidon_drap_report = Signal(dict)
+    load_aurora_report = Signal()
     update_bottom_bar = Signal(str)
 
 
@@ -28,6 +29,7 @@ class UIspaceweather(QObject):
         self._window_current = self._window.findChild(QObject, "spaceWeatherCurrentObj")
         self._window_forecast = self._window.findChild(QObject, "spaceWeatherForecastObj")
         self._window_drap = self._window.findChild(QObject, "spaceWeatherDRAPObj")
+        self._window_aurora = self._window.findChild(QObject, "spaceWeatherAuroraObj")
 
         self._connect()
 
@@ -41,6 +43,7 @@ class UIspaceweather(QObject):
         self.load_poseidon_report.connect(self._window_current.loadReport)
         self.load_poseidon_forecast_report.connect(self._window_forecast.loadForecastReport)
         self.load_poseidon_drap_report.connect(self._window_drap.loadDrapReport)
+        self.load_aurora_report.connect(self._window_aurora.loadAuroraReport)
 
 
     def load_spaceweather_ui(self):
@@ -59,6 +62,7 @@ class UIspaceweather(QObject):
             self.load_poseidon_report.emit(poseidon_data)
             self.load_poseidon_forecast_report.emit(poseidon_data)
             self.load_poseidon_drap_report.emit(poseidon_data)
+            self.load_aurora_report.emit()
 
             self.update_bottom_bar.emit(
                 'Loaded Poseidon report issued on {} at {} UTC'.format(
