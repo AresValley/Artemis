@@ -167,9 +167,9 @@ Window {
         id: fileDialog
         title: "Please choose a file"
         nameFilters: [
-            "Image (*.jpg *.png)",
-            "Audio (*.mp3 *.m4a *.ogg)",
-            "Document (*.txt *.pdf)",
+            "Image (*.png *.jpg *.jpeg *.gif *.bmp *.tiff *.tif *.webp *.svg *.heic *.raw *.cr2 *.nef *.orf *.sr2 *.arw *.dng)",
+            "Audio (*.mp3 *.wav *.aac *.flac *.alac *.wma *.ogg *.m4a *.aiff *.aif *.amr *.opus *.mid *.midi *.pcm)",
+            "Document (*.doc *.docx *.pdf *.txt *.rtf *.odt *.html *.htm *.xml *.ppt *.pptx *.xls *.xlsx *.csv *.epub *.mobi *.md *.tex *.wps)",
             "All files (*)"
         ]
 
