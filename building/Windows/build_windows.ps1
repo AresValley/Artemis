@@ -12,6 +12,8 @@ python -m nuitka app.py `
   --assume-yes-for-downloads `
   --disable-console `
   --enable-plugin=pyside6 `
+  --force-stderr-spec=%PROGRAM_BASE%.err.txt `
+  --force-stdout-spec=%PROGRAM_BASE%.out.txt `
   --include-qt-plugins=sensible,styles,qml,multimedia `
   --include-data-files=.\artemis\resources.py=.\artemis\resources.py `
   --include-data-files=.\config\qtquickcontrols2.conf=.\config\qtquickcontrols2.conf `
