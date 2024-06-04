@@ -12,7 +12,7 @@
 * **Edit Tags:** Open the tags editor window. From here, you can add, rename, or delete tags. The tags can be added to a signal from the [tags menu](#4-tags)
 * **Open Database Folder:** Shows the folder of the currently loaded database in the explorer.
 * **Preferences:** Open the program settings window.
-* **Exit:** This will simply close the application.
+* **Exit:** This will close the application.
 
 ### Signal
 * **New:** Add a new signal to the database.
