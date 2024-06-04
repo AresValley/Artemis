@@ -132,7 +132,7 @@ class ArtemisDatabase(Database):
         sig_ids = ",".join(str(num[0]) for num in matching_sig_ids)
 
         self.all_signals = self.execute(Query.SELECT_SIG_ID.format(sig_ids))
-        keys = ('SIG_ID', 'name')
+        keys = ('SIG_ID', 'name', 'description')
         result = [dict(zip(keys, values)) for values in self.all_signals]
         self.all_signals = result
 
