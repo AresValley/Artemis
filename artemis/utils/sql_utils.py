@@ -96,7 +96,7 @@ class ArtemisDatabase(Database):
             contains the SIG_ID and the NAME of the signal
         """
         self.all_signals = self.execute(Query.SELECT_ALL_SIGNALS)
-        keys = ('SIG_ID', 'name')
+        keys = ('SIG_ID', 'name', 'description')
         result = [dict(zip(keys, values)) for values in self.all_signals]
         self.all_signals = result
 

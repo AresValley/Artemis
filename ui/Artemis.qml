@@ -55,8 +55,9 @@ Window {
         listModel.clear()
         for (var i = 0; i < loadedList.length; i++) {
             var name = loadedList[i].name.toLowerCase()
+            var description = loadedList[i].description.toLowerCase()
             var search = textFieldSearch.text.toLowerCase()
-            if (name.includes(search)) {
+            if (name.includes(search) || description.includes(search)) {
                 listModel.append(loadedList[i])
             }
         }
