@@ -4,7 +4,7 @@ echo "Building maacOS target ..."
 
 echo "Installing requirements ..."
 pip install -r requirements.txt
-pip install nuitka imageio
+pip install nuitka==2.3 imageio
 
 echo "Building with Nuitka ..."
 python -m nuitka app.py \
@@ -12,7 +12,6 @@ python -m nuitka app.py \
   --follow-imports \
   --show-modules \
   --assume-yes-for-downloads \
-  --disable-console \
   --enable-plugin=pyside6 \
   --include-qt-plugins=sensible,styles,qml,multimedia \
   --include-data-files=./artemis/resources.py=./artemis/resources.py \

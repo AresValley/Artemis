@@ -1,10 +1,13 @@
+import os
+
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Signal, Slot
 
-from artemis.utils.path_utils import *
+from artemis.utils.path_utils import DATA_DIR
 from artemis.utils.generic_utils import *
 from artemis.utils.sql_utils import ArtemisDatabase
 from artemis.utils.constants import Constants
+from artemis.utils.sys_utils import delete_dir
 
 
 class UIdbmanager(QObject):
@@ -67,7 +70,7 @@ class UIdbmanager(QObject):
                 self._parent.lock_menu.emit(True)
                 self._parent.clear_list.emit()
                 self._parent.clear_signal_page.emit()
-        delete_db_dir(db_dir_name)
+        delete_dir(DATA_DIR / db_dir_name)
         self.load_local_db_list()
 
 
@@ -85,10 +88,10 @@ class UIdbmanager(QObject):
             return a dictionary containing only the valid ones with a summary
         """
         valid_db_list = []
-        db_dirs = next(os.walk(Constants.DB_DIR))[1]
+        db_dirs = next(os.walk(DATA_DIR))[1]
 
         for db_dir_name in db_dirs:
-            if valid_db(db_dir_name):
+            if self._valid_db(db_dir_name):
                 database = ArtemisDatabase(db_dir_name)
                 database.load()
                 valid_db_list.append(
@@ -103,3 +106,22 @@ class UIdbmanager(QObject):
                 )
 
         return valid_db_list
+
+
+    def _valid_db(self, db_dir_name):
+        """ Checks if db_dir_name is a valid db dir containing a `data.sqlite` file.
+            Db must be valid as well and should be properly initialized and loaded with
+            no errors.
+
+        Args:
+            db_dir_name (str): name of the db folder
+        """
+        if os.path.exists(DATA_DIR / db_dir_name / Constants.SQL_NAME):
+            try:
+                database = ArtemisDatabase(db_dir_name)
+                database.load()
+                return True
+            except:
+                return False        # Invalid or corrupted DB
+        else:
+            return False            # The dir is not containing a data.sqlite file

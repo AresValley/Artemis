@@ -6,7 +6,7 @@ import hashlib
 from shutil import rmtree, copyfile, make_archive, unpack_archive
 from pathlib import Path
 
-from artemis.utils.constants import Constants, Messages
+from artemis.utils.constants import Messages
 
 
 def is_windows():
@@ -46,15 +46,13 @@ def open_directory(directory, timeout=3):
         return
 
 
-def delete_db_dir(db_dir_name):
-    """Delete the db folder"""
-    db_dir = Constants.DB_DIR / db_dir_name
-    if os.path.exists(db_dir):
-        rmtree(db_dir)
-
-
 def copy_file(src_file_path, dst_file_path):
     copyfile(src_file_path, dst_file_path)
+
+
+def delete_dir(dir_path):
+    if os.path.exists(dir_path):
+        rmtree(dir_path)    
 
 
 def delete_file(file_path):
@@ -62,13 +60,24 @@ def delete_file(file_path):
         os.remove(file_path) 
 
 
-def pack_db(save_path, db_dir):
-    make_archive(save_path, 'tar', db_dir.resolve().as_posix())
+def make_tar(save_path, origin_path):
+    """ Create a tar archive from a folder
+
+    Args:
+        save_path: destination path where new tar is saved
+        origin_path: directory path of the folder to be archived
+    """
+    make_archive(save_path, 'tar', origin_path.resolve().as_posix())
 
 
-def unpack_db(tar_path, db_dir_name):
-    db_dir = Constants.DB_DIR / db_dir_name
-    unpack_archive(tar_path, db_dir, 'tar')
+def unpack_tar(tar_path, destination_path):
+    """ Unpack a tar archive in a folder
+
+    Args:
+        tar_path: path of the tar to be unpacked
+        destination_path: path where the tar is extracted
+    """
+    unpack_archive(tar_path, destination_path, 'tar')
 
 
 def match_hash(data, reference_hash):

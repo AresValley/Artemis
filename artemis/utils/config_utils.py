@@ -1,5 +1,7 @@
 from configparser import ConfigParser
-from artemis.utils.constants import Constants
+
+from artemis.utils.path_utils import PREFERENCES_DIR, BASE_DIR
+from artemis.utils.sys_utils import copy_file
 
 
 class Config(ConfigParser):
@@ -29,4 +31,11 @@ class Config(ConfigParser):
         with open(self._config_file_path, 'w') as f:
             self.write(f, space_around_delimiters=self._space_around_delimiters)
 
-CONFIGURE_QT = Config((Constants.PREFERENCES_DIR / 'qtquickcontrols2.conf').resolve().as_posix())
+
+if not (PREFERENCES_DIR / 'qtquickcontrols2.conf').exists():
+    copy_file(
+        BASE_DIR / 'config' / 'qtquickcontrols2.conf',
+        PREFERENCES_DIR / 'qtquickcontrols2.conf'
+    )
+
+CONFIGURE_QT = Config((PREFERENCES_DIR / 'qtquickcontrols2.conf').resolve().as_posix())

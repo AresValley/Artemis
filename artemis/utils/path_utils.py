@@ -1,14 +1,8 @@
 import os
 from pathlib import Path
 
-from artemis.utils.sql_utils import ArtemisDatabase
 from artemis.utils.constants import Constants
-from artemis.utils.sys_utils import *
-
-
-def check_data_dir():
-    if not os.path.exists(Constants.DB_DIR):
-        os.makedirs(Constants.DB_DIR)
+from artemis.utils.sys_utils import is_windows, is_linux, is_macos
 
 
 def normalize_dialog_path(path):
@@ -19,38 +13,37 @@ def normalize_dialog_path(path):
     return norm_path
 
 
-def logs_dir():
+def _app_dir():
     if is_macos():
-        logs_dir_path = Path.home() / 'Library/Logs/' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
+        app_dir_path = Path.home() / 'Library' / 'Application Support' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
     elif is_windows():
-        logs_dir_path = Path.home() / 'AppData/Local/' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME / 'logs'
+        app_dir_path = Path.home() / 'AppData' / 'Local' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
     elif is_linux():
-        logs_dir_path = Path.home() / '/var/log/' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
+        app_dir_path = Path.home() / '.local' / 'share' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
     else:
-        logs_dir_path = Constants.LOGS_DIR
+        app_dir_path = BASE_DIR
 
-    if not logs_dir_path.exists():
-        logs_dir_path.mkdir(parents=True)
+    if not app_dir_path.exists():
+        app_dir_path.mkdir(parents=True)
 
-    return logs_dir_path
+    return app_dir_path
 
 
-def valid_db(db_dir_name):
-    """ Checks if db_dir_name is a valid db dir containing a `data.sqlite` file.
-        Db must be valid as well and should be properly initialized and loaded with
-        no errors.
+def _data_dir():
+    data_dir_path = APP_DIR / 'data'
+    if not data_dir_path.exists():
+        data_dir_path.mkdir(parents=True)
+    return data_dir_path
 
-    Args:
-        db_dir_name (str): name of the db folder
-    """
-    if os.path.exists(Constants.DB_DIR / db_dir_name / Constants.SQL_NAME):
-        try:
-            database = ArtemisDatabase(db_dir_name)
-            database.load()
-            return True
-        except Exception as e:
-            # Invalid or corrupted DB
-            return False
-    else:
-        # The dir is not containing a data.sqlite file
-        return False
+
+def _preference_dir():
+    preference_dir_path = APP_DIR / 'config'
+    if not preference_dir_path.exists():
+        preference_dir_path.mkdir(parents=True)
+    return preference_dir_path    
+
+
+BASE_DIR = Path(os.path.dirname(__file__)) / '../..'
+APP_DIR = _app_dir()
+DATA_DIR = _data_dir()
+PREFERENCES_DIR = _preference_dir()

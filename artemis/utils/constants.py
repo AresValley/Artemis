@@ -1,9 +1,7 @@
-import os
 import locale
 import sys
 
 from PySide6.QtCore import qVersion
-from pathlib import Path
 
 
 class Constants():
@@ -13,13 +11,6 @@ class Constants():
     ORGANIZATION_NAME           = 'AresValley'
     ORGANIZATION_DOMAIN         = 'aresvalley.com'
     APPLICATION_VERSION         = '4.0.0'
-
-    BASE_DIR                    = Path(os.path.dirname(__file__)) / '../..'
-    PREFERENCES_DIR             = BASE_DIR / 'config'
-    DB_DIR                      = BASE_DIR / 'data'
-    UI_DIR                      = BASE_DIR / 'ui'
-    IMAGES_DIR                  = BASE_DIR / 'images'
-    LOGS_DIR                    = BASE_DIR / 'logs'
 
     SQL_NAME                    = 'data.sqlite'
 

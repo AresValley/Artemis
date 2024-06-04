@@ -3,9 +3,9 @@ from PySide6.QtCore import QObject, Slot, Signal, QUrl, QSaveFile, QDir, QIODevi
 from PySide6.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
 
 from artemis.utils.config_utils import *
-from artemis.utils.sys_utils import delete_file, match_hash, unpack_db
+from artemis.utils.sys_utils import delete_file, delete_dir, match_hash, unpack_tar
 from artemis.utils.constants import Messages
-from artemis.utils.sys_utils import delete_db_dir
+from artemis.utils.path_utils import DATA_DIR
 
 
 class UIDownloader(QObject):
@@ -42,7 +42,7 @@ class UIDownloader(QObject):
             the attributes of the UpdatesController class
         """
         url_file = QUrl(self._parent.network_manager.remote_db_url)
-        dest_path = QDir(Constants.DB_DIR)
+        dest_path = QDir(DATA_DIR)
         self.dest_file = dest_path.filePath(url_file.fileName())
         self.file = QSaveFile(self.dest_file)
 
@@ -97,8 +97,8 @@ class UIDownloader(QObject):
 
         if match_hash(self.dest_file, self._parent.network_manager.remote_db_hash):
             self._label_progress.setProperty("text", "Unpacking archive...")
-            delete_db_dir('SigID')
-            unpack_db(self.dest_file, 'SigID')
+            delete_dir(DATA_DIR / 'SigID')
+            unpack_tar(self.dest_file, DATA_DIR / 'SigID')
             delete_file(self.dest_file)
             self._parent.load_db('SigID')
             self.close_ui.emit()

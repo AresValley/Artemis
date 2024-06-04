@@ -4,9 +4,9 @@ from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, Signal
 
 from artemis.utils.constants import Constants, Messages
-from artemis.utils.sys_utils import open_directory, pack_db, unpack_db
+from artemis.utils.sys_utils import open_directory, make_tar, unpack_tar
 from artemis.utils.sql_utils import ArtemisDatabase, ArtemisSignal
-from artemis.utils.path_utils import check_data_dir
+from artemis.utils.path_utils import DATA_DIR
 from artemis.utils.network_utils import NetworkManager
 from artemis.utils.generic_utils import generate_filter_query
 from artemis.utils.path_utils import normalize_dialog_path
@@ -68,8 +68,6 @@ class UIArtemis(QObject):
         self.cateditor = UIcategoryeditor(self)
 
         self.network_manager = NetworkManager(self)
-
-        check_data_dir()
 
 
     def _connect(self):
@@ -277,7 +275,7 @@ class UIArtemis(QObject):
         """
         try:
             dest_path = normalize_dialog_path(save_path)
-            pack_db(dest_path, self.loaded_db.db_dir)
+            make_tar(dest_path, self.loaded_db.db_dir)
             self.dialog_popup(
                 Messages.DIALOG_TYPE_INFO,
                 Messages.GENERIC_SUCCESS,
@@ -300,7 +298,8 @@ class UIArtemis(QObject):
         """
         try:
             origin_path = normalize_dialog_path(tar_path)
-            unpack_db(origin_path, str(uuid.uuid4()))
+            save_path = DATA_DIR / str(uuid.uuid4())
+            unpack_tar(origin_path, save_path)
             self.dialog_popup(
                 Messages.DIALOG_TYPE_INFO,
                 Messages.GENERIC_SUCCESS,

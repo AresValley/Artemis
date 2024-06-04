@@ -1,13 +1,14 @@
-import sqlite3
 import os
+import sqlite3
 
 from PySide6.QtCore import QUrl
 from operator import itemgetter
 from datetime import datetime
+from contextlib import closing
 
 from artemis.utils.constants import Query, Constants
-from artemis.utils.generic_utils import *
-from contextlib import closing
+from artemis.utils.path_utils import DATA_DIR
+from artemis.utils.generic_utils import format_frequency
 
 
 class Database():
@@ -51,7 +52,7 @@ class ArtemisDatabase(Database):
 
     def __init__(self, db_dir_name):
         self.db_dir_name = db_dir_name
-        self.db_dir = Constants.DB_DIR / db_dir_name
+        self.db_dir = DATA_DIR / db_dir_name
         self.sql_path = self.db_dir / Constants.SQL_NAME
         self.media_dir = self.db_dir / 'media'
         super().__init__(self.sql_path)

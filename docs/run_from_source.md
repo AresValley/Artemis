@@ -27,3 +27,18 @@ Running Artemis directly from the source code using the Python interpreter is co
     ```
     pyside6-rcc ./artemis.qrc -o artemis/resources.py
     ```
+
+## Folders Structure
+Artemis can be safely executed and/or installed in any folder (even protected ones, such as `Program Files (x86)` in Windows) because Artemis performs read-only operations in the `BASE_DIR` folder from where it runs. All the reading-writing operations (such as database ops, logging, etc.) are performed in standard folders as follow:
+
+### :simple-windows: Windows
+* Data, Cache, Configurations: `$USER\AppData\Local\AresValley\Artemis`
+* Logs: `$USER\AppData\Local\Temp`
+
+### :simple-linux: Linux
+* Data, Cache, Configurations: `~/.local/share/AresValley/Artemis`
+* Logs: `/tmp`
+
+### :simple-apple: Mac OS
+* Data, Cache, Configurations: `~/Library/Application Support/AresValley/Artemis`
+* Logs: `/tmp`

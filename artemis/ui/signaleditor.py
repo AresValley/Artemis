@@ -4,6 +4,7 @@ from PySide6.QtCore import QObject, Signal, Slot
 from artemis.utils.path_utils import *
 from artemis.utils.generic_utils import *
 from artemis.utils.sql_utils import ArtemisSignal
+from artemis.utils.sys_utils import delete_file
 
 
 class UIsignaleditor(QObject):

@@ -11,14 +11,19 @@
 - All signal parameters (such as frequency, modulation, location, etc.) are now followed by a description
 - Databases can be exported/imported for easy sharing
 - Possibility to store and view all type of documents related to a signal entry
-- Filtration process is now much more efficient due to usage of SQL queries 
+- Filtration process is now much more efficient due to usage of SQL queries
+- D-Region Absorption Predictions (DRAP) and Aurora OVATION model are now present in the Space Weather window
 
 ### Changed
 - Updated GUI libray from PyQt5 to PySide6. Artemis 4 now relies on the QtQuick framework.
-- Undefined value for frequency and bandwidth is now deprecated.
+- SigID standard database is now hosted on GitHub (the server is much faster) along with the website parser
+- Undefined value for frequency and bandwidth is now deprecated
 - Drastically reduced the number of third party libraries
 - The signals filtering page has been simplified to be more immediate and user friendly
-- Space weather page now relies on Poseidon daemon (hosted on aresvalley.com)
+- Space weather page has been greatly improved and now relies on Poseidon daemon (hosted on aresvalley.com)
+
+### Fixed
+- Artemis can be execunted inside standard pretected folder (such as Program Files) without using elevated privileges
 
 ## [3.2.4] - 2022-09-30
 ### Fixed

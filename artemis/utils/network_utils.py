@@ -6,6 +6,7 @@ from packaging.version import Version
 from artemis.utils.constants import Constants, Messages
 from artemis.utils.sql_utils import ArtemisDatabase
 from artemis.utils.sys_utils import is_windows, is_linux, is_macos
+from artemis.utils.path_utils import DATA_DIR
 
 
 class NetworkManager:
@@ -14,7 +15,7 @@ class NetworkManager:
 
     def __init__(self, parent):
         self._parent = parent
-        self.sigid_db_path = Constants.DB_DIR / 'sigID' / Constants.SQL_NAME
+        self.sigid_db_path = DATA_DIR / 'SigID' / Constants.SQL_NAME
 
         self.show_popup = False
         self.db_update = None
@@ -92,7 +93,7 @@ class NetworkManager:
         """ Loads the local database if exists
         """
         if os.path.exists(self.sigid_db_path):
-            local_db = ArtemisDatabase('sigID')
+            local_db = ArtemisDatabase('SigID')
             local_db.load()
             return local_db
         return None

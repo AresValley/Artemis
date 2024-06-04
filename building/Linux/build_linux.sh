@@ -4,7 +4,7 @@ echo "Building Linux target ..."
 
 echo "Installing requirements ..."
 pip install -r requirements.txt
-pip install nuitka
+pip install nuitka==2.3
 
 echo "Building with Nuitka ..."
 python -m nuitka app.py \
@@ -12,8 +12,9 @@ python -m nuitka app.py \
   --follow-imports \
   --show-modules \
   --assume-yes-for-downloads \
-  --disable-console \
   --enable-plugin=pyside6 \
+  --force-stderr-spec="{TEMP}/artemis.err.log" \
+  --force-stdout-spec="{TEMP}/artemis.out.log" \
   --include-qt-plugins=sensible,styles,qml,multimedia \
   --include-data-files=./artemis/resources.py=./artemis/resources.py \
   --include-data-files=./config/qtquickcontrols2.conf=./config/qtquickcontrols2.conf \
