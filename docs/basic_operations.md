@@ -22,7 +22,10 @@
 * **Check Report:** Open the main [Space Weather window](space_weather/current.md) and retrieve all the live data from Poseidon Crawler.
 
 ## 2. Signal List
-This is the signal list where all the database entries are shown. When a signal is selected, it will load on the right panel. On top of the list, there is a field for filtering signals by name: this filter has the highest priority among all the filters.
+This is the signal list where all the database entries are shown. When a signal is selected, it will load on the right panel.
+
+### Filter by Name/Description
+On top of the list, there is a field for filtering signals by name or any keyword inside the description of the signal: this filter has the highest priority among all the filters.
 
 ## 3. Signal Menu
 Here you can swithc between the main **signal** window and the **filter** page.
