@@ -7,8 +7,8 @@ import QtMultimedia
 
 
 Item {
-    width: 200
-    height: 80
+    width: 180
+    height: 132
 
     property bool loop: false
 
@@ -28,7 +28,7 @@ Item {
         buttonPause.enabled = true
         buttonStop.enabled = true
         buttonLoop.enabled = true
-        playerPosition.enabled = player.seekable
+        positionSlider.enabled = player.seekable
         player.play()
     }
 
@@ -65,10 +65,12 @@ Item {
         buttonPause.enabled = false
         buttonStop.enabled = false
         buttonLoop.enabled = false
-        playerPosition.enabled = false
+        positionSlider.enabled = false
     }
 
     ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
         RowLayout {
             spacing: 0
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -83,6 +85,10 @@ Item {
                 onClicked: playSound()
             }
 
+            Item {
+                Layout.fillWidth: true
+            }
+
             RoundButton {
                 id: buttonPause
                 icon.color: Material.foreground
@@ -93,6 +99,10 @@ Item {
                 onClicked: pauseSound()
             }
 
+            Item {
+                Layout.fillWidth: true
+            }
+
             RoundButton {
                 id: buttonStop
                 icon.color: Material.foreground
@@ -101,6 +111,10 @@ Item {
                 enabled: false
                 flat: true
                 onClicked: stopSound()
+            }
+
+            Item {
+                Layout.fillWidth: true
             }
 
             RoundButton {
@@ -122,21 +136,43 @@ Item {
             }
         }
 
-        Slider {
-            id: playerPosition
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.preferredHeight: 20
-            enabled: player.seekable
-            value: player.duration > 0 ? player.position / player.duration : 0
-            onMoved: {
-                player.position = player.duration * playerPosition.position
+        RowLayout {
+            Slider {
+                id: positionSlider
+                Layout.preferredHeight: 20
+                enabled: player.seekable
+                value: player.duration > 0 ? player.position / player.duration : 0
+                Layout.fillWidth: true
+                onMoved: {
+                    player.position = player.duration * positionSlider.position
+                }
+            }
+        }
+
+        RowLayout {
+            Slider {
+                id: volumeSlider
+                Layout.preferredHeight: 20
+                value: 0.5
+                Layout.fillWidth: true
+            }
+
+            RoundButton {
+                id: buttonMute
+                icon.color: Material.foreground
+                icon.source: "qrc:/images/icons/player_mute.svg"
+                display: AbstractButton.IconOnly
+                enabled: true
+                flat: true
+                onClicked: {
+                    volumeSlider.value = 0
+                }
             }
         }
 
         MediaPlayer {
             id: player
             audioOutput: audioOutput
-
             onPlaybackStateChanged: {
                 if (player.playbackState === MediaPlayer.StoppedState) {
                     if (loop) {
@@ -150,7 +186,7 @@ Item {
 
         AudioOutput {
             id: audioOutput
-            //volume: volumeSlider.value
+            volume: volumeSlider.value
         }
     }
 }

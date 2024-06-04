@@ -67,10 +67,10 @@ Window {
 
         ColumnLayout {
             anchors.fill: parent
-            anchors.rightMargin: 15
-            anchors.leftMargin: 15
-            anchors.bottomMargin: 15
-            anchors.topMargin: 15
+            anchors.rightMargin: 10
+            anchors.leftMargin: 10
+            anchors.bottomMargin: 10
+            anchors.topMargin: 10
 
             RowLayout {
                 Layout.fillWidth: true

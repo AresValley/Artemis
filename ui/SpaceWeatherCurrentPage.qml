@@ -79,10 +79,10 @@ Page {
 
         RowLayout {
             anchors.fill: parent
-            anchors.rightMargin: 20
-            anchors.leftMargin: 20
-            anchors.bottomMargin: 20
-            anchors.topMargin: 20
+            anchors.rightMargin: 10
+            anchors.leftMargin: 10
+            anchors.bottomMargin: 10
+            anchors.topMargin: 10
 
             ColumnLayout {
                 Layout.fillHeight: true

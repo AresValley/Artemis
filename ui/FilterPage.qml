@@ -213,6 +213,8 @@ Page {
 
     ColumnLayout {
         anchors.fill: parent
+        anchors.rightMargin: 10
+        anchors.topMargin: 10
 
         GridLayout {
             rows: 2

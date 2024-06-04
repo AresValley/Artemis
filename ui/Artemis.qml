@@ -215,9 +215,8 @@ Window {
 
     Page {
         anchors.fill: parent
-        leftPadding: 5
-        rightPadding: 5
-        bottomPadding: 5
+        leftPadding: 10
+        bottomPadding: 10
 
         header: MenuBar {
             id: topBar
@@ -359,16 +358,18 @@ Window {
 
         RowLayout {
             anchors.fill: parent
-            spacing: 20
+            spacing: 10
 
             ColumnLayout {
                 Layout.maximumWidth: 250
 
                 TextField {
                     id: textFieldSearch
+                    Layout.preferredHeight: 39
+                    Layout.topMargin: 5
                     enabled: false
                     Layout.fillWidth: true
-                    Layout.topMargin: 10
+
                     placeholderText: qsTr("Search")
                     onTextChanged: {
                         refreshList()
@@ -417,16 +418,14 @@ Window {
 
                 TabBar {
                     id: tabBar
-                    width: parent.width
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.fillWidth: true
 
                     TabButton {
-                        text: qsTr("Signal")
+                        text: qsTr("SIGNAL")
                     }
 
                     TabButton {
-                        text: qsTr("Filter")
+                        text: qsTr("FILTERS")
                     }
                 }
 
@@ -448,6 +447,7 @@ Window {
                         }
                     }
                 }
+
             }
         }
     }
