@@ -105,6 +105,7 @@ class UIsignaleditor(QObject):
         """
         if param_type == 'Signal':
             self._parent.loaded_sig.delete_signal()
+            self._parent.lock_audio_player.emit()
             for doc in self._parent.loaded_sig.documents:
                 doc_file_name = '{}.{}'.format(str(doc[0]), doc[1])
                 doc_file_path = self._parent.loaded_db.media_dir / doc_file_name
