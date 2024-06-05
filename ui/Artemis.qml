@@ -321,6 +321,11 @@ Window {
                 MenuSeparator {}
 
                 MenuItem {
+                    text: "Project Homepage"
+                    onClicked: {Qt.openUrlExternally('https://aresvalley.com/')}
+                }
+
+                MenuItem {
                     text: "Documentation"
                     onClicked: {Qt.openUrlExternally('https://AresValley.github.io/Artemis')}
                 }
@@ -447,7 +452,6 @@ Window {
                         }
                     }
                 }
-
             }
         }
     }
