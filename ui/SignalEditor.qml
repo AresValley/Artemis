@@ -154,17 +154,18 @@ Window {
                 }
             }
 
-            ScrollView {
+            Flickable {
                 Layout.fillWidth: true
-                Layout.topMargin: 5
                 Layout.fillHeight: true
-                ScrollBar.vertical.interactive: true
-
-                TextArea {
+                Layout.topMargin: 5
+                TextArea.flickable: TextArea {
                     id: paramDescription
                     placeholderText: qsTr("Description")
-                    wrapMode: TextEdit.WordWrap
                     font.pointSize: 10
+                    wrapMode: TextEdit.WordWrap
+                }
+                ScrollBar.vertical: ScrollBar {
+                    width: 10
                 }
             }
 

@@ -82,18 +82,6 @@ Window {
         }
     }
 
-    function contentChanged() {
-        if (listView.currentIndex !== -1) {
-            myModel.set(
-                listView.currentIndex,
-                {
-                    'name': nameField.text,
-                    'description': descriptionField.text,
-                }
-            )
-        }
-    }
-
     function lockMenu(toggle) {
         if (toggle) {
             openButton.enabled = false
@@ -236,15 +224,17 @@ Window {
                 }
             }
 
-            ScrollView {
-                Layout.fillHeight: true
+            Flickable {
                 Layout.fillWidth: true
-                ScrollBar.vertical.interactive: true
-                
-                TextArea {
+                Layout.fillHeight: true
+                TextArea.flickable: TextArea {
                     id: newDescriptionField
                     placeholderText: qsTr("Description")
+                    font.pointSize: 10
                     wrapMode: TextEdit.WordWrap
+                }
+                ScrollBar.vertical: ScrollBar {
+                    width: 10
                 }
             }
         }
@@ -293,15 +283,17 @@ Window {
                 }
             }
 
-            ScrollView {
-                Layout.fillHeight: true
+            Flickable {
                 Layout.fillWidth: true
-                ScrollBar.vertical.interactive: true
-                
-                TextArea {
+                Layout.fillHeight: true
+                TextArea.flickable: TextArea {
                     id: editDescriptionField
                     placeholderText: qsTr("Description")
+                    font.pointSize: 10
                     wrapMode: TextEdit.WordWrap
+                }
+                ScrollBar.vertical: ScrollBar {
+                    width: 10
                 }
             }
         }
@@ -446,9 +438,7 @@ Window {
                     id: nameField
                     Layout.fillWidth: true
                     placeholderText: qsTr("Name")
-                    onTextChanged: {
-                        contentChanged()
-                    }
+                    readOnly: true
                 }
 
                 TextField {
@@ -458,18 +448,18 @@ Window {
                     readOnly: true
                 }
 
-                ScrollView {
+                Flickable {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    ScrollBar.vertical.interactive: true
-
-                    TextArea {
+                    TextArea.flickable: TextArea {
                         id: descriptionField
-                        wrapMode: TextEdit.WordWrap
+                        placeholderText: qsTr("Description")
+                        readOnly: true
                         font.pointSize: 10
-                        onTextChanged: {
-                            contentChanged()
-                        }
+                        wrapMode: TextEdit.WordWrap
+                    }
+                    ScrollBar.vertical: ScrollBar {
+                        width: 10
                     }
                 }
 
