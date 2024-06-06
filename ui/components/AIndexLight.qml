@@ -62,7 +62,7 @@ Item {
             Layout.fillHeight: true
             clip: true
             Label {
-                text: qsTr("MAJOR STORM")
+                text: qsTr("STRONG STORM")
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -78,7 +78,7 @@ Item {
             Layout.fillHeight: true
             clip: true
             Label {
-                text: qsTr("MINOR STORM")
+                text: qsTr("MODERATE STORM")
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -94,7 +94,7 @@ Item {
             Layout.fillHeight: true
             clip: true
             Label {
-                text: qsTr("ACTIVE")
+                text: qsTr("ACTIVE-STORM")
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

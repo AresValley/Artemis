@@ -18,8 +18,8 @@ The **K index** is a number (from 0 to 9) that shows how much Earth's magnetic f
 |**Kp 8**|Severe Storm (G4)|Extremely strong aurora, long periods of substorming|Strong auroral display extremely likely|Vide supra|
 |**Kp 9**|Extreme Storm (G5)|Extremely strong aurora, long periods of substorming|Very strong auroral display, overhead aurora possible|Super CMEs, Carrington-class events, devastating solar wind with extreme shock waves|
 
-## 2. A Index
-The **A index** represents the three-hourly equivalent amplitude of geomagnetic activity at a specific magnetometer station, derived from the station-specific K index. Due to the quasi-logarithmic nature of the K-scale in relation to magnetometer fluctuations, directly averaging a set of K indices is not really meaningful. Instead each K is converted back into a linear scale. The **Ap index** is determined by averaging the eight daily A values, providing a measure of geomagnetic activity for a specific day. Days with higher levels of geomagnetic activity correspond to higher daily Ap values.
+## 2. Ap Index
+The **A index** represents the three-hourly equivalent amplitude of geomagnetic activity at a specific magnetometer station, derived from the station-specific K index. Due to the quasi-logarithmic nature of the K-scale in relation to magnetometer fluctuations, directly averaging a set of K indices is not really meaningful. Instead each K is converted back into a linear scale. The **Ap index** is determined by averaging the eight daily Ap values (3-hour) and using the same stations grid explained for the Kp index in the previous section. This provides a measure of geomagnetic activity for a specific day. Days with higher levels of geomagnetic activity correspond to higher daily Ap values.
 
 ## 3. NOAA Space Weather Scale
 

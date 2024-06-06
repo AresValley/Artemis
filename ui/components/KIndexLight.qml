@@ -58,7 +58,7 @@ Item {
             topLeftRadius: 10
             topRightRadius: 10
             Label {
-                text: qsTr("SUPER STORM")
+                text: qsTr("EXTREME STORM")
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -74,7 +74,7 @@ Item {
             Layout.fillHeight: true
             clip: true
             Label {
-                text: qsTr("EXTREME STORM")
+                text: qsTr("SEVERE STORM")
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -90,7 +90,7 @@ Item {
             Layout.fillHeight: true
             clip: true
             Label {
-                text: qsTr("SEVERE STORM")
+                text: qsTr("STRONG STORM")
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -106,7 +106,7 @@ Item {
             Layout.fillHeight: true
             clip: true
             Label {
-                text: qsTr("MAJOR STORM")
+                text: qsTr("MODERATE STORM")
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
