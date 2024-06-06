@@ -40,9 +40,9 @@ class UIPreferences(QObject):
     def load_preferences_ui(self):
         """ Loading all the initial preferences from the conf file to the UI
         """
-        self.load_material_accent.emit(CONFIGURE_QT.get_or_default("Material", "Accent", "Green"))
-        self.load_material_theme.emit(CONFIGURE_QT.get_or_default("Material", "Theme", "System"))
-        self.load_autoload.emit(int(CONFIGURE_QT.get_or_default("Database", "autoload", 0)))
+        self.load_material_accent.emit(CONFIGURE_QT.value("Material", "Accent", "Green"))
+        self.load_material_theme.emit(CONFIGURE_QT.value("Material", "Theme", "System"))
+        self.load_autoload.emit(int(CONFIGURE_QT.value("Database", "autoload", 0)))
         self.show_ui.emit()
 
 

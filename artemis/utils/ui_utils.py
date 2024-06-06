@@ -5,10 +5,10 @@ from artemis.utils.config_utils import CONFIGURE_QT
 
 
 def set_ui():
-    os.environ['QT_QUICK_CONTROLS_STYLE'] = CONFIGURE_QT.get_or_default('Controls', 'style', 'Material')
-    os.environ['QT_QUICK_CONTROLS_MATERIAL_VARIANT'] = CONFIGURE_QT.get_or_default('Material', 'variant', 'Dense')
-    os.environ['QT_QUICK_CONTROLS_MATERIAL_THEME'] = CONFIGURE_QT.get_or_default('Material', 'theme', 'System')
-    os.environ['QT_QUICK_CONTROLS_MATERIAL_ACCENT'] = CONFIGURE_QT.get_or_default('Material', 'accent', 'Green')
+    os.environ['QT_QUICK_CONTROLS_STYLE'] = CONFIGURE_QT.value('Controls', 'style', 'Material')
+    os.environ['QT_QUICK_CONTROLS_MATERIAL_VARIANT'] = CONFIGURE_QT.value('Material', 'variant', 'Dense')
+    os.environ['QT_QUICK_CONTROLS_MATERIAL_THEME'] = CONFIGURE_QT.value('Material', 'theme', 'System')
+    os.environ['QT_QUICK_CONTROLS_MATERIAL_ACCENT'] = CONFIGURE_QT.value('Material', 'accent', 'Green')
 
     if is_windows():
         os.environ['QSG_RHI_BACKEND'] = 'opengl'

@@ -336,7 +336,7 @@ class UIArtemis(QObject):
 
     def autoload_db(self):
         sig_id_path = DATA_DIR / 'SigID' / Constants.SQL_NAME
-        autoload = CONFIGURE_QT.get_or_default("Database", "autoload", 0)
+        autoload = CONFIGURE_QT.value("Database", "autoload", 0)
         if sig_id_path.exists() and int(autoload):
             self.load_db('SigID')
 
