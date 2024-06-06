@@ -23,10 +23,12 @@ Window {
 
     signal saveMaterialAccent(string arg)
     signal saveMaterialTheme(string arg)
+    signal saveAutoload(int arg)
 
     function saveAll() {
         saveMaterialAccent(comboBoxAccent.currentText)
         saveMaterialTheme(comboBoxTheme.currentText)
+        saveAutoload(checkBoxAutoload.checked)
     }
 
     function loadMaterialAccent(accent) {
@@ -44,6 +46,14 @@ Window {
                 comboBoxTheme.currentIndex = idx
                 break
             }
+        }
+    }
+
+    function loadAutoload(toggle) {
+        if (toggle) {
+            checkBoxAutoload.checked = true
+        } else {
+            checkBoxAutoload.checked = false
         }
     }
 
@@ -129,6 +139,21 @@ Window {
                         "Grey",
                         "BlueGrey"
                     ]
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+
+                Label {
+                    text: "Auto-load SigID Database on Startup"
+                    font.pixelSize: 12
+                    clip: true
+                    Layout.fillWidth: true
+                }
+
+                CheckBox {
+                    id: checkBoxAutoload
                 }
             }
 

@@ -10,6 +10,7 @@ from artemis.utils.path_utils import DATA_DIR
 from artemis.utils.network_utils import NetworkManager
 from artemis.utils.generic_utils import generate_filter_query
 from artemis.utils.path_utils import normalize_dialog_path
+from artemis.utils.config_utils import CONFIGURE_QT
 
 from artemis.ui.preferences import UIPreferences
 from artemis.ui.dbmanager import UIdbmanager
@@ -68,6 +69,8 @@ class UIArtemis(QObject):
         self.cateditor = UIcategoryeditor(self)
 
         self.network_manager = NetworkManager(self)
+
+        self.autoload_db()
 
 
     def _connect(self):
@@ -329,6 +332,13 @@ class UIArtemis(QObject):
         """ Open the category manager windows
         """
         self.cateditor.load_cateditor_ui()
+
+
+    def autoload_db(self):
+        sig_id_path = DATA_DIR / 'SigID' / Constants.SQL_NAME
+        autoload = CONFIGURE_QT.get_or_default("Database", "autoload", 0)
+        if sig_id_path.exists() and int(autoload):
+            self.load_db('SigID')
 
 
     def dialog_popup(self, message_type, title, message):

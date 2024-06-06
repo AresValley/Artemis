@@ -9,6 +9,7 @@ class UIPreferences(QObject):
     show_ui = Signal()
     load_material_accent = Signal(str)
     load_material_theme = Signal(str)
+    load_autoload = Signal(int)
 
 
     def __init__(self, parent):
@@ -27,11 +28,13 @@ class UIPreferences(QObject):
         # QML > Python connections
         self._window.saveMaterialAccent.connect(self.save_material_accent)
         self._window.saveMaterialTheme.connect(self.save_material_theme)
+        self._window.saveAutoload.connect(self.save_autoload)
 
         # Python > QML connections
         self.show_ui.connect(self._window.show)
         self.load_material_accent.connect(self._window.loadMaterialAccent)
         self.load_material_theme.connect(self._window.loadMaterialTheme)
+        self.load_autoload.connect(self._window.loadAutoload)
 
 
     def load_preferences_ui(self):
@@ -39,6 +42,7 @@ class UIPreferences(QObject):
         """
         self.load_material_accent.emit(CONFIGURE_QT.get_or_default("Material", "Accent", "Green"))
         self.load_material_theme.emit(CONFIGURE_QT.get_or_default("Material", "Theme", "System"))
+        self.load_autoload.emit(int(CONFIGURE_QT.get_or_default("Database", "autoload", 0)))
         self.show_ui.emit()
 
 
@@ -54,3 +58,10 @@ class UIPreferences(QObject):
         """ Saving material theme setting
         """
         CONFIGURE_QT.set("Material", "Theme", material_theme)
+
+
+    @Slot(int)
+    def save_autoload(self, autoload):
+        """ Saving autoload setting
+        """
+        CONFIGURE_QT.set("Database", "autoload", str(autoload))

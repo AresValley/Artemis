@@ -32,10 +32,13 @@ class Config(ConfigParser):
             self.write(f, space_around_delimiters=self._space_around_delimiters)
 
 
-if not (PREFERENCES_DIR / 'qtquickcontrols2.conf').exists():
-    copy_file(
-        BASE_DIR / 'config' / 'qtquickcontrols2.conf',
-        PREFERENCES_DIR / 'qtquickcontrols2.conf'
-    )
+def prepare_qt_conf():
+    if not (PREFERENCES_DIR / 'qtquickcontrols2.conf').exists():
+        copy_file(
+            BASE_DIR / 'config' / 'qtquickcontrols2.conf',
+            PREFERENCES_DIR / 'qtquickcontrols2.conf'
+        )
 
+
+prepare_qt_conf()
 CONFIGURE_QT = Config((PREFERENCES_DIR / 'qtquickcontrols2.conf').resolve().as_posix())
