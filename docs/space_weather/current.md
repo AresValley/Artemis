@@ -5,6 +5,19 @@
 ## 1. Kp Index
 The **K index** is a number (from 0 to 9) that shows how much Earth's magnetic field is disturbed. A K index of 1 means things are calm, while a K index of 5 or higher indicates a geomagnetic storm. These disturbances are measured with magnetometers that track changes in Earth's magnetic field every three hours. The K itself comes from a German word "Kennziffer" meaning "characteristic digit". To get a big picture of what's happening around the world, an official planetary **Kp index** is calculated. This is done by averaging the K indices from a special network of 13 geomagnetic observatories located around the globe at mid-latitudes.
 
+|Index|Activity Level|High Latitudes|Low Latitudes|Possible Source|
+|-|-|-|-|-|
+|**Kp 0**|Inactive|Weak & slow aurora possible|Aurora extremely unlikely|Small influx of particles due to some reconnections mostly at the magnetotail|
+|**Kp 1**|Very Quiet|Weak & slow aurora likely|Aurora very unlikely|Vide supra|
+|**Kp 2**|Quiet|Moderate auroral display|Aurora unlikely|Vide supra|
+|**Kp 3**|Unsettled|Active auroral display, sporadic substorm possible|Weak aurora display possible|Coronal hole sending fast winds or remains after days of storming, enhanced solar wind|
+|**Kp 4**|Active|Active auroral display, multiple sporadic substorms possible|Weak Aurora Display Possible|Vide supra|
+|**Kp 5**|Minor Storm (G1)|Very active auroral display, multiple substorms likely|Aurora display likely|Coronal hole sending fast winds or coronal mass ejection (CME), enhanced solar wind|
+|**Kp 6**|Moderate Storm (G2)|Strong auroral display, longer substorms|Active auroral display very likely|Vide supra|
+|**Kp 7**|Strong Storm (G3)|Very strong auroral display|Strong auroral display extremely likely|Large CMEs caused by solar storms or flares, very enhanced solar wind with strong shock wave|
+|**Kp 8**|Severe Storm (G4)|Extremely strong aurora, long periods of substorming|Strong auroral display extremely likely|Vide supra|
+|**Kp 9**|Extreme Storm (G5)|Extremely strong aurora, long periods of substorming|Very strong auroral display, overhead aurora possible|Super CMEs, Carrington-class events, devastating solar wind with extreme shock waves|
+
 ## 2. A Index
 The **A index** represents the three-hourly equivalent amplitude of geomagnetic activity at a specific magnetometer station, derived from the station-specific K index. Due to the quasi-logarithmic nature of the K-scale in relation to magnetometer fluctuations, directly averaging a set of K indices is not really meaningful. Instead each K is converted back into a linear scale. The **Ap index** is determined by averaging the eight daily A values, providing a measure of geomagnetic activity for a specific day. Days with higher levels of geomagnetic activity correspond to higher daily Ap values.
 

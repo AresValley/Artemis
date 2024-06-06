@@ -15,7 +15,7 @@
 **Artemis** is a software designed to assist **radio frequency (RF) signal identification and storage**. It simplifies real-time spectrum analysis by leveraging one of the most extensive and community-driven databases, containing nearly **500 recognized signals**. This comprehensive software solution allows users to collect RF signals with specific parameters such as frequency, bandwidth, modulation, etc. Users can also store spectrum waterfalls, audio samples, and all types of documents for future reference. Artemis provides a robust platform to manage a wide range of RF data with precision and ease.
 
 <div align="center">
-    <img src="docs/assets/artemis_preview.png">
+    <img src="docs/assets/artemis_preview.webp" style="border-radius: 10px; box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.3)">
 </div>
 
 ## Documentation
