@@ -4,7 +4,7 @@ echo "Building maacOS target ..."
 
 echo "Installing requirements ..."
 pip install -r requirements.txt
-pip install nuitka==2.3 imageio
+pip install nuitka==2.3.1 imageio
 
 echo "Building with Nuitka ..."
 python -m nuitka app.py \
