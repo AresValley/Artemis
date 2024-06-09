@@ -16,7 +16,7 @@
 2. Before running `app.bin`, be sure to have the executable permissions to the binary file with:
 
     ```
-    chmode 700 app.bin
+    chmod 700 app.bin
     ```
 
 ### Create a Shortcut
