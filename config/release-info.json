@@ -6,10 +6,10 @@
     "total_bytes": 244449280
   },
   "windows": {
-    "version": "4.0.0"
+    "version": "4.0.1"
   },
   "linux": {
-    "version": "4.0.0"
+    "version": "4.0.1"
   },
   "mac": {
     "version": "4.0.0"

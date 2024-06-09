@@ -3,7 +3,9 @@
 > [!NOTE]  
 > This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and the format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - 2024-05-28
+## [Unreleased]
+
+## [4.0.1] - 2024-06-9
 ### Added
 - Database format has been changed from .csv to a proper relational DB (sqlite) which is much easier handled thanks to the native library shipped with python
 - Possibility to create an arbitrary number of new databases for storing new custom signals
@@ -89,7 +91,8 @@ First release.
 
 
 <!-- Links definitions -->
-[Unreleased]: https://github.com/AresValley/Artemis/compare/v3.2.4...HEAD
+[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.0.1...HEAD
+[4.0.1]: https://github.com/AresValley/Artemis/compare/v3.2.4...v4.0.1
 [3.2.4]: https://github.com/AresValley/Artemis/compare/v3.2.1...v3.2.4
 [3.2.3]: https://github.com/AresValley/Artemis/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/AresValley/Artemis/compare/v3.2.1...v3.2.2
