@@ -23,6 +23,6 @@ python -m nuitka app.py \
   --macos-app-name=Artemis \
   --macos-app-mode=gui \
   --macos-sign-identity=ad-hoc \
-  --macos-app-version=4.0.0
+  --macos-app-version=4.0.1
 
 echo "Building Linux target finished."
