@@ -274,7 +274,6 @@ Page {
             Layout.fillWidth: true
         }
 
-
         RowLayout {
             width: 100
             height: 100
@@ -584,6 +583,9 @@ Page {
                         wrapMode: TextEdit.WordWrap
                         textFormat: Text.MarkdownText
                         readOnly: true
+                        onLinkActivated: (link) => {
+                            Qt.openUrlExternally(link)
+                        }
                     }
                     ScrollBar.vertical: ScrollBar {
                         width: 10
