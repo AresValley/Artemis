@@ -5,6 +5,12 @@
 
 ## [Unreleased]
 
+### Changed
+- Optimized final package size (reduced by 30% to 50%) by explicitly including necessary plugins/DLLs and excluding unnecessary ones with Nuitka [#47](https://github.com/AresValley/Artemis/issues/47)
+
+### Fixed
+- When the links/urls in the description field of a signal are clicked, they open the default browser [#46](https://github.com/AresValley/Artemis/issues/46)
+
 ## [4.0.1] - 2024-06-9
 ### Added
 - Database format has been changed from .csv to a proper relational DB (sqlite) which is much easier handled thanks to the native library shipped with python

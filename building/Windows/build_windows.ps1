@@ -12,11 +12,19 @@ python -m nuitka app.py `
   --assume-yes-for-downloads `
   --windows-console-mode=disable `
   --enable-plugin=pyside6 `
-  --force-stderr-spec="{TEMP}\artemis.err.log" `
-  --force-stdout-spec="{TEMP}\artemis.out.log" `
-  --include-qt-plugins=sensible,styles,qml,multimedia `
+  --noinclude-dlls="Qt6Charts*" `
+  --noinclude-dlls="Qt6Quick3D*" `
+  --noinclude-dlls="Qt6Sensors*" `
+  --noinclude-dlls="Qt6Test*" `
+  --noinclude-dlls="Qt6WebEngine*" `
+  --include-qt-plugins=sensible `
+  --include-qt-plugins=styles `
+  --include-qt-plugins=qml `
+  --include-qt-plugins=multimedia `
   --include-data-files=.\artemis\resources.py=.\artemis\resources.py `
   --include-data-files=.\config\qtquickcontrols2.conf=.\config\qtquickcontrols2.conf `
+  --force-stderr-spec="{TEMP}\artemis.err.log" `
+  --force-stdout-spec="{TEMP}\artemis.out.log" `
   --windows-company-name=Aresvalley.com `
   --windows-product-name=Artemis `
   --windows-file-version=4.0.1 `
