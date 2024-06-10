@@ -12,6 +12,9 @@ class UIDownloader(QObject):
     # Python > QML Signals
     show_ui = Signal()
     close_ui = Signal()
+    update_progress_bar = Signal(int, int)
+    update_status = Signal(str)
+
 
     def __init__(self, parent):
         super().__init__()
@@ -21,8 +24,6 @@ class UIDownloader(QObject):
         self._engine = QQmlApplicationEngine()
         self._engine.load('qrc:/ui/Downloader.qml')
         self._window = self._engine.rootObjects()[0]
-        self._progress_bar = self._window.findChild(QObject, "progressBar")
-        self._label_progress = self._window.findChild(QObject, "labelProgress")
 
         self._connect()
 
@@ -34,6 +35,8 @@ class UIDownloader(QObject):
         # Python > QML connections
         self.show_ui.connect(self._window.show)
         self.close_ui.connect(self._window.close)
+        self.update_progress_bar.connect(self._window.updateProgressBar)
+        self.update_status.connect(self._window.updateStatus)
 
 
     @Slot()
@@ -66,7 +69,7 @@ class UIDownloader(QObject):
         """ Stop the download when user press abort button """
         if self.reply:
             self.reply.abort()
-            self._progress_bar.setProperty("value", 0)
+            self.update_progress_bar.emit(0, 0)
 
         if self.file:
             self.file.cancelWriting()
@@ -93,10 +96,10 @@ class UIDownloader(QObject):
         if self.file:
             self.file.commit()
 
-        self._label_progress.setProperty("text", "Checking DB integrity (SHA-256)")
+        self.update_status.emit("Checking DB integrity (SHA-256)")
 
         if match_hash(self.dest_file, self._parent.network_manager.remote_db_hash):
-            self._label_progress.setProperty("text", "Unpacking archive...")
+            self.update_status.emit("Unpacking archive...")
             delete_dir(DATA_DIR / 'SigID')
             unpack_tar(self.dest_file, DATA_DIR / 'SigID')
             delete_file(self.dest_file)
@@ -109,9 +112,8 @@ class UIDownloader(QObject):
         """ Update progress bar and label
         """
         total_bytes = self._parent.network_manager.remote_db_size
-        self._label_progress.setProperty("text", "{:.1f} Mb / {:.1f} Mb".format(bytesReceived/10**6, total_bytes/10**6))
-        self._progress_bar.setProperty("to", total_bytes)
-        self._progress_bar.setProperty("value", bytesReceived)
+        self.update_status.emit("{:.1f} Mb / {:.1f} Mb".format(bytesReceived/10**6, total_bytes/10**6))
+        self.update_progress_bar.emit(bytesReceived, total_bytes)
 
 
     @Slot(QNetworkReply.NetworkError)

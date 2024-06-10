@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
+
 Window {
     id: windowDownloader
 
@@ -23,6 +24,15 @@ Window {
 
     signal onAbort()
 
+    function updateProgressBar(bytesReceived, bytesTotal) {
+        progressBar.value = bytesReceived
+        progressBar.to = bytesTotal
+    }
+
+    function updateStatus(arg) {
+        progressLabel.text = arg
+    }
+
     Page {
         id: page
         anchors.fill: parent
@@ -37,17 +47,19 @@ Window {
             }
 
             ProgressBar {
-                objectName: "progressBar"
+                id: progressBar
                 Layout.rightMargin: 20
                 Layout.leftMargin: 20
                 Layout.fillWidth: true
                 value: 0
+                to: 0
             }
 
             Label {
-                objectName: "labelProgress"
+                id: progressLabel
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             }
+
             Button {
                 text: qsTr("Abort")
                 icon.source: "qrc:/images/icons/abort.svg"
