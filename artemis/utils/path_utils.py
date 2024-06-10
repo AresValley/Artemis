@@ -21,7 +21,7 @@ def _app_dir():
     elif is_linux():
         app_dir_path = Path.home() / '.local' / 'share' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
     else:
-        app_dir_path = BASE_DIR
+        app_dir_path = BASE_DIR.resolve()
 
     if not app_dir_path.exists():
         app_dir_path.mkdir(parents=True)
