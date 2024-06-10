@@ -62,8 +62,8 @@ def check_conf_file():
         and if it is different in structure (different section/options)
         it will merge the conf file with the new template one
     """
-    active_conf = PREFERENCES_DIR / 'qtquickcontrols2.conf'
-    template_conf = BASE_DIR / 'config' / 'qtquickcontrols2.conf'
+    active_conf = (PREFERENCES_DIR / 'qtquickcontrols2.conf').resolve()
+    template_conf = (BASE_DIR / 'config' / 'qtquickcontrols2.conf').resolve()
 
     if not active_conf.exists():
         copy_file(template_conf, active_conf)

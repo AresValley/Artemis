@@ -10,6 +10,7 @@
 
 ### Fixed
 - When the links/urls in the description field of a signal are clicked, they open the default browser [#46](https://github.com/AresValley/Artemis/issues/46)
+- Fixed an error occurig on Linux where configuration file path are not properly resolved during startup with the binary version of the program (they are if running from source) [#48](https://github.com/AresValley/Artemis/issues/48)
 
 ## [4.0.1] - 2024-06-9
 ### Added
