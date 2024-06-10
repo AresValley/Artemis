@@ -5,6 +5,9 @@
 
 ## [Unreleased]
 
+
+## [4.0.3] - 2024-06-10
+
 ### Changed
 - Optimized final package size (reduced by 30% to 50%) by explicitly including necessary plugins/DLLs and excluding unnecessary ones with Nuitka [#47](https://github.com/AresValley/Artemis/issues/47)
 
@@ -98,7 +101,8 @@ First release.
 
 
 <!-- Links definitions -->
-[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.0.1...HEAD
+[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.0.3...HEAD
+[4.0.1]: https://github.com/AresValley/Artemis/compare/v4.0.1...v4.0.3
 [4.0.1]: https://github.com/AresValley/Artemis/compare/v3.2.4...v4.0.1
 [3.2.4]: https://github.com/AresValley/Artemis/compare/v3.2.1...v3.2.4
 [3.2.3]: https://github.com/AresValley/Artemis/compare/v3.2.2...v3.2.3

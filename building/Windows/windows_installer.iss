@@ -1,5 +1,5 @@
 #define MyAppName "Artemis"
-#define MyAppVersion "4.0.1"
+#define MyAppVersion "4.0.3"
 #define MyAppPublisher "AresValley"
 #define MyAppURL "https://www.aresvalley.com/"
 #define MyAppExeName "artemis.exe"

@@ -10,7 +10,7 @@ class Constants():
     APPLICATION_NAME            = 'Artemis'
     ORGANIZATION_NAME           = 'AresValley'
     ORGANIZATION_DOMAIN         = 'aresvalley.com'
-    APPLICATION_VERSION         = '4.0.1'
+    APPLICATION_VERSION         = '4.0.3'
 
     SQL_NAME                    = 'data.sqlite'
 
