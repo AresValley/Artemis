@@ -13,11 +13,11 @@ python -m nuitka app.py \
   --show-modules \
   --assume-yes-for-downloads \
   --enable-plugin=pyside6 \
-  --noinclude-dlls=Qt6Charts* \
-  --noinclude-dlls=Qt6Quick3D* \
-  --noinclude-dlls=Qt6Sensors* \
-  --noinclude-dlls=Qt6Test* \
-  --noinclude-dlls=Qt6WebEngine* \
+  --noinclude-dlls=libQt6Charts* \
+  --noinclude-dlls=libQt6Quick3D* \
+  --noinclude-dlls=libQt6Sensors* \
+  --noinclude-dlls=libQt6Test* \
+  --noinclude-dlls=libQt6WebEngine* \
   --include-qt-plugins=sensible \
   --include-qt-plugins=styles \
   --include-qt-plugins=qml \
