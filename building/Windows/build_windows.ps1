@@ -7,7 +7,6 @@ pip install nuitka==2.3
 Write-Output "Building with Nuitka ..."
 python -m nuitka app.py `
   --standalone `
-  --follow-imports `
   --show-modules `
   --assume-yes-for-downloads `
   --windows-console-mode=disable `
@@ -17,7 +16,6 @@ python -m nuitka app.py `
   --noinclude-dlls="Qt6Sensors*" `
   --noinclude-dlls="Qt6Test*" `
   --noinclude-dlls="Qt6WebEngine*" `
-  --include-qt-plugins=sensible `
   --include-qt-plugins=styles `
   --include-qt-plugins=qml `
   --include-qt-plugins=multimedia `
