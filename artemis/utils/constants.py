@@ -39,6 +39,7 @@ class Messages:
     UP_TO_DATE                  = "You're up to date!"
     DB_NEW_VER                  = "New SigID DB version available!"
     ART_NEW_VER                 = "New Artemis version available!"
+    DB_CORRUPTED                = "Database Corruption Detected"
 
     # Messages
     DB_CREATION_SUCCESS_MSG     = "The new database has been created succesfully."
@@ -51,7 +52,8 @@ class Messages:
     UP_TO_DATE_MSG              = "The latest version of Artemis and SigID wiki is installed on your computer."
     DB_NEW_VER_MSG              = "A new version of the database ({}) is available for download. Download now?"
     ART_NEW_VER_MSG             = "A new version of Artemis ({}) is available for download. Check GitHub page now?"
-    DOWNLOAD_CORRUPTED_MSG      = "Downloaded data corrupted or invalid. Please retry."
+    DB_CORRUPTED_MSG            = "Downloaded data corrupted or invalid. Please retry."
+    DB_DOWNLOAD_SUCCESS_MSG     = "The database has been successfully downloaded and is now being loaded."
 
 
 class Query():

@@ -7,7 +7,7 @@ from artemis.utils.constants import Constants, Messages
 from artemis.utils.sys_utils import open_directory, make_tar, unpack_tar
 from artemis.utils.sql_utils import ArtemisDatabase, ArtemisSignal
 from artemis.utils.path_utils import DATA_DIR
-from artemis.utils.network_utils import NetworkManager
+from artemis.utils.update_utils import UpdateManager
 from artemis.utils.generic_utils import generate_filter_query
 from artemis.utils.path_utils import normalize_dialog_path
 from artemis.utils.config_utils import CONFIGURE_QT
@@ -62,13 +62,12 @@ class UIArtemis(QObject):
         # Creating istances for other windows
         self.preferences = UIPreferences(self)
         self.dbmanager = UIdbmanager(self)
-        self.downloader = UIDownloader(self)
         self.spaceweather = UIspaceweather(self)
         self.docmanager = UIdocumentsmanager(self)
         self.sigeditor = UIsignaleditor(self)
         self.cateditor = UIcategoryeditor(self)
 
-        self.network_manager = NetworkManager(self)
+        self.update_manager = UpdateManager(self)
 
         self.autoload_db()
 
@@ -217,15 +216,19 @@ class UIArtemis(QObject):
     def check_update_db(self):
         """ User manual check for updates db updates
         """
-        self.network_manager.show_popup = True
-        self.network_manager.check_updates()
+        self.update_manager.check_updates(True)
 
 
     def start_download_db(self):
         """ Show the downloader and start the download of the sigid db
         """
-        self.downloader.show_ui.emit()
-        self.downloader.on_start()
+        self.downloader = UIDownloader(self)
+        self.downloader.finished.connect(self.update_manager.post_download_db)
+        self.downloader.on_start(
+            self.update_manager.remote_db_url,
+            self.update_manager.remote_db_size,
+            DATA_DIR
+        )
 
 
     def dialog_download_db(self, message_type, title, message):

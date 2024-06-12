@@ -2,14 +2,12 @@ from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, Signal, QUrl, QSaveFile, QDir, QIODevice
 from PySide6.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
 
-from artemis.utils.config_utils import *
-from artemis.utils.sys_utils import delete_file, delete_dir, match_hash, unpack_tar
 from artemis.utils.constants import Messages
-from artemis.utils.path_utils import DATA_DIR
 
 
 class UIDownloader(QObject):
     # Python > QML Signals
+    finished = Signal()
     show_ui = Signal()
     close_ui = Signal()
     update_progress_bar = Signal(int, int)
@@ -25,6 +23,9 @@ class UIDownloader(QObject):
         self._engine.load('qrc:/ui/Downloader.qml')
         self._window = self._engine.rootObjects()[0]
 
+        self.file_url = None
+        self.file_size = None
+
         self._connect()
 
 
@@ -39,20 +40,22 @@ class UIDownloader(QObject):
         self.update_status.connect(self._window.updateStatus)
 
 
-    @Slot()
-    def on_start(self):
+    def on_start(self, url, filesize, save_path):
         """ Start the download of the DB taking the needed url and size from
             the attributes of the UpdatesController class
         """
-        url_file = QUrl(self._parent.network_manager.remote_db_url)
-        dest_path = QDir(DATA_DIR)
-        self.dest_file = dest_path.filePath(url_file.fileName())
+        self.show_ui.emit()
+
+        self.file_url = QUrl(url)
+        self.file_size = filesize
+        dest_path = QDir(save_path)
+        self.dest_file = dest_path.filePath(self.file_url.fileName())
         self.file = QSaveFile(self.dest_file)
 
         if self.file.open(QIODevice.WriteOnly):
             # Start a GET HTTP request
             self.manager = QNetworkAccessManager(self)
-            self.reply = self.manager.get(QNetworkRequest(url_file))
+            self.reply = self.manager.get(QNetworkRequest(self.file_url))
             self.reply.downloadProgress.connect(self.on_progress)
             self.reply.finished.connect(self.on_finished)
             self.reply.readyRead.connect(self.on_ready_read)
@@ -74,8 +77,6 @@ class UIDownloader(QObject):
         if self.file:
             self.file.cancelWriting()
 
-        self.close_ui.emit()
-
 
     @Slot()
     def on_ready_read(self):
@@ -95,25 +96,19 @@ class UIDownloader(QObject):
 
         if self.file:
             self.file.commit()
+        
+        if self.reply.error() == QNetworkReply.NoError:
+            self.finished.emit()
 
-        self.update_status.emit("Checking DB integrity (SHA-256)")
-
-        if match_hash(self.dest_file, self._parent.network_manager.remote_db_hash):
-            self.update_status.emit("Unpacking archive...")
-            delete_dir(DATA_DIR / 'SigID')
-            unpack_tar(self.dest_file, DATA_DIR / 'SigID')
-            delete_file(self.dest_file)
-            self._parent.load_db('SigID')
-            self.close_ui.emit()
+        self.close_ui.emit()
 
 
     @Slot(int, int)
     def on_progress(self, bytesReceived: int):
         """ Update progress bar and label
         """
-        total_bytes = self._parent.network_manager.remote_db_size
-        self.update_status.emit("{:.1f} Mb / {:.1f} Mb".format(bytesReceived/10**6, total_bytes/10**6))
-        self.update_progress_bar.emit(bytesReceived, total_bytes)
+        self.update_status.emit("{:.1f} Mb / {:.1f} Mb".format(bytesReceived/10**6, self.file_size/10**6))
+        self.update_progress_bar.emit(bytesReceived, self.file_size)
 
 
     @Slot(QNetworkReply.NetworkError)
