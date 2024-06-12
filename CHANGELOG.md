@@ -5,6 +5,11 @@
 
 ## [Unreleased]
 
+### Changed
+- Improved readability of labels for filter ranges for frequency, bandwidth, and ACF
+
+### Fixed
+- Added a database load check to avoid (non critical) exceptions when applying filters without having loaded a database.
 
 ## [4.0.3] - 2024-06-10
 

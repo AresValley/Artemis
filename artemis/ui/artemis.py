@@ -168,17 +168,18 @@ class UIArtemis(QObject):
             the details to generate a search query
         """
         filter_status = filter_status.toVariant()
-        if filter_status != {}:
-            filter_query = generate_filter_query(filter_status)
-            self.loaded_db.select_by_filter(filter_query)
-            
-            self.clear_signal_page.emit()
-            self.populate_sig_list.emit(self.loaded_db.all_signals)
+        if self.loaded_db is not None:
+            if filter_status != {}:
+                filter_query = generate_filter_query(filter_status)
+                self.loaded_db.select_by_filter(filter_query)
+                
+                self.clear_signal_page.emit()
+                self.populate_sig_list.emit(self.loaded_db.all_signals)
 
-            total_signals = len(self.loaded_db.all_signals)
-            self.bottom_info_bar("FILTERS ACTIVE: {} signals found".format(total_signals), "warning")
-        else:
-            self.load_db(self.loaded_db.db_dir_name)
+                total_signals = len(self.loaded_db.all_signals)
+                self.bottom_info_bar("FILTERS ACTIVE: {} signals found".format(total_signals), "warning")
+            else:
+                self.load_db(self.loaded_db.db_dir_name)
 
 
     def show_pref_ui(self):
