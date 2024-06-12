@@ -12,8 +12,14 @@
 ---
 
 ## :simple-linux: Linux
-1. Download `Artemis-Linux-x86_64-4.x.x.tar` in the Assets menu from the [:material-download: LATEST RELEASE](https://github.com/AresValley/Artemis/releases) and extract the tarball archive in a folder of your choice.
-2. Before running `app.bin`, be sure to have the executable permissions to the binary file with:
+1. On Linux, the xcb plugin is utilized to supply the essential functionality required for Qt GUI and Qt Widgets to operate on [X11](https://doc.qt.io/qt-6/linux-requirements.html). On some Linux distributions the required dependencies are already met, but in many cases, you will need to install them. To install the dependencies use:
+
+    ```
+    sudo apt install libxcb-cursor0
+    ```
+
+2. Download `Artemis-Linux-x86_64-4.x.x.tar` in the Assets menu from the [:material-download: LATEST RELEASE](https://github.com/AresValley/Artemis/releases) and extract the tarball archive in a folder of your choice.
+3. Before running `app.bin`, be sure to have the executable permissions to the binary file with:
 
     ```
     chmod 700 app.bin
