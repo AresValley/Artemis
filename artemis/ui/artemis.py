@@ -226,7 +226,6 @@ class UIArtemis(QObject):
         self.downloader.finished.connect(self.update_manager.post_download_db)
         self.downloader.on_start(
             self.update_manager.remote_db_url,
-            self.update_manager.remote_db_size,
             DATA_DIR
         )
 

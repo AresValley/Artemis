@@ -29,6 +29,10 @@ Window {
         progressBar.to = bytesTotal
     }
 
+    function setIndeterminateBar() {
+        progressBar.indeterminate = true
+    }
+
     function updateStatus(arg) {
         progressLabel.text = arg
     }
@@ -51,6 +55,7 @@ Window {
                 Layout.rightMargin: 20
                 Layout.leftMargin: 20
                 Layout.fillWidth: true
+                indeterminate: false
                 value: 0
                 to: 0
             }
@@ -61,10 +66,11 @@ Window {
             }
 
             Button {
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                 text: qsTr("Abort")
                 icon.source: "qrc:/images/icons/abort.svg"
                 display: AbstractButton.TextBesideIcon
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                flat: true
                 onClicked: { onAbort() }
             }
         }

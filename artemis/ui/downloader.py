@@ -1,3 +1,5 @@
+import requests
+
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, Signal, QUrl, QSaveFile, QDir, QIODevice
 from PySide6.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
@@ -7,11 +9,12 @@ from artemis.utils.constants import Messages
 
 class UIDownloader(QObject):
     # Python > QML Signals
-    finished = Signal()
     show_ui = Signal()
     close_ui = Signal()
     update_progress_bar = Signal(int, int)
+    set_indeterminate_bar = Signal()
     update_status = Signal(str)
+    finished = Signal()
 
 
     def __init__(self, parent):
@@ -25,6 +28,10 @@ class UIDownloader(QObject):
 
         self.file_url = None
         self.file_size = None
+        self.dest_file = None
+        self.file = None
+        self.manager = None
+        self.reply = None
 
         self._connect()
 
@@ -37,17 +44,22 @@ class UIDownloader(QObject):
         self.show_ui.connect(self._window.show)
         self.close_ui.connect(self._window.close)
         self.update_progress_bar.connect(self._window.updateProgressBar)
+        self.set_indeterminate_bar.connect(self._window.setIndeterminateBar)
         self.update_status.connect(self._window.updateStatus)
 
 
-    def on_start(self, url, filesize, save_path):
-        """ Start the download of the DB taking the needed url and size from
-            the attributes of the UpdatesController class
+    def on_start(self, url, save_path):
+        """ Start the download process using the specified URL
+
+        Args:
+            url (str): url from where download the file
+            save_path (str): path where to save the downloaded file
         """
+
         self.show_ui.emit()
 
         self.file_url = QUrl(url)
-        self.file_size = filesize
+        self.file_size = self._get_filesize(url)
         dest_path = QDir(save_path)
         self.dest_file = dest_path.filePath(self.file_url.fileName())
         self.file = QSaveFile(self.dest_file)
@@ -69,7 +81,8 @@ class UIDownloader(QObject):
 
     @Slot()
     def on_abort(self):
-        """ Stop the download when user press abort button """
+        """ Stop the download when user presses the abort button
+        """
         if self.reply:
             self.reply.abort()
             self.update_progress_bar.emit(0, 0)
@@ -80,7 +93,8 @@ class UIDownloader(QObject):
 
     @Slot()
     def on_ready_read(self):
-        """ Get available bytes and store them into the file """
+        """ Write available bytes to the file
+        """
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
                 self.file.write(self.reply.readAll())
@@ -88,8 +102,9 @@ class UIDownloader(QObject):
 
     @Slot()
     def on_finished(self):
-        """ Delete reply, close the file, check the hash for integrity,
-            extract the database and delete the downloaded zip
+        """ Finalize the download process and if no errors
+            occurrs emits the finished signal usefulle for
+            a callback
         """
         if self.reply:
             self.reply.deleteLater()
@@ -105,10 +120,13 @@ class UIDownloader(QObject):
 
     @Slot(int, int)
     def on_progress(self, bytesReceived: int):
-        """ Update progress bar and label
+        """ Update progress bar and status label
         """
-        self.update_status.emit("{:.1f} Mb / {:.1f} Mb".format(bytesReceived/10**6, self.file_size/10**6))
-        self.update_progress_bar.emit(bytesReceived, self.file_size)
+        if self.file_size is not None:
+            self.update_status.emit("{:.1f} Mb / {:.1f} Mb".format(bytesReceived/10**6, self.file_size/10**6))
+            self.update_progress_bar.emit(bytesReceived, self.file_size)
+        else:
+            self.update_status.emit("{:.1f} Mb".format(bytesReceived/10**6))
 
 
     @Slot(QNetworkReply.NetworkError)
@@ -120,6 +138,22 @@ class UIDownloader(QObject):
             self.show_popup_error(
                 self.reply.errorString()
             )
+
+
+    def _get_filesize(self, url):
+        """ Get the file size by sending a HEAD request to the URL.
+            If the Content-Length in HTTP headers is missing, returns None
+
+        Args:
+            url (str): URL to check the file size
+        """
+        try:
+            response = requests.get(url, stream=True)
+            size = int(response.headers.get('content-length'))
+            return size
+        except:
+            self.set_indeterminate_bar.emit()
+            return None
 
 
     def show_popup_error(self, error_msg):
