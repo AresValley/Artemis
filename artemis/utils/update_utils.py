@@ -43,7 +43,7 @@ class UpdateManager:
                     Defaults to False. True is usefull when the user manual check for
                     updates.
         """
-        latest_json = self._fetch_remote_json(Constants.LATEST_VERSION_URL, show_popup)
+        latest_json = self.fetch_remote_json(Constants.LATEST_VERSION_URL, show_popup)
         if latest_json:
             local_db = self._load_local_db()
             remote_db = latest_json['sigID_DB']
@@ -83,7 +83,7 @@ class UpdateManager:
                     self._show_popup_initial_db_download()
 
 
-    def _fetch_remote_json(self, url, show_popup=False):
+    def fetch_remote_json(self, url, show_popup=False):
         """ Fetches the remote json from a url
 
             Args:
