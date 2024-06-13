@@ -31,8 +31,8 @@ Window {
     signal showCatManager()
     signal openSigEditor(string type, var sig_param, bool is_new)
     signal showSpaceWeather()
-    signal checkDbUpdates()
-    signal startDownloader()
+    signal checkForUpdate()
+    signal updateDb()
     signal updateArtemis()
     signal openDbDirectory()
     signal newDb(string name)
@@ -137,7 +137,7 @@ Window {
         standardButtons: Dialog.Cancel | Dialog.Yes
 
         onAccepted: {
-            startDownloader()
+            updateDb()
         }
     }
 
@@ -323,7 +323,7 @@ Window {
 
                 MenuItem {
                     text: "Check for Updates"
-                    onClicked: {checkDbUpdates()}
+                    onClicked: {checkForUpdate()}
                 }
 
                 MenuSeparator {}

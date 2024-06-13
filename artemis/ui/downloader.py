@@ -55,7 +55,7 @@ class UIDownloader(QObject):
             url (str): url from where download the file
             save_path (str): path where to save the downloaded file
         """
-
+        self._clear_ui()
         self.show_ui.emit()
 
         self.file_url = QUrl(url)
@@ -85,8 +85,6 @@ class UIDownloader(QObject):
         """
         if self.reply:
             self.reply.abort()
-            self.update_progress_bar.emit(0, 0)
-            self.update_status.emit('')
 
         if self.file:
             self.file.cancelWriting()
@@ -103,8 +101,8 @@ class UIDownloader(QObject):
 
     @Slot()
     def on_finished(self):
-        """ Finalize the download process and if no errors
-            occurs emits the finished signal usefulle for
+        """ Finalize the download process and, if no errors
+            occurs, emits the finished signal usefull for
             a callback
         """
         if self.reply:
@@ -144,6 +142,7 @@ class UIDownloader(QObject):
     def _get_filesize(self, url):
         """ Get the file size by sending a HEAD request to the URL.
             If the Content-Length in HTTP headers is missing, returns None
+            and set the progress_bar as 'indeterminate' like a 'busy indicator'
 
         Args:
             url (str): URL to check the file size
@@ -155,6 +154,11 @@ class UIDownloader(QObject):
         except:
             self.set_indeterminate_bar.emit()
             return None
+
+
+    def _clear_ui(self):
+        self.update_progress_bar.emit(0, 0)
+        self.update_status.emit('')
 
 
     def show_popup_error(self, error_msg):
