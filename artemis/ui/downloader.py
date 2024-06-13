@@ -74,9 +74,7 @@ class UIDownloader(QObject):
             self.reply.errorOccurred.connect(self.on_error)
         else:
             self.close_ui.emit()
-            self.show_popup_error(
-                self.file.errorString()
-            )
+            self.show_popup_error(self.file.errorString())
 
 
     @Slot()

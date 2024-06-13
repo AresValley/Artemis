@@ -6638,7 +6638,7 @@ G@\x11\x10HG\x93Hp\xec\x0au\xe3\xcd\x1e\xf4\
 >k\xd0\xd3b\x1eG\xb5_d\xde\xb6{\x8f\x95\xc5\
 U\xaf\xbc\xfd\xe9\xb5\x9f\xe5\xe3}r\xba?\xbbI\x06\
 \xfe\xfc\x0f\xf4\xcd*2\
-\x00\x00\x070\
+\x00\x00\x07^\
 i\
 mport QtQuick\x0d\x0ai\
 mport QtQuick.Wi\
@@ -6667,94 +6667,97 @@ Qt.Dialog\x0d\x0a\x0d\x0a   \
 temis - Download\
 er\x22)\x0d\x0a\x0d\x0a    sign\
 al onAbort()\x0d\x0a\x0d\x0a\
-    function upd\
-ateProgressBar(b\
-ytesReceived, by\
-tesTotal) {\x0d\x0a   \
-     progressBar\
-.value = bytesRe\
-ceived\x0d\x0a        \
-progressBar.to =\
- bytesTotal\x0d\x0a   \
- }\x0d\x0a\x0d\x0a    functi\
-on setIndetermin\
-ateBar() {\x0d\x0a    \
-    progressBar.\
-indeterminate = \
-true\x0d\x0a    }\x0d\x0a\x0d\x0a \
-   function upda\
-teStatus(arg) {\x0d\
-\x0a        progres\
-sLabel.text = ar\
-g\x0d\x0a    }\x0d\x0a\x0d\x0a    \
-Page {\x0d\x0a        \
-id: page\x0d\x0a      \
-  anchors.fill: \
-parent\x0d\x0a\x0d\x0a      \
-  ColumnLayout {\
-\x0d\x0a            id\
-: columnLayout\x0d\x0a\
-            anch\
-ors.fill: parent\
-\x0d\x0a\x0d\x0a            \
-Label {\x0d\x0a       \
-         text: q\
-sTr(\x22Downloading\
- in progress...\x22\
-)\x0d\x0a             \
-   Layout.alignm\
-ent: Qt.AlignHCe\
-nter | Qt.AlignV\
-Center\x0d\x0a        \
-    }\x0d\x0a\x0d\x0a       \
-     ProgressBar\
- {\x0d\x0a            \
-    id: progress\
-Bar\x0d\x0a           \
-     Layout.righ\
-tMargin: 20\x0d\x0a   \
-             Lay\
-out.leftMargin: \
-20\x0d\x0a            \
-    Layout.fillW\
-idth: true\x0d\x0a    \
-            inde\
-terminate: false\
+    onClosing: {\
+\x0d\x0a        onAbor\
+t()\x0d\x0a    }\x0d\x0a\x0d\x0a  \
+  function updat\
+eProgressBar(byt\
+esReceived, byte\
+sTotal) {\x0d\x0a     \
+   progressBar.v\
+alue = bytesRece\
+ived\x0d\x0a        pr\
+ogressBar.to = b\
+ytesTotal\x0d\x0a    }\
+\x0d\x0a\x0d\x0a    function\
+ setIndeterminat\
+eBar() {\x0d\x0a      \
+  progressBar.in\
+determinate = tr\
+ue\x0d\x0a    }\x0d\x0a\x0d\x0a   \
+ function update\
+Status(arg) {\x0d\x0a \
+       progressL\
+abel.text = arg\x0d\
+\x0a    }\x0d\x0a\x0d\x0a    Pa\
+ge {\x0d\x0a        id\
+: page\x0d\x0a        \
+anchors.fill: pa\
+rent\x0d\x0a\x0d\x0a        \
+ColumnLayout {\x0d\x0a\
+            id: \
+columnLayout\x0d\x0a  \
+          anchor\
+s.fill: parent\x0d\x0a\
+\x0d\x0a            La\
+bel {\x0d\x0a         \
+       text: qsT\
+r(\x22Downloading i\
+n progress...\x22)\x0d\
+\x0a               \
+ Layout.alignmen\
+t: Qt.AlignHCent\
+er | Qt.AlignVCe\
+nter\x0d\x0a          \
+  }\x0d\x0a\x0d\x0a         \
+   ProgressBar {\
 \x0d\x0a              \
-  value: 0\x0d\x0a    \
-            to: \
-0\x0d\x0a            }\
-\x0d\x0a\x0d\x0a            \
-Label {\x0d\x0a       \
-         id: pro\
-gressLabel\x0d\x0a    \
-            Layo\
-ut.alignment: Qt\
-.AlignHCenter | \
-Qt.AlignVCenter\x0d\
+  id: progressBa\
+r\x0d\x0a             \
+   Layout.rightM\
+argin: 20\x0d\x0a     \
+           Layou\
+t.leftMargin: 20\
+\x0d\x0a              \
+  Layout.fillWid\
+th: true\x0d\x0a      \
+          indete\
+rminate: false\x0d\x0a\
+                \
+value: 0\x0d\x0a      \
+          to: 0\x0d\
 \x0a            }\x0d\x0a\
-\x0d\x0a            Bu\
-tton {\x0d\x0a        \
-        Layout.a\
-lignment: Qt.Ali\
-gnHCenter | Qt.A\
-lignBottom\x0d\x0a    \
-            text\
-: qsTr(\x22Abort\x22)\x0d\
-\x0a               \
- icon.source: \x22q\
-rc:/images/icons\
-/abort.svg\x22\x0d\x0a   \
-             dis\
-play: AbstractBu\
-tton.TextBesideI\
-con\x0d\x0a           \
-     flat: true\x0d\
-\x0a               \
- onClicked: { on\
-Abort() }\x0d\x0a     \
-       }\x0d\x0a      \
-  }\x0d\x0a    }\x0d\x0a}\x0d\x0a\
+\x0d\x0a            La\
+bel {\x0d\x0a         \
+       id: progr\
+essLabel\x0d\x0a      \
+          Layout\
+.alignment: Qt.A\
+lignHCenter | Qt\
+.AlignVCenter\x0d\x0a \
+           }\x0d\x0a\x0d\x0a\
+            Butt\
+on {\x0d\x0a          \
+      Layout.ali\
+gnment: Qt.Align\
+HCenter | Qt.Ali\
+gnBottom\x0d\x0a      \
+          text: \
+qsTr(\x22Abort\x22)\x0d\x0a \
+               i\
+con.source: \x22qrc\
+:/images/icons/a\
+bort.svg\x22\x0d\x0a     \
+           displ\
+ay: AbstractButt\
+on.TextBesideIco\
+n\x0d\x0a             \
+   flat: true\x0d\x0a \
+               o\
+nClicked: { onAb\
+ort() }\x0d\x0a       \
+     }\x0d\x0a        \
+}\x0d\x0a    }\x0d\x0a}\x0d\x0a\
 \x00\x00\x05\xac\
 i\
 mport QtQuick\x0d\x0ai\
@@ -7305,12 +7308,12 @@ qt_resource_struct = b"\
 \x00\x00\x01\x8f\xff^8P\
 \x00\x00\x03<\x00\x01\x00\x00\x00\x01\x00\x01>\xe2\
 \x00\x00\x01\x90\x11\xc7\x00\xf9\
-\x00\x00\x05\xa8\x00\x00\x00\x00\x00\x01\x00\x01\xa0\xab\
+\x00\x00\x05\xa8\x00\x00\x00\x00\x00\x01\x00\x01\xa0\xd9\
 \x00\x00\x01\x8f\xff^8P\
 \x00\x00\x03r\x00\x01\x00\x00\x00\x01\x00\x01I=\
 \x00\x00\x01\x8f\xff^8_\
 \x00\x00\x05\x86\x00\x00\x00\x00\x00\x01\x00\x01\x99w\
-\x00\x00\x01\x90\x11\xad[\xc5\
+\x00\x00\x01\x90\x12\x9a\x0f\x0b\
 \x00\x00\x03X\x00\x02\x00\x00\x00\x04\x00\x00\x00+\
 \x00\x00\x00\x00\x00\x00\x00\x00\
 \x00\x00\x04\xc4\x00\x01\x00\x00\x00\x01\x00\x01vE\
@@ -7329,13 +7332,13 @@ qt_resource_struct = b"\
 \x00\x00\x01\x8f\xff^8P\
 \x00\x00\x05\x06\x00\x00\x00\x00\x00\x01\x00\x01\x85\xde\
 \x00\x00\x01\x8f\xff^8P\
-\x00\x00\x05\xdc\x00\x01\x00\x00\x00\x01\x00\x01\xa9^\
+\x00\x00\x05\xdc\x00\x01\x00\x00\x00\x01\x00\x01\xa9\x8c\
 \x00\x00\x01\x8f\xff^8_\
-\x00\x00\x06$\x00\x01\x00\x00\x00\x01\x00\x01\xaf\xa3\
+\x00\x00\x06$\x00\x01\x00\x00\x00\x01\x00\x01\xaf\xd1\
 \x00\x00\x01\x8f\xff^8_\
-\x00\x00\x05\xc0\x00\x01\x00\x00\x00\x01\x00\x01\xa6[\
+\x00\x00\x05\xc0\x00\x01\x00\x00\x00\x01\x00\x01\xa6\x89\
 \x00\x00\x01\x8f\xff^8_\
-\x00\x00\x06\x00\x00\x01\x00\x00\x00\x01\x00\x01\xac!\
+\x00\x00\x06\x00\x00\x01\x00\x00\x00\x01\x00\x01\xacO\
 \x00\x00\x01\x8f\xff^8_\
 "
 

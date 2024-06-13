@@ -24,6 +24,10 @@ Window {
 
     signal onAbort()
 
+    onClosing: {
+        onAbort()
+    }
+
     function updateProgressBar(bytesReceived, bytesTotal) {
         progressBar.value = bytesReceived
         progressBar.to = bytesTotal
