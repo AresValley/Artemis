@@ -506,7 +506,6 @@ Page {
                         Layout.fillHeight: true
                         highlightMoveDuration: 0
                         clip: true
-                        focus: true
                         ScrollBar.vertical: ScrollBar {
                             active: true
                         }
@@ -558,7 +557,6 @@ Page {
                         Layout.fillWidth: true
                         highlightMoveDuration: 0
                         clip: true
-                        focus: true
                         ScrollBar.vertical: ScrollBar {
                             active: true
                         }
@@ -610,7 +608,6 @@ Page {
                         Layout.fillWidth: true
                         highlightMoveDuration: 0
                         clip: true
-                        focus: true
                         ScrollBar.vertical: ScrollBar {
                             active: true
                         }

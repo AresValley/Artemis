@@ -218,6 +218,11 @@ Window {
         leftPadding: 10
         bottomPadding: 10
 
+        focus: true
+
+        Keys.onDownPressed: listView.incrementCurrentIndex()
+        Keys.onUpPressed: listView.decrementCurrentIndex()
+
         header: MenuBar {
             id: topBar
 
@@ -389,7 +394,6 @@ Window {
                         Layout.fillHeight: true
                         highlightMoveDuration: 0
                         clip: true
-                        focus: true
                         ScrollBar.vertical: bar
                         highlight: Rectangle { color: Material.accent; radius: 5 }
                         onCurrentIndexChanged: { itemChangedList() }
