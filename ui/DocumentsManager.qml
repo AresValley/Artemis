@@ -372,7 +372,6 @@ Window {
                         Layout.fillHeight: true
                         highlightMoveDuration: 0
                         clip: true
-                        focus: true
                         ScrollBar.vertical: bar
                         highlight: Rectangle { color: Material.accent; radius: 5 }
                         onCurrentIndexChanged: { itemChanged() }

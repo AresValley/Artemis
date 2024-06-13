@@ -5,6 +5,9 @@
 
 ## [Unreleased]
 
+### Added
+- Possibility to navigate Artemis just with the keyboard [#50](https://github.com/AresValley/Artemis/issues/50)
+
 ### Changed
 - Improved readability of labels for filter ranges for frequency, bandwidth, and ACF
 

@@ -33,7 +33,16 @@ where $Y_{i+τ}$ is a lagged data by $τ$ of $Y_i$ and $\bar{Y}$ is the average 
 ## Example: ACF Analysis
 ### STANAG 4285
 
-The first example will be a NATO standard known as STANAG 4285. You can download a .wav sample from HERE. We start to collect some information about the structure of this signal: a good starting point is the official declassified NATO document dated 1989. The main frame structure can be found at **Annex A-3/5** with a graphical view at **Annex A-7**, also reported below:
+The first example will be a NATO standard known as STANAG 4285. You can download a .wav sample from [:material-download: HERE](assets/stanag_4285.wav). 
+
+<div align="center">
+    <audio controls>
+        <source src="https://raw.githubusercontent.com/AresValley/Artemis/master/docs/assets/stanag_4285.wav" type="audio/wav">
+        Your browser does not support the audio player.
+    </audio>
+</div>
+
+We start to collect some information about the structure of this signal: a good starting point is the official declassified NATO document dated 1989. The main frame structure can be found at **Annex A-3/5** with a graphical view at **Annex A-7**, also reported below:
 
 * [STANAG 4285 (i)](assets/acf_2.png)
 * [STANAG 4285 A-3](assets/acf_3.png)

@@ -73,8 +73,9 @@ nav:
     - Forecasts: 'space_weather/forecasts.md'
     - DRAP: 'space_weather/drap.md'
     - Aurora: 'space_weather/aurora.md'
-  - Example:
-    - ACF Analysis: 'acf_analysis.md'
+  - Signal Analysis:
+    - Autocorrelation (ACF): 'acf_analysis.md'
+    - FAQ: 'faq.md'
   - Contribute: 'contribute.md'
   - Changelog: https://github.com/AresValley/Artemis/blob/master/CHANGELOG.md
   - License & Credits: 'credits.md'
