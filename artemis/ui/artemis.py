@@ -37,7 +37,7 @@ class UIArtemis(QObject):
 
     show_dialog_popup = Signal(str, str, str)
     show_dialog_download_db = Signal(str, str, str)
-    show_dialog_download_art = Signal(str, str, str)
+    show_dialog_update_artemis = Signal(str, str, str, bool)
     update_info_bar = Signal(str, str)
 
 
@@ -66,6 +66,7 @@ class UIArtemis(QObject):
         self.docmanager = UIdocumentsmanager(self)
         self.sigeditor = UIsignaleditor(self)
         self.cateditor = UIcategoryeditor(self)
+        self.downloader = UIDownloader(self)
 
         self.update_manager = UpdateManager(self)
 
@@ -80,6 +81,7 @@ class UIArtemis(QObject):
         self._window.openSigEditor.connect(self.open_sig_editor)
         self._window.startDownloader.connect(self.start_download_db)
         self._window.checkDbUpdates.connect(self.check_update_db)
+        self._window.updateArtemis.connect(self.update_artemis)
         self._window.showSpaceWeather.connect(self.show_space_weather_ui)
         self._window.openDbDirectory.connect(self.open_db_directory)
         self._window.showCatManager.connect(self.open_cat_manager)
@@ -102,7 +104,7 @@ class UIArtemis(QObject):
         self.update_info_bar.connect(self._window.bottomInfoBar)
         self.show_dialog_popup.connect(self._window.openGeneralDialog)
         self.show_dialog_download_db.connect(self._window.openDialogDownloadDb)
-        self.show_dialog_download_art.connect(self._window.openDialogDownloadArtemis)
+        self.show_dialog_update_artemis.connect(self._window.openDialogUpdateArtemis)
         self.lock_menu.connect(self._window.lockMenu)
 
         self.populate_sig_details.connect(self._window_signal.populateSignalParam)
@@ -222,7 +224,6 @@ class UIArtemis(QObject):
     def start_download_db(self):
         """ Show the downloader and start the download of the sigid db
         """
-        self.downloader = UIDownloader(self)
         self.downloader.finished.connect(self.update_manager.post_download_db)
         self.downloader.on_start(
             self.update_manager.remote_db_url,
@@ -236,10 +237,15 @@ class UIArtemis(QObject):
         self.show_dialog_download_db.emit(message_type, title, message)
 
 
-    def dialog_download_artemis(self, message_type, title, message):
+    def dialog_update_artemis(self, message_type, title, message, auto=False):
         """ Dialog popup for artemis download confirmation
         """
-        self.show_dialog_download_art.emit(message_type, title, message)
+        self.show_dialog_update_artemis.emit(message_type, title, message, auto)
+
+
+    @Slot()
+    def update_artemis(self):
+        print('ciao')
 
 
     def open_db_directory(self):

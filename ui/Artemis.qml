@@ -33,6 +33,7 @@ Window {
     signal showSpaceWeather()
     signal checkDbUpdates()
     signal startDownloader()
+    signal updateArtemis()
     signal openDbDirectory()
     signal newDb(string name)
     signal exportDb(string path)
@@ -121,11 +122,12 @@ Window {
         dialogDownloadDb.open()
     }
 
-    function openDialogDownloadArtemis(messageType, title, message) {
-        dialogDownloadArtemis.messageType = messageType
-        dialogDownloadArtemis.title = title
-        dialogDownloadArtemis.message = message
-        dialogDownloadArtemis.open()
+    function openDialogUpdateArtemis(messageType, title, message, auto) {
+        dialogUpdateArtemis.messageType = messageType
+        dialogUpdateArtemis.title = title
+        dialogUpdateArtemis.message = message
+        dialogUpdateArtemis.autoUpdate = auto
+        dialogUpdateArtemis.open()
     }
 
     DialogMessage {
@@ -140,13 +142,19 @@ Window {
     }
 
     DialogMessage {
-        id: dialogDownloadArtemis
+        id: dialogUpdateArtemis
         modal: true
+
+        property bool autoUpdate
 
         standardButtons: Dialog.Cancel | Dialog.Yes
 
         onAccepted: {
-            Qt.openUrlExternally("https://github.com/AresValley/Artemis")
+            if (autoUpdate) {
+                updateArtemis();
+            } else {
+                Qt.openUrlExternally("https://github.com/AresValley/Artemis");
+            }
         }
     }
 

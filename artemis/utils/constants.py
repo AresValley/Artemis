@@ -51,7 +51,8 @@ class Messages:
     NO_CONNECTION_MSG           = "Unable to check for updates. It appears that there is a problem with your internet connection. Please check your network settings and try again later. {}"
     UP_TO_DATE_MSG              = "The latest version of Artemis and SigID wiki is installed on your computer."
     DB_NEW_VER_MSG              = "A new version of the database ({}) is available for download. Download now?"
-    ART_NEW_VER_MSG             = "A new version of Artemis ({}) is available for download. Check GitHub page now?"
+    ART_NEW_VER_MANUAL_MSG      = "A new version of Artemis ({}) is available for download. Check GitHub page now?"
+    ART_NEW_VER_AUTO_MSG        = "A new version of Artemis ({}) is available for download. Update Artemis now?"
     DB_CORRUPTED_MSG            = "Downloaded data corrupted or invalid. Please retry."
     DB_DOWNLOAD_SUCCESS_MSG     = "The database has been successfully downloaded and is now being loaded."
 

@@ -125,13 +125,24 @@ class UpdateManager:
 
 
     def _show_popup_art_update(self):
-        """ Prompts the user to download the updated version of the database.
+        """ Alerts the user of a new version of Artemis.
+            Windows - asks to download with automatic update
+            Linux, macOS - redirects to GitHub page
         """
-        self._parent.dialog_download_artemis(
-            Messages.DIALOG_TYPE_WARN,
-            Messages.ART_NEW_VER,
-            Messages.ART_NEW_VER_MSG.format(self.remote_art_version)
-        )
+        if is_windows():
+            self._parent.dialog_update_artemis(
+                Messages.DIALOG_TYPE_QUEST,
+                Messages.ART_NEW_VER,
+                Messages.ART_NEW_VER_AUTO_MSG.format(self.remote_art_version),
+                True
+            )
+        else:
+            self._parent.dialog_update_artemis(
+                Messages.DIALOG_TYPE_QUEST,
+                Messages.ART_NEW_VER,
+                Messages.ART_NEW_VER_MANUAL_MSG.format(self.remote_art_version),
+                False
+            )
 
 
     def _show_popup_up_to_date(self):

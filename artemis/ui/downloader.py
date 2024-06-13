@@ -86,6 +86,7 @@ class UIDownloader(QObject):
         if self.reply:
             self.reply.abort()
             self.update_progress_bar.emit(0, 0)
+            self.update_status.emit('')
 
         if self.file:
             self.file.cancelWriting()
