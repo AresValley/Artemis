@@ -6,10 +6,10 @@ from PySide6.QtCore import QObject, Slot, Signal
 from artemis.utils.constants import Constants, Messages
 from artemis.utils.sys_utils import open_directory, make_tar, unpack_tar
 from artemis.utils.sql_utils import ArtemisDatabase, ArtemisSignal
-from artemis.utils.path_utils import DATA_DIR
-from artemis.utils.network_utils import NetworkManager
+from artemis.utils.update_utils import UpdateManager
 from artemis.utils.generic_utils import generate_filter_query
 from artemis.utils.path_utils import normalize_dialog_path
+from artemis.utils.path_utils import DATA_DIR
 from artemis.utils.config_utils import CONFIGURE_QT
 
 from artemis.ui.preferences import UIPreferences
@@ -25,6 +25,7 @@ import artemis.resources
 
 class UIArtemis(QObject):
     # Python > QML Signals
+    close_ui = Signal()
     populate_sig_list = Signal(list)
     populate_sig_details = Signal(list)
     populate_filter_modulation = Signal(list)
@@ -37,7 +38,7 @@ class UIArtemis(QObject):
 
     show_dialog_popup = Signal(str, str, str)
     show_dialog_download_db = Signal(str, str, str)
-    show_dialog_download_art = Signal(str, str, str)
+    show_dialog_update_artemis = Signal(str, str, str, bool)
     update_info_bar = Signal(str, str)
 
 
@@ -62,13 +63,13 @@ class UIArtemis(QObject):
         # Creating istances for other windows
         self.preferences = UIPreferences(self)
         self.dbmanager = UIdbmanager(self)
-        self.downloader = UIDownloader(self)
         self.spaceweather = UIspaceweather(self)
         self.docmanager = UIdocumentsmanager(self)
         self.sigeditor = UIsignaleditor(self)
         self.cateditor = UIcategoryeditor(self)
+        self.downloader = UIDownloader(self)
 
-        self.network_manager = NetworkManager(self)
+        self.update_manager = UpdateManager(self)
 
         self.autoload_db()
 
@@ -79,8 +80,9 @@ class UIArtemis(QObject):
         self._window.loadSignal.connect(self.load_sig)
         self._window.showPref.connect(self.show_pref_ui)
         self._window.openSigEditor.connect(self.open_sig_editor)
-        self._window.startDownloader.connect(self.start_download_db)
-        self._window.checkDbUpdates.connect(self.check_update_db)
+        self._window.checkForUpdate.connect(self.check_for_update)
+        self._window.updateDb.connect(self.update_db)
+        self._window.updateArtemis.connect(self.update_artemis)
         self._window.showSpaceWeather.connect(self.show_space_weather_ui)
         self._window.openDbDirectory.connect(self.open_db_directory)
         self._window.showCatManager.connect(self.open_cat_manager)
@@ -98,12 +100,13 @@ class UIArtemis(QObject):
         self._window_signal.addCatTag.connect(self.add_cat_tag)
 
         # Python > QML connections
+        self.close_ui.connect(self._window.close)
         self.populate_sig_list.connect(self._window.populateList)
         self.clear_list.connect(self._window.clearList)
         self.update_info_bar.connect(self._window.bottomInfoBar)
         self.show_dialog_popup.connect(self._window.openGeneralDialog)
         self.show_dialog_download_db.connect(self._window.openDialogDownloadDb)
-        self.show_dialog_download_art.connect(self._window.openDialogDownloadArtemis)
+        self.show_dialog_update_artemis.connect(self._window.openDialogUpdateArtemis)
         self.lock_menu.connect(self._window.lockMenu)
 
         self.populate_sig_details.connect(self._window_signal.populateSignalParam)
@@ -214,18 +217,10 @@ class UIArtemis(QObject):
         self.docmanager.load_documentsmanager_ui()
 
 
-    def check_update_db(self):
-        """ User manual check for updates db updates
+    def check_for_update(self):
+        """ User manual check for updates updates
         """
-        self.network_manager.show_popup = True
-        self.network_manager.check_updates()
-
-
-    def start_download_db(self):
-        """ Show the downloader and start the download of the sigid db
-        """
-        self.downloader.show_ui.emit()
-        self.downloader.on_start()
+        self.update_manager.check_updates(True)
 
 
     def dialog_download_db(self, message_type, title, message):
@@ -234,10 +229,24 @@ class UIArtemis(QObject):
         self.show_dialog_download_db.emit(message_type, title, message)
 
 
-    def dialog_download_artemis(self, message_type, title, message):
-        """ Dialog popup for artemis download confirmation
+    def dialog_update_artemis(self, message_type, title, message, auto=False):
+        """ Dialog popup for Artemis download confirmation
         """
-        self.show_dialog_download_art.emit(message_type, title, message)
+        self.show_dialog_update_artemis.emit(message_type, title, message, auto)
+
+
+    @Slot()
+    def update_db(self):
+        """ Start the download of the sigID DB
+        """
+        self.update_manager.download_db()
+
+
+    @Slot()
+    def update_artemis(self):
+        """ Start the download of Artemis
+        """
+        self.update_manager.download_artemis()
 
 
     def open_db_directory(self):

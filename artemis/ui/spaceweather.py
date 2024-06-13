@@ -53,10 +53,10 @@ class UIspaceweather(QObject):
     
 
     def download_poseidon_report(self):
-        network_manager = self._parent.network_manager
-        network_manager.show_popup = True
-        poseidon_data =  network_manager.fetch_remote_json(
-            Constants.POSEIDON_REPORT_URL
+        update_manager = self._parent.update_manager
+        poseidon_data = update_manager.fetch_remote_json(
+            Constants.POSEIDON_REPORT_URL,
+            True
         )
         if poseidon_data:
             self.load_poseidon_report.emit(poseidon_data)
