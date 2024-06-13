@@ -6,7 +6,7 @@ from packaging.version import Version
 from artemis.utils.constants import Constants, Messages
 from artemis.utils.sql_utils import ArtemisDatabase
 from artemis.utils.sys_utils import is_windows, is_linux, is_macos, delete_file, delete_dir, match_hash, unpack_tar, open_file
-from artemis.utils.path_utils import DATA_DIR, APP_DIR
+from artemis.utils.path_utils import DATA_DIR, TMP_DIR
 
 
 class UpdateManager:
@@ -116,13 +116,13 @@ class UpdateManager:
 
     def download_db(self):
         """ Open the downloader and download the sigID database in the 
-            DATA_DIR folder. After a succesfull download the callback function
+            TMP_DIR folder. After a succesfull download the callback function
             from the downloader is post_download_db
         """
         self._parent.downloader.finished.connect(self.post_download_db)
         self._parent.downloader.on_start(
             self.remote_db_url,
-            DATA_DIR
+            TMP_DIR
         )
 
 
@@ -131,7 +131,7 @@ class UpdateManager:
             for possible corrupted data, delete old sigID DB and extract
             the new one
         """
-        latest_db_tar_path = DATA_DIR / self.remote_db_file_name
+        latest_db_tar_path = TMP_DIR / self.remote_db_file_name
         if match_hash(latest_db_tar_path, self.remote_db_hash):
             delete_dir(DATA_DIR / 'SigID')
             unpack_tar(latest_db_tar_path, DATA_DIR / 'SigID')
@@ -144,13 +144,13 @@ class UpdateManager:
 
     def download_artemis(self):
         """ Open the downloader and download Artemis in the 
-            APP_DIR folder. After a succesfull download the callback function
+            TMP_DIR folder. After a succesfull download the callback function
             from the downloader is post_download_artemis
         """
         self._parent.downloader.finished.connect(self.post_download_artemis)
         self._parent.downloader.on_start(
             self.remote_artemis_url,
-            APP_DIR
+            TMP_DIR
         )
 
 
@@ -159,7 +159,7 @@ class UpdateManager:
             and close the application
         """
         if is_windows():
-            open_file(APP_DIR / self.remote_artemis_file_name)
+            open_file(TMP_DIR / self.remote_artemis_file_name)
             self._parent.close_ui.emit()
 
 

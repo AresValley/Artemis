@@ -36,6 +36,15 @@ def _data_dir():
     return data_dir_path
 
 
+def _tmp_dir():
+    if is_windows():
+        tmp_dir_path = Path.home() / 'AppData' / 'Local' / 'Temp'
+    else:
+        tmp_dir_path = Path('/tmp')
+
+    return tmp_dir_path
+
+
 def _preference_dir():
     preference_dir_path = APP_DIR / 'config'
     if not preference_dir_path.exists():
@@ -46,4 +55,5 @@ def _preference_dir():
 BASE_DIR = Path(os.path.dirname(__file__)) / '../..'
 APP_DIR = _app_dir()
 DATA_DIR = _data_dir()
+TMP_DIR = _tmp_dir()
 PREFERENCES_DIR = _preference_dir()
