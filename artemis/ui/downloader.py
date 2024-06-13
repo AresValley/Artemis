@@ -103,7 +103,7 @@ class UIDownloader(QObject):
     @Slot()
     def on_finished(self):
         """ Finalize the download process and if no errors
-            occurrs emits the finished signal usefulle for
+            occurs emits the finished signal usefulle for
             a callback
         """
         if self.reply:
