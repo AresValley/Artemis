@@ -5,21 +5,58 @@
 ## 1. Main Menu
 
 ### File
-* **New Database:** Create a new database.
-* **Load Database:** Open the Database Manager windows in order to open, rename, or delete a database.
-* **Import Database:** Import an Artemis database with a standard .tar format.
-* **Export Database:** Export the loaded database with a standard .tar format.
-* **Edit Tags:** Open the tags editor window. From here, you can add, rename, or delete tags. The tags can be added to a signal from the [tags menu](#4-tags)
-* **Open Database Folder:** Shows the folder of the currently loaded database in the explorer.
-* **Preferences:** Open the program settings window.
-* **Exit:** This will close the application.
+
+* **New Database**
+
+    Create a new database.
+
+* **Load Database** 
+
+    Open the Database Manager windows in order to open, rename, or delete a database.
+
+* **Import Database** 
+
+    Import an Artemis database with a standard .tar format.
+    !!! tip "Offline Importing of SigID Database"
+        Sometimes it may happen that a computer does not have network access and unfortunately Artemis cannot download the SigID database. To solve this you can:
+
+        1. Download the .tar database [:material-download: HERE](https://github.com/AresValley/Artemis-DB/releases) from a PC with an internet access
+        2. Import the downloaded .tar on the target PC (without internet access) using the **Import Database** function
+
+* **Export Database** 
+
+    Export the loaded database with a standard .tar format.
+
+* **Edit Tags** 
+
+    Open the tags editor window. From here, you can add, rename, or delete tags. The tags can be added to a signal from the [tags menu](#4-tags)
+
+* **Open Database Folder**
+
+    Shows the folder of the currently loaded database in the explorer.
+
+* **Preferences**
+
+    Open the program settings window.
+
+* **Exit**
+
+    This will close the application.
 
 ### Signal
-* **New:** Add a new signal to the database.
-* **Edit:** Edit the current/selected signal from the loaded database.
+* **New**
+
+    Add a new signal to the database.
+
+* **Edit**
+
+    Edit the current/selected signal from the loaded database.
 
 ### Space Weather
-* **Check Report:** Open the main [Space Weather window](space_weather/current.md) and retrieve all the live data from Poseidon Crawler.
+
+* **Check Report**
+
+    Open the main [Space Weather window](space_weather/current.md) and retrieve all the live data from Poseidon Crawler.
 
 ## 2. Signal List
 This is the signal list where all the database entries are shown. When a signal is selected, it will load on the right panel.
@@ -31,9 +68,18 @@ On top of the list, there is a field for filtering signals by name or any keywor
 Here you can swithc between the main **signal** window and the **filter** page.
 
 ## 4. Tags
-* **Associate Tag:** Custom tags can be associated to the selected signal with the :octicons-plus-circle-16: icon
-* **Remove Tag:** In order to remove a tag, just click on its badge. 
-* **Add/Rename Tag:** To add a new tag open the [Tags Editor](#1-main-menu) in the main menu.
+
+* **Associate Tag**
+
+    Custom tags can be associated to the selected signal with the :octicons-plus-circle-16: icon
+
+* **Remove Tag**
+
+    In order to remove a tag, just click on its badge.
+
+* **Add/Rename Tag**
+
+    To add a new tag open the [Tags Editor](#1-main-menu) in the main menu.
 
 ## 5. Add Parameter
 Click on the labels to add the corresponding parameter to the signal (e.g. click on **Frequency** to add a new frequency).
