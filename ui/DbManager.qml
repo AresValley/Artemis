@@ -33,6 +33,8 @@ Window {
         if (selected_db !== undefined) {
             lockMenu(false)
             titleLabel.text = myModel.get(listView.currentIndex).name
+            versionLabel.text = 'VERSION ' + myModel.get(listView.currentIndex).version
+            dateLabel.text = myModel.get(listView.currentIndex).date
             totDocsLabel.text = myModel.get(listView.currentIndex).documents_n
             totSignalsLabel.text = myModel.get(listView.currentIndex).signals_n
             totImagesLabel.text = myModel.get(listView.currentIndex).images_n
@@ -44,6 +46,8 @@ Window {
 
     function clearAll() {
         titleLabel.text = 'N/A'
+        versionLabel.text = ''
+        dateLabel.text = ''
         totDocsLabel.text = ''
         totSignalsLabel.text = ''
         totImagesLabel.text = ''
@@ -175,10 +179,15 @@ Window {
 
                 Label {
                     id: titleLabel
-                    Layout.bottomMargin: 20
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     font.pointSize: 15
                     font.bold: true
+                }
+                Label {
+                    id: versionLabel
+                    Layout.bottomMargin: 20
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    font.pointSize: 9
                 }
                 GridLayout {
                     columnSpacing: 25
@@ -230,7 +239,20 @@ Window {
                         id: totAudioLabel
                         text: qsTr("0")
                         font.pointSize: 12
-                    }                    
+                    }
+
+                    Label {
+                        Layout.topMargin: 20
+                        text: qsTr("DB Created:")
+                        font.pointSize: 12
+                    }
+
+                    Label {
+                        id: dateLabel
+                        Layout.topMargin: 20
+                        text: qsTr("")
+                        font.pointSize: 12
+                    }     
                 }
 
                 Item {

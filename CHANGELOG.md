@@ -9,6 +9,7 @@
 - Possibility to navigate Artemis just with the keyboard [#50](https://github.com/AresValley/Artemis/issues/50)
 - **Windows:** automatic updates have been implemented. When a software update is available, Artemis will download the new version and install the updates automatically 
 - Multiple sigID databases can be conserved. In the case of autoload, the latest local version will be loaded
+- Added creation date and DB version in DB manager window
 
 ### Changed
 - Improved readability of labels for filter ranges for frequency, bandwidth, and ACF

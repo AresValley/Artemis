@@ -56,6 +56,8 @@ class UIdbmanager(QObject):
             db_param.append(
                 {
                     'name': db.name,
+                    'version': db.version,
+                    'date': db.date,
                     'db_dir_name': db.db_dir_name,
                     'documents_n': db.stats['documents'],
                     'signals_n': db.stats['signals'],
