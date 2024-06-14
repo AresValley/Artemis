@@ -1361,23 +1361,64 @@
 <h2 id="1-main-menu">1. Main Menu</h2>
 <h3 id="file">File</h3>
 <ul>
-<li><strong>New Database:</strong> Create a new database.</li>
-<li><strong>Load Database:</strong> Open the Database Manager windows in order to open, rename, or delete a database.</li>
-<li><strong>Import Database:</strong> Import an Artemis database with a standard .tar format.</li>
-<li><strong>Export Database:</strong> Export the loaded database with a standard .tar format.</li>
-<li><strong>Edit Tags:</strong> Open the tags editor window. From here, you can add, rename, or delete tags. The tags can be added to a signal from the <a href="#4-tags">tags menu</a></li>
-<li><strong>Open Database Folder:</strong> Shows the folder of the currently loaded database in the explorer.</li>
-<li><strong>Preferences:</strong> Open the program settings window.</li>
-<li><strong>Exit:</strong> This will close the application.</li>
+<li>
+<p><strong>New Database</strong></p>
+<p>Create a new database.</p>
+</li>
+<li>
+<p><strong>Load Database</strong> </p>
+<p>Open the Database Manager windows in order to open, rename, or delete a database.</p>
+</li>
+<li>
+<p><strong>Import Database</strong> </p>
+<p>Import an Artemis database with a standard .tar format.</p>
+<div class="admonition tip">
+<p class="admonition-title">Offline Importing of SigID Database</p>
+<p>Sometimes it may happen that a computer does not have network access and unfortunately Artemis cannot download the SigID database. To solve this you can:</p>
+<ol>
+<li>Download the .tar database <a href="https://github.com/AresValley/Artemis-DB/releases"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7 7-7Z"/></svg></span> HERE</a> from a PC with an internet access</li>
+<li>Import the downloaded .tar on the target PC (without internet access) using the <strong>Import Database</strong> function</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>Export Database</strong> </p>
+<p>Export the loaded database with a standard .tar format.</p>
+</li>
+<li>
+<p><strong>Edit Tags</strong> </p>
+<p>Open the tags editor window. From here, you can add, rename, or delete tags. The tags can be added to a signal from the <a href="#4-tags">tags menu</a></p>
+</li>
+<li>
+<p><strong>Open Database Folder</strong></p>
+<p>Shows the folder of the currently loaded database in the explorer.</p>
+</li>
+<li>
+<p><strong>Preferences</strong></p>
+<p>Open the program settings window.</p>
+</li>
+<li>
+<p><strong>Exit</strong></p>
+<p>This will close the application.</p>
+</li>
 </ul>
 <h3 id="signal">Signal</h3>
 <ul>
-<li><strong>New:</strong> Add a new signal to the database.</li>
-<li><strong>Edit:</strong> Edit the current/selected signal from the loaded database.</li>
+<li>
+<p><strong>New</strong></p>
+<p>Add a new signal to the database.</p>
+</li>
+<li>
+<p><strong>Edit</strong></p>
+<p>Edit the current/selected signal from the loaded database.</p>
+</li>
 </ul>
 <h3 id="space-weather">Space Weather</h3>
 <ul>
-<li><strong>Check Report:</strong> Open the main <a href="../space_weather/current/">Space Weather window</a> and retrieve all the live data from Poseidon Crawler.</li>
+<li>
+<p><strong>Check Report</strong></p>
+<p>Open the main <a href="../space_weather/current/">Space Weather window</a> and retrieve all the live data from Poseidon Crawler.</p>
+</li>
 </ul>
 <h2 id="2-signal-list">2. Signal List</h2>
 <p>This is the signal list where all the database entries are shown. When a signal is selected, it will load on the right panel.</p>
@@ -1387,9 +1428,18 @@
 <p>Here you can swithc between the main <strong>signal</strong> window and the <strong>filter</strong> page.</p>
 <h2 id="4-tags">4. Tags</h2>
 <ul>
-<li><strong>Associate Tag:</strong> Custom tags can be associated to the selected signal with the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7.25-3.25v2.5h2.5a.75.75 0 0 1 0 1.5h-2.5v2.5a.75.75 0 0 1-1.5 0v-2.5h-2.5a.75.75 0 0 1 0-1.5h2.5v-2.5a.75.75 0 0 1 1.5 0Z"/></svg></span> icon</li>
-<li><strong>Remove Tag:</strong> In order to remove a tag, just click on its badge. </li>
-<li><strong>Add/Rename Tag:</strong> To add a new tag open the <a href="#1-main-menu">Tags Editor</a> in the main menu.</li>
+<li>
+<p><strong>Associate Tag</strong></p>
+<p>Custom tags can be associated to the selected signal with the <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7.25-3.25v2.5h2.5a.75.75 0 0 1 0 1.5h-2.5v2.5a.75.75 0 0 1-1.5 0v-2.5h-2.5a.75.75 0 0 1 0-1.5h2.5v-2.5a.75.75 0 0 1 1.5 0Z"/></svg></span> icon</p>
+</li>
+<li>
+<p><strong>Remove Tag</strong></p>
+<p>In order to remove a tag, just click on its badge.</p>
+</li>
+<li>
+<p><strong>Add/Rename Tag</strong></p>
+<p>To add a new tag open the <a href="#1-main-menu">Tags Editor</a> in the main menu.</p>
+</li>
 </ul>
 <h2 id="5-add-parameter">5. Add Parameter</h2>
 <p>Click on the labels to add the corresponding parameter to the signal (e.g. click on <strong>Frequency</strong> to add a new frequency).</p>
