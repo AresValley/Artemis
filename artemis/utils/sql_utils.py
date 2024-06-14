@@ -141,7 +141,7 @@ class ArtemisDatabase(Database):
         """ Create new db in the data folder.
             The name of folder containing the new db has a unique id as name (db_dir_name).
         """
-        meta = [name, datetime.now(), 0, 0]
+        meta = [name, datetime.now(), 1, 1]
         os.makedirs(self.db_dir)
         os.makedirs(self.media_dir)
 

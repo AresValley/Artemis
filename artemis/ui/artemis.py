@@ -345,10 +345,13 @@ class UIArtemis(QObject):
 
 
     def autoload_db(self):
-        sig_id_path = DATA_DIR / 'SigID' / Constants.SQL_NAME
+        """ This will autoload the latest local sigID DB, if present
+            according to the user settings
+        """
+        sig_id_db = self.dbmanager.get_latest_local_sigid_db()
         autoload = CONFIGURE_QT.value("Database", "autoload", 0)
-        if sig_id_path.exists() and int(autoload):
-            self.load_db('SigID')
+        if sig_id_db is not None and int(autoload):
+            self.load_db(sig_id_db.db_dir_name)
 
 
     def dialog_popup(self, message_type, title, message):

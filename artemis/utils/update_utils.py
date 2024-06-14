@@ -1,4 +1,5 @@
 import os
+import uuid
 import requests
 
 from packaging.version import Version
@@ -15,7 +16,6 @@ class UpdateManager:
 
     def __init__(self, parent):
         self._parent = parent
-        self.sigid_db_path = DATA_DIR / 'SigID' / Constants.SQL_NAME
 
         self.db_update = None
         self.art_update = None
@@ -45,7 +45,7 @@ class UpdateManager:
         """
         latest_json = self.fetch_remote_json(Constants.LATEST_VERSION_URL, show_popup)
         if latest_json:
-            local_db = self._load_local_db()
+            local_db = self._parent.dbmanager.get_latest_local_sigid_db()
             remote_db = latest_json['sigID_DB']
 
             self.remote_db_version = remote_db['version']
@@ -104,16 +104,6 @@ class UpdateManager:
             return None
 
 
-    def _load_local_db(self):
-        """ Loads the local database if exists
-        """
-        if os.path.exists(self.sigid_db_path):
-            local_db = ArtemisDatabase('SigID')
-            local_db.load()
-            return local_db
-        return None
-
-
     def download_db(self):
         """ Open the downloader and download the sigID database in the 
             TMP_DIR folder. After a succesfull download the callback function
@@ -133,9 +123,9 @@ class UpdateManager:
         """
         latest_db_tar_path = TMP_DIR / self.remote_db_file_name
         if match_hash(latest_db_tar_path, self.remote_db_hash):
-            delete_dir(DATA_DIR / 'SigID')
-            unpack_tar(latest_db_tar_path, DATA_DIR / 'SigID')
-            self._parent.load_db('SigID')
+            db_dir_name = str(uuid.uuid4())
+            unpack_tar(latest_db_tar_path, DATA_DIR / db_dir_name)
+            self._parent.load_db(db_dir_name)
             self._show_popup_db_download_complete()
         else:
             self._show_popup_db_hash_failed()

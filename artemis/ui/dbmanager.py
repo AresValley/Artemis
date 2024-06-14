@@ -49,8 +49,22 @@ class UIdbmanager(QObject):
     def load_local_db_list(self):
         """ Scan for all the valid DBs in the data folder and show them on the list
         """
+        db_param = []
         valid_db_list = self.scan_db_dir()
-        self.populate_db_list.emit(valid_db_list)
+
+        for db in valid_db_list:
+            db_param.append(
+                {
+                    'name': db.name,
+                    'db_dir_name': db.db_dir_name,
+                    'documents_n': db.stats['documents'],
+                    'signals_n': db.stats['signals'],
+                    'images_n': db.stats['images'],
+                    'audio_n': db.stats['audio']
+                }
+            )
+
+        self.populate_db_list.emit(db_param)
 
 
     def load_db(self, db_dir_name):
@@ -85,7 +99,7 @@ class UIdbmanager(QObject):
 
     def scan_db_dir(self):
         """ Scans the data directory for valid databases and
-            return a dictionary containing only the valid ones with a summary
+            return a dictionary containing only the (already loaded) valid ones
         """
         valid_db_list = []
         db_dirs = next(os.walk(DATA_DIR))[1]
@@ -94,18 +108,23 @@ class UIdbmanager(QObject):
             if self._valid_db(db_dir_name):
                 database = ArtemisDatabase(db_dir_name)
                 database.load()
-                valid_db_list.append(
-                    {
-                        'name': database.name,
-                        'db_dir_name': database.db_dir_name,
-                        'documents_n': database.stats['documents'],
-                        'signals_n': database.stats['signals'],
-                        'images_n': database.stats['images'],
-                        'audio_n': database.stats['audio']
-                    }
-                )
+                valid_db_list.append(database)
 
         return valid_db_list
+
+
+    def get_latest_local_sigid_db(self):
+        """ Return the newest valid local sigID database.
+            Returns None if no valid sigID database is found.
+        """
+        valid_dbs = self._parent.dbmanager.scan_db_dir()
+        sig_id_dbs = [db for db in valid_dbs if db.editable == -1]
+
+        if len(sig_id_dbs) != 0:
+            sig_id_latest = max(sig_id_dbs, key=lambda x: x.version)
+            return sig_id_latest
+        else:
+            return None
 
 
     def _valid_db(self, db_dir_name):

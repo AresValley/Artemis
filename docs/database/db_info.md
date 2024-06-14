@@ -21,8 +21,6 @@ A simple integer to denote the database version.
 
 This field should serve as a writing protection on the database.
 
+* **-1**: reserved to sigID database. This is the primary way to distinguish a valid sigID database
 * **0**: read-only database
 * **1**: database can be edited with no restrictions
-
-!!! example "Experimental"
-    This feature is experimental and not yet implemented.
