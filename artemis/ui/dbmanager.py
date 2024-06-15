@@ -101,16 +101,19 @@ class UIdbmanager(QObject):
 
     def scan_db_dir(self):
         """ Scans the data directory for valid databases and
-            return a dictionary containing only the (already loaded) valid ones
+            return a dictionary containing only the valid ones.
+            Returns a list of objects (dbs)
         """
         valid_db_list = []
         db_dirs = next(os.walk(DATA_DIR))[1]
 
         for db_dir_name in db_dirs:
-            if self._valid_db(db_dir_name):
+            try:
                 database = ArtemisDatabase(db_dir_name)
                 database.load()
                 valid_db_list.append(database)
+            except:
+                continue
 
         return valid_db_list
 
@@ -127,22 +130,3 @@ class UIdbmanager(QObject):
             return sig_id_latest
         else:
             return None
-
-
-    def _valid_db(self, db_dir_name):
-        """ Checks if db_dir_name is a valid db dir containing a `data.sqlite` file.
-            Db must be valid as well and should be properly initialized and loaded with
-            no errors.
-
-        Args:
-            db_dir_name (str): name of the db folder
-        """
-        if os.path.exists(DATA_DIR / db_dir_name / Constants.SQL_NAME):
-            try:
-                database = ArtemisDatabase(db_dir_name)
-                database.load()
-                return True
-            except:
-                return False        # Invalid or corrupted DB
-        else:
-            return False            # The dir is not containing a data.sqlite file
