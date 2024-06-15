@@ -146,7 +146,7 @@ Window {
                 Layout.fillWidth: true
 
                 Label {
-                    text: "Auto-load SigID Database on Startup"
+                    text: "Auto-load SigID database on startup (latest version)"
                     font.pixelSize: 12
                     clip: true
                     Layout.fillWidth: true

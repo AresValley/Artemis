@@ -5,6 +5,8 @@
 
 ## [Unreleased]
 
+## [4.0.5] - 2024-06-15
+
 ### Added
 - Possibility to navigate Artemis just with the keyboard [#50](https://github.com/AresValley/Artemis/issues/50)
 - **Windows:** automatic updates have been implemented. When a software update is available, Artemis will download the new version and install the updates automatically 
@@ -118,7 +120,8 @@ First release.
 
 
 <!-- Links definitions -->
-[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.0.3...HEAD
+[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.0.5...HEAD
+[4.0.5]: https://github.com/AresValley/Artemis/compare/v4.0.3...v4.0.5
 [4.0.3]: https://github.com/AresValley/Artemis/compare/v4.0.1...v4.0.3
 [4.0.1]: https://github.com/AresValley/Artemis/compare/v3.2.4...v4.0.1
 [3.2.4]: https://github.com/AresValley/Artemis/compare/v3.2.1...v3.2.4
