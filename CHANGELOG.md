@@ -16,13 +16,13 @@
 ### Changed
 - Improved readability of labels for filter ranges for frequency, bandwidth, and ACF
 - Improved Update manager and Downloader functionalities
-- OS dependent temporary folders are now used for database download and artemis updates
-- The logic for searching the last sigID database has changed, now the discriminant is no longer the folder name but is reported as a signature in the database itself (-1 in the editable field, see documentation)
+- OS-dependent temporary folders are now used for database download and Artemis updates
+- The logic for searching the last sigID database has changed now the discriminant is no longer the folder name but is reported as a signature in the database itself (-1 in the editable field; see documentation)
 - Old sigID databases are not deleted anymore when a new version is downloaded. This is to avoid removing databases with user changes or additions
 
 ### Fixed
-- Added a database load check to avoid (non critical) exceptions when applying filters without having loaded a database.
-- Fixed a potential issue involing the forcibly closure of downloader window but the downloader instance keeps running
+- Added a database load check to avoid (noncritical) exceptions when applying filters without having loaded a database.
+- Fixed a potential issue involving the forcible closure of the downloader window, but the downloader instance keeps running
 - With the new logic in the latest sigID database search, manually imported sigID databases are officially recognized as proper ones
 
 ## [4.0.3] - 2024-06-10
