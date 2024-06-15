@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from artemis.utils.constants import Query
 
 
@@ -75,3 +77,17 @@ def generate_filter_query(filer_status):
             ))
 
     return ' INTERSECT '.join(query)
+
+
+def parse_date(date_str):
+    """ Parses a date string in "%Y-%m-%d %H:%M:%S.%f" format and returns
+    the date in "YYYY-MM-DD" format. If parsing fails, returns the original string.
+
+    Args:
+        date_str (str): The date string to parse.
+    """
+    try:
+        form_date = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S.%f")
+        return str(form_date.date())
+    except ValueError:
+        return date_str

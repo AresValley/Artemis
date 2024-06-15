@@ -7,8 +7,8 @@ from datetime import datetime
 from contextlib import closing
 
 from artemis.utils.constants import Query, Constants
-from artemis.utils.path_utils import DATA_DIR
 from artemis.utils.generic_utils import format_frequency
+from artemis.utils.path_utils import DATA_DIR
 
 
 class Database():

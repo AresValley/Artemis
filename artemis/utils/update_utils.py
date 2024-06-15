@@ -1,12 +1,10 @@
-import os
 import uuid
 import requests
 
 from packaging.version import Version
 
 from artemis.utils.constants import Constants, Messages
-from artemis.utils.sql_utils import ArtemisDatabase
-from artemis.utils.sys_utils import is_windows, is_linux, is_macos, delete_file, delete_dir, match_hash, unpack_tar, open_file
+from artemis.utils.sys_utils import is_windows, is_linux, is_macos, delete_file, match_hash, unpack_tar, open_file
 from artemis.utils.path_utils import DATA_DIR, TMP_DIR
 
 

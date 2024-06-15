@@ -6,7 +6,6 @@ from PySide6.QtCore import QObject, Signal, Slot
 from artemis.utils.path_utils import DATA_DIR
 from artemis.utils.generic_utils import *
 from artemis.utils.sql_utils import ArtemisDatabase
-from artemis.utils.constants import Constants
 from artemis.utils.sys_utils import delete_dir
 
 
@@ -57,7 +56,7 @@ class UIdbmanager(QObject):
                 {
                     'name': db.name,
                     'version': db.version,
-                    'date': db.date,
+                    'date': parse_date(db.date),
                     'db_dir_name': db.db_dir_name,
                     'documents_n': db.stats['documents'],
                     'signals_n': db.stats['signals'],
