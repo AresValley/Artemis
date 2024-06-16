@@ -17,6 +17,7 @@ from artemis.ui.dbmanager import UIdbmanager
 from artemis.ui.signaleditor import UIsignaleditor
 from artemis.ui.downloader import UIDownloader
 from artemis.ui.spaceweather import UIspaceweather
+from artemis.ui.audioanalysis import UIAudioAnalysis
 from artemis.ui.documentsmanager import UIdocumentsmanager
 from artemis.ui.categoryeditor import UIcategoryeditor
 
@@ -64,6 +65,7 @@ class UIArtemis(QObject):
         self.preferences = UIPreferences(self)
         self.dbmanager = UIdbmanager(self)
         self.spaceweather = UIspaceweather(self)
+        self.audioanalysis = UIAudioAnalysis(self)
         self.docmanager = UIdocumentsmanager(self)
         self.sigeditor = UIsignaleditor(self)
         self.cateditor = UIcategoryeditor(self)
@@ -84,6 +86,7 @@ class UIArtemis(QObject):
         self._window.updateDb.connect(self.update_db)
         self._window.updateArtemis.connect(self.update_artemis)
         self._window.showSpaceWeather.connect(self.show_space_weather_ui)
+        self._window.showAudioAnalysis.connect(self.show_audio_analysis_ui)
         self._window.openDbDirectory.connect(self.open_db_directory)
         self._window.showCatManager.connect(self.open_cat_manager)
         
@@ -209,6 +212,12 @@ class UIArtemis(QObject):
         """ Open the space weather windows
         """
         self.spaceweather.load_spaceweather_ui()
+
+
+    def show_audio_analysis_ui(self):
+        """ Open the space weather windows
+        """
+        self.audioanalysis.load_audioanalysis_ui()
 
 
     def show_documentsmanager_ui(self):

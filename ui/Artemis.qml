@@ -31,6 +31,7 @@ Window {
     signal showCatManager()
     signal openSigEditor(string type, var sig_param, bool is_new)
     signal showSpaceWeather()
+    signal showAudioAnalysis()
     signal checkForUpdate()
     signal updateDb()
     signal updateArtemis()
@@ -318,6 +319,17 @@ Window {
                     text: "Check Report"
                     onClicked: {
                         showSpaceWeather()
+                    }
+                }
+            }
+
+            Menu {
+                title: qsTr("Analysis")
+
+                MenuItem {
+                    text: "Audio Analysis"
+                    onClicked: {
+                        showAudioAnalysis()
                     }
                 }
             }
