@@ -7,8 +7,8 @@ import QtMultimedia
 
 
 Item {
-    width: 180
-    height: 132
+    width: 200
+    height: 80
 
     property bool loop: false
 
@@ -68,6 +68,109 @@ Item {
         positionSlider.enabled = false
     }
 
+    Window {
+        id: audioSettingWindow
+
+        width: 450
+        height: 150
+
+        maximumHeight: height
+        maximumWidth: width
+
+        minimumHeight: height
+        minimumWidth: width
+
+        modality: Qt.ApplicationModal
+        flags: Qt.Dialog
+
+        title: qsTr("Artemis - Audio Player Settings")
+
+        Component.onCompleted: {
+            x = Screen.width / 2 - width / 2
+            y = Screen.height / 2 - height / 2
+        }
+
+        Page {
+            anchors.fill: parent
+
+            ColumnLayout {
+                anchors.fill: parent
+                anchors.rightMargin: 10
+                anchors.leftMargin: 10
+                anchors.bottomMargin: 10
+                anchors.topMargin: 10
+
+                RowLayout {
+                    Layout.fillWidth: true
+
+                    Label {
+                        text: "Audio Output"
+                        font.pixelSize: 12
+                        clip: true
+                        Layout.fillWidth: true
+                    }
+
+                    ComboBox {
+                        id: audioOutputComboBox
+                        Layout.preferredWidth: 200
+                        model: mediaDevices.audioOutputs
+                        textRole: "description"
+                        onCurrentIndexChanged: {
+                            audioOutput.device = mediaDevices.audioOutputs[currentIndex]
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Label {
+                        text: "Volume"
+                        font.pixelSize: 12
+                        clip: true
+                        Layout.fillWidth: true
+                    }
+                    Slider {
+                        id: volumeSlider
+                        Layout.preferredHeight: 20
+                        Layout.preferredWidth: 200
+                        value: 0.5
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    Label {
+                        text: "Replay (Loop)"
+                        font.pixelSize: 12
+                        clip: true
+                        Layout.fillWidth: true
+                    }
+                    RoundButton {
+                        id: buttonLoop
+                        icon.color: Material.foreground
+                        icon.source: "qrc:/images/icons/player_loop.svg"
+                        display: AbstractButton.IconOnly
+                        enabled: false
+                        flat: true
+                        onClicked: {
+                            if (loop) {
+                                loop = false
+                                icon.color = Material.foreground
+                            } else {
+                                loop = true
+                                icon.color = Material.accent
+                            }
+                        }
+                    }
+                }
+
+                Item {
+                    Layout.fillHeight: true
+                }
+            }
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -118,20 +221,14 @@ Item {
             }
 
             RoundButton {
-                id: buttonLoop
+                id: buttonSettings
                 icon.color: Material.foreground
-                icon.source: "qrc:/images/icons/player_loop.svg"
+                icon.source: "qrc:/images/icons/settings.svg"
                 display: AbstractButton.IconOnly
-                enabled: false
+                enabled: true
                 flat: true
                 onClicked: {
-                    if (loop) {
-                        loop = false
-                        icon.color = Material.foreground
-                    } else {
-                        loop = true
-                        icon.color = Material.accent
-                    }
+                    audioSettingWindow.show()
                 }
             }
         }
@@ -145,27 +242,6 @@ Item {
                 Layout.fillWidth: true
                 onMoved: {
                     player.position = player.duration * positionSlider.position
-                }
-            }
-        }
-
-        RowLayout {
-            Slider {
-                id: volumeSlider
-                Layout.preferredHeight: 20
-                value: 0.5
-                Layout.fillWidth: true
-            }
-
-            RoundButton {
-                id: buttonMute
-                icon.color: Material.foreground
-                icon.source: "qrc:/images/icons/player_mute.svg"
-                display: AbstractButton.IconOnly
-                enabled: true
-                flat: true
-                onClicked: {
-                    volumeSlider.value = 0
                 }
             }
         }
@@ -186,7 +262,12 @@ Item {
 
         AudioOutput {
             id: audioOutput
+            device: mediaDevices.defaultAudioOutput
             volume: volumeSlider.value
+        }
+
+        MediaDevices {
+            id: mediaDevices
         }
     }
 }

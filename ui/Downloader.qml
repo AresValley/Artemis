@@ -48,6 +48,10 @@ Window {
         ColumnLayout {
             id: columnLayout
             anchors.fill: parent
+            anchors.rightMargin: 10
+            anchors.leftMargin: 10
+            anchors.bottomMargin: 10
+            anchors.topMargin: 10
 
             Label {
                 text: qsTr("Downloading in progress...")

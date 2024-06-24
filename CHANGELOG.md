@@ -5,6 +5,13 @@
 
 ## [Unreleased]
 
+### Added
+- Created a setting panel for the audio player
+- Selection of the audio output device. Close #4
+
+### Fixed
+- Fixed margins for downloader window
+
 ## [4.0.5] - 2024-06-15
 
 ### Added
