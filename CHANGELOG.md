@@ -7,7 +7,7 @@
 
 ### Added
 - Created a setting panel for the audio player
-- Selection of the audio output device. Close #4
+- Selection of the audio output device. Closes [#4](https://github.com/AresValley/Artemis/issues/4)
 
 ### Fixed
 - Fixed margins for downloader window
