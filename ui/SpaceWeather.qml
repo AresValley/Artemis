@@ -56,6 +56,12 @@ Window {
                 TabButton {
                     text: qsTr("Aurora")
                 }
+                TabButton {
+                    text: qsTr("SSA")
+                }
+                TabButton {
+                    text: qsTr("Sun Imagers")
+                }
             }
 
             StackLayout {
@@ -84,6 +90,18 @@ Window {
                 Item {
                     SpaceWeatherAuroraPage {
                         id: spaceWeatherAuroraPage
+                    }
+                }
+
+                Item {
+                    SpaceWeatherSSA {
+                        id: spaceWeatherSSA
+                    }
+                }
+
+                Item {
+                    SpaceWeatherSunImagers {
+                        id: spaceWeatherSunImagers
                     }
                 }
             }

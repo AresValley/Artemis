@@ -41,6 +41,8 @@
         <file>ui/SpaceWeatherForecastPage.qml</file>
         <file>ui/SpaceWeatherDRAPPage.qml</file>
         <file>ui/SpaceWeatherAuroraPage.qml</file>
+        <file>ui/SpaceWeatherSSA.qml</file>
+        <file>ui/SpaceWeatherSunImagers.qml</file>
 
         <file>ui/About.qml</file>
 
