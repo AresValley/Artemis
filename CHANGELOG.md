@@ -12,7 +12,7 @@
   - Sun Synoptic Analysis (SAS)
   - GOES Solar Ultraviolet Imager (SUVI), all wavelenght (94 Å, 131 Å, 171 Å, 195 Å, 284 Å, 304 Å)
   - GOES Thematic Map (from SUVI)
-  - Large Angle and Spectrometric Coronagraph (LASCO), both C2/C3 optical imaging of the Sun’s corona
+  - Large Angle and Spectrometric Coronagraph (LASCO), both C2/C3 range for optical imaging of the Sun’s corona
   - Helioseismic and Magnetic Imager (HMI): Magnetogram, Intensitygram, Dopplergram (TODO)
 
 ### Fixed

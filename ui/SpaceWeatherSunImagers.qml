@@ -51,14 +51,19 @@ Page {
             textRole: 'text'
             Layout.fillWidth: true
             model:  ListModel {
-                ListElement { text: "SUVI 94 Å"; value: "SUVI_094" }
-                ListElement { text: "SUVI 131 Å"; value: "SUVI_131" }
-                ListElement { text: "SUVI 171 Å"; value: "SUVI_171" }
-                ListElement { text: "SUVI 195 Å"; value: "SUVI_195" }
-                ListElement { text: "SUVI 284 Å"; value: "SUVI_284" }
-                ListElement { text: "SUVI 304 Å"; value: "SUVI_304" }
-                ListElement { text: "LASCO C2"; value: "LASCO_C2" }
-                ListElement { text: "LASCO C3"; value: "LASCO_C3" }
+                ListElement { text: "94 Å - Atmospheric Imagery Assembly"; value: "AIA_094" }
+                ListElement { text: "131 Å - Atmospheric Imagery Assembly"; value: "AIA_131" }
+                ListElement { text: "171 Å - Atmospheric Imagery Assembly"; value: "AIA_171" }
+                ListElement { text: "193 Å - Atmospheric Imagery Assembly"; value: "AIA_193" }
+                ListElement { text: "303 Å - Atmospheric Imagery Assembly"; value: "AIA_304" }
+                ListElement { text: "335 Å - Atmospheric Imagery Assembly"; value: "AIA_335" }
+                ListElement { text: "1600 Å - Atmospheric Imagery Assembly"; value: "AIA_1600" }
+                ListElement { text: "1700 Å - Atmospheric Imagery Assembly"; value: "AIA_1700" }
+                ListElement { text: "Magnetogram - Helioseismic and Magnetic Imager"; value: "AIA_MAGN" }
+                ListElement { text: "Intensitygram - Helioseismic and Magnetic Imager"; value: "AIA_INTE" }
+                ListElement { text: "Dopplergram - Helioseismic and Magnetic Imager"; value: "AIA_DOPP" }
+                ListElement { text: "LASCO C2 - Large Angle and Spectrometric Coronagraph"; value: "LASCO_C2" }
+                ListElement { text: "LASCO C3 - Large Angle and Spectrometric Coronagraph"; value: "LASCO_C3" }
                 ListElement { text: "Thematic Map"; value: "SUVI_THEMATIC" }
             }
             onActivated: {
