@@ -19,3 +19,5 @@ def set_ui():
 
     os.environ['QT_ENABLE_GLYPH_CACHE_WORKAROUND'] = '1'
     os.environ['QML_USE_GLYPHCACHE_WORKAROUND'] = '1'
+
+    os.environ['QT_DEBUG_PLUGINS'] = CONFIGURE_QT.value('Develop', 'debug_plugin', '0')
