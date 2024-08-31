@@ -1,9 +1,9 @@
 {
   "sigID_DB": {
-    "version": 65,
-    "url": "https://github.com/AresValley/Artemis-DB/releases/download/v65/v65.tar",
-    "sha256_hash": "00c49d4e47d2b32e14e9dd072810b9a976348c1f58b2b10880b54dc8d8123214",
-    "total_bytes": 192102400
+    "version": 70,
+    "url": "https://github.com/AresValley/Artemis-DB/releases/download/v70/v70.tar",
+    "sha256_hash": "0d71a4a51359c1ad095ec0a7f07e705110c8c1e88e6d4b235a5295dd92196f6b",
+    "total_bytes": 194600960
   },
   "windows": {
     "version": "4.0.5",
