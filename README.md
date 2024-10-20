@@ -8,7 +8,7 @@
 ![GitHub Release](https://img.shields.io/github/v/release/AresValley/Artemis-DB?label=DB%20version)
 ![GitHub repo file or directory count (in path)](https://img.shields.io/github/directory-file-count/aresvalley/artemis-db/static?type=dir&label=DB%20signals)
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aresvalley/artemis/windows.yml?logo=windows&logoColor=white)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aresvalley/artemis/windows.yml?logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHNoYXBlLXJlbmRlcmluZz0iZ2VvbWV0cmljUHJlY2lzaW9uIiB0ZXh0LXJlbmRlcmluZz0iZ2VvbWV0cmljUHJlY2lzaW9uIiBpbWFnZS1yZW5kZXJpbmc9Im9wdGltaXplUXVhbGl0eSIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIHZpZXdCb3g9IjAgMCA1MTIgNTEyLjAyNiI+PHBhdGggZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJub256ZXJvIiBkPSJNMjY5LjMxMiA1MTIuMDI1SDUxMlYyNjkuMzM3SDI2OS4zMTJ2MjQyLjY4OHpNMCA1MTIuMDI1aDI0Mi42ODhWMjY5LjMzN0gwdjI0Mi42ODh6bTI2OS4zMTItMjY5LjMzN0g1MTJWMEgyNjkuMzEydjI0Mi42ODh6TTAgMjQyLjY4OGgyNDIuNjg4VjBIMHYyNDIuNjg4eiIvPjwvc3ZnPg==)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/aresvalley/artemis/linux.yml?logo=linux&logoColor=white)
 ![Static Badge](https://img.shields.io/badge/build-soon%E2%84%A2-yellow?logo=apple)
 ![Static Badge](https://img.shields.io/badge/build-soon%E2%84%A2-yellow?logo=raspberrypi)
