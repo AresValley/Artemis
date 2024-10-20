@@ -4,7 +4,7 @@ echo "Building Linux target ..."
 
 echo "Installing requirements ..."
 pip install -r requirements.txt
-pip install nuitka==2.3
+pip install nuitka==2.4.10
 
 echo "Building with Nuitka ..."
 python -m nuitka app.py \

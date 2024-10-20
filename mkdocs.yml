@@ -73,6 +73,8 @@ nav:
     - Forecasts: 'space_weather/forecasts.md'
     - DRAP: 'space_weather/drap.md'
     - Aurora: 'space_weather/aurora.md'
+    - SSA: 'space_weather/SSA.md'
+    - Sun Imagers: 'space_weather/imagers.md'
   - Signal Analysis:
     - Autocorrelation (ACF): 'acf_analysis.md'
     - FAQ: 'faq.md'

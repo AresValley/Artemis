@@ -15,7 +15,7 @@
 1. On Linux, the xcb plugin is utilized to supply the essential functionality required for Qt GUI and Qt Widgets to operate on [X11](https://doc.qt.io/qt-6/linux-requirements.html). On some Linux distributions the required dependencies are already met, but in many cases, you will need to install them. To install the dependencies use:
 
     ``` bash title="Debian-based distro (Ubuntu, Mint, Pop! OS, Kali, ...)"
-    sudo apt install libxcb-cursor0
+    sudo apt install libxcb-*
     ```
 
 2. Download `Artemis-Linux-x86_64-4.x.x.tar` in the Assets menu from the [:material-download: LATEST RELEASE](https://github.com/AresValley/Artemis/releases) and extract the tarball archive in a folder of your choice.

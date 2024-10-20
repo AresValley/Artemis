@@ -12,7 +12,6 @@
         <file>images/icons/player_play.svg</file>
         <file>images/icons/player_stop.svg</file>
         <file>images/icons/player_loop.svg</file>
-        <file>images/icons/player_mute.svg</file>
         <file>images/icons/save.svg</file>
         <file>images/icons/delete.svg</file>
         <file>images/icons/add.svg</file>
@@ -22,6 +21,7 @@
         <file>images/icons/browser.svg</file>
         <file>images/icons/documents.svg</file>
         <file>images/icons/abort.svg</file>
+        <file>images/icons/settings.svg</file>
         <file>images/spectrum_not_available.svg</file>
         <file>images/artemis_not_available.svg</file>
 
@@ -41,6 +41,8 @@
         <file>ui/SpaceWeatherForecastPage.qml</file>
         <file>ui/SpaceWeatherDRAPPage.qml</file>
         <file>ui/SpaceWeatherAuroraPage.qml</file>
+        <file>ui/SpaceWeatherSSA.qml</file>
+        <file>ui/SpaceWeatherSunImagers.qml</file>
 
         <file>ui/About.qml</file>
 
