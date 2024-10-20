@@ -6,7 +6,7 @@ on:
       artemis_version:
         description: 'Version'
         required: true
-        default: '4.0.0'
+        default: '4.1.0'
         type: string
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Build and package
         run: ./building/Windows/build_windows.ps1

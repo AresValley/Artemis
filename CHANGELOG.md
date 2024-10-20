@@ -5,6 +5,8 @@
 
 ## [Unreleased]
 
+## [4.1.0] - 2024-10-20
+
 ### Added
 - Created a setting panel for the audio player
 - Selection of the audio output device. Closes [#4](https://github.com/AresValley/Artemis/issues/4)
@@ -13,7 +15,7 @@
   - GOES Solar Ultraviolet Imager (SUVI), all wavelenght (94 Å, 131 Å, 171 Å, 195 Å, 284 Å, 304 Å)
   - GOES Thematic Map (from SUVI)
   - Large Angle and Spectrometric Coronagraph (LASCO), both C2/C3 range for optical imaging of the Sun’s corona
-  - Helioseismic and Magnetic Imager (HMI): Magnetogram, Intensitygram, Dopplergram (TODO)
+  - Helioseismic and Magnetic Imager (HMI): Magnetogram, Intensitygram, Dopplergram
 
 ### Fixed
 - Fixed margins for downloader window
@@ -133,7 +135,8 @@ First release.
 
 
 <!-- Links definitions -->
-[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.0.5...HEAD
+[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/AresValley/Artemis/compare/v4.0.5...v4.1.0
 [4.0.5]: https://github.com/AresValley/Artemis/compare/v4.0.3...v4.0.5
 [4.0.3]: https://github.com/AresValley/Artemis/compare/v4.0.1...v4.0.3
 [4.0.1]: https://github.com/AresValley/Artemis/compare/v3.2.4...v4.0.1
