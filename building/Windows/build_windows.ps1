@@ -25,8 +25,8 @@ python -m nuitka app.py `
   --force-stdout-spec="{TEMP}\artemis.out.log" `
   --windows-company-name=Aresvalley.com `
   --windows-product-name=Artemis `
-  --windows-file-version=4.0.5 `
-  --windows-product-version=4.0.5 `
+  --windows-file-version=4.1.0 `
+  --windows-product-version=4.1.0 `
   --windows-file-description=Artemis `
   --windows-icon-from-ico=images\artemis_icon.ico
 
