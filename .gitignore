@@ -9,3 +9,5 @@ site
 Generated
 app.build
 app.dist
+builddir/
+repo/

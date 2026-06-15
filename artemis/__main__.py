@@ -3,9 +3,9 @@ import sys
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QGuiApplication, QIcon
 
-from artemis.utils.constants import Constants
-from artemis.utils.ui_utils import set_ui
-from artemis.ui.artemis import UIArtemis
+from .utils.constants import Constants
+from .utils.ui_utils import set_ui
+from .ui.artemis import UIArtemis
 
 
 def main():

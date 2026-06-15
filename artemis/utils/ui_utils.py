@@ -14,8 +14,8 @@ def set_ui():
         os.environ['QSG_RHI_BACKEND'] = 'opengl'
 
     if is_linux():
-        os.environ['GDK_BACKEND'] = 'x11'
-        os.environ['QT_QPA_PLATFORM'] = 'xcb'
+        # os.environ['GDK_BACKEND'] = 'x11'
+        os.environ['QT_QPA_PLATFORM'] = 'wayland;xcb'
 
     os.environ['QT_ENABLE_GLYPH_CACHE_WORKAROUND'] = '1'
     os.environ['QML_USE_GLYPHCACHE_WORKAROUND'] = '1'
