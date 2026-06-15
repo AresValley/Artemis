@@ -24,7 +24,6 @@ finish-args:
   - --device=dri
   - --share=network
   - --socket=pulseaudio
-  - --filesystem=home
 
 modules:
   - python3-requirements.json

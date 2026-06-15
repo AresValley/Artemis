@@ -199,7 +199,7 @@ Window {
         id: exportDialog
         title: "Please choose a save folder..."
         fileMode: FileDialog.SaveFile
-        nameFilters: ["Archive (.tar)"]
+        nameFilters: ["All files (*)"]
 
         onAccepted: {
             exportDb(selectedFile)
@@ -210,7 +210,7 @@ Window {
         id: importDialog
         title: "Please choose a valid tar.gz archive..."
         fileMode: FileDialog.OpenFile
-        nameFilters: ["Archive (*.tar)"]
+        nameFilters: ["All files (*)"]
 
         onAccepted: {
             importDb(selectedFile)

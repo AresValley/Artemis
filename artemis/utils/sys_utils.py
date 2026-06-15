@@ -2,8 +2,9 @@ import os
 import platform
 import subprocess
 import hashlib
+import tarfile
 
-from shutil import rmtree, copyfile, make_archive, unpack_archive
+from shutil import rmtree, copyfile, unpack_archive
 from pathlib import Path
 
 from artemis.utils.constants import Messages
@@ -64,10 +65,12 @@ def make_tar(save_path, origin_path):
     """ Create a tar archive from a folder
 
     Args:
-        save_path: destination path where new tar is saved
-        origin_path: directory path of the folder to be archived
+        save_path (str): destination path exactly as provided by QUrl.toLocalFile()
+        origin_path (Path): directory path of the folder to be archived
     """
-    make_archive(save_path, 'tar', origin_path.resolve().as_posix())
+    origin_str = str(origin_path.resolve())
+    with tarfile.open(name=save_path, mode="w") as tar:
+        tar.add(origin_str, arcname=".")
 
 
 def unpack_tar(tar_path, destination_path):

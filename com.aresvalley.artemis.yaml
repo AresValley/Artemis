@@ -24,7 +24,6 @@ finish-args:
   - --device=dri
   - --share=network
   - --socket=pulseaudio
-  - --filesystem=home
 
 modules:
   - python3-requirements.json
@@ -44,8 +43,10 @@ modules:
       - install -Dm644 data/com.aresvalley.artemis.svg -t ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
       - install -Dm644 data/com.aresvalley.artemis.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
     sources:
-      - type: dir
-        path: .
+      - type: git
+        url: https://github.com/AresValley/Artemis
+        tag: v1-flatpak
+        commit: fe51771946ab38d73d1b3c61ec21b5903aa93e28
 
   - name: cleanup
     buildsystem: simple
