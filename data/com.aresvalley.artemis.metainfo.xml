@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.aresvalley.artemis</id>
+  
+  <name>Artemis</name>
+  <developer id="com.aresvalley">
+    <name>AresValley</name>
+  </developer>
+  
+  <summary>Radio Signals Recognition Manual</summary>
+  
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  
+  <url type="homepage">https://aresvalley.com/</url>
+  
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  
+  <description>
+    <p>
+      Artemis is a software designed to assist radio frequency (RF) signal identification and storage. It simplifies real-time spectrum analysis by leveraging one of the most extensive, community-driven databases, which contains over 500 recognized signals. This comprehensive software solution allows users to collect RF signals with specific parameters such as frequency, bandwidth, modulation, etc. Users can also store spectrum waterfalls, audio samples, and all types of documents for future reference. Artemis provides a robust platform to manage a wide range of RF data with precision and ease.
+    </p>
+  </description>
+  
+  <launchable type="desktop-id">com.aresvalley.artemis.desktop</launchable>
+  
+  <screenshots>
+    <screenshot type="default">
+      <image>https://aresvalley.com/wp-content/uploads/2024/06/preview_main1.webp</image>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/wp-content/uploads/2024/06/preview_for1.webp</image>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/wp-content/uploads/2024/06/preview_for3.webp</image>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.0" />
+
+  <releases>
+    <release version="4.1.0" date="2024-10-20">
+      <url type="details">https://github.com/AresValley/Artemis/releases/tag/v4.1.0</url>
+      <description>
+        <p>This release introduces a new audio setting panel, device selection, and advanced products for the space weather module.</p>
+        <ul>
+          <li>Created a setting panel for the audio player</li>
+          <li>Added selection of the audio output device</li>
+          <li>Added Sun Synoptic Analysis (SAS) to the space weather module</li>
+          <li>Added GOES Solar Ultraviolet Imager (SUVI) for all wavelengths (94 Å, 131 Å, 171 Å, 195 Å, 284 Å, 304 Å)</li>
+          <li>Added GOES Thematic Map from SUVI</li>
+          <li>Added Large Angle and Spectrometric Coronagraph (LASCO) C2/C3 range for optical imaging of the Sun's corona</li>
+          <li>Added Helioseismic and Magnetic Imager (HMI) products: Magnetogram, Intensitygram, Dopplergram</li>
+          <li>Fixed margins for downloader window</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+</component>

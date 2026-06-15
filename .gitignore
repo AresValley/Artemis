@@ -1,7 +1,6 @@
 **/__pycache__/
 .vscode/
 *.pyproject.user
-data/
 .flake8
 *.qtds
 artemis_rc.py
