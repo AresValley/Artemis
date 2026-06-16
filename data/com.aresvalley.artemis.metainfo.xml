@@ -34,43 +34,6 @@
     <p>
       Artemis enhances RF propagation analysis with comprehensive space weather tracking. It offers near real-time (5-minute) data and forecasts to help users anticipate the effects of solar and geomagnetic conditions on RF communications.
     </p>
-    <p>Some of the features include:</p>
-    <ul>
-      <li>Kp/Ap indexes &amp; NOAA GSR Scale Alerts</li>
-      <li>3-day Space Weather Forecast</li>
-      <li>Maximum Usable Frequency</li>
-      <li>Earth-Moon-Earth</li>
-      <li>Meteor Scatter</li>
-      <li>Sporadic-E</li>
-      <li>Aurora Spots</li>
-      <li>Expected HF Noise</li>
-      <li>D-Region Absorption Prediction (DRAP)</li>
-      <li>Aurora Forecast (OVATION Model)</li>
-      <li>Solar Synoptic Analysis (SAS)</li>
-      <li>
-        GOES Solar Ultraviolet Imager (SUVI):
-        <ul>
-          <li>94 Å, 131 Å, 171 Å, 195 Å, 284 Å, 304 Å, 1600 Å, 1700 Å</li>
-        </ul>
-      </li>
-      <li>GOES Thematic Map</li>
-      <li>
-        Large Angle and Spectrometric Coronagraph (LASCO):
-        <ul>
-          <li>C1: Fabry-Pérot interferometer, not available</li>
-          <li>C2: 1.5 to 6 solar radii (RED)</li>
-          <li>C3: 3.7 to 30 solar radii (BLUE)</li>
-        </ul>
-      </li>
-      <li>
-        Helioseismic and Magnetic Imager (HMI):
-        <ul>
-          <li>Magnetogram</li>
-          <li>Intensitygram</li>
-          <li>Dopplergram</li>
-        </ul>
-      </li>
-    </ul>
   </description>
   
   <launchable type="desktop-id">com.aresvalley.artemis.desktop</launchable>
