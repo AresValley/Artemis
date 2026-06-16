@@ -1,7 +1,6 @@
 **/__pycache__/
 .vscode/
 *.pyproject.user
-data/
 .flake8
 *.qtds
 artemis_rc.py
@@ -9,3 +8,5 @@ site
 Generated
 app.build
 app.dist
+builddir/
+repo/

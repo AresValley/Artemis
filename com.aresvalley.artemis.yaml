@@ -1,0 +1,57 @@
+id: com.aresvalley.artemis
+runtime: org.kde.Platform
+runtime-version: '6.10'
+sdk: org.kde.Sdk
+
+command: artemis-launcher
+
+base: io.qt.PySide.BaseApp
+base-version: '6.10'
+
+build-options:
+  append-path: /usr/lib/sdk/llvm21/bin
+  append-ld-library-path: /usr/lib/sdk/llvm21/lib
+  env:
+
+    BASEAPP_REMOVE_WEBENGINE: "1"
+    BASEAPP_DISABLE_NUMPY: "1"
+    QT_QPA_PLATFORMTHEME: kde
+
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --device=dri
+  - --share=network
+  - --socket=pulseaudio
+  - --no-talk-name=com.canonical.AppMenu.Registrar
+  - --no-talk-name=org.kde.KGlobalSettings
+  - --no-talk-name=org.kde.kconfig.notify
+
+modules:
+  - python3-requirements.json
+
+  - name: artemis
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 artemis-launcher ${FLATPAK_DEST}/bin/artemis-launcher
+      - install -d ${FLATPAK_DEST}/lib/python3.13/site-packages/artemis
+
+      - cp -r artemis/* ${FLATPAK_DEST}/lib/python3.13/site-packages/artemis/
+
+      - install -d ${FLATPAK_DEST}/lib/python3.13/site-packages/config
+      - cp -r config/* ${FLATPAK_DEST}/lib/python3.13/site-packages/config/
+
+      - install -Dm644 data/com.aresvalley.artemis.desktop -t ${FLATPAK_DEST}/share/applications/
+      - install -Dm644 data/com.aresvalley.artemis.svg -t ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
+      - install -Dm644 data/com.aresvalley.artemis.metainfo.xml -t ${FLATPAK_DEST}/share/metainfo
+    sources:
+      - type: git
+        url: https://github.com/AresValley/Artemis
+        tag: v1-flatpak
+        commit: fe51771946ab38d73d1b3c61ec21b5903aa93e28
+
+  - name: cleanup
+    buildsystem: simple
+    build-commands:
+      - /app/cleanup-BaseApp.sh

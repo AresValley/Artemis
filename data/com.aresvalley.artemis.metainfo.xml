@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.aresvalley.artemis</id>
+  
+  <name>Artemis</name>
+  <developer id="com.aresvalley">
+    <name>AresValley</name>
+  </developer>
+  
+  <summary>Radio Signals Recognition Manual</summary>
+  
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  
+  <url type="homepage">https://aresvalley.com/</url>
+  <url type="help">https://aresvalley.github.io/Artemis/</url>
+  <url type="vcs-browser">https://github.com/AresValley/Artemis</url>
+  <url type="bugtracker">https://github.com/AresValley/Artemis/issues</url>
+  <url type="donation">https://aresvalley.com/#donations</url>
+
+  <supports>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </supports>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  
+  <description>
+    <p>
+      Artemis is a software designed to assist radio frequency (RF) signal identification and storage. It simplifies real-time spectrum analysis by leveraging one of the most extensive and community-driven databases, containing over 500 recognized signals. This comprehensive software solution allows users to collect RF signals with specific parameters such as frequency, bandwidth, modulation, etc. Users can also store spectrum waterfalls, audio samples, and all types of documents for future reference. Artemis provides a robust platform to manage a wide range of RF data with precision and ease.
+    </p>
+    <p>
+      Artemis enhances RF propagation analysis with comprehensive space weather tracking. It offers near real-time (5-minute) data and forecasts to help users anticipate the effects of solar and geomagnetic conditions on RF communications.
+    </p>
+    <p>Some of the features include:</p>
+    <ul>
+      <li>Kp/Ap indexes &amp; NOAA GSR Scale Alerts</li>
+      <li>3-day Space Weather Forecast</li>
+      <li>Maximum Usable Frequency</li>
+      <li>Earth-Moon-Earth</li>
+      <li>Meteor Scatter</li>
+      <li>Sporadic-E</li>
+      <li>Aurora Spots</li>
+      <li>Expected HF Noise</li>
+      <li>D-Region Absorption Prediction (DRAP)</li>
+      <li>Aurora Forecast (OVATION Model)</li>
+      <li>Solar Synoptic Analysis (SAS)</li>
+      <li>
+        GOES Solar Ultraviolet Imager (SUVI):
+        <ul>
+          <li>94 Å, 131 Å, 171 Å, 195 Å, 284 Å, 304 Å, 1600 Å, 1700 Å</li>
+        </ul>
+      </li>
+      <li>GOES Thematic Map</li>
+      <li>
+        Large Angle and Spectrometric Coronagraph (LASCO):
+        <ul>
+          <li>C1: Fabry-Pérot interferometer, not available</li>
+          <li>C2: 1.5 to 6 solar radii (RED)</li>
+          <li>C3: 3.7 to 30 solar radii (BLUE)</li>
+        </ul>
+      </li>
+      <li>
+        Helioseismic and Magnetic Imager (HMI):
+        <ul>
+          <li>Magnetogram</li>
+          <li>Intensitygram</li>
+          <li>Dopplergram</li>
+        </ul>
+      </li>
+    </ul>
+  </description>
+  
+  <launchable type="desktop-id">com.aresvalley.artemis.desktop</launchable>
+  
+  <screenshots>
+    <screenshot type="default">
+      <image>https://aresvalley.com/screenshots/1.png</image>
+      <caption>Main application interface showing RF signal identification</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/screenshots/2.png</image>
+      <caption>Signal search engine with advanced filtering options</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/screenshots/3.png</image>
+      <caption>Current space weather conditions and RF propagation summary</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/screenshots/4.png</image>
+      <caption>Comprehensive 3-day space weather forecast and alerts</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/screenshots/5.png</image>
+      <caption>D-Region Absorption Prediction (DRAP) global model</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/screenshots/6.png</image>
+      <caption>Aurora forecast based on the OVATION model</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/screenshots/7.png</image>
+      <caption>Solar Synoptic Analysis (SSA)</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://aresvalley.com/screenshots/8.png</image>
+      <caption>Near real-time solar imaging using multiple GOES and HMI instruments</caption>
+    </screenshot>
+  </screenshots>
+
+  <branding>
+    <color type="primary" scheme_preference="light">#5a8dc4</color>
+    <color type="primary" scheme_preference="dark">#48638e</color>
+  </branding>
+
+  <content_rating type="oars-1.0" />
+
+  <releases>
+    <release version="4.1.0" date="2024-10-20">
+      <url type="details">https://github.com/AresValley/Artemis/releases/tag/v4.1.0</url>
+      <description>
+        <p>This release introduces a new audio setting panel, device selection, and advanced products for the space weather module.</p>
+        <ul>
+          <li>Created a setting panel for the audio player</li>
+          <li>Added selection of the audio output device</li>
+          <li>Added Sun Synoptic Analysis (SAS) to the space weather module</li>
+          <li>Added GOES Solar Ultraviolet Imager (SUVI) for all wavelengths (94 Å, 131 Å, 171 Å, 195 Å, 284 Å, 304 Å)</li>
+          <li>Added GOES Thematic Map from SUVI</li>
+          <li>Added Large Angle and Spectrometric Coronagraph (LASCO) C2/C3 range for optical imaging of the Sun's corona</li>
+          <li>Added Helioseismic and Magnetic Imager (HMI) products: Magnetogram, Intensitygram, Dopplergram</li>
+          <li>Fixed margins for downloader window</li>
+        </ul>
+      </description>
+    </release>
+  </releases>
+</component>

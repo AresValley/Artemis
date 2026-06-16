@@ -19,7 +19,12 @@ def _app_dir():
     elif is_windows():
         app_dir_path = Path.home() / 'AppData' / 'Local' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
     elif is_linux():
-        app_dir_path = Path.home() / '.local' / 'share' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
+        # XDG_DATA_HOME is only used for the flatpak application since all the files are saved in the flatpak sandbox
+        xdg_data = os.environ.get('XDG_DATA_HOME')
+        if xdg_data:
+            app_dir_path = Path(xdg_data) / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
+        else:
+            app_dir_path = Path.home() / '.local' / 'share' / Constants.ORGANIZATION_NAME / Constants.APPLICATION_NAME
     else:
         app_dir_path = BASE_DIR.resolve()
 

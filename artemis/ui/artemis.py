@@ -1,7 +1,7 @@
 import uuid
 
 from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtCore import QObject, Slot, Signal
+from PySide6.QtCore import QObject, Slot, Signal, QUrl
 
 from artemis.utils.constants import Constants, Messages
 from artemis.utils.sys_utils import open_directory, make_tar, unpack_tar
@@ -287,7 +287,9 @@ class UIArtemis(QObject):
             save_path (str): destination path of the generated .tar file
         """
         try:
-            dest_path = normalize_dialog_path(save_path)
+            url = QUrl(save_path)
+            dest_path = url.toLocalFile()
+
             make_tar(dest_path, self.loaded_db.db_dir)
             self.dialog_popup(
                 Messages.DIALOG_TYPE_INFO,
