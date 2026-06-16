@@ -24,6 +24,9 @@ finish-args:
   - --device=dri
   - --share=network
   - --socket=pulseaudio
+  - --no-talk-name=com.canonical.AppMenu.Registrar
+  - --no-talk-name=org.kde.KGlobalSettings
+  - --no-talk-name=org.kde.kconfig.notify
 
 modules:
   - python3-requirements.json
