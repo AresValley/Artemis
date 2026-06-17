@@ -16,3 +16,6 @@ dependencies = [
 
 [tool.setuptools.packages.find]
 include = ["artemis*", "config*"]
+
+[tool.setuptools.package-data]
+config = ["*.conf"]
