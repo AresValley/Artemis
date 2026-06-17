@@ -9,13 +9,13 @@ base: io.qt.PySide.BaseApp
 base-version: '6.10'
 
 build-options:
-  append-path: /usr/lib/sdk/llvm21/bin
-  append-ld-library-path: /usr/lib/sdk/llvm21/lib
   env:
-
     BASEAPP_REMOVE_WEBENGINE: "1"
     BASEAPP_DISABLE_NUMPY: "1"
     QT_QPA_PLATFORMTHEME: kde
+
+cleanup-commands:
+  - /app/cleanup-BaseApp.sh
 
 finish-args:
   - --socket=wayland
@@ -31,13 +31,9 @@ modules:
   - name: artemis
     buildsystem: simple
     build-commands:
+      - pip3 install --prefix=${FLATPAK_DEST} --no-deps --no-build-isolation .
+
       - install -Dm755 artemis-launcher ${FLATPAK_DEST}/bin/artemis-launcher
-      - install -d ${FLATPAK_DEST}/lib/python3.13/site-packages/artemis
-
-      - cp -r artemis/* ${FLATPAK_DEST}/lib/python3.13/site-packages/artemis/
-
-      - install -d ${FLATPAK_DEST}/lib/python3.13/site-packages/config
-      - cp -r config/* ${FLATPAK_DEST}/lib/python3.13/site-packages/config/
 
       - install -Dm644 data/com.aresvalley.artemis.desktop -t ${FLATPAK_DEST}/share/applications/
       - install -Dm644 data/com.aresvalley.artemis.svg -t ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/
@@ -45,8 +41,3 @@ modules:
     sources:
       - type: dir
         path: .
-
-  - name: cleanup
-    buildsystem: simple
-    build-commands:
-      - /app/cleanup-BaseApp.sh

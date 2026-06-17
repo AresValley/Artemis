@@ -1,11 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "artemis"
 version = "4.1.0"
 description = "Radio Signals Recognition Manual"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "packaging==26.2",
     "pyside6==6.11.1",
     "requests==2.34.2",
 ]
+
+[tool.setuptools.packages.find]
+include = ["artemis*", "config*"]
