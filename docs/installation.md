@@ -1,53 +1,31 @@
 # Installation
 
-**Requirements:**
+=== ":fontawesome-brands-microsoft: Windows"
 
-* **Windows** 8 or later
-* **Linux** Ubuntu 20.04+ / Mint 20+ / Fedora 32+ and many other
-* **macOS** 11+ (Big Sur or later)
+    **Requirements:** Windows 8 or later
 
-## :simple-windows: Windows
-1. Download the installer `Artemis-Windows-x86_64-4.x.x.exe` in the Assets menu from the [:material-download: LATEST RELEASE](https://github.com/AresValley/Artemis/releases) and follow the guided procedure to complete the installation process.
+    Download the installer from the main website ([Aresvalley](https://aresvalley.com)) or from GitHub repository (in the Assets menu from the [:material-download: LATEST RELEASE](https://github.com/AresValley/Artemis/releases)) and follow the guided procedure to complete the installation process.
 
----
+=== ":fontawesome-brands-linux: Linux"
 
-## :simple-linux: Linux
-1. On Linux, the xcb plugin is utilized to supply the essential functionality required for Qt GUI and Qt Widgets to operate on [X11](https://doc.qt.io/qt-6/linux-requirements.html). On some Linux distributions the required dependencies are already met, but in many cases, you will need to install them. To install the dependencies use:
+    The easiest and recommended way to install the application on both Linux PCs (**x64**) and Raspberry Pi (**arm64**) is via **Flathub**.
+    <div align="center">
+        <a href='https://flathub.org/it/apps/com.aresvalley.artemis'>
+            <img width='240' alt='Get it on Flathub' src='https://flathub.org/api/badge?svg&locale=en'/>
+        </a>
+    </div>
 
-    ``` bash title="Debian-based distro (Ubuntu, Mint, Pop! OS, Kali, ...)"
-    sudo apt install libxcb-*
-    ```
+    Alternatively, you can search for it directly in your distribution's Software Center if Flatpak support is already enabled.
 
-2. Download `Artemis-Linux-x86_64-4.x.x.tar` in the Assets menu from the [:material-download: LATEST RELEASE](https://github.com/AresValley/Artemis/releases) and extract the tarball archive in a folder of your choice.
-3. Before running `app.bin`, be sure to have the executable permissions to the binary file with:
+=== ":fontawesome-brands-apple: MacOS"
 
-    ```
-    chmod 700 app.bin
-    ```
+    **Requirements:** macOS 11+ (Big Sur or later)
 
-### Create a Shortcut
+    !!! warning
+        The macOS support is temporarily limited!
 
-1. To create a direct shortcut (in the main menu) launch the bash script in the terminal with the command:
+    The support for the macOS compiled version of the program is temporarily limited due to a lack of machines for extensive testing. To use Artemis on a macOS device, you have the following options:
 
-    ```
-    . create_shortcut.sh
-    ```
-
-This script will:
-
-- Set the correct read/write privileges of the Artemis folder
-- Create the artemis.desktop file (shortcut) in /home/$USER/.local/share/applications
-- Move the Artemis icon file to /usr/share/icons
-
----
-
-## :simple-apple: Mac OS
-!!! warning
-    The macOS support is temporarily limited!
-
-The support for the macOS compiled version of the program is temporarily limited due to a lack of machines for extensive testing. To use Artemis on a macOS device, you have the following options:
-
-* **Run the program directly from the source:** Follow the instructions provided in [this chapter](run_from_source.md) to launch the program from the source code.
-* **Compile the Artemis 4 binaries on your machine:** In this case, you can contribute by reporting any issues you encounter by [opening an Issue](https://github.com/AresValley/Artemis/issues).
-* **Use the last available compiled version (3.2.1):** Although this version is no longer officially supported, it remains available for use: [:material-download: Artemis-3.2.1.dmg](https://www.aresvalley.com/?sdm_process_download=1&download_id=377).
-
+    * **Run the program directly from the source:** Follow the instructions provided in [this chapter](run_from_source.md) to launch the program from the source code.
+    * **Compile the Artemis 4 binaries on your machine:** In this case, you can contribute by reporting any issues you encounter by [opening an Issue](https://github.com/AresValley/Artemis/issues).
+    * **Use the last available compiled version (3.2.1):** Although this version is no longer officially supported, it remains available for use: [:material-download: Artemis-3.2.1.dmg](https://www.aresvalley.com/?sdm_process_download=1&download_id=377).

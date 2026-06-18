@@ -10,42 +10,32 @@ Building a distributable package with an executable for Artemis creates a practi
 !!! warning "Cross-Compilation"
     An operating system that matches the target OS must be used to generate standalone packages, as Nuitka does not support cross-compilation. For example, you cannot build binaries on Windows that work on Linux or macOS.
 
-## :simple-windows: Windows
+=== ":fontawesome-brands-microsoft: Windows"
 
-### Procedure
+    1. Open a PowerShell terminal in the main Artemis folder and execute the following command to start the build process:
 
-1. Open a PowerShell terminal in the main Artemis folder and execute the following command to start the build process:
+        ```
+        .\building\Windows\build_windows.ps1
+        ```
 
-    ```
-    .\building\Windows\build_windows.ps1
-    ```
+    2. Wait for the build process to complete. This may take a few minutes depending on your system's performance. Once the process finishes, check the `artemis.dist/` directory: it will contain the standalone software with the `artemis.exe` executable.
 
-2. Wait for the build process to complete. This may take a few minutes depending on your system's performance. Once the process finishes, check the `artemis.dist/` directory: it will contain the standalone software with the `artemis.exe` executable.
+=== ":fontawesome-brands-linux: Linux"
 
----
+    1. Open a terminal in the main Artemis folder and execute the following command to start the build process:
+        ```
+        . ./building/Linux/build_linux.sh
+        ```
 
-## :simple-linux: Linux
+    2. Wait for the build process to complete. This may take a few minutes depending on your system's performance. Once the process finishes, check the `artemis.dist/` directory: it will contain the standalone software with the `app.bin` executable.
+    3. If you wish to create a shortcut, follows the procedure in the
 
-### Procedure
+=== ":fontawesome-brands-apple: Mac OS"
 
-1. Open a terminal in the main Artemis folder and execute the following command to start the build process:
-    ```
-    . ./building/Linux/build_linux.sh
-    ```
+    !!! warning
+        The support for the macOS compiled version of the program is temporarily limited due to a lack of machines for extensive testing. Feel free to contribute by reporting any issues you encounter by [opening an Issue](https://github.com/AresValley/Artemis/issues).
 
-2. Wait for the build process to complete. This may take a few minutes depending on your system's performance. Once the process finishes, check the `artemis.dist/` directory: it will contain the standalone software with the `app.bin` executable.
-3. If you wish to create a shortcut, follows the procedure in the [installation section](installation.md/#create-a-shortcut)
-
----
-
-## :simple-apple: Mac OS
-
-!!! warning
-    The support for the macOS compiled version of the program is temporarily limited due to a lack of machines for extensive testing. Feel free to contribute by reporting any issues you encounter by [opening an Issue](https://github.com/AresValley/Artemis/issues).
-
-### Procedure
-
-1. Open a terminal in the main Artemis folder and execute the following command to start the build process:
-    ```
-    . ./building/macOS/build_macos.sh
-    ```
+    1. Open a terminal in the main Artemis folder and execute the following command to start the build process:
+        ```
+        . ./building/macOS/build_macos.sh
+        ```

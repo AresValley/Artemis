@@ -1,5 +1,3 @@
-#
-
 ![sw_current](../assets/sw_1.webp)
 
 ## 1. Kp Index

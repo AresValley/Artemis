@@ -10,3 +10,4 @@ app.build
 app.dist
 builddir/
 repo/
+*.egg-info

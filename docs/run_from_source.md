@@ -6,20 +6,20 @@ Running Artemis directly from the source code using the Python interpreter is co
 
 ## Procedure
 
-1. Download and install Python (3.11 or higher) from the official [website](https://www.python.org/downloads/). Be sure to select the flag `Add Python 3.x to PATH` during the first part of the installation.
+1. Download and install UV from the official [website](https://docs.astral.sh/uv/getting-started/installation/).
 
 2. Download Artemis source code from the [latest release](https://github.com/AresValley/Artemis/releases) in the GitHub repository.
 
 3. Extract the downloaded archive.
 
-4. Open the terminal in Artemis folder and install the required Python libraries with PIP:
+4. Open the terminal in Artemis folder and install the virtual environement and teh required Python libraries with uv:
     ```
-    pip install -r requirements.txt --user
+    uv sync
     ```
 
 5. Launch Artemis:
     ```
-    python app.py
+    uv run python -m artemis
     ```
 
 !!! example "Note for Developers"
@@ -31,14 +31,14 @@ Running Artemis directly from the source code using the Python interpreter is co
 ## Folders Structure
 Artemis can be safely executed and/or installed in any folder (even protected ones, such as `Program Files (x86)` in Windows) because Artemis performs read-only operations in the `BASE_DIR` folder from where it runs. All the reading-writing operations (such as database ops, logging, etc.) are performed in standard folders as follow:
 
-### :simple-windows: Windows
-* Data, Cache, Configurations: `$USER\AppData\Local\AresValley\Artemis`
-* Logs: `$USER\AppData\Local\Temp`
+=== ":fontawesome-brands-microsoft: Windows"
+    * Data, Cache, Configurations: `$USER\AppData\Local\AresValley\Artemis`
+    * Logs: `$USER\AppData\Local\Temp`
 
-### :simple-linux: Linux
-* Data, Cache, Configurations: `~/.local/share/AresValley/Artemis`
-* Logs: `/tmp`
+=== ":fontawesome-brands-linux: Linux"
+    * Data, Cache, Configurations: `~/.local/share/AresValley/Artemis`
+    * Logs: `/tmp`
 
-### :simple-apple: Mac OS
-* Data, Cache, Configurations: `~/Library/Application Support/AresValley/Artemis`
-* Logs: `/tmp`
+=== ":fontawesome-brands-apple: Mac OS"
+    * Data, Cache, Configurations: `~/Library/Application Support/AresValley/Artemis`
+    * Logs: `/tmp`
