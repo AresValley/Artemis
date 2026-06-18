@@ -42,7 +42,6 @@ sources = [
 ]
 
 test_sources = [
-    "tests",
 ]
 
 requires = [
@@ -51,7 +50,6 @@ requires = [
 ]
 
 test_requires = [
-    "pytest",
 ]
 
 [tool.briefcase.app.artemis.macOS]
