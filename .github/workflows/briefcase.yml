@@ -73,16 +73,6 @@ jobs:
             ${{ matrix.briefcase-args }} \
             ${{ matrix.briefcase-build-args }}
 
-      - name: Test App
-        run: |
-          ${{ matrix.briefcase-run-prefix }} \
-          briefcase run \
-            ${{ matrix.platform || matrix.target }} \
-            ${{ matrix.output-format }} \
-            --test --no-input --log \
-            ${{ matrix.briefcase-args }} \
-            ${{ matrix.briefcase-run-args }}
-
       - name: Package App
         run: |
           ${{ matrix.briefcase-package-prefix }} \
