@@ -9,6 +9,7 @@ description = "Radio Signals Recognition Manual"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "briefcase>=0.4.2",
     "packaging==26.2",
     "pyside6==6.11.1",
     "requests==2.34.2",
@@ -19,3 +20,99 @@ include = ["artemis*", "config*"]
 
 [tool.setuptools.package-data]
 config = ["*.conf"]
+
+[tool.briefcase]
+project_name = "Artemis"
+bundle = "com.aresvalley.artemis"
+version = "4.1.0"
+url = "https://aresvalley.com"
+license = "GPL-3.0+"
+license-files = ["LICENSE"]
+author = "AresValley"
+author_email = "aresvalley.info@gmail.com"
+
+[tool.briefcase.app.artemis]
+formal_name = "Artemis"
+description = "Radio Signals Recognition Manual"
+long_description = """More details about the app should go here.
+"""
+
+sources = [
+    "artemis",
+]
+
+test_sources = [
+    "tests",
+]
+
+requires = [
+    "PySide6-Essentials~=6.8",
+    # "PySide6-Addons~=6.8",
+]
+
+test_requires = [
+    "pytest",
+]
+
+[tool.briefcase.app.artemis.macOS]
+universal_build = true
+# Pyside 6.10 (required for Python 3.14 support) enforces a macOS 13 minimum.
+min_os_version = "13.0"
+requires = [
+    "std-nslog~=1.0.3",
+]
+
+[tool.briefcase.app.artemis.linux]
+requires = [
+]
+
+[tool.briefcase.app.artemis.linux.system.debian]
+system_requires = [
+]
+
+system_runtime_requires = [
+    "libgl1",
+    "libqt6dbus6",
+    "libqt6gui6",
+    "libxcb-cursor0",
+    # The following packages are explicit dependencies on recent Debian-based
+    # distros, but not on Ubuntu 22.04.
+    "libxcb-icccm4",
+    "libxcb-keysyms1",
+    "libxcb-shape0",
+    "libxkbcommon-x11-0",
+]
+
+[tool.briefcase.app.artemis.linux.system.rhel]
+system_requires = [
+]
+
+system_runtime_requires = [
+    "qt6-qtbase-gui",
+]
+
+[tool.briefcase.app.artemis.linux.system.suse]
+system_requires = [
+]
+
+system_runtime_requires = [
+    "libgthread-2_0-0",
+    "libQt6Gui6",
+]
+
+[tool.briefcase.app.artemis.linux.system.arch]
+system_requires = [
+]
+
+system_runtime_requires = [
+    "qt6-base",
+]
+
+[tool.briefcase.app.artemis.linux.appimage]
+manylinux = "manylinux_2_28"
+
+system_requires = [
+]
+
+linuxdeploy_plugins = [
+]
