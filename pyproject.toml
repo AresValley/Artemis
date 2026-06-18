@@ -7,7 +7,7 @@ name = "artemis"
 version = "4.1.0"
 description = "Radio Signals Recognition Manual"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     "briefcase>=0.4.2",
     "packaging==26.2",
