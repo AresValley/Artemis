@@ -2,11 +2,11 @@
 
 echo "Building macOS target ..."
 
-Write-Output "Install building dependencies ..."
+echo "Install building dependencies ..."
 uv add 'nuitka==4.1.2'
 uv add 'imageio'
 
-Write-Output "Compiling resources ..."
+echo "Compiling resources ..."
 uv run pyside6-rcc ./artemis.qrc -o artemis/resources.py
 
 echo "Building with Nuitka ..."
@@ -25,7 +25,7 @@ uv run --python 3.13 nuitka \
   --macos-signed-app-name=com.AresValley.Artemis \
   --macos-app-name=Artemis \
   --macos-app-mode=gui \
-  --macos-sign-identity=ad-hoc \
+  --macos-sign-identity=auto \
   --macos-app-version=4.1.0
 
 echo "Building macOS target finished."

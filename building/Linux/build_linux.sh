@@ -2,12 +2,15 @@
 
 echo "Building Linux target ..."
 
-echo "Installing requirements ..."
-pip install -r requirements.txt
-pip install nuitka==2.4.10
+echo "Install building dependencies ..."
+uv add 'nuitka==4.1.2'
+
+echo "Compiling resources ..."
+uv run pyside6-rcc ./artemis.qrc -o artemis/resources.py
 
 echo "Building with Nuitka ..."
-python -m nuitka app.py \
+uv run --python 3.13 nuitka \
+  --python-flag=-m artemis \
   --standalone \
   --show-modules \
   --assume-yes-for-downloads \
@@ -20,7 +23,6 @@ python -m nuitka app.py \
   --include-qt-plugins=styles \
   --include-qt-plugins=qml \
   --include-qt-plugins=multimedia \
-  --include-data-files=./artemis/resources.py=./artemis/resources.py \
   --include-data-files=./config/qtquickcontrols2.conf=./config/qtquickcontrols2.conf \
   --include-data-files=./building/Linux/create_shortcut.sh=./create_shortcut.sh \
   --include-data-files=./images/artemis_icon.svg=./images/artemis_icon.svg \
