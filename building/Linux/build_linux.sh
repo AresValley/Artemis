@@ -20,7 +20,7 @@ uv run --python 3.13 nuitka \
   --noinclude-dlls=libQt6Sensors* \
   --noinclude-dlls=libQt6Test* \
   --noinclude-dlls=libQt6WebEngine* \
-  --exclude-directory-pattern="*objects-RelWithDebInfo*" \
+  --noinclude-dlls="*/objects-RelWithDebInfo/*" \
   --include-qt-plugins=qml \
   --include-qt-plugins=multimedia \
   --include-data-files=./config/qtquickcontrols2.conf=./config/qtquickcontrols2.conf \
