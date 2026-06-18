@@ -14,12 +14,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - name: Setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v8.2.0
+
+      - name: Install dependencies
+        run: uv sync
 
       - name: Build and package
         run: ./building/Windows/build_windows.ps1
@@ -29,7 +30,7 @@ jobs:
         run: iscc ./building/Windows/windows_installer.iss
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: Artemis-Windows-x86_64-${{github.event.inputs.artemis_version}}
           path: ./building/artemis.exe
