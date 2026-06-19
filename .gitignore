@@ -11,3 +11,7 @@ app.dist
 builddir/
 repo/
 *.egg-info
+dist/
+build/
+.cache/
+.venv/

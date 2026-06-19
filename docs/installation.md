@@ -19,13 +19,14 @@
 
 === ":fontawesome-brands-apple: MacOS"
 
-    **Requirements:** macOS 11+ (Big Sur or later)
+    !!! warning "No Pre-compiled Binaries for macOS"
+        We do not provide pre-compiled binaries (`.app` or `.dmg`) for macOS due to Apple's strict code-signing requirements.
+        
+        Packaging a macOS application for public distribution requires a valid Apple Developer Account and an official Application Distribution Certificate (99 USD per year, thanks Apple). Without these, `Briefcase` (the tool used to build the executable) can only package the app using an **ad-hoc identity**. 
+        
+        Ad-hoc signed applications are locked to the specific machine that compiled them and **will not run on any other computer** due to macOS Gatekeeper restrictions. Therefore, to run this app on macOS, you must clone the repository and build it locally.
 
-    !!! warning
-        The macOS support is temporarily limited!
+    Then, you can choose from:
 
-    The support for the macOS compiled version of the program is temporarily limited due to a lack of machines for extensive testing. To use Artemis on a macOS device, you have the following options:
-
-    * **Run the program directly from the source:** Follow the instructions provided in [this chapter](run_from_source.md) to launch the program from the source code.
-    * **Compile the Artemis 4 binaries on your machine:** In this case, you can contribute by reporting any issues you encounter by [opening an Issue](https://github.com/AresValley/Artemis/issues).
-    * **Use the last available compiled version (3.2.1):** Although this version is no longer officially supported, it remains available for use: [:material-download: Artemis-3.2.1.dmg](https://www.aresvalley.com/?sdm_process_download=1&download_id=377).
+    - **Run the program directly from the source:** Follow the instructions provided in [this chapter](run_from_source.md) to launch the program from the source code.
+    - **Compile the Artemis binaries** on your machine following the instructions in [this chapter](build_package.md#__tabbed_1_3).

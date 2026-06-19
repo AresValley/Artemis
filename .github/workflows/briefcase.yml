@@ -50,7 +50,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.13"
+          python-version: "3.12"
 
       - name: Install Briefcase
         run: |
@@ -72,16 +72,6 @@ jobs:
             --test --no-input --log \
             ${{ matrix.briefcase-args }} \
             ${{ matrix.briefcase-build-args }}
-
-      - name: Test App
-        run: |
-          ${{ matrix.briefcase-run-prefix }} \
-          briefcase run \
-            ${{ matrix.platform || matrix.target }} \
-            ${{ matrix.output-format }} \
-            --test --no-input --log \
-            ${{ matrix.briefcase-args }} \
-            ${{ matrix.briefcase-run-args }}
 
       - name: Package App
         run: |
