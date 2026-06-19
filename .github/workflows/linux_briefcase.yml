@@ -54,6 +54,10 @@ jobs:
         run: |
           ${{ matrix.pre-command }}
 
+      - name: Compile Resources
+        run: |
+          pyside6-rcc ./artemis.qrc -o artemis/resources.py
+
       - name: Build App
         run: |
           briefcase build \
