@@ -23,7 +23,7 @@ jobs:
         run: uv sync
 
       - name: Build and package
-        run: ./building/Windows/build_windows.ps1
+        run: ./building/Windows/build_nuitka.ps1
         shell: powershell
 
       - name: Building installer (ISCC)
