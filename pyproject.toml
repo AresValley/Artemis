@@ -38,6 +38,7 @@ long_description = "Artemis is a software designed to assist radio frequency (RF
 icon = "building/icons/artemis.icon"
 sources = [
     "artemis",
+    "config",
 ]
 test_sources = [
 ]
