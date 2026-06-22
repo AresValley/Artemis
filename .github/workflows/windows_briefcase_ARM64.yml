@@ -1,0 +1,79 @@
+name: Build - Windows ARM64 (briefcase)
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  FORCE_COLOR: "1"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  ci:
+    name: Package
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ "Windows" ]
+        include:
+          - target: "Windows"
+            output-format: "app"
+            runs-on: "windows-11-vs2026-arm"
+            platform: "windows"
+            pre-command: |
+              python -m pip install PySide6
+              pyside6-rcc ./artemis.qrc -o artemis/resources.py
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install Briefcase
+        run: |
+          python -m pip install -U pip setuptools wheel
+          python -m pip install briefcase
+
+      - name: Setup Environment
+        run: |
+          ${{ matrix.pre-command }}
+
+      - name: Build App
+        run: |
+          briefcase build \
+            ${{ matrix.platform }} \
+            ${{ matrix.output-format }} \
+            --test --no-input --log \
+            ${{ matrix.briefcase-args }}
+
+      - name: Package App
+        run: |
+          briefcase package \
+            ${{ matrix.platform }} \
+            ${{ matrix.output-format }} \
+            --update --adhoc-sign --no-input --log \
+            ${{ matrix.briefcase-args }}
+
+      - name: Upload App
+        uses: actions/upload-artifact@v7
+        with:
+          name: App-${{ matrix.target }}
+          path: dist
+          if-no-files-found: error
+
+      - name: Upload Log
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: Log-Failure-${{ matrix.target }}
+          path: logs/*
