@@ -1,4 +1,4 @@
-name: Build - Windows (nuitka)
+name: Build - Windows x64 (nuitka)
 
 on:
   workflow_dispatch:
