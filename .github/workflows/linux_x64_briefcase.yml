@@ -1,4 +1,4 @@
-name: Build - Linux (.rpm/.deb)
+name: Build - Linux x64 (.rpm/.deb)
 on:
   workflow_dispatch:
 
