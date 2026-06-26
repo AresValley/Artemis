@@ -23,14 +23,14 @@ jobs:
         run: uv sync
 
       - name: Build and package
-        run: ./building/Windows/build_nuitka.ps1
+        run: ./scripts/Windows/build_nuitka.ps1
         shell: powershell
 
       - name: Building installer (ISCC)
-        run: iscc ./building/Windows/windows_installer.iss
+        run: iscc ./scripts/Windows/windows_installer.iss
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: Artemis-Windows-x86_64-${{github.event.inputs.artemis_version}}
-          path: ./building/artemis.exe
+          path: ./scripts/artemis.exe

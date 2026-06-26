@@ -163,7 +163,7 @@ Window {
 
             Button {
                 text: qsTr("Save")
-                icon.source: "qrc:/images/icons/save.svg"
+                icon.source: "qrc:/data/images/icons/save.svg"
                 display: AbstractButton.TextBesideIcon
                 Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                 onClicked: {

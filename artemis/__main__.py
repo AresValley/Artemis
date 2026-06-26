@@ -17,7 +17,7 @@ def main():
 
     app = QGuiApplication(sys.argv)
 
-    icon_file_path = (':/images/artemis_icon.ico')
+    icon_file_path = (':/data/images/artemis_icon.ico')
     app.setWindowIcon(QIcon(icon_file_path))
 
     UIArtemis()

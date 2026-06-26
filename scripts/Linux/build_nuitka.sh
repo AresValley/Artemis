@@ -24,8 +24,8 @@ uv run --python 3.13 nuitka \
   --include-qt-plugins=qml \
   --include-qt-plugins=multimedia \
   --include-data-files=./config/qtquickcontrols2.conf=./config/qtquickcontrols2.conf \
-  --include-data-files=./building/Linux/create_shortcut.sh=./create_shortcut.sh \
-  --include-data-files=./images/artemis_icon.svg=./images/artemis_icon.svg \
+  --include-data-files=./scripts/Linux/create_shortcut.sh=./create_shortcut.sh \
+  --include-data-files=./data/images/artemis_icon.svg=./data/images/artemis_icon.svg \
   --force-stderr-spec="{TEMP}/artemis.err.log" \
   --force-stdout-spec="{TEMP}/artemis.out.log"
 

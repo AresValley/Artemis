@@ -108,7 +108,7 @@ Page {
         descriptionTextArea.text = ""
         bandBar.resetBandBar()
         audioPlayer.resetPlayer()
-        image.source = "qrc:///images/spectrum_not_available.svg"
+        image.source = "qrc:///data/images/spectrum_not_available.svg"
         lockMenu(true)
     }
 
@@ -621,7 +621,7 @@ Page {
 
                     RoundButton {
                         id: urlButton
-                        icon.source: "qrc:/images/icons/browser.svg"
+                        icon.source: "qrc:/data/images/icons/browser.svg"
                         display: AbstractButton.IconOnly
                         visible: false
                         text: "U"
@@ -632,7 +632,7 @@ Page {
 
                     RoundButton {
                         id: docManagerButton
-                        icon.source: "qrc:/images/icons/documents.svg"
+                        icon.source: "qrc:/data/images/icons/documents.svg"
                         display: AbstractButton.IconOnly
                         visible: false
                         text: "D"

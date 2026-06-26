@@ -76,7 +76,7 @@ Window {
             Button {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                 text: qsTr("Abort")
-                icon.source: "qrc:/images/icons/abort.svg"
+                icon.source: "qrc:/data/images/icons/abort.svg"
                 display: AbstractButton.TextBesideIcon
                 flat: true
                 onClicked: { onAbort() }

@@ -19,9 +19,9 @@ uv run --python 3.13 nuitka \
   --enable-plugin=pyside6 \
   --include-qt-plugins=sensible,styles,qml,multimedia \
   --include-data-files=./config/qtquickcontrols2.conf=./config/qtquickcontrols2.conf \
-  --include-data-files=./building/Linux/create_shortcut.sh=./create_shortcut.sh \
+  --include-data-files=./scripts/Linux/create_shortcut.sh=./create_shortcut.sh \
   --macos-create-app-bundle \
-  --macos-app-icon=images/artemis_icon.ico \
+  --macos-app-icon=data/images/artemis_icon.ico \
   --macos-signed-app-name=com.AresValley.Artemis \
   --macos-app-name=Artemis \
   --macos-app-mode=gui \

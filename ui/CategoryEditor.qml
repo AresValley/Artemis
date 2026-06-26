@@ -172,7 +172,7 @@ Window {
                     onClicked: {
                         dialogNewCat.open()
                     }
-                    icon.source: "qrc:/images/icons/add.svg"
+                    icon.source: "qrc:/data/images/icons/add.svg"
                     display: AbstractButton.TextBesideIcon
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
@@ -187,7 +187,7 @@ Window {
                     onClicked: {
                         dialogRenameCat.open()
                     }
-                    icon.source: "qrc:/images/icons/rename.svg"
+                    icon.source: "qrc:/data/images/icons/rename.svg"
                     enabled: false
                     display: AbstractButton.TextBesideIcon
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -203,7 +203,7 @@ Window {
                     onClicked: {
                         dialogDeleteConfirmation.open()
                     }
-                    icon.source: "qrc:/images/icons/delete.svg"
+                    icon.source: "qrc:/data/images/icons/delete.svg"
                     enabled: false
                     display: AbstractButton.TextBesideIcon
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter

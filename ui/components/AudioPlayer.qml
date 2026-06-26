@@ -148,7 +148,7 @@ Item {
                     RoundButton {
                         id: buttonLoop
                         icon.color: Material.foreground
-                        icon.source: "qrc:/images/icons/player_loop.svg"
+                        icon.source: "qrc:/data/images/icons/player_loop.svg"
                         display: AbstractButton.IconOnly
                         enabled: false
                         flat: true
@@ -181,7 +181,7 @@ Item {
             RoundButton {
                 id: buttonPlay
                 icon.color: Material.foreground
-                icon.source: "qrc:/images/icons/player_play.svg"
+                icon.source: "qrc:/data/images/icons/player_play.svg"
                 display: AbstractButton.IconOnly
                 enabled: false
                 flat: true
@@ -195,7 +195,7 @@ Item {
             RoundButton {
                 id: buttonPause
                 icon.color: Material.foreground
-                icon.source: "qrc:/images/icons/player_pause.svg"
+                icon.source: "qrc:/data/images/icons/player_pause.svg"
                 display: AbstractButton.IconOnly
                 enabled: false
                 flat: true
@@ -209,7 +209,7 @@ Item {
             RoundButton {
                 id: buttonStop
                 icon.color: Material.foreground
-                icon.source: "qrc:/images/icons/player_stop.svg"
+                icon.source: "qrc:/data/images/icons/player_stop.svg"
                 display: AbstractButton.IconOnly
                 enabled: false
                 flat: true
@@ -223,7 +223,7 @@ Item {
             RoundButton {
                 id: buttonSettings
                 icon.color: Material.foreground
-                icon.source: "qrc:/images/icons/settings.svg"
+                icon.source: "qrc:/data/images/icons/settings.svg"
                 display: AbstractButton.IconOnly
                 enabled: true
                 flat: true

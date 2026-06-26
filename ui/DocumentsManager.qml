@@ -407,7 +407,7 @@ Window {
                     id: addButton
                     text: qsTr("Add")
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    icon.source: "qrc:/images/icons/add.svg"
+                    icon.source: "qrc:/data/images/icons/add.svg"
                     display: AbstractButton.TextBesideIcon
                     onClicked: {
                         dialogAddNew.open()
@@ -466,7 +466,7 @@ Window {
                     Button {
                         id: deleteButton
                         text: qsTr("Delete")
-                        icon.source: "qrc:/images/icons/delete.svg"
+                        icon.source: "qrc:/data/images/icons/delete.svg"
                         display: AbstractButton.TextBesideIcon
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         onClicked: {
@@ -495,7 +495,7 @@ Window {
                         id: editButton
                         text: qsTr("Edit")
                         enabled: false
-                        icon.source: "qrc:/images/icons/rename.svg"
+                        icon.source: "qrc:/data/images/icons/rename.svg"
                         display: AbstractButton.TextBesideIcon
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         onClicked: {
@@ -510,7 +510,7 @@ Window {
                         id: openButton
                         text: qsTr("Open")
                         enabled: false
-                        icon.source: "qrc:/images/icons/open.svg"
+                        icon.source: "qrc:/data/images/icons/open.svg"
                         display: AbstractButton.TextBesideIcon
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                         onClicked: {

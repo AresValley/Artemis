@@ -12,23 +12,23 @@ Page {
 
     function loadForecastReport(poseidon_data) {
         if (poseidon_data['FORCST']['SUMMARY']['G_REPORT'][0] === 1) {
-            imageAttentionGReport.source = "qrc:/images/icons/dialog_warn.svg"
+            imageAttentionGReport.source = "qrc:/data/images/icons/dialog_warn.svg"
         } else {
-            imageAttentionGReport.source = "qrc:/images/icons/dialog_info.svg"
+            imageAttentionGReport.source = "qrc:/data/images/icons/dialog_info.svg"
         }
         labelGReport.text = poseidon_data['FORCST']['SUMMARY']['G_REPORT'][1]
 
         if (poseidon_data['FORCST']['SUMMARY']['S_REPORT'][0] === 1) {
-            imageAttentionSReport.source = "qrc:/images/icons/dialog_warn.svg"
+            imageAttentionSReport.source = "qrc:/data/images/icons/dialog_warn.svg"
         } else {
-            imageAttentionSReport.source = "qrc:/images/icons/dialog_info.svg"
+            imageAttentionSReport.source = "qrc:/data/images/icons/dialog_info.svg"
         }
         labelSReport.text = poseidon_data['FORCST']['SUMMARY']['S_REPORT'][1]
 
         if (poseidon_data['FORCST']['SUMMARY']['R_REPORT'][0] === 1) {
-            imageAttentionRReport.source = "qrc:/images/icons/dialog_warn.svg"
+            imageAttentionRReport.source = "qrc:/data/images/icons/dialog_warn.svg"
         } else {
-            imageAttentionRReport.source = "qrc:/images/icons/dialog_info.svg"
+            imageAttentionRReport.source = "qrc:/data/images/icons/dialog_info.svg"
         }
         labelRReport.text = poseidon_data['FORCST']['SUMMARY']['R_REPORT'][1]
 

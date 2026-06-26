@@ -293,7 +293,7 @@ class ArtemisSignal():
             self.spectrum_path = self.db.media_dir / default_spectrum_filename
             self.spectrum_path = QUrl.fromLocalFile(self.spectrum_path.resolve())
         else:
-            self.spectrum_path = 'qrc:///images/spectrum_not_available.svg'
+            self.spectrum_path = 'qrc:///data/images/spectrum_not_available.svg'
 
         if default_audio != []:
             default_audio_filename = '{}.{}'.format(str(default_audio[0][0]), default_audio[0][1])

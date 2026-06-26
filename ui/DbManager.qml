@@ -264,7 +264,7 @@ Window {
                     Button {
                         id: deleteButton
                         text: qsTr("Delete")
-                        icon.source: "qrc:/images/icons/delete.svg"
+                        icon.source: "qrc:/data/images/icons/delete.svg"
                         display: AbstractButton.TextBesideIcon
                         enabled: false
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -280,7 +280,7 @@ Window {
                     Button {
                         id: renameButton
                         text: qsTr("Rename")
-                        icon.source: "qrc:/images/icons/rename.svg"
+                        icon.source: "qrc:/data/images/icons/rename.svg"
                         display: AbstractButton.TextBesideIcon
                         enabled: false
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -296,7 +296,7 @@ Window {
                     Button {
                         id: loadButton
                         text: qsTr("Load")
-                        icon.source: "qrc:/images/icons/load.svg"
+                        icon.source: "qrc:/data/images/icons/load.svg"
                         display: AbstractButton.TextBesideIcon
                         enabled: false
                         Layout.alignment: Qt.AlignRight | Qt.AlignVCenter

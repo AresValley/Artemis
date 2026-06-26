@@ -30,7 +30,7 @@ if [ -e "$file" ]; then
         echo "Exec=sh -c \"cd $DIR && ./app.bin\" " >> /home/$USER/.local/share/applications/artemis.desktop
         echo "Terminal=false" >> /home/$USER/.local/share/applications/artemis.desktop
         echo "Icon=artemis_icon" >> /home/$USER/.local/share/applications/artemis.desktop
-        sudo cp ./images/artemis_icon.svg /usr/share/icons/
+        sudo cp ./data/images/artemis_icon.svg /usr/share/icons/
         echo "Link Updated!"
     ;;
         r|R) 
@@ -48,7 +48,7 @@ else
     echo "Exec=sh -c \"cd $DIR && ./app.bin\" " >> /home/$USER/.local/share/applications/artemis.desktop
     echo "Terminal=false" >> /home/$USER/.local/share/applications/artemis.desktop
     echo "Icon=artemis_icon" >> /home/$USER/.local/share/applications/artemis.desktop
-    sudo cp ./images/artemis_icon.svg /usr/share/icons/
+    sudo cp ./data/images/artemis_icon.svg /usr/share/icons/
     echo "
     Link copied in: /home/$USER/.local/share/applications/artemis.desktop
     Icon copied in: /usr/share/icons/artemis_icon.svg

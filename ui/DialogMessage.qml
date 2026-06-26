@@ -27,15 +27,15 @@ Dialog {
             source: {
                 switch (messageType.toLowerCase()) {
                 case "question":
-                    return "qrc:///images/icons/dialog_quest.svg"
+                    return "qrc:///data/images/icons/dialog_quest.svg"
                 case "warn":
-                    return "qrc:///images/icons/dialog_warn.svg"
+                    return "qrc:///data/images/icons/dialog_warn.svg"
                 case "error":
-                    return "qrc:///images/icons/dialog_error.svg"
+                    return "qrc:///data/images/icons/dialog_error.svg"
                 case "info":
-                    return "qrc:///images/icons/dialog_info.svg"
+                    return "qrc:///data/images/icons/dialog_info.svg"
                 default:
-                    return "qrc:///images/icons/dialog_info.svg"
+                    return "qrc:///data/images/icons/dialog_info.svg"
                 }
             }
         }

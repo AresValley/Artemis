@@ -23,7 +23,7 @@ jobs:
         run: uv sync
 
       - name: Build and package
-        run: sh ./building/Linux/build_linux.sh
+        run: sh ./scripts/Linux/build_linux.sh
         shell: bash
 
       - name: Upload artifact

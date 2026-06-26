@@ -23,7 +23,7 @@ Dialog {
 
             sourceSize.height: 80
             sourceSize.width: 80
-            source: "qrc:///images/artemis_icon.svg"
+            source: "qrc:///data/images/artemis_icon.svg"
         }
 
         Label {

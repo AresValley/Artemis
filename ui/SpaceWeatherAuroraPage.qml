@@ -16,7 +16,7 @@ Page {
             if (exists) {
                 imageBox.source = "https://www.aresvalley.com/poseidon_engine/aurora.png"
             } else {
-                imageBox.source = "qrc:///images/artemis_not_available.svg"
+                imageBox.source = "qrc:///data/images/artemis_not_available.svg"
             }
         })
     }

@@ -23,7 +23,7 @@ Page {
             if (exists) {
                 imageBox.source = url
             } else {
-                imageBox.source = "qrc:///images/artemis_not_available.svg"
+                imageBox.source = "qrc:///data/images/artemis_not_available.svg"
             }
         })
     }

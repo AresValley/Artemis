@@ -177,7 +177,7 @@ Window {
                     id: deleteButton
                     visible: isNew ? false : true
                     text: qsTr("Delete")
-                    icon.source: "qrc:/images/icons/delete.svg"
+                    icon.source: "qrc:/data/images/icons/delete.svg"
                     display: AbstractButton.TextBesideIcon
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     onClicked: {
@@ -192,7 +192,7 @@ Window {
                 Button {
                     id: saveButton
                     text: qsTr("Save")
-                    icon.source: "qrc:/images/icons/save.svg"
+                    icon.source: "qrc:/data/images/icons/save.svg"
                     display: AbstractButton.TextBesideIcon
                     Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                     onClicked: {
