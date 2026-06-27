@@ -6,7 +6,6 @@ We pledge to make our community welcoming, safe, and equitable for all.
 
 We are committed to fostering an environment that respects and promotes the dignity, rights, and contributions of all individuals, regardless of characteristics including race, ethnicity, caste, color, age, physical characteristics, neurodiversity, disability, sex or gender, gender identity or expression, sexual orientation, language, philosophy or religion, national or social origin, socio-economic position, level of education, or other status. The same privileges of participation are extended to everyone who participates in good faith and in accordance with this Covenant.
 
-
 ## Encouraged Behaviors
 
 While acknowledging differences in social norms, we all strive to meet our community's expectations for positive behavior. We also understand that our words and actions may be interpreted differently than we intend based on culture, background, or native language.
@@ -20,7 +19,6 @@ With these considerations in mind, we agree to behave mindfully toward each othe
 5. Gracefully giving and accepting **constructive feedback**.
 6. Committing to **repairing harm** when it occurs.
 7. Behaving in other ways that promote and sustain the **well-being of our community**.
-
 
 ## Restricted Behaviors
 
@@ -41,7 +39,6 @@ We agree to restrict the following behaviors in our community. Instances, threat
 3. **Promotional materials**. Sharing marketing or other commercial content in a way that is outside the norms of the community.
 4. **Irresponsible communication.** Failing to responsibly present content which includes, links or describes any other restricted behaviors.
 
-
 ## Reporting an Issue
 
 Tensions can occur between community members even when they are trying their best to collaborate. Not every conflict represents a code of conduct violation, and this Code of Conduct reinforces encouraged behaviors and norms that can help avoid conflicts and minimize harm.
@@ -49,7 +46,6 @@ Tensions can occur between community members even when they are trying their bes
 When an incident does occur, it is important to report it promptly. Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the community leaders responsible for enforcement at [aresvalley.info@gmail.com](mailto:aresvalley.info@gmail.com)
 
 Community Moderators take reports of violations seriously and will make every effort to respond in a timely manner. They will investigate all reports of code of conduct violations, reviewing messages, logs, and recordings, or interviewing witnesses and other participants. Community Moderators will keep investigation and enforcement actions as transparent as possible while prioritizing safety and confidentiality. In order to honor these values, enforcement actions are carried out in private with the involved parties, but communicating to the whole community may be part of a mutually agreed upon resolution.
-
 
 ## Addressing and Repairing Harm
 
@@ -74,11 +70,9 @@ If an investigation by the Community Moderators finds that this Code of Conduct 
 
 This enforcement ladder is intended as a guideline. It does not limit the ability of Community Managers to use their discretion and judgment, in keeping with the best interests of our community.
 
-
 ## Scope
 
 This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing the community in public or other spaces. Examples of representing our community include using an official email address, posting via an official social media account, or acting as an appointed representative at an online or offline event.
-
 
 ## Attribution
 

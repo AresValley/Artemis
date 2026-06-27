@@ -2,9 +2,17 @@
 
 === ":fontawesome-brands-microsoft: Windows"
 
-    **Requirements:** Windows 8 or later
+    ## Installer
 
     Download the installer from the main website ([Aresvalley](https://aresvalley.com)) or from GitHub repository (in the Assets menu from the [:material-download: LATEST RELEASE](https://github.com/AresValley/Artemis/releases)) and follow the guided procedure to complete the installation process.
+
+    ## WinGet
+
+    To install Artemis with winget, use the following command:
+
+    ```
+    winget install -e --id AresValley.Artemis
+    ```
 
 === ":fontawesome-brands-linux: Linux"
 

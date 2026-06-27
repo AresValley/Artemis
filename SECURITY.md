@@ -4,10 +4,10 @@
 
 We actively monitor and patch security vulnerabilities. Only the latest stable version of Artemis is officially supported and receives security updates:
 
-| Version | Supported          |
+| Version | Supported |
 | ------- | ------------------ |
 | Latest Stable | :white_check_mark: |
-| Older Versions | :x:                |
+| Older Versions | :x: |
 
 *Note: We highly recommend always updating to the latest stable release of Artemis.*
 
