@@ -15,10 +15,11 @@ Artemis is an open-source project, and every contribution, no matter how small, 
 
     ---
 
-    Create a copy of the codebase from which you can modify and submit pull requests.
+    Before you start, please read our **[Contribution Guide](https://github.com/AresValley/Artemis/blob/master/CONTRIBUTING.md)** for the complete development workflow, coding guidelines, and pull request process.
 
+    Then, create a copy of the repository so you can make your changes and submit a pull request.
 
-    [:octicons-arrow-right-24: Fork the repo](https://github.com/AresValley/Artemis)
+    [:octicons-arrow-right-24: Read the Contribution Guide](https://github.com/AresValley/Artemis/blob/master/CONTRIBUTING.md)
 
 - :material-lightbulb-on: __Ideas?__
 
