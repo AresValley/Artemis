@@ -4,7 +4,7 @@ import requests
 from packaging.version import Version
 
 from artemis.utils.constants import Constants, Messages
-from artemis.utils.sys_utils import is_windows, is_linux, is_macos, delete_file, match_hash, unpack_tar, open_file
+from artemis.utils.sys_utils import is_windows, is_linux, is_macos, is_arm, is_x64, delete_file, match_hash, unpack_tar, open_file
 from artemis.utils.path_utils import DATA_DIR, TMP_DIR
 
 
@@ -53,8 +53,12 @@ class UpdateManager:
             self.remote_db_file_name = self.remote_db_url.split('/')[-1]
 
             if is_windows():
-                self.remote_artemis_version = latest_json['windows']['version']
-                self.remote_artemis_url = latest_json['windows']['url']
+                if is_x64():
+                    os_name = 'windows'
+                elif is_arm():
+                    os_name = 'windows-ARM64'
+                self.remote_artemis_version = latest_json[os_name]['version']
+                self.remote_artemis_url = latest_json[os_name]['url']
             elif is_linux():
                 self.remote_artemis_version = latest_json['linux']['version']
                 self.remote_artemis_url = latest_json['linux']['url']

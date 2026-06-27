@@ -10,14 +10,28 @@ from pathlib import Path
 from artemis.utils.constants import Messages
 
 
-def is_windows():
+def is_windows() -> bool:
+    """Checks if the current system OS is windows"""
     return platform.system() == 'Windows'
 
-def is_macos():
+def is_macos() -> bool:
+    """Checks if the current system OS is macos"""
     return platform.system() == 'Darwin'
 
-def is_linux():
+def is_linux() -> bool:
+    """Checks if the current system OS is linux"""
     return platform.system() == 'Linux'
+
+
+def is_arm() -> bool:
+    """Checks if the current system architecture is ARM-based."""
+    arch = platform.machine().lower()
+    return "arm" in arch or "aarch64" in arch
+
+def is_x64() -> bool:
+    """Checks if the current system architecture is x64-based."""
+    arch = platform.machine().lower()
+    return "x86_64" in arch or "amd64" in arch
 
 
 def open_file(file_path, timeout=3):
