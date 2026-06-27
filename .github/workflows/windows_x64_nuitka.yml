@@ -6,7 +6,7 @@ on:
       artemis_version:
         description: 'Version'
         required: true
-        default: '4.1.0'
+        default: '4.1.1'
         type: string
 
 jobs:

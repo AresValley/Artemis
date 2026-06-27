@@ -81,6 +81,21 @@
   <content_rating type="oars-1.0" />
 
   <releases>
+    <release version="4.1.1" date="2026-06-27">
+      <url type="details">https://github.com/AresValley/Artemis/releases/tag/v4.1.1</url>
+      <description>
+        <p>This release extends platform support, improves documentation, and includes maintenance updates and fixes.</p>
+        <ul>
+          <li>Extended support for Windows ARM64 architecture</li>
+          <li>Added .rpm and .deb packages for Linux x64</li>
+          <li>Artemis is now available directly on Flathub for Linux x64 and Linux ARM64</li>
+          <li>Added CONTRIBUTING.md, CODE_OF_CONDUCT.md, and SECURITY.md</li>
+          <li>Updated general dependencies</li>
+          <li>Migrated documentation from MkDocs to Zensical</li>
+          <li>Fixed automatic updates for Windows ARM64</li>
+        </ul>
+      </description>
+    </release>
     <release version="4.1.0" date="2024-10-20">
       <url type="details">https://github.com/AresValley/Artemis/releases/tag/v4.1.0</url>
       <description>

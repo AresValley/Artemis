@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "artemis"
-version = "4.1.0"
+version = "4.1.1"
 description = "Radio Signals Recognition Manual"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -24,7 +24,7 @@ config = ["*.conf"]
 [tool.briefcase]
 project_name = "Artemis"
 bundle = "com.aresvalley.artemis"
-version = "4.1.0"
+version = "4.1.1"
 url = "https://aresvalley.com"
 license = "GPL-3.0+"
 license-files = ["LICENSE"]

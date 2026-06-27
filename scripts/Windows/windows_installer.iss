@@ -1,5 +1,5 @@
 #define MyAppName "Artemis"
-#define MyAppVersion "4.1.0"
+#define MyAppVersion "4.1.1"
 #define MyAppPublisher "AresValley"
 #define MyAppURL "https://www.aresvalley.com/"
 #define MyAppExeName "artemis.exe"
@@ -18,7 +18,7 @@ LicenseFile=..\..\LICENSE
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=..\
 OutputBaseFilename=Artemis
-SetupIconFile=..\..\images\installer_icon.ico
+SetupIconFile=..\..\data\images\installer_icon.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 VersionInfoVersion={#MyAppVersion}

@@ -1,4 +1,4 @@
-$VERSION = "4.1.0"
+$VERSION = "4.1.1"
 
 Write-Output "Building Windows target"
 
@@ -32,6 +32,6 @@ uv run --python 3.13 nuitka `
   --windows-file-version=$VERSION `
   --windows-product-version=$VERSION `
   --windows-file-description=Artemis `
-  --windows-icon-from-ico=images\artemis_icon.ico
+  --windows-icon-from-ico=data\images\artemis_icon.ico
 
 Write-Output "Building Windows target finished."

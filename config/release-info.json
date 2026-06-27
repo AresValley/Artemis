@@ -6,19 +6,19 @@
     "total_bytes": 303667200
   },
   "windows": {
-    "version": "4.1.0",
-    "url": "https://github.com/AresValley/Artemis/releases/download/v4.1.0/Artemis-Windows-x86_64-4.1.0.exe"
+    "version": "4.1.1",
+    "url": "https://github.com/AresValley/Artemis/releases/download/v4.1.1/Artemis-Windows-x86_64-4.1.1.exe"
   },
   "windows-ARM64": {
-    "version": "4.1.0",
-    "url": "https://github.com/AresValley/Artemis/releases/download/v4.1.0/Artemis-Windows-arm64-4.1.0.msi"
+    "version": "4.1.1",
+    "url": "https://github.com/AresValley/Artemis/releases/download/v4.1.1/Artemis-Windows-arm64-4.1.1.msi"
   },
   "linux": {
-    "version": "4.1.0",
+    "version": "4.1.1",
     "url": ""
   },
   "mac": {
-    "version": "4.1.0",
+    "version": "4.1.1",
     "url": ""
   }
 }
