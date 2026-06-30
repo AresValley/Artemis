@@ -74,6 +74,8 @@ class UpdateManager:
                 self.db_update = True
             else:
                 self.db_update = False
+        else:
+            self.db_update = None
 
 
     def update(self, show_popup=False):
@@ -93,6 +95,13 @@ class UpdateManager:
 
             if self.art_update:
                 self._show_popup_art_update()
+
+            has_updates = bool(self.art_update or self.db_update or self.db_update is None)
+
+            if show_popup and not has_updates:
+                self._show_popup_up_to_date()
+
+            self._parent.set_update_available(has_updates)
 
         except requests.exceptions.RequestException as e:
             self.db_update = False
@@ -136,6 +145,7 @@ class UpdateManager:
             db_dir_name = str(uuid.uuid4())
             unpack_tar(latest_db_tar_path, DATA_DIR / db_dir_name)
             self._parent.load_db(db_dir_name)
+            self._parent.set_update_available(False)
             self._show_popup_db_download_complete()
         else:
             self._show_popup_db_hash_failed()
