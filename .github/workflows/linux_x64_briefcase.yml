@@ -1,4 +1,4 @@
-name: Build - Linux x64 (.rpm/.deb)
+name: Build - Linux x64 (.rpm/.deb/.pkg)
 on:
   workflow_dispatch:
 
@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ "Ubuntu-24.04", "Fedora-40" ]
+        target: [ "Ubuntu-24.04", "Fedora-40", "Arch-Linux" ]
         include:
           - target: "Ubuntu-24.04"
             platform: "Linux"
@@ -41,7 +41,7 @@ jobs:
             output-format: "system"
             runs-on: "ubuntu-latest"
             pre-command: "sudo apt -y install socat"
-            briefcase-args: "--target archlinux:latest"
+            briefcase-args: "--target archlinux:base-20241229.0.293060" 
 
     steps:
       - name: Checkout
