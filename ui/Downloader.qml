@@ -22,13 +22,14 @@ Window {
 
     title: qsTr("Artemis - Downloader")
 
-    signal onAbort()
+    signal abortRequested()
 
     onClosing: {
-        onAbort()
+        abortRequested()
     }
 
     function updateProgressBar(bytesReceived, bytesTotal) {
+        progressBar.indeterminate = false
         progressBar.value = bytesReceived
         progressBar.to = bytesTotal
     }
@@ -48,10 +49,7 @@ Window {
         ColumnLayout {
             id: columnLayout
             anchors.fill: parent
-            anchors.rightMargin: 10
-            anchors.leftMargin: 10
-            anchors.bottomMargin: 10
-            anchors.topMargin: 10
+            anchors.margins: 10
 
             Label {
                 text: qsTr("Downloading in progress...")
@@ -79,7 +77,7 @@ Window {
                 icon.source: "qrc:/data/images/icons/abort.svg"
                 display: AbstractButton.TextBesideIcon
                 flat: true
-                onClicked: { onAbort() }
+                onClicked: { abortRequested() }
             }
         }
     }

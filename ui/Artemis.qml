@@ -40,6 +40,7 @@ Window {
     signal importDb(string path)
 
     property var loadedList
+    property bool updateAvailable: false
 
     function populateList(signalsList) {
         loadedList = signalsList
@@ -324,11 +325,39 @@ Window {
 
             Menu {
                 id: aboutMenu
-                title: qsTr("Help")
+                title: window.updateAvailable ? qsTr("Help •") : qsTr("Help")
 
                 MenuItem {
-                    text: "Check for Updates"
-                    onClicked: {checkForUpdate()}
+                    id: checkForUpdatesItem
+                    onClicked: { checkForUpdate() }
+
+                    contentItem: RowLayout {
+                        spacing: 10
+
+                        Label {
+                            text: qsTr("Check for Updates")
+                            font: checkForUpdatesItem.font
+                            color: checkForUpdatesItem.enabled ? Material.foreground : Material.hintTextColor
+                            Layout.fillWidth: true
+                        }
+
+                        Rectangle {
+                            id: updateDot
+                            width: 8
+                            height: 8
+                            radius: 4
+                            color: Material.color(Material.Red)
+                            visible: window.updateAvailable // shows only if updates are available
+                            Layout.alignment: Qt.AlignVCenter
+
+                            SequentialAnimation on opacity {
+                                loops: Animation.Infinite
+                                running: window.updateAvailable
+                                NumberAnimation { from: 1.0; to: 0.4; duration: 250; easing.type: Easing.InOutQuad }
+                                NumberAnimation { from: 0.4; to: 1.0; duration: 500; easing.type: Easing.InOutQuad }
+                            }
+                        }
+                    }
                 }
 
                 MenuSeparator {}

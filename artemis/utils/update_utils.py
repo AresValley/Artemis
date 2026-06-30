@@ -28,82 +28,99 @@ class UpdateManager:
         self.remote_artemis_url = None
         self.remote_artemis_file_name = None
 
-        self.check_updates()
+        self.update()
 
 
-    def check_updates(self, show_popup=False):
-        """ Checks if a software or DB update is available.
-            Prioritize Artemis updates over the DB one.
+    def _get_meta(self):
+        latest_json = self.fetch_remote_json(Constants.LATEST_VERSION_URL)
 
-            Args:
-                show_popup (bool, optional): 
-                    If False, suppress the "already up-to-date" message on startup.
-                    Defaults to False. True is usefull when the user manual check for
-                    updates.
-        """
-        latest_json = self.fetch_remote_json(Constants.LATEST_VERSION_URL, show_popup)
-        if latest_json:
-            local_db = self._parent.dbmanager.get_latest_local_sigid_db()
-            remote_db = latest_json['sigID_DB']
+        if not latest_json:
+            self.db_update = False
+            self.art_update = False
+            return
 
-            self.remote_db_version = remote_db['version']
-            self.remote_db_url = remote_db['url']
-            self.remote_db_hash = remote_db['sha256_hash']
-            self.remote_db_size = remote_db['total_bytes']
-            self.remote_db_file_name = self.remote_db_url.split('/')[-1]
+        local_db = self._parent.dbmanager.get_latest_local_sigid_db()
+        remote_db = latest_json['sigID_DB']
 
-            if is_windows():
-                if is_x64():
-                    os_name = 'windows'
-                elif is_arm():
-                    os_name = 'windows-ARM64'
-                self.remote_artemis_version = latest_json[os_name]['version']
-                self.remote_artemis_url = latest_json[os_name]['url']
-            elif is_linux():
-                self.remote_artemis_version = latest_json['linux']['version']
-                self.remote_artemis_url = latest_json['linux']['url']
-            elif is_macos():
-                self.remote_artemis_version = latest_json['mac']['version']
-                self.remote_artemis_url = latest_json['mac']['url']
-            
-            self.remote_artemis_file_name = self.remote_artemis_url.split('/')[-1]
+        self.remote_db_version = remote_db['version']
+        self.remote_db_url = remote_db['url']
+        self.remote_db_hash = remote_db['sha256_hash']
+        self.remote_db_size = remote_db['total_bytes']
+        self.remote_db_file_name = self.remote_db_url.split('/')[-1]
 
-            if Version(self.remote_artemis_version) > Version(Constants.APPLICATION_VERSION):
-                self.art_update = True
+        if is_windows():
+            if is_x64():
+                os_name = 'windows'
+            elif is_arm():
+                os_name = 'windows-ARM64'
+            self.remote_artemis_version = latest_json[os_name]['version']
+            self.remote_artemis_url = latest_json[os_name]['url']
+        elif is_linux():
+            self.remote_artemis_version = latest_json['linux']['version']
+            self.remote_artemis_url = latest_json['linux']['url']
+        elif is_macos():
+            self.remote_artemis_version = latest_json['mac']['version']
+            self.remote_artemis_url = latest_json['mac']['url']
+
+        self.remote_artemis_file_name = self.remote_artemis_url.split('/')[-1]
+
+        if Version(self.remote_artemis_version) > Version(Constants.APPLICATION_VERSION):
+            self.art_update = True
+        else:
+            self.art_update = False         
+
+        if local_db:
+            if self.remote_db_version > local_db.version:
+                self.db_update = True
             else:
-                self.art_update = False         
-
-            if self.art_update:
-                self._show_popup_art_update()
-            else:
-                if local_db:
-                    if self.remote_db_version > local_db.version:
-                        self._show_popup_db_update()
-                    elif show_popup:
-                        self._show_popup_up_to_date()
-                else:
-                    self._show_popup_initial_db_download()
+                self.db_update = False
+        else:
+            self.db_update = None
 
 
-    def fetch_remote_json(self, url, show_popup=False):
-        """ Fetches the remote json from a url
+    def update(self, show_popup=False):
+        """ Main updating routine
 
             Args:
                 show_popup (bool, optional): If false, suppress any error message
                 Defaults to False (to avoid error if the program is used offline)
         """
         try:
-            response = requests.get(url)
-            response.raise_for_status()
-            return response.json()
+            self._get_meta()
+
+            if self.db_update:
+                self._show_popup_db_update()
+            elif self.db_update is None:
+                self._show_popup_initial_db_download()
+
+            if self.art_update:
+                self._show_popup_art_update()
+
+            has_updates = bool(self.art_update or self.db_update or self.db_update is None)
+
+            if show_popup and not has_updates:
+                self._show_popup_up_to_date()
+
+            self._parent.set_update_available(has_updates)
+
         except requests.exceptions.RequestException as e:
+            self.db_update = False
+            self.art_update = False
+
             if show_popup:
                 self._parent.dialog_popup(
                     Messages.DIALOG_TYPE_ERROR,
                     Messages.NO_CONNECTION,
                     Messages.NO_CONNECTION_MSG.format(e)
                 )
-            return None
+
+
+    def fetch_remote_json(self, url):
+        """ Fetches the remote json from a url
+        """
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        return response.json()
 
 
     def download_db(self):
@@ -128,6 +145,7 @@ class UpdateManager:
             db_dir_name = str(uuid.uuid4())
             unpack_tar(latest_db_tar_path, DATA_DIR / db_dir_name)
             self._parent.load_db(db_dir_name)
+            self._parent.set_update_available(False)
             self._show_popup_db_download_complete()
         else:
             self._show_popup_db_hash_failed()

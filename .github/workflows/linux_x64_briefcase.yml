@@ -36,6 +36,13 @@ jobs:
             pre-command: "sudo apt -y install socat"
             briefcase-args: "--target fedora:40"
 
+          - target: "Arch-Linux"
+            platform: "Linux"
+            output-format: "system"
+            runs-on: "ubuntu-latest"
+            pre-command: "sudo apt -y install socat"
+            briefcase-args: "--target archlinux:latest"
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6

@@ -220,7 +220,13 @@ class UIArtemis(QObject):
     def check_for_update(self):
         """ User manual check for updates updates
         """
-        self.update_manager.check_updates(True)
+        self.update_manager.update(show_popup=True)
+
+
+    def set_update_available(self, available):
+        """ Set the blinking light when updates are available
+        """
+        self._window.setProperty("updateAvailable", available)
 
 
     def dialog_download_db(self, message_type, title, message):

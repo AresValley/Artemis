@@ -5,6 +5,16 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added indicator if a DB and/or Artemis update is available on the main menu
+- Added native support and official packages for Arch Linux and derived distributions utilizing the pacman package manager.
+
+### Fixed
+
+- Download module has been refactored to mitigate bugs on edge cases
+- Resolved an issue where database updates were blocked if the application was not running the latest version [#76](https://github.com/AresValley/Artemis/issues/76)
+
 ## [4.1.1] - 2026-06-27
 
 ### Added
