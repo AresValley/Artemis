@@ -8,6 +8,7 @@
 ### Added
 
 - Added indicator if a DB and/or Artemis update is available on the main menu
+- Added native support and official packages for Arch Linux and derived distributions utilizing the pacman package manager.
 
 ### Fixed
 
