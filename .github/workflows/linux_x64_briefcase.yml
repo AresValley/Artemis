@@ -28,6 +28,7 @@ jobs:
             runs-on: "ubuntu-latest"
             pre-command: "sudo apt -y install socat"
             briefcase-args: "--target ubuntu:24.04"
+            python-version: "3.12"
 
           - target: "Fedora-40"
             platform: "Linux"
@@ -35,13 +36,15 @@ jobs:
             runs-on: "ubuntu-latest"
             pre-command: "sudo apt -y install socat"
             briefcase-args: "--target fedora:40"
+            python-version: "3.12"
 
           - target: "Arch-Linux"
             platform: "Linux"
             output-format: "system"
             runs-on: "ubuntu-latest"
             pre-command: "sudo apt -y install socat"
-            briefcase-args: "--target archlinux:base-20241229.0.293060" 
+            briefcase-args: "--target archlinux:latest" 
+            python-version: "3.14"
 
     steps:
       - name: Checkout
@@ -50,7 +53,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install Briefcase
         run: |
@@ -60,6 +63,15 @@ jobs:
       - name: Setup Environment
         run: |
           ${{ matrix.pre-command }}
+
+      - name: Prepare Changelog for Arch Linux
+        if: matrix.target == 'Arch-Linux'
+        run: |
+          if [ -f "CHANGELOG.md" ]; then
+            cp CHANGELOG.md CHANGELOG
+          else
+            touch CHANGELOG
+          fi
 
       - name: Build App
         run: |
