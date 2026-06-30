@@ -1,5 +1,3 @@
-import requests
-
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, Signal, QUrl, QSaveFile, QDir, QIODevice
 from PySide6.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
@@ -30,7 +28,7 @@ class UIDownloader(QObject):
         self.file_size = None
         self.dest_file = None
         self.file = None
-        self.manager = None
+        self.manager = QNetworkAccessManager(self)
         self.reply = None
 
         self._connect()
@@ -38,7 +36,7 @@ class UIDownloader(QObject):
 
     def _connect(self):
         # QML > Python connections
-        self._window.onAbort.connect(self.on_abort)
+        self._window.abortRequested.connect(self.on_abort)
 
         # Python > QML connections
         self.show_ui.connect(self._window.show)
@@ -59,15 +57,15 @@ class UIDownloader(QObject):
         self.show_ui.emit()
 
         self.file_url = QUrl(url)
-        self.file_size = self._get_filesize(url)
+        self.file_size = None
         dest_path = QDir(save_path)
         self.dest_file = dest_path.filePath(self.file_url.fileName())
         self.file = QSaveFile(self.dest_file)
 
         if self.file.open(QIODevice.WriteOnly):
             # Start a GET HTTP request
-            self.manager = QNetworkAccessManager(self)
             self.reply = self.manager.get(QNetworkRequest(self.file_url))
+            self.reply.metaDataChanged.connect(self.on_metadata_changed)
             self.reply.downloadProgress.connect(self.on_progress)
             self.reply.finished.connect(self.on_finished)
             self.reply.readyRead.connect(self.on_ready_read)
@@ -76,6 +74,21 @@ class UIDownloader(QObject):
             self.close_ui.emit()
             self.show_popup_error(self.file.errorString())
 
+    @Slot()
+    def on_metadata_changed(self):
+        """ Read the Content-Length header once the reply's metadata
+            becomes available. If the header is missing, leave
+            file_size as None and set the progress bar to
+            'indeterminate' mode instead.
+        """
+        if not self.reply:
+            return
+
+        content_length = self.reply.header(QNetworkRequest.ContentLengthHeader)
+        if content_length is not None:
+            self.file_size = int(content_length)
+        else:
+            self.set_indeterminate_bar.emit()
 
     @Slot()
     def on_abort(self):
@@ -83,9 +96,6 @@ class UIDownloader(QObject):
         """
         if self.reply:
             self.reply.abort()
-
-        if self.file:
-            self.file.cancelWriting()
 
 
     @Slot()
@@ -103,56 +113,57 @@ class UIDownloader(QObject):
             occurs, emits the finished signal usefull for
             a callback
         """
-        if self.reply:
-            self.reply.deleteLater()
+        if not self.reply:
+            return
+
+        has_error = self.reply.error() != QNetworkReply.NoError
 
         if self.file:
-            self.file.commit()
+            if not has_error:
+                self.file.commit()
+            else:
+                self.file.cancelWriting()
+
+        self.reply.deleteLater()
+        self.reply = None
         
-        if self.reply.error() == QNetworkReply.NoError:
+        if not has_error:
             self.finished.emit()
 
         self.close_ui.emit()
 
 
     @Slot(int, int)
-    def on_progress(self, bytesReceived: int):
+    def on_progress(self, bytesReceived: int, bytesTotal: int):
         """ Update progress bar and status label
+
+            Note: file_size (from the Content-Length header) may not be
+            populated yet on the very first call, since metaDataChanged
+            and the first downloadProgress signal can race. In that case
+            we fall back to bytesTotal for this tick only; file_size
+            takes over on subsequent calls once available.
         """
-        if self.file_size is not None:
-            self.update_status.emit("{:.1f} Mb / {:.1f} Mb".format(bytesReceived/10**6, self.file_size/10**6))
-            self.update_progress_bar.emit(bytesReceived, self.file_size)
+        total = self.file_size if self.file_size is not None else bytesTotal
+
+        if total > 0:
+            self.update_status.emit(f"{bytesReceived/10**6:.1f} Mb / {total/10**6:.1f} Mb")
+            self.update_progress_bar.emit(bytesReceived, total)
         else:
-            self.update_status.emit("{:.1f} Mb".format(bytesReceived/10**6))
+            self.update_status.emit(f"{bytesReceived/10**6:.1f} Mb")
 
 
     @Slot(QNetworkReply.NetworkError)
     def on_error(self, code: QNetworkReply.NetworkError):
         """ Show a message if an error happen during download
         """
+        if code == QNetworkReply.OperationCanceledError:
+            return
+
         if self.reply:
             self.close_ui.emit()
             self.show_popup_error(
                 self.reply.errorString()
             )
-
-
-    def _get_filesize(self, url):
-        """ Get the file size by sending a HEAD request to the URL.
-            If the Content-Length in HTTP headers is missing, returns None
-            and set the progress_bar as 'indeterminate' like a 'busy indicator'
-
-        Args:
-            url (str): URL to check the file size
-        """
-        try:
-            response = requests.get(url, stream=True)
-            size = int(response.headers.get('content-length'))
-            return size
-        except:
-            self.set_indeterminate_bar.emit()
-            return None
-
 
     def _clear_ui(self):
         self.update_progress_bar.emit(0, 0)
