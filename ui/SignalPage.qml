@@ -105,7 +105,6 @@ Page {
         locationList = []
         acfList = []
         descriptionTextArea.text = ""
-        bandBar.resetBandBar()
         audioPlayer.resetPlayer()
         image.source = "qrc:///data/images/spectrum_not_available.svg"
         lockMenu(true)

@@ -1,261 +1,112 @@
 import QtQuick
-import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Controls.Material
 
 Item {
+    id: root
     width: 400
     height: 20
 
-    function setBandBar(lof, upf) {
-        resetBandBar()
+    property real lastLof: -1
+    property real lastUpf: -1
+    property int selectedStart: -1
+    property int selectedEnd: -1
 
-        if (lof < 30) {
-            selector.anchors.left = rectangleELF.left
-        } else if (lof >= 30 && lof < 300) {
-            selector.anchors.left = rectangleSLF.left
-        } else if (lof >= 300 && lof < 3000) {
-            selector.anchors.left = rectangleULF.left
-        } else if (lof >= 3000 && lof < 30000) {
-            selector.anchors.left = rectangleVLF.left
-        } else if (lof >= 30000 && lof < 300000) {
-            selector.anchors.left = rectangleLF.left
-        } else if (lof >= 300000 && lof < 3000000) {
-            selector.anchors.left = rectangleMF.left
-        } else if (lof >= 3000000 && lof < 30000000) {
-            selector.anchors.left = rectangleHF.left
-        } else if (lof >= 30000000 && lof < 300000000) {
-            selector.anchors.left = rectangleVHF.left
-        } else if (lof >= 300000000 && lof < 3000000000) {
-            selector.anchors.left = rectangleUHF.left
-        } else if (lof >= 3000000000 && lof < 30000000000) {
-            selector.anchors.left = rectangleSHF.left
-        } else if (lof >= 30000000000 && lof < 300000000000) {
-            selector.anchors.left = rectangleEHF.left
-        }
-
-        if (upf < 30) {
-            selector.anchors.right = rectangleELF.right
-        } else if (upf >= 30 && upf < 300) {
-            selector.anchors.right = rectangleSLF.right
-        } else if (upf >= 300 && upf < 3000) {
-            selector.anchors.right = rectangleULF.right
-        } else if (upf >= 3000 && upf < 30000) {
-            selector.anchors.right = rectangleVLF.right
-        } else if (upf >= 30000 && upf < 300000) {
-            selector.anchors.right = rectangleLF.right
-        } else if (upf >= 300000 && upf < 3000000) {
-            selector.anchors.right = rectangleMF.right
-        } else if (upf >= 3000000 && upf < 30000000) {
-            selector.anchors.right = rectangleHF.right
-        } else if (upf >= 30000000 && upf < 300000000) {
-            selector.anchors.right = rectangleVHF.right
-        } else if (upf >= 300000000 && upf < 3000000000) {
-            selector.anchors.right = rectangleUHF.right
-        } else if (upf >= 3000000000 && upf < 30000000000) {
-            selector.anchors.right = rectangleSHF.right
-        } else if (upf >= 30000000000 && upf < 300000000000) {
-            selector.anchors.right = rectangleEHF.right
-        }
+    function bandIndex(freq) {
+        if (freq < 30) return 0
+        if (freq < 300) return 1
+        if (freq < 3000) return 2
+        if (freq < 30000) return 3
+        if (freq < 300000) return 4
+        if (freq < 3000000) return 5
+        if (freq < 30000000) return 6
+        if (freq < 300000000) return 7
+        if (freq < 3000000000) return 8
+        if (freq < 30000000000) return 9
+        return 10
     }
 
-    function resetBandBar() {
-        selector.anchors.left = container.left
-        selector.anchors.right = container.left
+    // Return "black" o "white" based on the luminance
+    function contrastTextColor(color) {
+        let luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b
+        return luminance > 0.55 ? "black" : "white"
+    }
+
+    function setBandBar(lof, upf) {
+        lastLof = lof
+        lastUpf = upf
+
+        if (container.width <= 0) return
+
+        let start = bandIndex(lof)
+        let end = bandIndex(upf)
+        selectedStart = start
+        selectedEnd = end
+
+        let step = container.width / 11
+        selector.x = start * step
+        selector.width = Math.max(step, (end - start + 1) * step)
     }
 
     Rectangle {
         id: container
-        radius: 13
         anchors.fill: parent
+        radius: 13
+
+        onWidthChanged: {
+            if (width > 0 && root.lastLof !== -1) {
+                root.setBandBar(root.lastLof, root.lastUpf)
+            }
+        }
+
         gradient: Gradient {
             orientation: Gradient.Horizontal
-            GradientStop {
-                position: 0
-                color: "#1a000000"
-            }
-            GradientStop {
-                position: 0.5
-                color: "#26000000"
-            }
-            GradientStop {
-                position: 1
-                color: "#1a000000"
-            }
-        }
-
-        Rectangle {
-            id: rectangleELF
-            width: parent.width/11
-            anchors.left: parent.left
-            anchors.right: rectangleSLF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("ELF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleSLF
-            width: parent.width/11
-            anchors.right: rectangleULF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("SLF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleULF
-            width: parent.width/11
-            anchors.right: rectangleVLF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("ULF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleVLF
-            width: parent.width/11
-            anchors.right: rectangleLF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("VLF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleLF
-            width: parent.width/11
-            anchors.right: rectangleMF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("LF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleMF
-            width: parent.width/11
-            anchors.right: rectangleHF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("MF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleHF
-            width: parent.width/11
-            anchors.right: rectangleVHF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("HF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleVHF
-            width: parent.width/11
-            anchors.right: rectangleUHF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("VHF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleUHF
-            width: parent.width/11
-            anchors.right: rectangleSHF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("UHF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleSHF
-            width: parent.width/11
-            anchors.right: rectangleEHF.left
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("SHF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
-
-        Rectangle {
-            id: rectangleEHF
-            width: parent.width/11
-            anchors.right: parent.right
-            height: 20
-            color: "#00ffffff"
-            Label {
-                text: qsTr("EHF")
-                font.bold: true
-                anchors.fill: parent
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            GradientStop { position: 0.0; color: "#1a000000" }
+            GradientStop { position: 0.5; color: "#3d000000" }
+            GradientStop { position: 1.0; color: "#1a000000" }
         }
 
         Rectangle {
             id: selector
-            height: 20
-            color: Material.accent
+            height: parent.height
+            x: 0
+            width: 0
             radius: 10
-            z: -1
+            color: Material.accent
+            z: 0
+            Behavior on x {
+                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+            }
+            Behavior on width {
+                NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+            }
+        }
+
+        Row {
+            anchors.fill: parent
+            spacing: 0
+            Repeater {
+                model: ["ELF","SLF","ULF","VLF","LF","MF","HF","VHF","UHF","SHF","EHF"]
+                delegate: Rectangle {
+                    width: container.width / 11
+                    height: container.height
+                    color: "transparent"
+                    Label {
+                        anchors.fill: parent
+                        text: modelData
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.bold: true
+                        color: (index >= root.selectedStart && index <= root.selectedEnd)
+                            ? root.contrastTextColor(Material.accent)
+                            : Material.foreground
+
+                        Behavior on color {
+                            ColorAnimation { duration: 200 }
+                        }
+                    }
+                }
+            }
         }
     }
 }
