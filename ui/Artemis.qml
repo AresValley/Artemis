@@ -657,7 +657,7 @@ Window {
                                 anchors.verticalCenter: parent.verticalCenter
 
                                 color: listView.currentIndex === index ? contrastTextColor(Material.accent) : Material.foreground
-                                font.weight: listView.currentIndex === index ? Font.Medium : Font.Normal
+                                font.weight: listView.currentIndex === index ? Font.Bold : Font.Normal
                                 elide: Text.ElideRight
                             }
 
