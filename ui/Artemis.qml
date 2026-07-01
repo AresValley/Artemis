@@ -5,6 +5,8 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
+import './components' as UIComponents
+
 
 Window {
     id: window
@@ -35,9 +37,11 @@ Window {
     signal newDb(string name)
     signal exportDb(string path)
     signal importDb(string path)
+    signal applyFilter(var filterDict)
 
     // MARK: Properties
     property var loadedList: []
+    property var filterDict: ({})
     property bool updateAvailable: false
 
     // MARK: Functions
@@ -126,6 +130,147 @@ Window {
         dialogUpdateArtemis.message = message
         dialogUpdateArtemis.autoUpdate = auto
         dialogUpdateArtemis.open()
+    }
+
+    function populateFilterLists(data) {
+        if (data && data.length > 0) {
+            if (data[0].location) filterLocation.populate(data[0].location);
+            if (data[0].category) filterCategory.populate(data[0].category);
+            if (data[0].modulation) filterModulation.populate(data[0].modulation);
+        }
+    }
+
+    function submitFilters() {
+        applyFilter(filterDict);
+    }
+
+    function resetFilters() {
+        filterLocation.resetToDefault();
+        filterCategory.resetToDefault();
+        filterModulation.resetToDefault();
+        filterFrequency.resetToDefault();
+        filterACF.resetToDefault();
+        filterBandwidth.resetToDefault();
+        applyFilter({});
+    }
+
+    function anyFilterActive() {
+        return filterLocation.isFilterActive || 
+            filterCategory.isFilterActive || 
+            filterModulation.isFilterActive ||
+            filterFrequency.isFilterActive ||
+            filterBandwidth.isFilterActive ||
+            filterACF.isFilterActive
+    }
+
+    // Return "black" o "white" based on the luminance
+    function contrastTextColor(color) {
+        let luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b
+        return luminance > 0.55 ? "black" : "white"
+    }
+
+    // MARK: FILTERS
+    UIComponents.FilterRangeDialog {
+        id: filterFrequency
+        objectName: "frequencyDialogObj"
+        title: qsTr("Filter by Frequency")
+        field_label: qsTr("Frequency")
+
+        onFilterApplied: function(lowerBand, upperBand) {
+            if (isFilterActive && lowerBand !== null && upperBand !== null) {
+                filterDict["frequency"] = {
+                    lower_band: lowerBand,
+                    upper_band: upperBand
+                }
+            } else {
+                delete filterDict["frequency"]
+            }
+            submitFilters()
+        }
+    }
+
+    UIComponents.FilterRangeDialog {
+        id: filterBandwidth
+        objectName: "bandwidthDialogObj"
+        title: qsTr("Filter by Bandwidth")
+        field_label: qsTr("Bandwidth")
+
+        onFilterApplied: function(lowerBand, upperBand) {
+            if (isFilterActive && lowerBand !== null && upperBand !== null) {
+                filterDict["bandwidth"] = {
+                    lower_band: lowerBand,
+                    upper_band: upperBand
+                }
+            } else {
+                delete filterDict["bandwidth"]
+            }
+            submitFilters()
+        }
+    }
+
+    UIComponents.FilterRangeDialog {
+        id: filterACF
+        objectName: "acfDialogObj"
+        title: qsTr("Filter by ACF")
+        field_label: qsTr("ACF")
+        isTimeField: true
+
+        onFilterApplied: function(lowerBand, upperBand) {
+            if (isFilterActive && lowerBand !== null && upperBand !== null) {
+                filterDict["acf"] = {
+                    lower_band: lowerBand,
+                    upper_band: upperBand
+                }
+            } else {
+                delete filterDict["acf"]
+            }
+            submitFilters()
+        }
+    }
+
+    UIComponents.FilterListDialog {
+        id: filterLocation
+        objectName: "locationDialogObj"
+        title: qsTr("Filter by Location")
+        
+        onFilterApplied: function(selectedValues) {
+            if (isFilterActive && selectedValues && selectedValues.length > 0) {
+                filterDict["location"] = selectedValues;
+            } else {
+                delete filterDict["location"];
+            }
+            submitFilters();
+        }
+    }
+
+    UIComponents.FilterListDialog {
+        id: filterCategory
+        objectName: "categoryDialogObj"
+        title: qsTr("Filter by Category")
+        
+        onFilterApplied: function(selectedValues) {
+            if (isFilterActive && selectedValues && selectedValues.length > 0) {
+                filterDict["category"] = selectedValues;
+            } else {
+                delete filterDict["category"];
+            }
+            submitFilters();
+        }
+    }
+
+    UIComponents.FilterListDialog {
+        id: filterModulation
+        objectName: "modulationDialogObj"
+        title: qsTr("Filter by Modulation")
+        
+        onFilterApplied: function(selectedValues) {
+            if (isFilterActive && selectedValues && selectedValues.length > 0) {
+                filterDict["modulation"] = selectedValues;
+            } else {
+                delete filterDict["modulation"];
+            }
+            submitFilters();
+        }
     }
 
     // MARK: Dialogs
@@ -219,6 +364,32 @@ Window {
             background: Rectangle {
                     color: Material.backgroundColor
                 }
+
+            delegate: MenuBarItem {
+                id: menuBarItem
+                contentItem: Label {
+                    text: menuBarItem.text
+                    font: menuBarItem.font
+                    color: (menuBarItem.menu === filterMenu && anyFilterActive()) ? Material.color(Material.Red) : Material.foreground
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+
+                    SequentialAnimation on opacity {
+                        id: pulseAnimation
+                        running: menuBarItem.menu === filterMenu && anyFilterActive()
+                        loops: Animation.Infinite
+
+                        NumberAnimation { to: 0.5; duration: 250; easing.type: Easing.InOutQuad }
+                        NumberAnimation { to: 1.0; duration: 500; easing.type: Easing.InOutQuad }
+
+                        onRunningChanged: {
+                            if (!running)
+                                menuBarItem.contentItem.opacity = 1.0
+                        }
+                    }
+                }
+            }
+
             Menu {
                 title: qsTr("File")
                 MenuItem { text: "New Database..."; onClicked: dialogNewDb.open() }
@@ -231,7 +402,7 @@ Window {
                 MenuSeparator {}
                 MenuItem { id: openFileMenu; text: "Open Database Folder"; onClicked: openDbDirectory(); enabled: false }
                 MenuItem { text: "Preferences"; onClicked: showPref() }
-                MenuItem { text: "Exit"; onClicked: window.close() }
+                MenuItem { text: "Exit"; onClicked: close() }
             }
 
             Menu {
@@ -255,41 +426,131 @@ Window {
             }
 
             Menu {
+                id: filterMenu
+                title: anyFilterActive() ? qsTr("Filter ●") : qsTr("Filter")
+
+                MenuItem {
+                    text: qsTr("Frequency")
+                    onClicked: filterFrequency.open()
+
+                    contentItem: Label {
+                        text: filterFrequency.isFilterActive
+                            ? qsTr("Frequency ●")
+                            : qsTr("Frequency")
+
+                        color: filterFrequency.isFilterActive
+                            ? Material.color(Material.Red)
+                            : Material.foreground
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("Bandwidth")
+                    onClicked: filterBandwidth.open()
+
+                    contentItem: Label {
+                        text: filterBandwidth.isFilterActive
+                            ? qsTr("Bandwidth ●")
+                            : qsTr("Bandwidth")
+
+                        color: filterBandwidth.isFilterActive
+                            ? Material.color(Material.Red)
+                            : Material.foreground
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("ACF")
+                    onClicked: filterACF.open()
+
+                    contentItem: Label {
+                        text: filterACF.isFilterActive
+                            ? qsTr("ACF ●")
+                            : qsTr("ACF")
+
+                        color: filterACF.isFilterActive
+                            ? Material.color(Material.Red)
+                            : Material.foreground
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("Modulation")
+                    onClicked: filterModulation.open()
+
+                    contentItem: Label {
+                        text: filterModulation.isFilterActive
+                            ? qsTr("Modulation ●")
+                            : qsTr("Modulation")
+
+                        color: filterModulation.isFilterActive
+                            ? Material.color(Material.Red)
+                            : Material.foreground
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("Category")
+                    onClicked: filterCategory.open()
+
+                    contentItem: Label {
+                        text: filterCategory.isFilterActive
+                            ? qsTr("Category ●")
+                            : qsTr("Category")
+
+                        color: filterCategory.isFilterActive
+                            ? Material.color(Material.Red)
+                            : Material.foreground
+                    }
+                }
+
+                MenuItem {
+                    text: qsTr("Location")
+                    onClicked: filterLocation.open()
+
+                    contentItem: Label {
+                        text: filterLocation.isFilterActive
+                            ? qsTr("Location ●")
+                            : qsTr("Location")
+
+                        color: filterLocation.isFilterActive
+                            ? Material.color(Material.Red)
+                            : Material.foreground
+                    }
+                }
+
+                MenuSeparator {}
+
+                MenuItem {
+                    id: resetFilterMenu
+                    enabled: true
+                    text: "Reset all filters"
+                    onClicked: {resetFilters()}
+                } 
+            }
+
+            Menu {
                 title: qsTr("Space Weather")
                 MenuItem { text: "Check Report"; onClicked: showSpaceWeather() }
             }
 
             Menu {
                 id: aboutMenu
-                title: window.updateAvailable ? qsTr("Help •") : qsTr("Help")
+                title: updateAvailable ? qsTr("Help ●") : qsTr("Help")
 
                 MenuItem {
                     id: checkForUpdatesItem
                     onClicked: checkForUpdate()
-                    contentItem: RowLayout {
-                        spacing: 10
-                        Label {
-                            text: qsTr("Check for Updates")
-                            font: checkForUpdatesItem.font
-                            color: checkForUpdatesItem.enabled ? Material.foreground : Material.hintTextColor
-                            Layout.fillWidth: true
-                        }
-                        Rectangle {
-                            id: updateDot
-                            width: 8
-                            height: 8
-                            radius: 4
-                            color: Material.color(Material.Red)
-                            visible: window.updateAvailable
-                            Layout.alignment: Qt.AlignVCenter
+                    text: qsTr("Check for Updates")
 
-                            SequentialAnimation on opacity {
-                                loops: Animation.Infinite
-                                running: window.updateAvailable
-                                NumberAnimation { from: 1.0; to: 0.4; duration: 250; easing.type: Easing.InOutQuad }
-                                NumberAnimation { from: 0.4; to: 1.0; duration: 500; easing.type: Easing.InOutQuad }
-                            }
-                        }
+                    contentItem: Label {
+                        text: checkForUpdatesItem.enabled
+                            ? qsTr("Check for Updates ●")
+                            : qsTr("Check for Updates")
+
+                        color: checkForUpdatesItem.enabled
+                            ? Material.color(Material.Red)
+                            : Material.foreground
                     }
                 }
 
@@ -361,7 +622,7 @@ Window {
                         id: listView
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        highlightMoveDuration: 100
+                        highlightMoveDuration: 0
                         clip: true
                         ScrollBar.vertical: bar
 
@@ -395,7 +656,7 @@ Window {
                                 anchors.rightMargin: 8      
                                 anchors.verticalCenter: parent.verticalCenter
 
-                                color: listView.currentIndex === index ? Material.background : Material.foreground
+                                color: listView.currentIndex === index ? contrastTextColor(Material.accent) : Material.foreground
                                 font.weight: listView.currentIndex === index ? Font.Medium : Font.Normal
                                 elide: Text.ElideRight
                             }
@@ -419,35 +680,11 @@ Window {
             }
 
             // MARK: Right panel
-            ColumnLayout {
-                SplitView.fillWidth: true 
+            SignalPage {
+                id: signalPage
+                SplitView.fillWidth: true
+                Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: 5
-
-                TabBar {
-                    id: tabBar
-                    Layout.fillWidth: true
-                    TabButton { text: qsTr("SIGNAL") }
-                    TabButton { text: qsTr("FILTERS") }
-                }
-
-                StackLayout {
-                    currentIndex: tabBar.currentIndex
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-
-                    SignalPage {
-                        id: signalPage
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                    }
-
-                    FilterPage {
-                        id: filterPage
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true
-                    }
-                }
             }
         }
     }

@@ -35,7 +35,6 @@
         <file>ui/SignalEditor.qml</file>
         <file>ui/CategoryEditor.qml</file>
 
-        <file>ui/FilterPage.qml</file>
         <file>ui/SignalPage.qml</file>
         <file>ui/SpaceWeatherCurrentPage.qml</file>
         <file>ui/SpaceWeatherForecastPage.qml</file>
@@ -50,5 +49,7 @@
         <file>ui/components/AIndexLight.qml</file>
         <file>ui/components/AudioPlayer.qml</file>
         <file>ui/components/BandBar.qml</file>
+        <file>ui/components/FilterListDialog.qml</file>
+        <file>ui/components/FilterRangeDialog.qml</file>
     </qresource>
 </RCC>
