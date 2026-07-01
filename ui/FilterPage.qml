@@ -6,7 +6,6 @@ import QtQuick.Layouts
 
 Page {
     id: filterPage
-    anchors.fill: parent
     objectName: "filterPageObj"
 
     signal applyFilter(var filterDict)

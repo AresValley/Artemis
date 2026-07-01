@@ -8,7 +8,6 @@ import './components' as UIComponents
 
 Page {
     id: signalPage
-    anchors.fill: parent
     objectName: "signalPageObj"
 
     signal openDocManager()

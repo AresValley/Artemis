@@ -10,21 +10,18 @@ Window {
     id: window
     width: 1100
     height: 800
+    title: qsTr("Artemis")
+    visible: true
+    
+    modality: Qt.ApplicationModal
+    flags: Qt.Window
 
     Component.onCompleted: {
         x = Screen.width / 2 - width / 2
         y = Screen.height / 2 - height / 2
     }
 
-    title: qsTr("Artemis")
-    visible: true
-    
-    modality: Qt.ApplicationModal
-    flags: Qt.Window
-    
-    // Windows without upper bar
-    //flags: Qt.FramelessWindowHint
-
+    // MARK: Signals
     signal loadSignal(int signalId)
     signal showPref()
     signal showDBmanager()
@@ -39,15 +36,16 @@ Window {
     signal exportDb(string path)
     signal importDb(string path)
 
-    property var loadedList
+    // MARK: Properties
+    property var loadedList: []
     property bool updateAvailable: false
 
+    // MARK: Functions
     function populateList(signalsList) {
         loadedList = signalsList
         textFieldSearch.enabled = true
         var currentIndex = listView.currentIndex
         refreshList()
-        // Set the currentIndex back after refreshing the list
         if (currentIndex >= 0 && currentIndex < listModel.count) {
             listView.currentIndex = currentIndex
         }
@@ -55,12 +53,21 @@ Window {
 
     function refreshList() {
         listModel.clear()
-        for (var i = 0; i < loadedList.length; i++) {
-            var name = loadedList[i].name.toLowerCase()
-            var description = loadedList[i].description.toLowerCase()
-            var search = textFieldSearch.text.toLowerCase()
-            if (name.includes(search) || description.includes(search)) {
+        if (!loadedList) return
+
+        var search = textFieldSearch.text.toLowerCase().trim()
+
+        if (search === "") {
+            for (var i = 0; i < loadedList.length; i++) {
                 listModel.append(loadedList[i])
+            }
+        } else {
+            for (var j = 0; j < loadedList.length; j++) {
+                var name = loadedList[j].name ? loadedList[j].name.toLowerCase() : ""
+                var description = loadedList[j].description ? loadedList[j].description.toLowerCase() : ""
+                if (name.includes(search) || description.includes(search)) {
+                    listModel.append(loadedList[j])
+                }
             }
         }
         itemChangedList()
@@ -68,8 +75,8 @@ Window {
 
     function itemChangedList() {
         var selected_sig = listModel.get(listView.currentIndex)
-        if (selected_sig !== undefined) {
-            loadSignal(listModel.get(listView.currentIndex).SIG_ID)
+        if (selected_sig !== undefined && selected_sig !== null) {
+            loadSignal(selected_sig.SIG_ID)
             editSignalMenu.enabled = true
         } else {
             editSignalMenu.enabled = false
@@ -84,28 +91,18 @@ Window {
     }
 
     function lockMenu(toggle) {
-        if (toggle) {
-            openFileMenu.enabled = false
-            exportFileMenu.enabled = false
-            newSignalMenu.enabled = false
-            editCategoryMenu.enabled = false
-        } else {
-            openFileMenu.enabled = true
-            exportFileMenu.enabled = true
-            newSignalMenu.enabled = true
-            editCategoryMenu.enabled = true
-        }
+        openFileMenu.enabled = !toggle
+        exportFileMenu.enabled = !toggle
+        newSignalMenu.enabled = !toggle
+        editCategoryMenu.enabled = !toggle
     }
 
     function bottomInfoBar(message, messageType) {
         bottomInfoLabel.text = message
-        switch (messageType) {
-        case "warning":
+        if (messageType === "warning") {
             bottomInfoLabel.color = Material.color(Material.Red)
-            break
-        case "info":
+        } else {
             bottomInfoLabel.color = Material.foreground
-            break
         }
     }
 
@@ -131,25 +128,19 @@ Window {
         dialogUpdateArtemis.open()
     }
 
+    // MARK: Dialogs
     DialogMessage {
         id: dialogDownloadDb
         modal: true
-
         standardButtons: Dialog.Cancel | Dialog.Yes
-
-        onAccepted: {
-            updateDb()
-        }
+        onAccepted: updateDb()
     }
 
     DialogMessage {
         id: dialogUpdateArtemis
         modal: true
-
         property bool autoUpdate
-
         standardButtons: Dialog.Cancel | Dialog.Yes
-
         onAccepted: {
             if (autoUpdate) {
                 updateArtemis();
@@ -162,26 +153,23 @@ Window {
     DialogMessage {
         id: dialogGeneral
         modal: true
-
         standardButtons: Dialog.Ok
     }
 
     Dialog {
         id: dialogNewDb
-
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-
         modal: true
         closePolicy: Popup.NoAutoClose
-
         standardButtons: Dialog.Ok | Dialog.Cancel
 
         ColumnLayout {
             anchors.fill: parent
+            spacing: 10
             Label {
                 text: qsTr("Enter the name of the new database:")
-                Layout.bottomMargin: 15
+                Layout.bottomMargin: 5
                 font.pointSize: 12
             }
             TextField {
@@ -190,9 +178,9 @@ Window {
                 placeholderText: qsTr("Name")
             }
         }
-
         onAccepted: {
             newDb(newDbName.text)
+            newDbName.clear()
         }
     }
 
@@ -201,10 +189,7 @@ Window {
         title: "Please choose a save folder..."
         fileMode: FileDialog.SaveFile
         nameFilters: ["All files (*)"]
-
-        onAccepted: {
-            exportDb(selectedFile)
-        }
+        onAccepted: exportDb(selectedFile)
     }
 
     FileDialog {
@@ -212,21 +197,18 @@ Window {
         title: "Please choose a valid tar.gz archive..."
         fileMode: FileDialog.OpenFile
         nameFilters: ["All files (*)"]
-
-        onAccepted: {
-            importDb(selectedFile)
-        }
+        onAccepted: importDb(selectedFile)
     }
 
     About {
         id: aboutDialog
     }
 
+    // MARK: Main UI Layout
     Page {
         anchors.fill: parent
         leftPadding: 10
         bottomPadding: 10
-
         focus: true
 
         Keys.onDownPressed: listView.incrementCurrentIndex()
@@ -234,93 +216,47 @@ Window {
 
         header: MenuBar {
             id: topBar
-
+            background: Rectangle {
+                    color: Material.backgroundColor
+                }
             Menu {
                 title: qsTr("File")
-
-                MenuItem {
-                    text: "New Database..."
-                    onClicked: {dialogNewDb.open()}
-                }
-
-                MenuItem {
-                    text: "Load Database..."
-                    onClicked: {showDBmanager()}
-                }
-
+                MenuItem { text: "New Database..."; onClicked: dialogNewDb.open() }
+                MenuItem { text: "Load Database..."; onClicked: showDBmanager() }
                 MenuSeparator {}
-
-                MenuItem {
-                    id: importFileMenu
-                    text: "Import Database"
-                    onClicked: {importDialog.open()}
-                }
-
-                MenuItem {
-                    id: exportFileMenu
-                    text: "Export Database"
-                    onClicked: {exportDialog.open()}
-                    enabled: false
-                }
-
+                MenuItem { id: importFileMenu; text: "Import Database"; onClicked: importDialog.open() }
+                MenuItem { id: exportFileMenu; text: "Export Database"; onClicked: exportDialog.open(); enabled: false }
                 MenuSeparator {}
-
-                MenuItem {
-                    id: editCategoryMenu
-                    text: "Edit Tags"
-                    onClicked: {showCatManager()}
-                    enabled: false
-                }
-
+                MenuItem { id: editCategoryMenu; text: "Edit Tags"; onClicked: showCatManager(); enabled: false }
                 MenuSeparator {}
-
-                MenuItem {
-                    id: openFileMenu
-                    text: "Open Database Folder"
-                    onClicked: {openDbDirectory()}
-                    enabled: false
-                }
-
-                MenuItem {
-                    text: "Preferences"
-                    onClicked: {showPref()}
-                }
-
-                MenuItem {
-                    text: "Exit"
-                    onClicked: {window.close()}
-                }
-
+                MenuItem { id: openFileMenu; text: "Open Database Folder"; onClicked: openDbDirectory(); enabled: false }
+                MenuItem { text: "Preferences"; onClicked: showPref() }
+                MenuItem { text: "Exit"; onClicked: window.close() }
             }
 
             Menu {
                 id: signalMenu
                 title: qsTr("Signal")
-
                 MenuItem {
                     id: newSignalMenu
                     enabled: false
                     text: "New.."
-                    onClicked: {openSigEditor('Signal', [], true)}
+                    onClicked: openSigEditor('Signal', [], true)
                 }
-
                 MenuItem {
                     id: editSignalMenu
                     enabled: false
                     text: "Edit..."
-                    onClicked: {openSigEditor('Signal', [], false)}
+                    onClicked: {
+                        var currentSig = listModel.get(listView.currentIndex)
+                        if (currentSig) openSigEditor('Signal', currentSig, false)
+                    }
                 }
             }
 
             Menu {
                 title: qsTr("Space Weather")
-
-                MenuItem {
-                    text: "Check Report"
-                    onClicked: {
-                        showSpaceWeather()
-                    }
-                }
+                MenuItem { text: "Check Report"; onClicked: showSpaceWeather() }
             }
 
             Menu {
@@ -329,25 +265,22 @@ Window {
 
                 MenuItem {
                     id: checkForUpdatesItem
-                    onClicked: { checkForUpdate() }
-
+                    onClicked: checkForUpdate()
                     contentItem: RowLayout {
                         spacing: 10
-
                         Label {
                             text: qsTr("Check for Updates")
                             font: checkForUpdatesItem.font
                             color: checkForUpdatesItem.enabled ? Material.foreground : Material.hintTextColor
                             Layout.fillWidth: true
                         }
-
                         Rectangle {
                             id: updateDot
                             width: 8
                             height: 8
                             radius: 4
                             color: Material.color(Material.Red)
-                            visible: window.updateAvailable // shows only if updates are available
+                            visible: window.updateAvailable
                             Layout.alignment: Qt.AlignVCenter
 
                             SequentialAnimation on opacity {
@@ -385,13 +318,7 @@ Window {
                 }
 
                 MenuSeparator {}
-
-                MenuItem {
-                    text: "About"
-                    onClicked: {
-                        aboutDialog.open()
-                    }
-                }
+                MenuItem { text: "About"; onClicked: aboutDialog.open() }
             }
         }
 
@@ -403,94 +330,122 @@ Window {
             bottomPadding: 5
         }
 
-        RowLayout {
+        SplitView {
+            id: mainSplitView
             anchors.fill: parent
-            spacing: 10
+            orientation: Qt.Horizontal
 
+            // MARK: Left panel
             ColumnLayout {
-                Layout.maximumWidth: 250
+                SplitView.preferredWidth: 250
+                SplitView.minimumWidth: 200
+                SplitView.maximumWidth: 450
+                Layout.fillHeight: true
 
                 TextField {
                     id: textFieldSearch
-                    Layout.preferredHeight: 39
+                    Layout.preferredHeight: 40
                     Layout.topMargin: 5
-                    enabled: false
                     Layout.fillWidth: true
-
+                    enabled: false
                     placeholderText: qsTr("Search")
-                    onTextChanged: {
-                        refreshList()
-                    }
+                    onTextChanged: refreshList()
                 }
 
                 RowLayout {
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    spacing: 0
 
                     ListView {
                         id: listView
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        highlightMoveDuration: 0
+                        highlightMoveDuration: 100
                         clip: true
                         ScrollBar.vertical: bar
-                        highlight: Rectangle { color: Material.accent; radius: 5 }
-                        onCurrentIndexChanged: { itemChangedList() }
+
+                        highlight: Rectangle { 
+                            color: Qt.alpha(Material.accent, 0.85)
+                            radius: 4 
+                        }
+                        onCurrentIndexChanged: itemChangedList()
+                        
                         delegate: Item {
                             id: listDelegate
-                            width: ListView.view.width
-                            height: 20
-                            Label {text: name}
+                            width: listView.width
+                            height: 25
+
+                            HoverHandler {
+                                id: hoverHandler
+                            }
+
+                            Rectangle {
+                                anchors.fill: parent
+                                color: Qt.alpha(Material.accent, 0.15)
+                                radius: 4
+                                visible: hoverHandler.hovered && listView.currentIndex !== index
+                            }
+
+                            Label {
+                                text: model.name ? model.name : "" 
+                                anchors.left: parent.left
+                                anchors.leftMargin: 10
+                                anchors.right: parent.right 
+                                anchors.rightMargin: 8      
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                color: listView.currentIndex === index ? Material.background : Material.foreground
+                                font.weight: listView.currentIndex === index ? Font.Medium : Font.Normal
+                                elide: Text.ElideRight
+                            }
+
                             MouseArea {
                                 anchors.fill: parent
                                 onClicked: listView.currentIndex = index
                             }
                         }
-                        model: ListModel {
-                            id: listModel
-                        }
+                        model: ListModel { id: listModel }
                     }
 
                     ScrollBar {
                         id: bar
                         Layout.fillHeight: true
+                        implicitWidth: 8
                         active: true
+                        policy: ScrollBar.AsNeeded
                     }
                 }
             }
 
+            // MARK: Right panel
             ColumnLayout {
-                Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+                SplitView.fillWidth: true 
                 Layout.fillHeight: true
-                Layout.fillWidth: true
+                spacing: 5
 
                 TabBar {
                     id: tabBar
                     Layout.fillWidth: true
-
-                    TabButton {
-                        text: qsTr("SIGNAL")
-                    }
-
-                    TabButton {
-                        text: qsTr("FILTERS")
-                    }
+                    TabButton { text: qsTr("SIGNAL") }
+                    TabButton { text: qsTr("FILTERS") }
                 }
 
                 StackLayout {
                     currentIndex: tabBar.currentIndex
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.fillHeight: true
                     Layout.fillWidth: true
 
-                    Item {
-                        SignalPage {
-                            id: signalPage
-                        }
+                    SignalPage {
+                        id: signalPage
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
                     }
 
-                    Item {
-                        FilterPage {
-                            id: filterPage
-                        }
+                    FilterPage {
+                        id: filterPage
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
                     }
                 }
             }
