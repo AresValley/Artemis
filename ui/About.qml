@@ -30,9 +30,9 @@ Dialog {
             text: "<style>a { color: " + Material.accent + "; }</style>" +
                     "<p><b>Artemis</a> " + APPLICATION_VERSION + "</b></p>" +
                     "<p>" + "<a href=\"https://github.com/AresValley/Artemis\">ARTEMIS</a> " +
-                    qsTr("- The Radio Signals Recognition Manual") + "<br/>" +
+                    "- The Radio Signals Recognition Manual" + "<br/>" +
                     "Powered By Python " + PYTHON_VERSION + " & Qt " + QT_VERSION + "</p>" +
-                    "<p>Copyright (c) 2014-" + currentYear + " <a href=\"https://aresvalley.com\">" + qsTr("AresValley") +
+                    "<p>Copyright (c) 2014-" + currentYear + " <a href=\"https://aresvalley.com\">" + "AresValley" +
                     "</a> GPLv3 License</p>"
 
             Layout.fillWidth: true

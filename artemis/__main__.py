@@ -1,11 +1,12 @@
 import sys
 import logging
 
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QCoreApplication, QTranslator
 from PySide6.QtGui import QGuiApplication, QIcon
 
 from .utils.constants import Constants
 from .utils.ui_utils import set_ui
+from .utils.config_utils import CONFIGURE_QT
 from .ui.artemis import UIArtemis
 
 from . import resources
@@ -23,6 +24,11 @@ def main():
     QCoreApplication.setApplicationName(Constants.APPLICATION_NAME)
 
     app = QGuiApplication(sys.argv)
+
+    translator = QTranslator()
+    locale = CONFIGURE_QT.value('Localization', 'language', 'en_US')
+    translator.load(f":/artemis/i18n/{locale}.qm")
+    app.installTranslator(translator)
 
     icon_file_path = ":/data/images/artemis_icon.ico"
     app.setWindowIcon(QIcon(icon_file_path))

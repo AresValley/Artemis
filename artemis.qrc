@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
+        <file>artemis/i18n/en_US.qm</file>
+        <file>artemis/i18n/it_IT.qm</file>
+
         <file>data/images/artemis_icon.ico</file>
         <file>data/images/artemis_icon.svg</file>
 

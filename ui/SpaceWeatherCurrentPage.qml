@@ -156,7 +156,7 @@ Page {
 
                             Button {
                                 id: lightG_now
-                                text: qsTr("G")
+                                text: "G"
                                 font.pixelSize: 15
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                 font.bold: true
@@ -172,7 +172,7 @@ Page {
 
                             Button {
                                 id: lightS_now
-                                text: qsTr("S")
+                                text: "S"
                                 font.pixelSize: 15
                                 display: AbstractButton.TextOnly
                                 onClicked: {
@@ -188,7 +188,7 @@ Page {
 
                             Button {
                                 id: lightR_now
-                                text: qsTr("R")
+                                text: "R"
                                 font.pixelSize: 15
                                 display: AbstractButton.TextOnly
                                 onClicked: {
@@ -216,7 +216,7 @@ Page {
 
                             Button {
                                 id: lightG_24h
-                                text: qsTr("G")
+                                text: "G"
                                 font.pixelSize: 15
                                 display: AbstractButton.TextOnly
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -225,7 +225,7 @@ Page {
 
                             Button {
                                 id: lightS_24h
-                                text: qsTr("S")
+                                text: "S"
                                 font.pixelSize: 15
                                 display: AbstractButton.TextOnly
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -234,7 +234,7 @@ Page {
 
                             Button {
                                 id: lightR_24h
-                                text: qsTr("R")
+                                text: "R"
                                 font.pixelSize: 15
                                 display: AbstractButton.TextOnly
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

@@ -279,7 +279,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("00-03")
+                            text: "00-03"
                         }
 
                         Label {
@@ -304,7 +304,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("03-06")
+                            text: "03-06"
                         }
 
                         Label {
@@ -329,7 +329,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("06-09")
+                            text: "06-09"
                         }
 
                         Label {
@@ -354,7 +354,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("09-12")
+                            text: "09-12"
                         }
 
                         Label {
@@ -379,7 +379,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("12-15")
+                            text: "12-15"
                         }
 
                         Label {
@@ -404,7 +404,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("15-18")
+                            text: "15-18"
                         }
 
                         Label {
@@ -429,7 +429,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("18-21")
+                            text: "18-21"
                         }
 
                         Label {
@@ -454,7 +454,7 @@ Page {
                         }
 
                         Label {
-                            text: qsTr("21-00")
+                            text: "21-00"
                         }
 
                         Label {

@@ -25,12 +25,14 @@ Window {
 
     signal saveMaterialAccent(string arg)
     signal saveMaterialTheme(string arg)
+    signal saveLocalizationLanguage(string arg)
     signal saveScaling(string arg)
     signal saveAutoload(int arg)
 
     function saveAll() {
         saveMaterialAccent(comboBoxAccent.currentText)
         saveMaterialTheme(comboBoxTheme.currentText)
+        saveLocalizationLanguage(comboBoxLanguage.currentValue)
         saveAutoload(checkBoxAutoload.checked)
         saveScaling(comboBoxScaling.currentText)
     }
@@ -51,6 +53,12 @@ Window {
                 break
             }
         }
+    }
+
+    function loadLocalizationLanguage(language) {
+        const idx = comboBoxLanguage.indexOfValue(language)
+        if (idx >= 0)
+            comboBoxLanguage.currentIndex = idx
     }
 
     function loadScaling(scaling) {
@@ -87,6 +95,29 @@ Window {
         ColumnLayout {
             anchors.fill: parent
             anchors.margins: 10
+
+            RowLayout {
+                Layout.fillWidth: true
+
+                Label {
+                    text: qsTr("Language")
+                    font.pixelSize: 12
+                    clip: true
+                    Layout.fillWidth: true
+                }
+
+                ComboBox {
+                    id: comboBoxLanguage
+                    Layout.preferredWidth: 137
+                    Layout.preferredHeight: 48
+                    textRole: "text"
+                    valueRole: "value"
+                    model: ListModel {
+                        ListElement { text: "English"; value: "en_US" }
+                        ListElement { text: "Italiano";  value: "it_IT" }
+                    }
+                }
+            }
 
             RowLayout {
                 Layout.fillWidth: true

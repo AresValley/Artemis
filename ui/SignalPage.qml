@@ -231,7 +231,7 @@ Page {
                 Label {
                     id: freqValue
                     color: Material.accent
-                    text: qsTr("-")
+                    text: "-"
                     font.pixelSize: 18
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
@@ -256,7 +256,7 @@ Page {
                 Label {
                     id: bandValue
                     color: Material.accent
-                    text: qsTr("-")
+                    text: "-"
                     font.pixelSize: 18
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
@@ -600,7 +600,7 @@ Page {
 
                     UIComponents.ArtemisButton {
                         id: urlButton
-                        text: qsTr("Sigid Wiki")
+                        text: "Sigid Wiki"
                         icon.source: "qrc:/data/images/icons/browser.svg"
                         display: AbstractButton.TextBesideIcon
                         visible: false

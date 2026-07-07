@@ -12,7 +12,7 @@ Window {
     id: window
     width: 1100
     height: 800
-    title: qsTr("Artemis")
+    title: "Artemis"
     visible: true
     
     modality: Qt.ApplicationModal
