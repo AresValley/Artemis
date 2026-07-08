@@ -90,7 +90,7 @@ jobs:
           path: logs/*
 
   code-signing:
-    name: Combine MSIs into single zip
+    name: Code Signing
     needs: build
     runs-on: windows-latest
     steps:
@@ -116,5 +116,5 @@ jobs:
       - name: Upload Signed Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: Artemis-Windows-Installers
+          name: Artemis-Windows-Installers-Signed
           path: signed-installers
