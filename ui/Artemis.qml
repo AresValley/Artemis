@@ -50,7 +50,9 @@ Window {
         exportFileMenu.enabled = !is_db_loaded
         signalMenu.enabled = !is_db_loaded
         filterMenu.enabled = !is_db_loaded
+        editCategoryMenu.enabled = !is_db_loaded
         filterSinceVersionMenu.enabled = is_sigid
+        if (is_db_loaded) {bottomInfoBar('','info')}
     }
 
     function bottomInfoBar(message, messageType) {
