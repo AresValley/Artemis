@@ -12,6 +12,7 @@
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_name
 site_name = "ARTEMIS"
+repo_url = "https://github.com/AresValley/Artemis"
 
 # The site_description is included in the HTML head and should contain a
 # meaningful description of the site content for use by search engines.
@@ -86,6 +87,7 @@ nav = [
     ]
   },
   { "Contribute" = "contribute.md" },
+  { "Translations" = "localization.md" },
   { "Changelog" = "https://github.com/AresValley/Artemis/blob/master/CHANGELOG.md" },
   { "License & Credits" = "credits.md" }
 ]
