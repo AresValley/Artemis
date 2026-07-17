@@ -48,7 +48,7 @@ Building a distributable package with an executable for Artemis creates a practi
     1. Open a terminal in the main `Artemis` folder and install [Briefcase](https://github.com/beeware/briefcase):
 
         ```
-        python -m pip install briefcase
+        pipx install briefcase
         ```
 
     2. Initialize the application's build environment:

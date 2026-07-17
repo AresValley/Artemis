@@ -1,0 +1,120 @@
+name: Build - Windows Multi Arch Signed (briefcase)
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  FORCE_COLOR: "1"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Package
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ "x64", "ARM64" ]
+        include:
+          - target: "x64"
+            output-format: "app"
+            runs-on: "windows-latest"
+            platform: "windows"
+            pre-command: |
+              python -m pip install PySide6
+              pyside6-rcc ./artemis.qrc -o artemis/resources.py
+          - target: "ARM64"
+            output-format: "app"
+            runs-on: "windows-11-vs2026-arm"
+            platform: "windows"
+            pre-command: |
+              python -m pip install PySide6
+              pyside6-rcc ./artemis.qrc -o artemis/resources.py
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install Briefcase
+        run: |
+          python -m pip install -U pip setuptools wheel
+          python -m pip install briefcase
+
+      - name: Setup Environment
+        run: |
+          ${{ matrix.pre-command }}
+
+      - name: Build App
+        run: |
+          briefcase build \
+            ${{ matrix.platform }} \
+            ${{ matrix.output-format }} \
+            --no-input --log \
+            ${{ matrix.briefcase-args }}
+
+      - name: Package App
+        run: |
+          briefcase package \
+            ${{ matrix.platform }} \
+            ${{ matrix.output-format }} \
+            --adhoc-sign --no-input --log \
+            ${{ matrix.briefcase-args }}
+
+      - name: Rename MSI to include Architecture
+        run: |
+          mv dist/*.msi "dist/Artemis-${{ matrix.target }}.msi"
+
+      - name: Upload Temporary MSI
+        uses: actions/upload-artifact@v7
+        with:
+          name: temp-Artemis-${{ matrix.target }}
+          path: dist/*.msi
+          if-no-files-found: error
+
+      - name: Upload Log
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: Log-Failure-${{ matrix.target }}
+          path: logs/*
+
+  code-signing:
+    name: Code Signing
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Merge Artifacts
+        id: merge-unsigned
+        uses: actions/upload-artifact/merge@v7
+        with:
+          name: Artemis-Windows-Installers
+          pattern: temp-Artemis-*
+          delete-merged: true
+
+      - name: Submit Signing Request
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '7ca51cc2-9ba1-444a-ad44-b6544f4cdee8'
+          project-slug: 'Artemis'
+          signing-policy-slug: 'test-signing'
+          github-artifact-id: '${{ steps.merge-unsigned.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: 'signed-installers'
+
+      - name: Upload Signed Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Artemis-Windows-Installers-Signed
+          path: signed-installers

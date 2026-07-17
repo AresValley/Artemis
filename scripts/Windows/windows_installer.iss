@@ -15,6 +15,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=..\..\LICENSE
+PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=..\
 OutputBaseFilename=Artemis
@@ -22,7 +23,8 @@ SetupIconFile=..\..\data\images\installer_icon.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 VersionInfoVersion={#MyAppVersion}
-ArchitecturesAllowed=x64
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\{#MyAppExeName}
 WizardStyle=modern
 
