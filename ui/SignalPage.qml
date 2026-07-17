@@ -49,8 +49,17 @@ Page {
 
         descriptionTextArea.text = sig.description
 
+        if (sig.since_version !== undefined) {
+            signalSinceVersionText.text = "v" + sig.since_version
+            signalSinceVersionBadge.visible = true
+        } else {
+            signalSinceVersionBadge.visible = false
+        }
+
         if (freq_lo !== undefined) {
-            bandBar.setBandBar(freq_lo[1], freq_up[1])
+            bandBar.set(freq_lo[1], freq_up[1])
+        } else {
+            bandBar.reset()
         }
 
         if (sig.url !== undefined) {
@@ -69,7 +78,8 @@ Page {
             lockPlayer()
         }
 
-        lockMenu(false)
+        docManagerButton.visible = true
+        addTagButton.enabled = true
     }
 
     function format_range(lower_freq, upper_freq) {
@@ -107,18 +117,15 @@ Page {
         descriptionTextArea.text = ""
         audioPlayer.resetPlayer()
         image.source = "qrc:///data/images/spectrum_not_available.svg"
-        lockMenu(true)
+        bandBar.reset()
+        signalSinceVersionBadge.visible = false
+        docManagerButton.visible = false
+        addTagButton.enabled = false
     }
 
-    function lockMenu(toggle) {
-        if (toggle) {
-            urlButton.visible = false
-            docManagerButton.visible = false
-            addTagButton.enabled = false
-        } else {
-            docManagerButton.visible = true
-            addTagButton.enabled = true
-        }
+    function contrastTextColor(color) {
+        let luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b
+        return luminance > 0.55 ? "black" : "white"
     }
 
     ColumnLayout {
@@ -143,7 +150,7 @@ Page {
             Repeater {
                 model: categoryList
                 delegate: UIComponents.ArtemisButton {
-                    text: modelData[1]
+                    text: modelData[2]
                     Layout.preferredHeight: 30
                     visibleBackground: true
 
@@ -184,6 +191,27 @@ Page {
                         onObjectRemoved: (index, object) => categoryMenu.removeItem(object)
                     }
                 }
+            }
+        }
+
+        Rectangle {
+            id: signalSinceVersionBadge
+            color: Qt.alpha(Material.accent, 0.7)
+            radius: 4
+            implicitWidth: signalSinceVersionText.implicitWidth + 12
+            implicitHeight: signalSinceVersionText.implicitHeight + 4
+            visible: false
+            Layout.alignment: Qt.AlignHCenter
+            
+            Text {
+                id: signalSinceVersionText
+                text: ""
+                color: contrastTextColor(Material.accent)
+                font.pointSize: 9
+                anchors.centerIn: parent
+                ToolTip.visible: hoverHandler.hovered
+                ToolTip.text: qsTr("Signal introduced in database version %1").arg(text)
+                HoverHandler {id: hoverHandler}
             }
         }
 
@@ -575,6 +603,7 @@ Page {
                         text: qsTr("Sigid Wiki")
                         icon.source: "qrc:/data/images/icons/browser.svg"
                         display: AbstractButton.TextBesideIcon
+                        visible: false
                         Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                         Layout.fillWidth: true
                         onClicked: {
@@ -587,6 +616,7 @@ Page {
                         text: qsTr("Open Documents")
                         icon.source: "qrc:/data/images/icons/documents.svg"
                         display: AbstractButton.TextBesideIcon
+                        visible: false
                         Layout.alignment: Qt.AlignRight | Qt.AlignBottom
                         Layout.fillWidth: true
                         onClicked: {

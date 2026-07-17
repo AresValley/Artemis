@@ -18,13 +18,15 @@ Window {
     title: qsTr("Artemis - Load Database")
 
     property var currentSelectedItem: null
+    property string loadedDbDirName: ""
 
     signal loadDB (string dbName)
     signal deleteDB (string dbName)
     signal renameDB (string dbName, string newDbName)
 
-    function loadList(dict) {
+    function loadList(dict, loadedName) {
         clearAll()
+        loadedDbDirName = loadedName
         customDBList.populateList(dict)
     }
 
@@ -50,6 +52,11 @@ Window {
         deleteButton.enabled = !toggle
         renameButton.enabled = !toggle
         loadButton.enabled = !toggle
+    }
+
+    function contrastTextColor(color) {
+        let luminance = 0.299 * color.r + 0.587 * color.g + 0.114 * color.b
+        return luminance > 0.55 ? "black" : "white"
     }
 
     DialogMessage {
@@ -144,8 +151,6 @@ Window {
                 SplitView.fillWidth: true
                 Layout.fillHeight: true
                 padding: 16
-                
-                Material.background: Material.elevation0
 
                 ColumnLayout {
                     anchors.fill: parent
@@ -154,14 +159,39 @@ Window {
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 2
-                        
-                        Label {
-                            id: titleLabel
-                            text: 'N/A'
-                            font.pointSize: 16
-                            font.bold: true
-                            elide: Text.ElideRight
+
+                        RowLayout {
                             Layout.fillWidth: true
+                            spacing: 8
+
+                            Label {
+                                id: titleLabel
+                                text: 'N/A'
+                                font.pointSize: 16
+                                font.bold: true
+                                elide: Text.ElideRight
+                                Layout.fillWidth: true
+                            }
+
+                            // "LOADED" badge
+                            Rectangle {
+                                id: loadedBadge
+                                color: Material.accent
+                                radius: 4
+                                implicitWidth: badgeText.implicitWidth + 12
+                                implicitHeight: badgeText.implicitHeight + 4
+                                visible: currentSelectedItem
+                                    ? (currentSelectedItem.db_dir_name === loadedDbDirName)
+                                    : false
+                                Text {
+                                    id: badgeText
+                                    text: "LOADED"
+                                    color: contrastTextColor(Material.accent)
+                                    font.pointSize: 9
+                                    font.bold: true
+                                    anchors.centerIn: parent
+                                }
+                            }
                         }
                         
                         Label {

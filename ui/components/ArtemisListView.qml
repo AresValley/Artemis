@@ -92,6 +92,18 @@ ColumnLayout {
         return luminance > 0.55 ? "black" : "white"
     }
 
+    function incrementCurrentIndex() {
+        if (listView.currentIndex < listView.count - 1) {
+            listView.currentIndex++;
+        }
+    }
+
+    function decrementCurrentIndex() {
+        if (listView.currentIndex > 0) {
+            listView.currentIndex--;
+        }
+    }
+
     TextField {
         id: textFieldSearch
         Layout.preferredHeight: 40

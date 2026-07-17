@@ -1,4 +1,5 @@
 import sys
+import logging
 
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QGuiApplication, QIcon
@@ -7,8 +8,14 @@ from .utils.constants import Constants
 from .utils.ui_utils import set_ui
 from .ui.artemis import UIArtemis
 
+from . import resources
+
 
 def main():
+    logger = logging.getLogger("peewee")
+    logger.setLevel(logging.WARNING)
+    logger.addHandler(logging.StreamHandler())
+
     set_ui()
 
     QCoreApplication.setOrganizationName(Constants.ORGANIZATION_NAME)
@@ -17,7 +24,7 @@ def main():
 
     app = QGuiApplication(sys.argv)
 
-    icon_file_path = (':/data/images/artemis_icon.ico')
+    icon_file_path = ":/data/images/artemis_icon.ico"
     app.setWindowIcon(QIcon(icon_file_path))
 
     UIArtemis()

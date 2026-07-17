@@ -5,6 +5,24 @@
 
 ## [Unreleased]
 
+## [4.2.0] - DATE TO BE ADDED
+
+### Added
+
+- A badge in the DB manager now shows which database is currently loaded, if any
+
+### Changed
+
+- Database Layer Refactoring: Transitioned from raw SQL queries to Peewee ORM to improve code maintainability.
+- Database Migrations: Implemented a structured migration system to ensure full backward compatibility with existing databases.
+
+### Fixed
+
+- Fixed a regression regarding the helper function to use up/down key to navigate the signal list
+- Moved resources import from artemis.py to main. This should fix resources import during dependency resolution in nuitka (window build). Now application icon should be available in taskbar as well.
+- Preview switch now works properly. Closes [#86](https://github.com/AresValley/Artemis/issues/86)
+- Fix bandBar behavior to reset when frequency is undefined
+
 ## [4.1.5] - 2026-07-03
 
 ### Added
@@ -202,7 +220,9 @@
 First release.
 
 <!-- Links definitions -->
-[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.1.1...HEAD
+[Unreleased]: https://github.com/AresValley/Artemis/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/AresValley/Artemis/compare/v4.1.5...v4.2.0
+[4.1.5]: https://github.com/AresValley/Artemis/compare/v4.1.1...v4.1.5
 [4.1.1]: https://github.com/AresValley/Artemis/compare/v4.1.0...v4.1.1
 [4.1.0]: https://github.com/AresValley/Artemis/compare/v4.0.5...v4.1.0
 [4.0.5]: https://github.com/AresValley/Artemis/compare/v4.0.3...v4.0.5

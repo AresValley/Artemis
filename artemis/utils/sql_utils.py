@@ -1,190 +1,235 @@
 import os
-import sqlite3
 
 from PySide6.QtCore import QUrl
-from operator import itemgetter
 from datetime import datetime
-from contextlib import closing
 
-from artemis.utils.constants import Query, Constants
+from artemis.utils.constants import Constants
 from artemis.utils.generic_utils import format_frequency
 from artemis.utils.path_utils import DATA_DIR
 
+from artemis.model import (
+    database, Info, Signals, Category, CategoryLabel, Frequency, Bandwidth, 
+    Modulation, Mode, Location, Acf, Documents
+)
+from peewee import SqliteDatabase, IntegerField
+from playhouse.migrate import SqliteMigrator, migrate
 
-class Database():
-    """ General superclass for SQLite DB manipulation.
-        Foreign keys are activated (otherwise disabled by default for compatibility purposes)
-    """
-    def __init__(self, sql_path):
-        self.sql_path = sql_path
 
-    def execute(self, query, parameters=None, last_rowid=False):
-        """ Open a connection, execute the given query with optional parameters and close the connection. 
-            In the case of a SELECT query, returns the results as a fetchall().
-            If last_rowid == True, this function returns a tuple with the result of the fetchall() and
-            the latest modified row id of the current connection.
-        """
-        with closing(sqlite3.connect(self.sql_path, check_same_thread=False)) as conn:
-            conn.execute('PRAGMA foreign_keys = ON;')
-
-            curs = conn.cursor()
-
-            if parameters:
-                curs.execute(query, parameters)
-            else:
-                curs.execute(query)
-
-            conn.commit()
-
-            if last_rowid:
-                result = (curs.fetchall(), curs.lastrowid)
-            else:
-                result = curs.fetchall()
-
-        return result
-
-################################## MARK: >>> DATABASE <<<
-
-class ArtemisDatabase(Database):
-    """ General CRUD class for SQLite DB manipulation.
-        Foreign keys are activated (otherwise disabled by default for compatibility purposes) 
-    """
-
+################################## MARK: ==== DATABASE ====
+class ArtemisDB:
     def __init__(self, db_dir_name):
         self.db_dir_name = db_dir_name
         self.db_dir = DATA_DIR / db_dir_name
         self.sql_path = self.db_dir / Constants.SQL_NAME
         self.media_dir = self.db_dir / 'media'
-        super().__init__(self.sql_path)
-        
+
         self.name = None
         self.date = None
         self.version = None
         self.editable = None
+        self.is_sigid = None
 
-        self.all_signals = None
-        self.all_modulation = None
-        self.all_location = None
-        self.all_category_labels = None
+        self.all_signals = []
+        self.all_modulations = []
+        self.all_locations = []
+        self.all_category_labels = []
+        self.all_since_versions = []
 
-        self.filtered_signals = None
-        
-        self.stats = {}
+        self.count_signals = None
+        self.count_docs = None
+        self.count_images = None
+        self.count_audio = None
+
+
+        db = SqliteDatabase(self.sql_path, autoconnect=False)
+        database.initialize(db)
 
 
     def load(self):
-        self._select_info()
-        self._select_all()
-        self._select_all_modulation()
-        self._select_all_location()
+        """ Load all the initial data: info, a list of all signals (used for the main
+            signals list, all the categories-locations-modulations (used to populate
+            the filters combobox) 
+        """
+        self.load_info()
+        self.load_stats()
+        self._select_all_signals()
         self._select_all_category_labels()
-        self._select_stats()
+        self._select_all_locations()
+        self._select_all_modulations()
+        self._select_all_since_versions()
 
 
-    def _select_info(self):
+    def load_info(self):
         """ Load the DB meta INFO from the table 'info'
         """
-        result = self.execute(Query.SELECT_INFO)[0]
-        self.name = result[0]
-        self.date = result[1]
-        self.version = result[2]
-        self.editable = result[3]
+        with database:
+            try:
+                info_record = Info.select().first()
+                if info_record:
+                    self.name = info_record.name
+                    self.date = info_record.date
+                    self.version = info_record.version
+                    self.editable = info_record.editable
+                    self.is_sigid = True if self.editable == -1 else False
+            except Exception as e:
+                print(f"ERROR: {e}")
 
 
-    def _select_all(self):
+    def load_stats(self):
+        with database:
+            self.count_signals = Signals.select().count()
+            self.count_docs = Documents.select().count()
+            self.count_images = Documents.select().where(Documents.type == 'Image').count()
+            self.count_audio = Documents.select().where(Documents.type == 'Audio').count()
+
+
+    def _select_all_signals(self):
         """ Load a list of tuple for all signals. Each tuple (representing a signal)
-            contains the SIG_ID and the NAME of the signal
+            contains the SIG_ID, NAME adn DESCRITPION of the signal
         """
-        self.all_signals = self.execute(Query.SELECT_ALL_SIGNALS)
-        keys = ('SIG_ID', 'name', 'description')
-        result = [dict(zip(keys, values)) for values in self.all_signals]
-        self.all_signals = result
+        with database:
+            try:
+                query = Signals.select(
+                    Signals.sig_id, 
+                    Signals.name, 
+                    Signals.description
+                ).dicts()
+                self.all_signals = list(query)
+            except Exception as e:
+                print(f"ERROR: {e}")
+                self.all_signals = []
 
 
-    def _select_all_modulation(self):
-        self.all_modulation = self.execute(Query.SELECT_ALL_MODULATION)
-        self.all_modulation = [{'value': item[0]} for item in self.all_modulation]
+    def _select_all_modulations(self):
+        with database:
+            try:
+                query = Modulation.select(Modulation.value).distinct().order_by(Modulation.value).dicts()
+                self.all_modulations = list(query)
+            except Exception as e:
+                print(f"ERROR: {e}")
+                self.all_modulations = []
 
 
-    def _select_all_location(self):
-        self.all_location = self.execute(Query.SELECT_ALL_LOCATION)
-        self.all_location = [{'value': item[0]} for item in self.all_location]
+    def _select_all_locations(self):
+        with database:
+            try:
+                query = Location.select(Location.value).distinct().order_by(Location.value).dicts()
+                self.all_locations = list(query)
+            except Exception as e:
+                print(f"ERROR: {e}")
+                self.all_locations = []
 
 
     def _select_all_category_labels(self):
-        self.all_category_labels = self.execute(Query.SELECT_ALL_CAT_LABELS)
-        self.all_category_labels = [{'clb_id': item[0], 'value': item[1]} for item in self.all_category_labels]
+        with database:
+            try:
+                query = CategoryLabel.select(
+                    CategoryLabel.clb_id, 
+                    CategoryLabel.value
+                ).distinct().order_by(CategoryLabel.value).dicts()
+                self.all_category_labels = list(query)
+            except Exception as e:
+                print(f"ERROR: {e}")
+                self.all_category_labels = []
 
 
-    def _select_stats(self):
-        tot_docs = self.execute(Query.SELECT_STAT_DOCS)[0][0]
-        tot_images = self.execute(Query.SELECT_STAT_IMAGES)[0][0]
-        tot_audio = self.execute(Query.SELECT_STAT_AUDIO)[0][0]
+    def _select_all_since_versions(self):
+        with database:
+            try:
+                query = (
+                    Signals.select(Signals.since_version)
+                    .where(Signals.since_version
+                    .is_null(False))
+                    .distinct()
+                    .order_by(Signals.since_version.desc())
+                    .scalars()
+                )
+                self.all_since_versions = list(query)
+            except Exception as e:
+                print(f"ERROR: {e}")
+                self.all_since_versions = []
 
-        self.stats['documents'] = tot_docs
-        self.stats['images'] = tot_images
-        self.stats['audio'] = tot_audio
-        self.stats['signals'] = len(self.all_signals)
+################################## MARK: MIGRATIONS
+    def migrate_db(self):
+        """ if models.py is changed and then the DB schema , hre goes al the necessary 
+            migrations to assure the compatibility of older DB. MIGRATION 1 and 2 has been
+            introduced during the ORM implementation.
+        """
+        with database:
+            migrator = SqliteMigrator(database)
 
+            # MIGRATION 1
+            # Introduction of a new column called since_version in the signals table
+            since_version_field = IntegerField(column_name='SINCE_VERSION', null=True)
+            try:
+                migrate(migrator.add_column('signals', 'SINCE_VERSION', since_version_field))
+            except Exception:
+                pass
 
-    def select_by_filter(self, filter_query):
-        matching_sig_ids = self.execute(filter_query)
-        sig_ids = ",".join(str(num[0]) for num in matching_sig_ids)
+            # MIGRATION 2
+            # renamed the table category_label to categorylabel. The latter is peewee standard
+            # nomencalture so the meta block in model.py is not necessary
+            try:
+                migrate(migrator.rename_table("category_label", "categorylabel"))
+            except Exception:
+                pass
 
-        self.all_signals = self.execute(Query.SELECT_SIG_ID.format(sig_ids))
-        keys = ('SIG_ID', 'name', 'description')
-        result = [dict(zip(keys, values)) for values in self.all_signals]
-        self.all_signals = result
-
-
+################################## MARK: CREATE
     def create(self, name):
         """ Create new db in the data folder.
             The name of folder containing the new db has a unique id as name (db_dir_name).
         """
-        meta = [name, datetime.now(), 1, 1]
-        os.makedirs(self.db_dir)
-        os.makedirs(self.media_dir)
+        os.makedirs(self.db_dir, exist_ok=True)
+        os.makedirs(self.media_dir, exist_ok=True)
 
-        self.execute(Query.CREATE_INFO)
-        self.execute(Query.INSERT_INFO, meta)
-        self.execute(Query.CREATE_SIGNALS)
-        self.execute(Query.CREATE_CATEGORY)
-        self.execute(Query.CREATE_CATEGORY_LABELS)
-        self.execute(Query.CREATE_FREQUENCY)
-        self.execute(Query.CREATE_BANDWIDTH)
-        self.execute(Query.CREATE_MODULATION)
-        self.execute(Query.CREATE_MODE)
-        self.execute(Query.CREATE_LOCATION)
-        self.execute(Query.CREATE_ACF)
-        self.execute(Query.CREATE_DOCUMENTS)
+        with database:
+            database.create_tables([
+                Info, Signals, Acf, Bandwidth, CategoryLabel, 
+                Category, Documents, Frequency, Location, Mode, Modulation
+            ])
 
-        self.execute(Query.CREATE_VIEW_FREQ)
-        self.execute(Query.CREATE_VIEW_BAND)
+            Info.create(
+                name=name,
+                date=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                version=1,
+                editable=1
+            )
 
+        self.load()
 
-    def rename(self, name):
-        self.execute(Query.RENAME_DB, [name])
-
+################################## MARK: CRUD
+    def rename(self, new_name):
+        with database:
+            Info.update(name=new_name).execute()
+        self.name = new_name
+    
+    def delete_signal(self, sig_id):
+        with database:
+            Signals.delete().where(Signals.sig_id == sig_id).execute()
+        self._select_all_signals()
 
     def insert_category_label(self, value):
-        self.execute(Query.INSERT_CATEGORY_LABEL, [value])
-
+        with database:
+            CategoryLabel.create(value=value)
+        self._select_all_category_labels()
 
     def update_category_label(self, clb_id, value):
-        self.execute(Query.UPDATE_CATEGORY_LABEL, [value, clb_id])
-
+        with database:
+            CategoryLabel.update(value=value).where(CategoryLabel.clb_id == clb_id).execute()
+        self._select_all_category_labels()
 
     def delete_category_label(self, clb_id):
-        self.execute(Query.DELETE_CATEGORY_LABEL, [clb_id])
+        with database:
+            CategoryLabel.delete().where(CategoryLabel.clb_id == clb_id).execute()
+        self._select_all_category_labels()
 
-################################## MARK: >>> SIGNAL <<<
-
-class ArtemisSignal():
+################################## MARK: ==== SIGNAL ====
+class ArtemisSIG():
     """ Main class of the object signal
     """
-
-    def __init__(self, loaded_db):
-        self.db = loaded_db
+    def __init__(self, database):
+        self.db = database
+        self._signal = None
 
         self.sig_id = None
         self.name = None
@@ -197,6 +242,7 @@ class ArtemisSignal():
         self.mode = None
         self.location = None
         self.acf = None
+        self.since_version = None
         
         self.documents = None
         self.spectrum_path = None
@@ -204,7 +250,11 @@ class ArtemisSignal():
 
 
     def load(self, sig_id):
+        with database:
+            self._signal = Signals.get(Signals.sig_id == sig_id)
+
         self.sig_id = sig_id
+        
         self._select_signals()
         self._select_category()
         self._select_frequency()
@@ -216,11 +266,13 @@ class ArtemisSignal():
         self.select_documents()
 
 
-    def generate_dic(self):
-        dic = {
+    @property
+    def summary(self):
+        return {
             'name': self.name,
             'description': self.description,
             'url': self.url,
+            'since_version': self.since_version,
             'category': self.category,
             'frequency': self.frequency,
             'bandwidth': self.bandwidth,
@@ -232,186 +284,229 @@ class ArtemisSignal():
             'audio_path': self.audio_path,
             'all_category': self.db.all_category_labels
         }
-        return dic
 
-
-################################## MARK: SELECT Methods
-
-
+################################## MARK: CRUD > SELECT
     def _select_signals(self):
-        signal = self.db.execute(Query.SELECT_SIGNAL, [self.sig_id])[0]
-        self.name = signal[0]
-        self.description = signal[1]
-        self.url = signal[2]
+        with database:
+            self.name = self._signal.name
+            self.description = self._signal.description
+            self.url = self._signal.url
+            self.since_version = self._signal.since_version
 
 
     def _select_category(self):
-        self.category = self.db.execute(Query.SELECT_CATEGORY, [self.sig_id])
-        self.category = [list(x) for x in self.category]
+        with database:
+            query = (Category
+                    .select(Category.cat_id, CategoryLabel.clb_id, CategoryLabel.value)
+                    .join(CategoryLabel)
+                    .where(Category.sig == self._signal))
+            
+            self.category = [[c.cat_id, c.clb.clb_id, c.clb.value] for c in query]
 
 
     def _select_frequency(self):
-        result = self.db.execute(Query.SELECT_FREQUENCY, [self.sig_id])
-        sorted_list = sorted(result, key=itemgetter(1))
-        self.frequency = [list(x) + [format_frequency(x[1])] for x in sorted_list]
+        with database:
+            query = self._signal.frequencies.order_by(Frequency.value)
+
+            self.frequency = [
+                [f.freq_id, f.value, f.description, format_frequency(f.value)] 
+                for f in query
+            ]
 
 
     def _select_bandwidth(self):
-        result = self.db.execute(Query.SELECT_BANDWIDTH, [self.sig_id])
-        sorted_list = sorted(result, key=itemgetter(1))
-        self.bandwidth = [list(x) + [format_frequency(x[1])] for x in sorted_list]
+        with database:
+            query = self._signal.bandwidths.order_by(Bandwidth.value)
+            self.bandwidth = [
+                [b.band_id, b.value, b.description, format_frequency(b.value)] 
+                for b in query
+            ]
 
 
     def _select_acf(self):
-        self.acf = self.db.execute(Query.SELECT_ACF, [self.sig_id])
-        self.acf = [list(x) for x in self.acf]
+        with database:
+            self.acf = [[a.acf_id, a.value, a.description] for a in self._signal.acfs]
 
 
     def _select_modulation(self):
-        self.modulation = self.db.execute(Query.SELECT_MODULATION, [self.sig_id])
-        self.modulation = [list(x) for x in self.modulation]
+        with database:
+            self.modulation = [[m.mdl_id, m.value, m.description] for m in self._signal.modulations]
 
 
     def _select_mode(self):
-        self.mode = self.db.execute(Query.SELECT_MODE, [self.sig_id])
-        self.mode = [list(x) for x in self.mode]
+        with database:
+            self.mode = [[m.mod_id, m.value, m.description] for m in self._signal.modes]
 
 
     def _select_location(self):
-        self.location = self.db.execute(Query.SELECT_LOCATION, [self.sig_id])
-        self.location = [list(x) for x in self.location]
+        with database:
+            self.location = [[loc.loc_id, loc.value, loc.description] for loc in self._signal.locations]
 
 
     def select_documents(self):
-        self.documents = self.db.execute(Query.SELECT_DOCUMENTS, [self.sig_id])
+        with database:
+            docs = self._signal.documents
+            self.documents = [[d.doc_id, d.extension, d.name, d.description, d.type, d.preview] for d in docs]
 
-        default_spectrum = [doc for doc in self.documents if doc[4] == 'Image' and doc[5] == 1]
-        default_audio = [doc for doc in self.documents if doc[4] == 'Audio' and doc[5] == 1]
+            default_spectrum = [d for d in docs if d.type == 'Image' and d.preview == 1]
+            default_audio = [d for d in docs if d.type == 'Audio' and d.preview == 1]
 
-        if default_spectrum != []:
-            default_spectrum_filename = '{}.{}'.format(str(default_spectrum[0][0]), default_spectrum[0][1])
-            self.spectrum_path = self.db.media_dir / default_spectrum_filename
-            self.spectrum_path = QUrl.fromLocalFile(self.spectrum_path.resolve())
-        else:
-            self.spectrum_path = 'qrc:///data/images/spectrum_not_available.svg'
+            if default_spectrum:
+                spec = default_spectrum[0]
+                default_spectrum_filename = f"{spec.doc_id}.{spec.extension}"
+                full_path = self.db.media_dir / default_spectrum_filename
+                self.spectrum_path = QUrl.fromLocalFile(str(full_path.resolve()))
+            else:
+                self.spectrum_path = 'qrc:///data/images/spectrum_not_available.svg'
 
-        if default_audio != []:
-            default_audio_filename = '{}.{}'.format(str(default_audio[0][0]), default_audio[0][1])
-            self.audio_path = self.db.media_dir / default_audio_filename
-            self.audio_path = QUrl.fromLocalFile(self.audio_path.resolve())
-        else:
-            self.audio_path = ''
+            if default_audio:
+                aud = default_audio[0]
+                default_audio_filename = f"{aud.doc_id}.{aud.extension}"
+                full_path = self.db.media_dir / default_audio_filename
+                self.audio_path = QUrl.fromLocalFile(str(full_path.resolve()))
+            else:
+                self.audio_path = ''
 
-
-################################## MARK: UPDATE Methods
-
-
+################################## MARK: CRUD > UPDATE
     def update_signal(self, sig_id, value, description):
-        self.db.execute(Query.UPDATE_SIGNAL, [value, description, sig_id])
+        with database:
+            Signals.update(name=value, description=description).where(Signals.sig_id == sig_id).execute()
 
 
     def update_frequency(self, freq_id, value, description):
-        self.db.execute(Query.UPDATE_FREQUENCY, [value, description, freq_id])
+        with database:
+            Frequency.update(value=value, description=description).where(Frequency.freq_id == freq_id).execute()
 
 
     def update_bandwidth(self, band_id, value, description):
-        self.db.execute(Query.UPDATE_BANDWIDTH, [value, description, band_id])
+        with database:
+            Bandwidth.update(value=value, description=description).where(Bandwidth.band_id == band_id).execute()
 
 
     def update_modulation(self, modu_id, value, description):
-        self.db.execute(Query.UPDATE_MODULATION, [value, description, modu_id])
+        with database:
+            Modulation.update(value=value, description=description).where(Modulation.mdl_id == modu_id).execute()
 
 
     def update_mode(self, mode_id, value, description):
-        self.db.execute(Query.UPDATE_MODE, [value, description, mode_id])
+        with database:
+            Mode.update(value=value, description=description).where(Mode.mod_id == mode_id).execute()
 
 
     def update_acf(self, acf_id, value, description):
-        self.db.execute(Query.UPDATE_ACF, [value, description, acf_id])
+        with database:
+            Acf.update(value=value, description=description).where(Acf.acf_id == acf_id).execute()
 
 
     def update_location(self, loc_id, value, description):
-        self.db.execute(Query.UPDATE_LOCATION, [value, description, loc_id])
+        with database:
+            Location.update(value=value, description=description).where(Location.loc_id == loc_id).execute()
 
 
     def update_documents(self, doc_id, name, description, type, is_preview):
-            self.db.execute(Query.UPDATE_DOCUMENTS, [name, description, type, is_preview, doc_id])
+        with database:
+            Documents.update(
+                name=name, 
+                description=description, 
+                type=type, 
+                preview=is_preview
+            ).where(Documents.doc_id == doc_id).execute()
 
-
-################################## MARK: INSERT Methods
-
-
+################################## MARK: CRUD > INSERT
     def insert_signal(self, value, description):
-        self.db.execute(Query.INSERT_SIGNAL, [value, description])
+        # Returns the created object, if necessary
+        with database:
+            return Signals.create(name=value, description=description)
 
 
     def insert_frequency(self, value, description):
-        self.db.execute(Query.INSERT_FREQUENCY, [self.sig_id, value, description])
+        with database:
+            Frequency.create(sig=self.sig_id, value=value, description=description)
 
 
     def insert_bandwidth(self, value, description):
-        self.db.execute(Query.INSERT_BANDWIDTH, [self.sig_id,value, description])
+        with database:
+            Bandwidth.create(sig=self.sig_id, value=value, description=description)
 
 
     def insert_modulation(self, value, description):
-        self.db.execute(Query.INSERT_MODULATION, [self.sig_id,value, description])
+        with database:
+            Modulation.create(sig=self.sig_id, value=value, description=description)
 
 
     def insert_mode(self, value, description):
-        self.db.execute(Query.INSERT_MODE, [self.sig_id,value, description])
+        with database:
+            Mode.create(sig=self.sig_id, value=value, description=description)
 
 
     def insert_acf(self, value, description):
-        self.db.execute(Query.INSERT_ACF, [self.sig_id,value, description])
+        with database:
+            Acf.create(sig=self.sig_id, value=value, description=description)
 
 
     def insert_location(self, value, description):
-        self.db.execute(Query.INSERT_LOCATION, [self.sig_id,value, description])
+        with database:
+            Location.create(sig=self.sig_id, value=value, description=description)
 
 
     def insert_category(self, clb_id):
-        self.db.execute(Query.INSERT_CATEGORY, [self.sig_id, clb_id])
+        with database:
+            Category.create(sig=self.sig_id, clb=clb_id)
 
 
     def insert_document(self, doc_lst):
-        row_id = self.db.execute(Query.INSERT_DOCUMENTS, [self.sig_id] + doc_lst[1:], True)[1]
-        return row_id
+        with database:
+            new_doc = Documents.create(
+                sig=self.sig_id,
+                name=doc_lst[2],
+                description=doc_lst[3],
+                extension=doc_lst[1],
+                type=doc_lst[4],
+                preview=doc_lst[5]
+            )
+        return new_doc.doc_id
 
-
-################################## MARK: DELETE Methods
-
-
+################################## MARK: CRUD > DELETE
     def delete_signal(self):
-        self.db.execute(Query.DELETE_SIGNAL, [self.sig_id])
+        with database:
+            Signals.delete().where(Signals.sig_id == self.sig_id).execute()
 
 
     def delete_frequency(self, freq_id):
-        self.db.execute(Query.DELETE_FREQUENCY, [freq_id])
+        with database:
+            Frequency.delete().where(Frequency.freq_id == freq_id).execute()
 
 
     def delete_bandwidth(self, band_id):
-        self.db.execute(Query.DELETE_BANDWIDTH, [band_id])
+        with database:
+            Bandwidth.delete().where(Bandwidth.band_id == band_id).execute()
 
 
     def delete_modulation(self, modu_id):
-        self.db.execute(Query.DELETE_MODULATION, [modu_id])
+        with database:
+            Modulation.delete().where(Modulation.mdl_id == modu_id).execute()
 
 
     def delete_mode(self, mode_id):
-        self.db.execute(Query.DELETE_MODE, [mode_id])
+        with database:
+            Mode.delete().where(Mode.mod_id == mode_id).execute()
 
 
     def delete_acf(self, acf_id):
-        self.db.execute(Query.DELETE_ACF, [acf_id])
+        with database:
+            Acf.delete().where(Acf.acf_id == acf_id).execute()
 
 
     def delete_location(self, loc_id):
-        self.db.execute(Query.DELETE_LOCATION, [loc_id])
+        with database:
+            Location.delete().where(Location.loc_id == loc_id).execute()
 
 
     def delete_document(self, doc_id):
-        self.db.execute(Query.DELETE_DOCUMENT, [doc_id])
+        with database:
+            Documents.delete().where(Documents.doc_id == doc_id).execute()
 
 
     def delete_category(self, cat_id):
-        self.db.execute(Query.DELETE_CATEGORY, [cat_id])
+        with database:
+            Category.delete().where(Category.cat_id == cat_id).execute()

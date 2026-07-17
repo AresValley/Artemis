@@ -1,9 +1,11 @@
+import os
+
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Signal, Slot
 
-from artemis.utils.path_utils import *
-from artemis.utils.generic_utils import *
-from artemis.utils.sys_utils import *
+from artemis.utils.path_utils import normalize_dialog_path
+from artemis.utils.sys_utils import copy_file, open_file, delete_file
+from artemis.utils.constants import Messages
 
 
 class UIdocumentsmanager(QObject):
@@ -69,18 +71,18 @@ class UIdocumentsmanager(QObject):
             doc_param contains all the details of the new documents. 
         """
         doc_param = doc_lst.toVariant()
-        file_extension = os.path.splitext(doc_param[0])[1][1:]
+        filename, file_extension = os.path.splitext(doc_param[0])
 
         doc_id = self._parent.loaded_sig.insert_document([
             -1,
-            file_extension,
+            file_extension[1:],
             doc_param[1],
             doc_param[2],
             doc_param[3],
             0
         ])
 
-        local_file_name = '{}.{}'.format(str(doc_id), file_extension)
+        local_file_name = f'{doc_id}{file_extension}'
         origin_path = normalize_dialog_path(doc_param[0])
         copy_file(origin_path, self._parent.loaded_db.media_dir / local_file_name)
         self.load_documents_list()
@@ -93,6 +95,7 @@ class UIdocumentsmanager(QObject):
         doc_list = doc_lst.toVariant()
         for doc in doc_list:
             self._parent.loaded_sig.update_documents(doc[0], doc[1], doc[2], doc[3], doc[4])
+        self._parent.load_sig(self._parent.loaded_sig.sig_id)
         self.load_documents_list()
 
 
@@ -101,7 +104,7 @@ class UIdocumentsmanager(QObject):
         """ Open the selected document with the proper system application (if any)
         """
         try:
-            open_file(self._parent.loaded_db.media_dir / '{}.{}'.format(doc_id, extension))
+            open_file(self._parent.loaded_db.media_dir / f'{doc_id}.{extension}')
         except Exception as e:
             self.close_ui.emit()
             self._parent.dialog_popup(
@@ -115,7 +118,7 @@ class UIdocumentsmanager(QObject):
     def delete_doc(self, doc_id, doc_extension, doc_type, doc_preview):
         """ Delete the selected document
         """
-        doc_file_name = '{}.{}'.format(doc_id, doc_extension)
+        doc_file_name = f'{doc_id}.{doc_extension}'
         doc_file_path = self._parent.loaded_db.media_dir / doc_file_name
         
         self._parent.loaded_sig.delete_document(doc_id)

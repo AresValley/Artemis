@@ -1,7 +1,7 @@
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, Signal
 
-from artemis.utils.config_utils import *
+from artemis.utils.config_utils import CONFIGURE_QT
 
 
 class UIPreferences(QObject):
@@ -9,6 +9,7 @@ class UIPreferences(QObject):
     show_ui = Signal()
     load_material_accent = Signal(str)
     load_material_theme = Signal(str)
+    load_scaling = Signal(str)
     load_autoload = Signal(int)
 
 
@@ -28,12 +29,14 @@ class UIPreferences(QObject):
         # QML > Python connections
         self._window.saveMaterialAccent.connect(self.save_material_accent)
         self._window.saveMaterialTheme.connect(self.save_material_theme)
+        self._window.saveScaling.connect(self.save_scaling)
         self._window.saveAutoload.connect(self.save_autoload)
 
         # Python > QML connections
         self.show_ui.connect(self._window.show)
         self.load_material_accent.connect(self._window.loadMaterialAccent)
         self.load_material_theme.connect(self._window.loadMaterialTheme)
+        self.load_scaling.connect(self._window.loadScaling)
         self.load_autoload.connect(self._window.loadAutoload)
 
 
@@ -42,6 +45,7 @@ class UIPreferences(QObject):
         """
         self.load_material_accent.emit(CONFIGURE_QT.value("Material", "Accent", "Green"))
         self.load_material_theme.emit(CONFIGURE_QT.value("Material", "Theme", "System"))
+        self.load_scaling.emit(CONFIGURE_QT.value("Scaling", "factor", "1.00"))
         self.load_autoload.emit(int(CONFIGURE_QT.value("Database", "autoload", 0)))
         self.show_ui.emit()
 
@@ -58,6 +62,13 @@ class UIPreferences(QObject):
         """ Saving material theme setting
         """
         CONFIGURE_QT.set("Material", "Theme", material_theme)
+
+
+    @Slot(str)
+    def save_scaling(self, scaling):
+        """ Saving UI scaling
+        """
+        CONFIGURE_QT.set("Scaling", "factor", scaling)
 
 
     @Slot(int)

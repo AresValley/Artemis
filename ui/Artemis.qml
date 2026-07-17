@@ -45,17 +45,14 @@ Window {
     property var currentSelectedSignal: null
 
     // MARK: Functions
-    function lockMenu(toggle) {
-        openFileMenu.enabled = !toggle
-        exportFileMenu.enabled = !toggle
-        newSignalMenu.enabled = !toggle
-        editCategoryMenu.enabled = !toggle
-        newFrequencyMenu.enabled = !toggle
-        newBandMenu.enabled = !toggle
-        newModeMenu.enabled = !toggle
-        newModulationMenu.enabled = !toggle
-        newACFMenu.enabled = !toggle
-        newLocationMenu.enabled = !toggle
+    function lockMenu(is_db_loaded, is_sigid) {
+        openFileMenu.enabled = !is_db_loaded
+        exportFileMenu.enabled = !is_db_loaded
+        signalMenu.enabled = !is_db_loaded
+        filterMenu.enabled = !is_db_loaded
+        editCategoryMenu.enabled = !is_db_loaded
+        filterSinceVersionMenu.enabled = is_sigid
+        if (is_db_loaded) {bottomInfoBar('','info')}
     }
 
     function bottomInfoBar(message, messageType) {
@@ -94,6 +91,7 @@ Window {
             if (data[0].location) filterLocation.populate(data[0].location);
             if (data[0].category) filterCategory.populate(data[0].category);
             if (data[0].modulation) filterModulation.populate(data[0].modulation);
+            if (data[0].since_version) filterSinceVersion.populate(data[0].since_version);
         }
     }
 
@@ -108,6 +106,7 @@ Window {
         filterFrequency.resetToDefault();
         filterACF.resetToDefault();
         filterBandwidth.resetToDefault();
+        filterSinceVersion.resetToDefault();
         applyFilter({});
     }
 
@@ -117,7 +116,8 @@ Window {
             filterModulation.isFilterActive ||
             filterFrequency.isFilterActive ||
             filterBandwidth.isFilterActive ||
-            filterACF.isFilterActive
+            filterACF.isFilterActive ||
+            filterSinceVersion.isFilterActive
     }
 
     // MARK: FILTERS
@@ -219,6 +219,21 @@ Window {
                 filterDict["modulation"] = selectedValues;
             } else {
                 delete filterDict["modulation"];
+            }
+            submitFilters();
+        }
+    }
+
+    UIComponents.FilterListDialog {
+        id: filterSinceVersion
+        objectName: "sinceVersionDialogObj"
+        title: qsTr("Filter by DB version")
+        
+        onFilterApplied: function(selectedValues) {
+            if (isFilterActive && selectedValues && selectedValues.length > 0) {
+                filterDict["since_version"] = selectedValues;
+            } else {
+                delete filterDict["since_version"];
             }
             submitFilters();
         }
@@ -366,8 +381,8 @@ Window {
         bottomPadding: 10
         focus: true
 
-        Keys.onDownPressed: listView.incrementCurrentIndex()
-        Keys.onUpPressed: listView.decrementCurrentIndex()
+        Keys.onDownPressed: customSignalList.incrementCurrentIndex()
+        Keys.onUpPressed: customSignalList.decrementCurrentIndex()
 
         header: MenuBar {
             id: topBar
@@ -377,6 +392,8 @@ Window {
 
             delegate: MenuBarItem {
                 id: menuBarItem
+                enabled: menuBarItem.menu ? menuBarItem.menu.enabled : true
+                opacity: menuBarItem.enabled ? 1.0 : 0.5
                 contentItem: Label {
                     text: menuBarItem.text
                     font: menuBarItem.font
@@ -418,17 +435,16 @@ Window {
             Menu {
                 id: signalMenu
                 title: qsTr("Edit")
+                enabled: false
 
                 MenuItem {
                     id: newSignalMenu
-                    enabled: false
                     text: "New Signal"
                     onClicked: openSigEditor('Signal', [], true)
                 }
 
                 MenuItem {
                     id: editSignalMenu
-                    enabled: false
                     text: "Edit Name/Description"
                     onClicked: {
                         if (currentSelectedSignal) {
@@ -441,42 +457,36 @@ Window {
 
                 MenuItem {
                     id: newFrequencyMenu
-                    enabled: false
                     text: "Add Frequency"
                     onClicked: openSigEditor('Frequency', [], true)
                 }
 
                 MenuItem {
                     id: newBandMenu
-                    enabled: false
                     text: "Add Bandwidth"
                     onClicked: openSigEditor('Bandwidth', [], true)
                 }
 
                 MenuItem {
                     id: newModulationMenu
-                    enabled: false
                     text: "Add Modulation"
                     onClicked: openSigEditor('Modulation', [], true)
                 }
 
                 MenuItem {
                     id: newModeMenu
-                    enabled: false
                     text: "Add Mode"
                     onClicked: openSigEditor('Mode', [], true)
                 }
 
                 MenuItem {
                     id: newACFMenu
-                    enabled: false
                     text: "Add ACF"
                     onClicked: openSigEditor('ACF', [], true)
                 }
 
                 MenuItem {
                     id: newLocationMenu
-                    enabled: false
                     text: "Add Location"
                     onClicked: openSigEditor('Location', [], true)
                 }
@@ -485,7 +495,7 @@ Window {
             Menu {
                 id: filterMenu
                 title: anyFilterActive() ? qsTr("Filter •") : qsTr("Filter")
-
+                enabled: false
                 MenuItem {
                     text: qsTr("Frequency")
                     onClicked: filterFrequency.open()
@@ -571,6 +581,22 @@ Window {
                             : qsTr("Location")
 
                         color: filterLocation.isFilterActive
+                            ? Material.color(Material.Red)
+                            : Material.foreground
+                    }
+                }
+
+                MenuItem {
+                    id: filterSinceVersionMenu
+                    text: qsTr("DB version")
+                    onClicked: filterSinceVersion.open()
+
+                    contentItem: Label {
+                        text: filterSinceVersion.isFilterActive
+                            ? qsTr("DB version •")
+                            : qsTr("DB version")
+
+                        color: filterSinceVersion.isFilterActive
                             ? Material.color(Material.Red)
                             : Material.foreground
                     }
@@ -673,7 +699,7 @@ Window {
 
                     onItemSelected: (selectedItem) => {
                         currentSelectedSignal = selectedItem
-                        loadSignal(selectedItem.SIG_ID) 
+                        loadSignal(selectedItem.sig_id) 
                         editSignalMenu.enabled = true
                         newFrequencyMenu.enabled = true
                         newBandMenu.enabled = true

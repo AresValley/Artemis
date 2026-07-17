@@ -25,12 +25,14 @@ Window {
 
     signal saveMaterialAccent(string arg)
     signal saveMaterialTheme(string arg)
+    signal saveScaling(string arg)
     signal saveAutoload(int arg)
 
     function saveAll() {
         saveMaterialAccent(comboBoxAccent.currentText)
         saveMaterialTheme(comboBoxTheme.currentText)
         saveAutoload(checkBoxAutoload.checked)
+        saveScaling(comboBoxScaling.currentText)
     }
 
     function loadMaterialAccent(accent) {
@@ -46,6 +48,15 @@ Window {
         for (var idx = 0; idx < comboBoxTheme.count; idx++) {
             if (theme === comboBoxTheme.valueAt(idx)) {
                 comboBoxTheme.currentIndex = idx
+                break
+            }
+        }
+    }
+
+    function loadScaling(scaling) {
+        for (var idx = 0; idx < comboBoxScaling.count; idx++) {
+            if (scaling === comboBoxScaling.valueAt(idx)) {
+                comboBoxScaling.currentIndex = idx
                 break
             }
         }
@@ -114,6 +125,30 @@ Window {
                         "Blue", "LightBlue", "Cyan", "Teal", "Green",
                         "LightGreen", "Lime", "Yellow", "Amber", "Orange",
                         "DeepOrange", "Brown", "Grey", "BlueGrey"
+                    ]
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+
+                Label {
+                    text: qsTr("DPI Scaling")
+                    font.pixelSize: 12
+                    clip: true
+                    Layout.fillWidth: true
+                }
+
+                ComboBox {
+                    id: comboBoxScaling
+                    Layout.preferredWidth: 137
+                    Layout.preferredHeight: 48
+                    model: [
+                        "0.50", "0.55", "0.60", "0.65", "0.70",
+                        "0.75", "0.80", "0.85", "0.90", "0.95",
+                        "1.00", "1.05", "1.10", "1.15", "1.20",
+                        "1.25", "1.30", "1.35", "1.40", "1.45",
+                        "1.50"
                     ]
                 }
             }

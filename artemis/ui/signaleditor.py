@@ -1,9 +1,7 @@
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Signal, Slot
 
-from artemis.utils.path_utils import *
-from artemis.utils.generic_utils import *
-from artemis.utils.sql_utils import ArtemisSignal
+from artemis.utils.sql_utils import ArtemisSIG
 from artemis.utils.sys_utils import delete_file
 
 
@@ -64,7 +62,7 @@ class UIsignaleditor(QObject):
 
         if is_new:
             if param_type == 'Signal':
-                self._parent.loaded_sig = ArtemisSignal(self._parent.loaded_db)
+                self._parent.loaded_sig = ArtemisSIG(self._parent.loaded_db)
                 self._parent.loaded_sig.insert_signal(data[1], data[2])
             elif param_type == 'Frequency':
                 self._parent.loaded_sig.insert_frequency(int(data[1]), data[2])
@@ -107,7 +105,7 @@ class UIsignaleditor(QObject):
             self._parent.loaded_sig.delete_signal()
             self._parent.lock_audio_player.emit()
             for doc in self._parent.loaded_sig.documents:
-                doc_file_name = '{}.{}'.format(str(doc[0]), doc[1])
+                doc_file_name = f'{str(doc[0])}.{doc[1]}'
                 doc_file_path = self._parent.loaded_db.media_dir / doc_file_name
                 delete_file(doc_file_path)
         elif param_type == 'Frequency':

@@ -32,7 +32,7 @@ Item {
         return luminance > 0.55 ? "black" : "white"
     }
 
-    function setBandBar(lof, upf) {
+    function set(lof, upf) {
         lastLof = lof
         lastUpf = upf
 
@@ -48,6 +48,16 @@ Item {
         selector.width = Math.max(step, (end - start + 1) * step)
     }
 
+    function reset() {
+        lastLof = -1
+        lastUpf = -1
+        selectedStart = -1
+        selectedEnd = -1
+        
+        selector.width = 0
+        selector.x = 0
+    }
+
     Rectangle {
         id: container
         anchors.fill: parent
@@ -55,7 +65,7 @@ Item {
 
         onWidthChanged: {
             if (width > 0 && root.lastLof !== -1) {
-                root.setBandBar(root.lastLof, root.lastUpf)
+                root.set(root.lastLof, root.lastUpf)
             }
         }
 

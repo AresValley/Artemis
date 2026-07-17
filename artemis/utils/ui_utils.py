@@ -11,10 +11,8 @@ def set_ui():
     os.environ['QT_QUICK_CONTROLS_MATERIAL_THEME'] = CONFIGURE_QT.value('Material', 'theme', 'System')
     os.environ['QT_QUICK_CONTROLS_MATERIAL_ACCENT'] = CONFIGURE_QT.value('Material', 'accent', 'Green')
 
-    # High DPI
-    os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
-    os.environ['QT_ENABLE_HIGHDPI_SCALING'] = '1'
-    os.environ['QT_SCALE_FACTOR_ROUNDING_POLICY'] = 'PassThrough'
+    # Scaling
+    os.environ['QT_SCALE_FACTOR'] = CONFIGURE_QT.value('Scaling', 'factor', '1.00')
 
     # GUI Backend
     if is_windows():

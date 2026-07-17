@@ -66,7 +66,7 @@ Window {
 
             if (currentDoc.type === 'Image' || currentDoc.type === 'Audio') {
                 switchPreview.visible = true
-                switchPreview.checked = (currentDoc.preview === 1)
+                switchPreview.checked = currentDoc.preview
             } else {
                 switchPreview.visible = false
             }
@@ -97,25 +97,20 @@ Window {
     }
 
     function previewChanged(is_preview) {
-        if (!currentDoc) return
+        if (!currentDoc || currentDoc.preview === is_preview) return
 
-        if (currentDoc.preview !== is_preview) {
-            var list = listView.loadedList
-            if (is_preview) {
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i].type === currentDoc.type) {
-                        list[i].preview = 0
-                    }
-                }
-                currentDoc.preview = 1            
-            } else {
-                currentDoc.preview = 0
-            }
-            updateDoc(getModel())
-            listView.populateList(list)
-            itemChanged()
-            changeSavedDialog.open()
-        }
+        var list = listView.loadedList || []
+
+        list.forEach(function(item) {
+            if (is_preview === 1 && item.type === currentDoc.type) item.preview = 0
+            if (item.doc_id === currentDoc.doc_id) item.preview = is_preview
+        })
+
+        currentDoc.preview = is_preview
+
+        updateDoc(getModel())
+        listView.populateList(list)
+        changeSavedDialog.open()
     }
 
     function validateFields() {
@@ -420,13 +415,8 @@ Window {
                         id: switchPreview
                         text: qsTr("Main")
                         Layout.alignment: Qt.AlignVCenter
-                        onCheckedChanged: {
-                            if (checked) {
-                                previewChanged(1)
-                            } else {
-                                previewChanged(0)
-                            }
-                        }
+                        checked: currentDoc ? (currentDoc.preview === 1) : false
+                        onToggled: previewChanged(checked ? 1 : 0)
                     }
 
                     UIComponents.ArtemisButton {
