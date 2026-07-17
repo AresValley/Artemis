@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "packaging==26.2",
-    "peewee>=4.1.1",
+    "peewee>=4.2.6",
     "pyside6==6.11.1",
     "requests==2.34.2",
 ]
