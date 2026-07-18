@@ -37,5 +37,8 @@ To learn more about Artemis, go to:
 * [**Pierpaolo Pravatto**](https://github.com/ppravatto "GitHub profile") - *Wiki page, β Tester*
 * [**Francesco Capostagno**](https://github.com/fcapostagno "GitHub profile"), **Luca**, **Pietro** - *β Tester*
 
+## Sponsors
+<a href="https://signpath.org/"><img src="docs/assets/signpath-logo.png" width="120" alt="SignPath Logo" valign="middle" /></a>&nbsp; Free code signing on Windows provided by <a href="https://signpath.io">SignPath.io</a>, certificate by <a href="https://signpath.org/projects/aresvalley-artemis/">SignPath Foundation</a>
+
 ## License
 Artemis is licensed under the [**GPL-3**](https://github.com/AresValley/Artemis/blob/master/LICENSE) license. 
