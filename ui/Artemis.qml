@@ -298,11 +298,11 @@ Window {
     // MARK: Export DB
     FileDialog {
         id: exportDialog
-        title: "Please choose a save folder..."
+        title: qsTr("Please choose a save folder...")
         fileMode: FileDialog.SaveFile
         nameFilters: ["All files (*)"]
         onAccepted: {
-            operationPopup.message = "Exporting..."
+            operationPopup.message = qsTr("Exporting...")
             operationPopup.open()
             exportTimer.start()
         }
@@ -321,7 +321,7 @@ Window {
     // MARK: Import DB
     FileDialog {
         id: importDialog
-        title: "Please choose a valid tar.gz archive..."
+        title: qsTr("Please choose a valid tar.gz archive...")
         fileMode: FileDialog.OpenFile
         nameFilters: ["All files (*)"]
         onAccepted: {
@@ -419,17 +419,17 @@ Window {
 
             Menu {
                 title: qsTr("File")
-                MenuItem { text: "New Database..."; onClicked: dialogNewDb.open() }
-                MenuItem { text: "Load Database..."; onClicked: showDBmanager() }
+                MenuItem { text: qsTr("New Database"); onClicked: dialogNewDb.open() }
+                MenuItem { text: qsTr("Load Database"); onClicked: showDBmanager() }
                 MenuSeparator {}
-                MenuItem { id: importFileMenu; text: "Import Database"; onClicked: importDialog.open() }
-                MenuItem { id: exportFileMenu; text: "Export Database"; onClicked: exportDialog.open(); enabled: false }
+                MenuItem { id: importFileMenu; text: qsTr("Import Database"); onClicked: importDialog.open() }
+                MenuItem { id: exportFileMenu; text: qsTr("Export Database"); onClicked: exportDialog.open(); enabled: false }
                 MenuSeparator {}
-                MenuItem { id: editCategoryMenu; text: "Edit Tags"; onClicked: showCatManager(); enabled: false }
+                MenuItem { id: editCategoryMenu; text: qsTr("Edit Tags"); onClicked: showCatManager(); enabled: false }
                 MenuSeparator {}
-                MenuItem { id: openFileMenu; text: "Open Database Folder"; onClicked: openDbDirectory(); enabled: false }
-                MenuItem { text: "Preferences"; onClicked: showPref() }
-                MenuItem { text: "Exit"; onClicked: close() }
+                MenuItem { id: openFileMenu; text: qsTr("Open Database Folder"); onClicked: openDbDirectory(); enabled: false }
+                MenuItem { text: qsTr("Preferences"); onClicked: showPref() }
+                MenuItem { text: qsTr("Exit"); onClicked: close() }
             }
 
             Menu {
@@ -439,13 +439,13 @@ Window {
 
                 MenuItem {
                     id: newSignalMenu
-                    text: "New Signal"
+                    text: qsTr("New Signal")
                     onClicked: openSigEditor('Signal', [], true)
                 }
 
                 MenuItem {
                     id: editSignalMenu
-                    text: "Edit Name/Description"
+                    text: qsTr("Edit Name/Description")
                     onClicked: {
                         if (currentSelectedSignal) {
                             openSigEditor('Signal', currentSelectedSignal, false)
@@ -457,37 +457,37 @@ Window {
 
                 MenuItem {
                     id: newFrequencyMenu
-                    text: "Add Frequency"
+                    text: qsTr("Add Frequency")
                     onClicked: openSigEditor('Frequency', [], true)
                 }
 
                 MenuItem {
                     id: newBandMenu
-                    text: "Add Bandwidth"
+                    text: qsTr("Add Bandwidth")
                     onClicked: openSigEditor('Bandwidth', [], true)
                 }
 
                 MenuItem {
                     id: newModulationMenu
-                    text: "Add Modulation"
+                    text: qsTr("Add Modulation")
                     onClicked: openSigEditor('Modulation', [], true)
                 }
 
                 MenuItem {
                     id: newModeMenu
-                    text: "Add Mode"
+                    text: qsTr("Add Mode")
                     onClicked: openSigEditor('Mode', [], true)
                 }
 
                 MenuItem {
                     id: newACFMenu
-                    text: "Add ACF"
+                    text: qsTr("Add ACF")
                     onClicked: openSigEditor('ACF', [], true)
                 }
 
                 MenuItem {
                     id: newLocationMenu
-                    text: "Add Location"
+                    text: qsTr("Add Location")
                     onClicked: openSigEditor('Location', [], true)
                 }
             }
@@ -607,14 +607,14 @@ Window {
                 MenuItem {
                     id: resetFilterMenu
                     enabled: true
-                    text: "Reset all filters"
+                    text: qsTr("Reset all filters")
                     onClicked: {resetFilters()}
                 } 
             }
 
             Menu {
                 title: qsTr("Space Weather")
-                MenuItem { text: "Check Report"; onClicked: showSpaceWeather() }
+                MenuItem { text: qsTr("Check Report"); onClicked: showSpaceWeather() }
             }
 
             Menu {
@@ -640,29 +640,29 @@ Window {
                 MenuSeparator {}
 
                 MenuItem {
-                    text: "Project Homepage"
+                    text: qsTr("Project Homepage")
                     onClicked: {Qt.openUrlExternally('https://aresvalley.com/')}
                 }
 
                 MenuItem {
-                    text: "Documentation"
+                    text: qsTr("Documentation")
                     onClicked: {Qt.openUrlExternally('https://AresValley.github.io/Artemis')}
                 }
 
                 MenuItem {
-                    text: "Show Release Notes"
+                    text: qsTr("Show Release Notes")
                     onClicked: {Qt.openUrlExternally('https://github.com/AresValley/Artemis/blob/master/CHANGELOG.md')}
                 }
 
                 MenuSeparator {}
 
                 MenuItem {
-                    text: "Report Issue"
+                    text: qsTr("Report Issue")
                     onClicked: {Qt.openUrlExternally('https://github.com/AresValley/Artemis/issues')}
                 }
 
                 MenuSeparator {}
-                MenuItem { text: "About"; onClicked: aboutDialog.open() }
+                MenuItem { text: qsTr("About"); onClicked: aboutDialog.open() }
             }
         }
 

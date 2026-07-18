@@ -140,7 +140,7 @@ Window {
 
     FileDialog {
         id: fileDialog
-        title: "Please choose a file"
+        title: qsTr("Please choose a file")
         nameFilters: [
             "Image (*.png *.jpg *.jpeg *.gif *.bmp *.tiff *.tif *.webp *.svg *.heic *.raw *.cr2 *.nef *.orf *.sr2 *.arw *.dng)",
             "Audio (*.mp3 *.wav *.aac *.flac *.alac *.wma *.ogg *.m4a *.aiff *.aif *.amr *.opus *.mid *.midi *.pcm)",
@@ -283,8 +283,8 @@ Window {
     DialogMessage {
         id: dialogDeleteConfirmation
         modal: true
-        title: "Are you sure?"
-        message: "You are about to delete the selected document. The process cannot be undone."
+        title: qsTr("Are you sure?")
+        message: qsTr("You are about to delete the selected document. The process cannot be undone.")
         messageType: "warn"
         standardButtons: Dialog.Cancel | Dialog.Yes
 

@@ -1,7 +1,7 @@
 import locale
 import sys
 
-from PySide6.QtCore import qVersion
+from PySide6.QtCore import qVersion, QCoreApplication
 
 
 class Constants():
@@ -23,7 +23,7 @@ class Constants():
     QT_VERSION                  = qVersion()
 
 
-class Messages:
+class _Messages:
     """ Container class for messages to be displayed """
     # Type
     DIALOG_TYPE_INFO            = 'info'
@@ -32,26 +32,89 @@ class Messages:
     DIALOG_TYPE_ERROR           = 'error'
 
     # Titles
-    GENERIC_SUCCESS             = "Success!"
-    GENERIC_ERROR               = "Something went wrong!"
-    NO_DB_DETECTED              = "No SigID database detected..."
-    NO_CONNECTION               = "Connection Error!"
-    UP_TO_DATE                  = "You're up to date!"
-    DB_NEW_VER                  = "New SigID DB version available!"
-    ART_NEW_VER                 = "New Artemis version available!"
-    DB_CORRUPTED                = "Database Corruption Detected"
+    @property
+    def GENERIC_SUCCESS(self):
+        return QCoreApplication.translate("Messages", "Success!")
+
+    @property
+    def GENERIC_ERROR(self):
+        return QCoreApplication.translate("Messages", "Something went wrong!")
+
+    @property
+    def NO_DB_DETECTED(self):
+        return QCoreApplication.translate("Messages", "No SigID database detected...")
+
+    @property
+    def NO_CONNECTION(self):
+        return QCoreApplication.translate("Messages", "Connection Error!")
+
+    @property
+    def UP_TO_DATE(self):
+        return QCoreApplication.translate("Messages", "You're up to date!")
+
+    @property
+    def DB_NEW_VER(self):
+        return QCoreApplication.translate("Messages", "New SigID DB version available!")
+
+    @property
+    def ART_NEW_VER(self):
+        return QCoreApplication.translate("Messages", "New Artemis version available!")
+
+    @property
+    def DB_CORRUPTED(self):
+        return QCoreApplication.translate("Messages", "Database Corruption Detected")
 
     # Messages
-    DB_CREATION_SUCCESS_MSG     = "The new database has been created succesfully."
-    GENERIC_ERROR_MSG           = "An error occurred during the process. Details: {}"
-    IMPORTING_SUCCESS_MSG       = "Database importing has been succesfully completed!"
-    EXPORTING_SUCCESS_MSG       = "Database exporting has been succesfully completed!"
-    FILE_NOT_FOUND_ERR_MSG      = "The file you are trying to access cannot be located. This may be because the file has been moved or deleted."
-    NO_DB_DETECTED_MSG          = "Do you want to download it now?"
-    NO_CONNECTION_MSG           = "Unable to check for updates. It appears that there is a problem with your internet connection. Please check your network settings and try again later. {}"
-    UP_TO_DATE_MSG              = "The latest version of Artemis and SigID wiki is installed on your computer."
-    DB_NEW_VER_MSG              = "A new version of the database ({}) is available for download. Download now?"
-    ART_NEW_VER_MANUAL_MSG      = "A new version of Artemis ({}) is available for download. Check GitHub page now?"
-    ART_NEW_VER_AUTO_MSG        = "A new version of Artemis ({}) is available for download. Update Artemis now?"
-    DB_CORRUPTED_MSG            = "Downloaded data corrupted or invalid. Please retry."
-    DB_DOWNLOAD_SUCCESS_MSG     = "The database has been successfully downloaded and is now being loaded."
+    @property
+    def DB_CREATION_SUCCESS_MSG(self):
+        return QCoreApplication.translate("Messages", "The new database has been created succesfully.")
+
+    @property
+    def GENERIC_ERROR_MSG(self):
+        return QCoreApplication.translate("Messages", "An error occurred during the process. Details: {}")
+
+    @property
+    def IMPORTING_SUCCESS_MSG(self):
+        return QCoreApplication.translate("Messages", "Database importing has been succesfully completed!")
+
+    @property
+    def EXPORTING_SUCCESS_MSG(self):
+        return QCoreApplication.translate("Messages", "Database exporting has been succesfully completed!")
+
+    @property
+    def FILE_NOT_FOUND_ERR_MSG(self):
+        return QCoreApplication.translate("Messages", "The file you are trying to access cannot be located. This may be because the file has been moved or deleted.")
+
+    @property
+    def NO_DB_DETECTED_MSG(self):
+        return QCoreApplication.translate("Messages", "Do you want to download it now?")
+
+    @property
+    def NO_CONNECTION_MSG(self):
+        return QCoreApplication.translate("Messages", "Unable to check for updates. It appears that there is a problem with your internet connection. Please check your network settings and try again later. {}")
+
+    @property
+    def UP_TO_DATE_MSG(self):
+        return QCoreApplication.translate("Messages", "The latest version of Artemis and SigID wiki is installed on your computer.")
+
+    @property
+    def DB_NEW_VER_MSG(self):
+        return QCoreApplication.translate("Messages", "A new version of the database ({}) is available for download. Download now?")
+
+    @property
+    def ART_NEW_VER_MANUAL_MSG(self):
+        return QCoreApplication.translate("Messages", "A new version of Artemis ({}) is available for download. Check GitHub page now?")
+
+    @property
+    def ART_NEW_VER_AUTO_MSG(self):
+        return QCoreApplication.translate("Messages", "A new version of Artemis ({}) is available for download. Update Artemis now?")
+
+    @property
+    def DB_CORRUPTED_MSG(self):
+        return QCoreApplication.translate("Messages", "Downloaded data corrupted or invalid. Please retry.")
+
+    @property
+    def DB_DOWNLOAD_SUCCESS_MSG(self):
+        return QCoreApplication.translate("Messages", "The database has been successfully downloaded and is now being loaded.")
+
+Messages = _Messages()

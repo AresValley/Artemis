@@ -113,8 +113,8 @@ Window {
                     textRole: "text"
                     valueRole: "value"
                     model: ListModel {
-                        ListElement { text: "English"; value: "en_US" }
-                        ListElement { text: "Italiano";  value: "it_IT" }
+                        ListElement { text: qsTr("English"); value: "en_US" }
+                        ListElement { text: qsTr("Italian");  value: "it_IT" }
                     }
                 }
             }

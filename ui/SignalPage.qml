@@ -287,7 +287,7 @@ Page {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "FREQUENCY"
+                        text: qsTr("FREQUENCY")
                         font.pixelSize: 14
                         font.bold: true
                         Layout.preferredWidth: 90
@@ -332,7 +332,7 @@ Page {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "BANDWIDTH"
+                        text: qsTr("BANDWIDTH")
                         font.pixelSize: 14
                         font.bold: true
                         Layout.preferredWidth: 90
@@ -377,7 +377,7 @@ Page {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "MODULATION"
+                        text: qsTr("MODULATION")
                         font.pixelSize: 14
                         font.bold: true
                         Layout.preferredWidth: 90
@@ -422,7 +422,7 @@ Page {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "MODE"
+                        text: qsTr("MODE")
                         font.pixelSize: 14
                         font.bold: true
                         Layout.preferredWidth: 90
@@ -467,7 +467,7 @@ Page {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "ACF"
+                        text: qsTr("ACF")
                         font.pixelSize: 14
                         font.bold: true
                         Layout.preferredWidth: 90
@@ -512,7 +512,7 @@ Page {
                     Layout.fillWidth: true
 
                     Label {
-                        text: "LOCATION"
+                        text: qsTr("LOCATION")
                         font.pixelSize: 14
                         font.bold: true
                         Layout.preferredWidth: 90

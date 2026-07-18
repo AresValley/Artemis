@@ -110,8 +110,8 @@ Window {
     DialogMessage {
         id: dialogDeleteConfirmation
         modal: true
-        title: "Are you sure?"
-        message: "You are about to delete the selected " + paramType + ". The process cannot be undone."
+        title: qsTr("Are you sure?")
+        message: qsTr("You are about to delete the selected " + paramType + ". The process cannot be undone.")
         messageType: "warn"
         standardButtons: Dialog.Cancel | Dialog.Yes
 
