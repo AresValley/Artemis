@@ -6,7 +6,7 @@ from packaging.version import Version
 from artemis.utils.constants import Constants, Messages
 from artemis.utils.sys_utils import is_windows, is_linux, is_macos, is_arm, is_x64, delete_file, match_hash, unpack_tar, open_file
 from artemis.utils.path_utils import DATA_DIR, TMP_DIR
-
+from artemis.utils.sql_utils import ArtemisDB
 
 class UpdateManager:
     """ Class used to manage DB and software updates
@@ -144,6 +144,10 @@ class UpdateManager:
         if match_hash(latest_db_tar_path, self.remote_db_hash):
             db_dir_name = str(uuid.uuid4())
             unpack_tar(latest_db_tar_path, DATA_DIR / db_dir_name)
+            # Apply migrations if necessary
+            db = ArtemisDB(db_dir_name)
+            db.migrate_db()
+            ####
             self._parent.load_db(db_dir_name)
             self._parent.set_update_available(False)
             self._show_popup_db_download_complete()
