@@ -81,6 +81,24 @@
   <content_rating type="oars-1.0" />
 
   <releases>
+    <release version="4.2.0" date="2026-07-18">
+      <url type="details">https://github.com/AresValley/Artemis/releases/tag/v4.2.0</url>
+      <description>
+        <p>This release introduces officially signed Windows binaries, High DPI scaling support, a significant database layer refactoring using Peewee ORM with structured migrations, and key stability fixes.</p>
+        <ul>
+          <li>Added a badge in the DB manager to show which database is currently loaded</li>
+          <li>Added a new field for each signal, including dedicated filtering, to track the specific database version in which the signal was introduced</li>
+          <li>Added digitally signed Windows binaries (x86 and ARM64) via SignPath Foundation to establish application trust</li>
+          <li>Added support for High DPI scaling to improve interface clarity on high-resolution displays</li>
+          <li>Refactored the database layer from raw SQL queries to Peewee ORM to improve code maintainability</li>
+          <li>Implemented a structured migration system to ensure full backward compatibility with existing databases</li>
+          <li>Fixed a regression regarding the helper function to use up/down keys to navigate the signal list</li>
+          <li>Moved resources import to main to fix resolution issues during Nuitka builds, ensuring the application icon appears in the taskbar</li>
+          <li>Fixed the preview switch behavior to ensure it works properly (#86)</li>
+          <li>Fixed the bandBar behavior to reset properly when the frequency is undefined</li>
+        </ul>
+      </description>
+    </release>
     <release version="4.1.5" date="2026-07-03">
       <url type="details">https://github.com/AresValley/Artemis/releases/tag/v4.1.5</url>
       <description>

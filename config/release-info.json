@@ -1,24 +1,24 @@
 {
   "sigID_DB": {
-    "version": 73,
-    "url": "https://github.com/AresValley/Artemis-DB/releases/download/v73/v73.tar",
-    "sha256_hash": "f7d2d404c987d673f47ad5ca6d215281d01d0b17ffb2b741c4c45dc0eec42fa4",
-    "total_bytes": 303667200
+    "version": 74,
+    "url": "https://github.com/AresValley/Artemis-DB/releases/download/v74/v74.tar",
+    "sha256_hash": "4ef66d5e0eddbc5430cc102f84de0489efd40b979bc6b78abdf259999d09d052",
+    "total_bytes": 302172160
   },
   "windows": {
-    "version": "4.1.5",
-    "url": "https://github.com/AresValley/Artemis/releases/download/v4.1.5/Artemis-Windows-x86_64-4.1.5.exe"
+    "version": "4.2.0",
+    "url": "https://github.com/AresValley/Artemis/releases/download/v4.2.0/Artemis-Windows-x86_64-4.2.0.msi"
   },
   "windows-ARM64": {
-    "version": "4.1.5",
-    "url": "https://github.com/AresValley/Artemis/releases/download/v4.1.5/Artemis-Windows-arm64-4.1.5.msi"
+    "version": "4.2.0",
+    "url": "https://github.com/AresValley/Artemis/releases/download/v4.2.0/Artemis-Windows-arm64-4.2.0.msi"
   },
   "linux": {
-    "version": "4.1.5",
+    "version": "4.2.0",
     "url": ""
   },
   "mac": {
-    "version": "4.1.5",
+    "version": "4.2.0",
     "url": ""
   }
 }

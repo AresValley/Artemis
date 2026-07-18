@@ -5,11 +5,19 @@
 
 ## [Unreleased]
 
-## [4.2.0] - DATE TO BE ADDED
+## [4.2.0] - 2026-07-18
+
+> [!IMPORTANT] Windows Code Signing
+> Starting from this release (4.2.0), the Windows applications (both **x86** and **ARM64**) are digitally signed using the certified authority **SignPath** and are officially listed and recognized ([SignPath Project Page](https://signpath.org/projects/aresvalley-artemis/)).
+> 
+> *Note on Windows SmartScreen:* If you still see a SmartScreen warning during installation, don't worry—the publisher is fully verified: you can easily check the valid signature yourself, which is issued to: *US, Delaware, Lewes, SignPath Foundation*. Windows SmartScreen relies on a reputation-based trust system, meaning the warning will automatically disappear in future versions as more users download and establish the application's reputation in the Microsoft database.
 
 ### Added
 
 - A badge in the DB manager now shows which database is currently loaded, if any
+- Added a new field for each signal, including dedicated filtering, to track the specific database version in which the signal was introduced
+- Digitally signed Windows binaries (x86 and ARM64) via SignPath Foundation
+- Added support for High DPI scaling to improve interface clarity on high-resolution displays
 
 ### Changed
 
