@@ -35,7 +35,8 @@ To learn more about Artemis, go to:
 * [**Marco Bortoli**](https://github.com/marbort "GitHub profile") - *macOS deployment, β Tester*
 * [**Eric Wiessner (KI7POL)**](https://github.com/WheezyE "GitHub profile") - *ARM port (Raspberry Pi3B+ and Pi4B)*
 * [**Pierpaolo Pravatto**](https://github.com/ppravatto "GitHub profile") - *Wiki page, β Tester*
-* [**Francesco Capostagno**](https://github.com/fcapostagno "GitHub profile"), **Luca**, **Pietro** - *β Tester*
+* [**Francesco Capostagno**](https://github.com/fcapostagno "GitHub profile") - *β Tester*
+* **Gabriele Da Tos (HB9GZL)** - *β Tester, UFCOM*
 
 ## Sponsors
 <a href="https://signpath.org/"><img src="docs/assets/signpath-logo.png" width="120" alt="SignPath Logo" valign="middle" /></a>&nbsp; Free code signing on Windows provided by <a href="https://signpath.io">SignPath.io</a>, certificate by <a href="https://signpath.org/projects/aresvalley-artemis/">SignPath Foundation</a>
