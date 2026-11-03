@@ -20,7 +20,7 @@
     !!! tip "Offline Importing of SigID Database"
         Sometimes it may happen that a computer does not have network access and unfortunately Artemis cannot download the SigID database. To solve this you can:
 
-        1. Download the .tar database [:material-download: HERE](https://github.com/AresValley/Artemis-DB/releases) from a PC with an internet access
+        1. Download the .tar database [:material-download: HERE](https://github.com/AresValley/Artemis-Database/releases) from a PC with an internet access
         2. Import the downloaded .tar on the target PC (without internet access) using the **Import Database** function
 
 * **Export Database**
