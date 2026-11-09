@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtCore import QObject, Slot, Signal, QUrl, QSaveFile, QDir, QIODevice
 from PySide6.QtNetwork import QNetworkReply, QNetworkRequest, QNetworkAccessManager
@@ -57,9 +59,20 @@ class UIDownloader(QObject):
         self.show_ui.emit()
 
         self.file_url = QUrl(url)
+        if self.file_url.scheme().lower() not in ('https', 'http'):
+            self.close_ui.emit()
+            self.show_popup_error("Security Error: Invalid or unsupported download URL protocol.")
+            return
+
         self.file_size = None
+        safe_filename = Path(self.file_url.fileName()).name
+        if not safe_filename:
+            self.close_ui.emit()
+            self.show_popup_error("Security Error: Invalid download filename.")
+            return
+
         dest_path = QDir(save_path)
-        self.dest_file = dest_path.filePath(self.file_url.fileName())
+        self.dest_file = dest_path.filePath(safe_filename)
         self.file = QSaveFile(self.dest_file)
 
         if self.file.open(QIODevice.WriteOnly):
