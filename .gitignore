@@ -13,5 +13,6 @@ repo/
 *.egg-info
 dist/
 build/
+logs/
 .cache/
 .venv/
