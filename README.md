@@ -1,5 +1,6 @@
 <div align="right">
-    
+
+<a href="https://madebyhuman.iamjarl.com"><img src="https://madebyhuman.iamjarl.com/badges/crafted-white.svg" alt="Crafted by Human" height="28"></a>
 ![GitHub Release](https://img.shields.io/github/v/release/aresvalley/artemis?style=for-the-badge&color=blue)
 ![GitHub Release](https://img.shields.io/github/v/release/AresValley/Artemis-Database?label=DB%20version&style=for-the-badge&color=blue)
 ![GitHub repo file or directory count (in path)](https://img.shields.io/github/directory-file-count/aresvalley/Artemis-Database/static?type=dir&label=DB%20signals&style=for-the-badge&color=blue)
