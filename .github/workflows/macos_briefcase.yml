@@ -1,0 +1,62 @@
+name: Build - macOS Universal (briefcase)
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  FORCE_COLOR: "1"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Package
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install Dependencies & Briefcase
+        run: |
+          python -m pip install -U pip setuptools wheel
+          python -m pip install briefcase 'pyside6==6.11.1' peewee requests packaging
+
+      - name: Compile Resources
+        run: |
+          pyside6-rcc ./artemis.qrc -o artemis/resources.py
+
+      - name: Create Xcode Project
+        run: |
+          briefcase create macOS Xcode --no-input --log
+
+      - name: Build Xcode Project
+        run: |
+          briefcase build macOS Xcode --no-input --log
+
+      - name: Package DMG
+        run: |
+          briefcase package macOS Xcode --adhoc-sign --no-input --log
+
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: Artemis-macOS-Universal
+          path: dist/*.dmg
+          if-no-files-found: error
+
+      - name: Upload Log
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: Log-Failure-macOS
+          path: logs/*

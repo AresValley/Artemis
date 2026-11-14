@@ -1,5 +1,6 @@
+import threading
 from PySide6.QtQml import QQmlApplicationEngine
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QObject, Signal, QTimer
 
 from artemis.utils.path_utils import *
 from artemis.utils.generic_utils import *
@@ -59,21 +60,31 @@ class UIspaceweather(QObject):
     
 
     def download_poseidon_report(self):
-        update_manager = self._parent.update_manager
-        poseidon_data = update_manager.fetch_remote_json(Constants.POSEIDON_REPORT_URL)
-        
-        if poseidon_data:
-            self.load_poseidon_report.emit(poseidon_data)
-            self.load_poseidon_forecast_report.emit(poseidon_data)
-            self.load_poseidon_drap_report.emit(poseidon_data)
-            self.load_poseidon_sun_images_report.emit(poseidon_data)
-            self.load_poseidon_SSA_report.emit(poseidon_data)
-            self.load_aurora_report.emit()
+        self.update_bottom_bar.emit("Connecting to Poseidon Space Weather Engine...")
+        self.show_ui.emit()
 
-            self.update_bottom_bar.emit(
-                'Loaded Poseidon report issued on {} at {} UTC'.format(
-                    poseidon_data['JSON_INFO']['utc_date'],
-                    poseidon_data['JSON_INFO']['utc_time']
-                )
-            )
-            self.show_ui.emit()
+        def _worker():
+            update_manager = self._parent.update_manager
+            poseidon_data = update_manager.fetch_remote_json(Constants.POSEIDON_REPORT_URL)
+
+            if poseidon_data:
+                def _apply():
+                    self.load_poseidon_report.emit(poseidon_data)
+                    self.load_poseidon_forecast_report.emit(poseidon_data)
+                    self.load_poseidon_drap_report.emit(poseidon_data)
+                    self.load_poseidon_sun_images_report.emit(poseidon_data)
+                    self.load_poseidon_SSA_report.emit(poseidon_data)
+                    self.load_aurora_report.emit()
+
+                    json_info = poseidon_data.get('JSON_INFO', {})
+                    self.update_bottom_bar.emit(
+                        'Loaded Poseidon report issued on {} at {} UTC'.format(
+                            json_info.get('utc_date', 'N/A'),
+                            json_info.get('utc_time', 'N/A')
+                        )
+                    )
+                QTimer.singleShot(0, self, _apply)
+            else:
+                QTimer.singleShot(0, self, lambda: self.update_bottom_bar.emit("Unable to fetch Space Weather report (offline or unreachable)."))
+
+        threading.Thread(target=_worker, daemon=True).start()

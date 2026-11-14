@@ -1,7 +1,9 @@
 import uuid
+import threading
 import requests
 
 from packaging.version import Version
+from PySide6.QtCore import QTimer
 
 from artemis.utils.constants import Constants, Messages
 from artemis.utils.sys_utils import is_windows, is_linux, is_macos, is_arm, is_x64, delete_file, match_hash, unpack_tar, open_file
@@ -79,48 +81,59 @@ class UpdateManager:
 
 
     def update(self, show_popup=False):
-        """ Main updating routine
+        """ Main updating routine (runs asynchronously to keep the UI fast and responsive)
 
             Args:
                 show_popup (bool, optional): If false, suppress any error message
                 Defaults to False (to avoid error if the program is used offline)
         """
-        try:
-            self._get_meta()
+        def _worker():
+            try:
+                self._get_meta()
 
-            if self.db_update:
-                self._show_popup_db_update()
-            elif self.db_update is None:
-                self._show_popup_initial_db_download()
+                def _apply_ui():
+                    if self.db_update:
+                        self._show_popup_db_update()
+                    elif self.db_update is None:
+                        self._show_popup_initial_db_download()
 
-            if self.art_update:
-                self._show_popup_art_update()
+                    if self.art_update:
+                        self._show_popup_art_update()
 
-            has_updates = bool(self.art_update or self.db_update or self.db_update is None)
+                    has_updates = bool(self.art_update or self.db_update or self.db_update is None)
 
-            if show_popup and not has_updates:
-                self._show_popup_up_to_date()
+                    if show_popup and not has_updates:
+                        self._show_popup_up_to_date()
 
-            self._parent.set_update_available(has_updates)
+                    self._parent.set_update_available(has_updates)
 
-        except requests.exceptions.RequestException as e:
-            self.db_update = False
-            self.art_update = False
+                QTimer.singleShot(0, self._parent, _apply_ui)
 
-            if show_popup:
-                self._parent.dialog_popup(
-                    Messages.DIALOG_TYPE_ERROR,
-                    Messages.NO_CONNECTION,
-                    Messages.NO_CONNECTION_MSG.format(e)
-                )
+            except (requests.exceptions.RequestException, ValueError, KeyError) as e:
+                self.db_update = False
+                self.art_update = False
+
+                if show_popup:
+                    def _show_err():
+                        self._parent.dialog_popup(
+                            Messages.DIALOG_TYPE_ERROR,
+                            Messages.NO_CONNECTION,
+                            Messages.NO_CONNECTION_MSG.format(e)
+                        )
+                    QTimer.singleShot(0, self._parent, _show_err)
+
+        threading.Thread(target=_worker, daemon=True).start()
 
 
     def fetch_remote_json(self, url):
         """ Fetches the remote json from a url
         """
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        return response.json()
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            return response.json()
+        except (requests.exceptions.RequestException, ValueError):
+            return None
 
 
     def download_db(self):

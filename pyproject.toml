@@ -44,7 +44,10 @@ sources = [
 test_sources = [
 ]
 requires = [
-    "PySide6-Essentials~=6.8"
+    "PySide6==6.11.1",
+    "peewee>=4.2.6",
+    "requests==2.34.2",
+    "packaging==26.2",
 ]
 test_requires = [
 ]

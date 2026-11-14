@@ -104,7 +104,13 @@ class UIdocumentsmanager(QObject):
         """ Open the selected document with the proper system application (if any)
         """
         try:
-            open_file(self._parent.loaded_db.media_dir / f'{doc_id}.{extension}')
+            safe_doc_id = os.path.basename(str(doc_id))
+            safe_ext = os.path.basename(str(extension))
+            target_path = (self._parent.loaded_db.media_dir / f'{safe_doc_id}.{safe_ext}').resolve()
+            media_dir = self._parent.loaded_db.media_dir.resolve()
+            if not (str(target_path) == str(media_dir) or str(target_path).startswith(str(media_dir) + os.sep)):
+                raise ValueError("Access denied: Invalid document path")
+            open_file(target_path)
         except Exception as e:
             self.close_ui.emit()
             self._parent.dialog_popup(
@@ -118,8 +124,12 @@ class UIdocumentsmanager(QObject):
     def delete_doc(self, doc_id, doc_extension, doc_type, doc_preview):
         """ Delete the selected document
         """
-        doc_file_name = f'{doc_id}.{doc_extension}'
-        doc_file_path = self._parent.loaded_db.media_dir / doc_file_name
+        safe_doc_id = os.path.basename(str(doc_id))
+        safe_ext = os.path.basename(str(doc_extension))
+        doc_file_path = (self._parent.loaded_db.media_dir / f'{safe_doc_id}.{safe_ext}').resolve()
+        media_dir = self._parent.loaded_db.media_dir.resolve()
+        if not (str(doc_file_path) == str(media_dir) or str(doc_file_path).startswith(str(media_dir) + os.sep)):
+            return
         
         self._parent.loaded_sig.delete_document(doc_id)
         

@@ -2,9 +2,10 @@ import os
 import platform
 import subprocess
 import hashlib
+import hmac
 import tarfile
 
-from shutil import rmtree, copyfile, unpack_archive
+from shutil import rmtree, copyfile
 from pathlib import Path
 
 from artemis.utils.constants import Messages
@@ -36,12 +37,13 @@ def is_x64() -> bool:
 
 def open_file(file_path, timeout=3):
     try:
+        file_str = str(file_path)
         if is_windows():
-            os.startfile(file_path)
+            os.startfile(file_str)
         elif is_macos():
-            subprocess.call(['open', file_path], timeout=timeout)
+            subprocess.call(['open', '--', file_str], timeout=timeout)
         elif is_linux():
-            subprocess.call(['xdg-open', file_path], timeout=timeout)
+            subprocess.call(['xdg-open', file_str], timeout=timeout)
         else:
             return
     except FileNotFoundError:
@@ -51,12 +53,13 @@ def open_file(file_path, timeout=3):
 
 
 def open_directory(directory, timeout=3):
+    dir_str = str(Path(directory))
     if is_windows():
-        subprocess.call(['explorer', str(Path(directory))], timeout=timeout)
+        subprocess.call(['explorer', dir_str], timeout=timeout)
     elif is_macos():
-        subprocess.call(['open', directory], timeout=timeout)
+        subprocess.call(['open', '--', dir_str], timeout=timeout)
     elif is_linux():
-        subprocess.call(['xdg-open', directory], timeout=timeout)
+        subprocess.call(['xdg-open', dir_str], timeout=timeout)
     else:
         return
 
@@ -88,13 +91,29 @@ def make_tar(save_path, origin_path):
 
 
 def unpack_tar(tar_path, destination_path):
-    """ Unpack a tar archive in a folder
+    """ Unpack a tar archive in a folder safely, preventing ZipSlip / path traversal attacks.
 
     Args:
         tar_path: path of the tar to be unpacked
         destination_path: path where the tar is extracted
     """
-    unpack_archive(tar_path, destination_path, 'tar')
+    dest_path = Path(destination_path).resolve()
+    dest_path.mkdir(parents=True, exist_ok=True)
+    dest_str = str(dest_path)
+
+    with tarfile.open(tar_path, 'r:*') as tar:
+        if hasattr(tarfile, 'data_filter'):
+            tar.extractall(dest_path, filter='data')
+        else:
+            for member in tar.getmembers():
+                target_path = (dest_path / member.name).resolve()
+                if not (str(target_path) == dest_str or str(target_path).startswith(dest_str + os.sep)):
+                    raise ValueError(f"Path traversal detected in archive member: {member.name}")
+                if member.islnk() or member.issym():
+                    link_target = (dest_path / member.linkname).resolve()
+                    if not (str(link_target) == dest_str or str(link_target).startswith(dest_str + os.sep)):
+                        raise ValueError(f"Symlink traversal detected in archive member: {member.name}")
+            tar.extractall(dest_path)
 
 
 def match_hash(data, reference_hash):
@@ -114,4 +133,4 @@ def match_hash(data, reference_hash):
         while n := f.readinto(mv):
             code.update(mv[:n])
 
-    return code.hexdigest() == reference_hash
+    return hmac.compare_digest(code.hexdigest().lower(), reference_hash.lower())
